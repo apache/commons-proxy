@@ -17,7 +17,6 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
-import org.apache.commons.proxy.exception.ObjectProviderException;
 
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
@@ -27,26 +26,26 @@ import org.apache.commons.proxy.exception.ObjectProviderException;
  */
 public class BeanProvider<T> implements ObjectProvider
 {
-    private final Class<? extends T> clazz;
+    private final Class<? extends T> beanClass;
 
     public BeanProvider( Class<? extends T> clazz )
     {
-        this.clazz = clazz;
+        this.beanClass = clazz;
     }
 
     public T getObject()
     {
         try
         {
-            return clazz.newInstance();
+            return beanClass.newInstance();
         }
         catch( InstantiationException e )
         {
-            throw new ObjectProviderException( "Class " + clazz.getName() + " is not concrete.", e );
+            throw new ObjectProviderException( "Class " + beanClass.getName() + " is not concrete.", e );
         }
         catch( IllegalAccessException e )
         {
-            throw new ObjectProviderException( "Constructor for class " + clazz.getName() + " is not accessible.", e );
+            throw new ObjectProviderException( "Constructor for class " + beanClass.getName() + " is not accessible.", e );
         }
     }
 }
