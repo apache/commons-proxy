@@ -1,0 +1,121 @@
+<project name="commons-proxy" basedir="." default="compile-java">
+    <property file="build.properties"/>
+
+    <property name="dir.src" location="src"/>
+    <property name="dir.src.java" location="${dir.src}/java"/>
+    <property name="dir.src.test" location="${dir.src}/test"/>
+
+    <property name="dir.build" location="build"/>
+    <property name="dir.build.java" location="${dir.build}/java"/>
+    <property name="dir.build.test" location="${dir.build}/test"/>
+    <property name="dir.build.reports" location="${dir.build}/reports"/>
+    <property name="dir.build.reports.test" location="${dir.build.reports}/junit"/>
+    <property name="dir.dist" location="dist"/>
+    <property name="dir.dist.javadoc" location="${dir.dist}/docs/api"/>
+
+    <property name="dir.lib" location="lib"/>
+    <property name="dir.lib.build" location="${dir.lib}/build"/>
+    <property name="dir.lib.runtime" location="${dir.lib}/runtime"/>
+
+    <fileset id="runtime-dependencies" dir="${dir.lib.runtime}" includes="**/*.jar"/>
+    <fileset id="build-dependencies" dir="${dir.lib.build}" includes="**/*.jar"/>
+
+    <macrodef name="get-dependency">
+        <attribute name="groupId"/>
+        <attribute name="artifactId" default="@{groupId}"/>
+        <attribute name="version" default="SNAPSHOT"/>
+        <attribute name="dir"/>
+        <sequential>
+            <mkdir dir="@{dir}/@{groupId}"/>
+            <get usetimestamp="true" description="Maven artifact @{groupId}: @{artifactId} version @{version}"
+                 src="http://www.ibiblio.org/maven/@{groupId}/jars/@{artifactId}-@{version}.jar"
+                 dest="@{dir}/@{groupId}/@{artifactId}.jar"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="build-dependency">
+        <attribute name="groupId"/>
+        <attribute name="artifactId" default="@{groupId}"/>
+        <attribute name="version" default="SNAPSHOT"/>
+        <sequential>
+            <get-dependency groupId="@{groupId}" dir="${dir.lib.build}" artifactId="@{artifactId}"
+                            version="@{version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="runtime-dependency">
+        <attribute name="groupId"/>
+        <attribute name="artifactId" default="@{groupId}"/>
+        <attribute name="version" default="SNAPSHOT"/>
+        <sequential>
+            <get-dependency groupId="@{groupId}" dir="${dir.lib.runtime}" artifactId="@{artifactId}"
+                            version="@{version}"/>
+        </sequential>
+    </macrodef>
+
+
+    <target name="get-dependencies">
+        <runtime-dependency groupId="commons-logging" version="1.0.4"/>
+        <runtime-dependency groupId="log4j" version="1.2.8"/>
+        <runtime-dependency groupId="aopalliance" version="1.0"/>
+        <runtime-dependency groupId="cglib" artifactId="cglib-full" version="2.0.2"/>
+        <runtime-dependency groupId="burlap" version="2.1.7"/>
+        <runtime-dependency groupId="hessian" version="3.0.1"/>
+        <runtime-dependency groupId="javassist" version="3.0"/>
+        <build-dependency groupId="easymock" version="1.1"/>
+        <build-dependency groupId="junit" version="3.8.1"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${dir.build}"/>
+        <delete dir="${dir.dist}"/>
+    </target>
+    <target name="compile-java" depends="get-dependencies">
+        <mkdir dir="${dir.build.java}"/>
+        <javac
+                srcdir="${dir.src.java}"
+                destdir="${dir.build.java}">
+            <classpath>
+                <fileset refid="runtime-dependencies"/>
+                <fileset refid="build-dependencies"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile-test">
+        <mkdir dir="${dir.build.test}"/>
+        <javac
+                srcdir="${dir.src.test}"
+                destdir="${dir.build.test}"/>
+    </target>
+
+    <target name="build" depends="compile-java">
+
+    </target>
+
+    <target name="javadoc" depends="compile-java">
+
+    </target>
+    <target name="dist" depends="build,javadoc">
+        <mkdir dir="${dir.dist}"/>
+        <jar basedir="${dir.build.java}" destfile="${dir.dist}/${ant.project.name}.jar"/>
+    </target>
+
+    <target name="test" depends="compile-test">
+        <mkdir dir="${dir.build.reports.test}"/>
+        <junit fork="true" haltonfailure="true" haltonerror="true" showoutput="true">
+            <classpath>
+                <pathelement location="${dir.build.java}"/>
+                <pathelement location="${dir.build.test}"/>
+                <fileset refid="build-dependencies"/>
+                <fileset refid="runtime-dependencies"/>
+            </classpath>
+            <formatter type="brief" usefile="false"/>
+            <batchtest fork="yes" todir="${dir.build.reports.test}">
+                <fileset dir="${dir.src.test}">
+                    <include name="**/Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>
