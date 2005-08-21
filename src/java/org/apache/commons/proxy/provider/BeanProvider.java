@@ -28,9 +28,9 @@ public class BeanProvider<T> implements ObjectProvider
 {
     private final Class<? extends T> beanClass;
 
-    public BeanProvider( Class<? extends T> clazz )
+    public BeanProvider( Class<? extends T> beanClass )
     {
-        this.beanClass = clazz;
+        this.beanClass = beanClass;
     }
 
     public T getObject()
