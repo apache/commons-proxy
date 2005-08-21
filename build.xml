@@ -82,11 +82,17 @@
         </javac>
     </target>
 
-    <target name="compile-test">
+    <target name="compile-test" depends="compile-java">
         <mkdir dir="${dir.build.test}"/>
         <javac
                 srcdir="${dir.src.test}"
-                destdir="${dir.build.test}"/>
+                destdir="${dir.build.test}">
+            <classpath>
+                <pathelement location="${dir.build.java}" />
+                <fileset refid="runtime-dependencies"/>
+                <fileset refid="build-dependencies"/>
+            </classpath>
+        </javac>
     </target>
 
     <target name="build" depends="compile-java">
