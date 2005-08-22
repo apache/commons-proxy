@@ -21,7 +21,7 @@ import org.apache.commons.proxy.ObjectProvider;
  * @author James Carman
  * @version 1.0
  */
-public class ProviderDecorator<T> extends AbstractProvider<T>
+public class ProviderDecorator<T> implements ObjectProvider<T>
 {
     protected ObjectProvider<? extends T> inner;
 

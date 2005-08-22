@@ -55,14 +55,11 @@
 
 
     <target name="get-dependencies">
-        <runtime-dependency groupId="commons-logging" version="1.0.4"/>
-        <runtime-dependency groupId="log4j" version="1.2.8"/>
         <runtime-dependency groupId="aopalliance" version="1.0"/>
         <runtime-dependency groupId="cglib" artifactId="cglib-full" version="2.0.2"/>
         <runtime-dependency groupId="burlap" version="2.1.7"/>
         <runtime-dependency groupId="hessian" version="3.0.1"/>
         <runtime-dependency groupId="javassist" version="3.0"/>
-        <build-dependency groupId="easymock" version="1.1"/>
         <build-dependency groupId="junit" version="3.8.1"/>
     </target>
 

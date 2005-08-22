@@ -16,8 +16,6 @@
 package org.apache.commons.proxy.util;
 
 import junit.framework.TestCase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author James Carman
@@ -25,5 +23,4 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractTestCase extends TestCase
 {
-    protected final Log log = LogFactory.getLog( getClass() );
 }
