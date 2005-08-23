@@ -1,6 +1,6 @@
 <project name="commons-proxy" basedir="." default="compile-java">
     <property file="build.properties"/>
-
+    <property name="version" value="1.0-SNAPSHOT" />
     <property name="dir.src" location="src"/>
     <property name="dir.src.java" location="${dir.src}/java"/>
     <property name="dir.src.test" location="${dir.src}/test"/>
@@ -67,6 +67,7 @@
         <delete dir="${dir.build}"/>
         <delete dir="${dir.dist}"/>
     </target>
+
     <target name="compile-java" depends="get-dependencies">
         <mkdir dir="${dir.build.java}"/>
         <javac
@@ -101,9 +102,10 @@
         <javadoc destdir="${dir.dist.javadoc}" sourcepath="${dir.src.java}" packagenames="*">
         </javadoc>
     </target>
-    <target name="dist" depends="build,javadoc">
+
+    <target name="dist" depends="clean,build,javadoc">
         <mkdir dir="${dir.dist}"/>
-        <jar basedir="${dir.build.java}" destfile="${dir.dist}/${ant.project.name}.jar"/>
+        <jar basedir="${dir.build.java}" destfile="${dir.dist}/${ant.project.name}-${version}.jar"/>
     </target>
 
     <target name="test" depends="compile-test">
