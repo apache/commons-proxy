@@ -30,6 +30,8 @@ import org.apache.commons.proxy.factory.AbstractProxyFactory;
 import java.lang.reflect.Method;
 
 /**
+ * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link org.apache.commons.proxy.ProxyFactory}
+ * implementation.
  * @author James Carman
  * @version 1.0
  */

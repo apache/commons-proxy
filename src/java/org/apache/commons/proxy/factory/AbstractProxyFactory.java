@@ -20,6 +20,7 @@ import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
 
 /**
+ * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
  * @author James Carman
  * @version 1.0
  */

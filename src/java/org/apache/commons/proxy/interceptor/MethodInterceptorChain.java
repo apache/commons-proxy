@@ -20,6 +20,9 @@ import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
 
 /**
+ * A <code>MethodInterceptorChain</code> assists with creating proxies which go through
+ * a series of <code>MethodInterceptors</code>.
+ * 
  * @author James Carman
  * @version 1.0
  */

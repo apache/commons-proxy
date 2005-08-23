@@ -22,6 +22,7 @@ import org.apache.commons.proxy.factory.AbstractProxyFactory;
 import java.lang.reflect.Proxy;
 
 /**
+ * A JDK proxy-based {@link org.apache.commons.proxy.ProxyFactory} implementation.
  * @author James Carman
  * @version 1.0
  */

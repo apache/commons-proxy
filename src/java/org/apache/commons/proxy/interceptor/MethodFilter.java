@@ -18,6 +18,8 @@ package org.apache.commons.proxy.interceptor;
 import java.lang.reflect.Method;
 
 /**
+ * A <code>MethodFilter</code> determines whether or not a method is accepted.
+ * 
  * @author James Carman
  * @version 1.0
  */

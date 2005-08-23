@@ -85,7 +85,7 @@
                 srcdir="${dir.src.test}"
                 destdir="${dir.build.test}">
             <classpath>
-                <pathelement location="${dir.build.java}" />
+                <pathelement location="${dir.build.java}"/>
                 <fileset refid="runtime-dependencies"/>
                 <fileset refid="build-dependencies"/>
             </classpath>
@@ -97,7 +97,9 @@
     </target>
 
     <target name="javadoc" depends="compile-java">
-
+        <mkdir dir="${dir.dist.javadoc}"/>
+        <javadoc destdir="${dir.dist.javadoc}" sourcepath="${dir.src.java}" packagenames="*">
+        </javadoc>
     </target>
     <target name="dist" depends="build,javadoc">
         <mkdir dir="${dir.dist}"/>

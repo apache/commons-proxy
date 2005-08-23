@@ -20,6 +20,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 import java.lang.reflect.Method;
 
 /**
+ * An invocation handler that passes through a <code>MethodInterceptor</code>.
+ * 
  * @author James Carman
  * @version 1.0
  */

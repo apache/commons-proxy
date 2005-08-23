@@ -27,6 +27,9 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 /**
+ * A <a href="http://cglib.sourceforge.net/">CGLIB</a>-based {@link org.apache.commons.proxy.ProxyFactory}
+ * implementation.
+ * 
  * @author James Carman
  * @version 1.0
  */

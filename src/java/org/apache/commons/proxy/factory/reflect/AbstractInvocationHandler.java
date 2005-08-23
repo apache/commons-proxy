@@ -19,16 +19,31 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 /**
+ * A useful baseclass for implementing invocation handlers.
+ *
  * @author James Carman
  * @version 1.0
  */
 public abstract class AbstractInvocationHandler implements InvocationHandler
 {
+    /**
+     * Creates a proxy object which implements the specified proxy interfaces.
+     * @param proxyInterfaces the proxy interfaces
+     * @return a proxy object which implements the specified proxy interfaces
+     */
     public Object createProxy( Class... proxyInterfaces )
     {
         return createProxy( Thread.currentThread().getContextClassLoader(), proxyInterfaces );
     }
 
+    /**
+     * Creates a proxy object which implements the specified proxy interfaces, using the
+     * specified class loader.
+     * @param classLoader the class loader
+     * @param proxyInterfaces the proxy interfaces
+     * @return a proxy object which implements the specified proxy interfaces, using the
+     * specified class loader.
+     */
     public Object createProxy( ClassLoader classLoader, Class... proxyInterfaces )
     {
         return Proxy.newProxyInstance( classLoader, proxyInterfaces, this );

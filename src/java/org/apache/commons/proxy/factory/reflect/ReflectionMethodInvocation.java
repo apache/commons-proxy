@@ -21,6 +21,8 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 /**
+ * A reflection-based implementation of the <code>MethodInvocation</code> interface.
+ * 
  * @author James Carman
  * @version 1.0
  */

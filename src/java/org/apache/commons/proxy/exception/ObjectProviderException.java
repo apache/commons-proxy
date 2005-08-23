@@ -16,6 +16,9 @@
 package org.apache.commons.proxy.exception;
 
 /**
+ * <code>ObjectProvider</code> implementations should throw this exception type
+ * to indicate that there was a problem creating/finding the object.
+ * 
  * @author James Carman
  * @version 1.0
  */

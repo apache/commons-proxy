@@ -18,6 +18,8 @@ package org.apache.commons.proxy.factory.reflect;
 import java.lang.reflect.Method;
 
 /**
+ * An invocation handler which delegates to another object.
+ *
  * @author James Carman
  * @version 1.0
  */
@@ -30,11 +32,22 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
         return method.invoke( getDelegate(), args );
     }
 
+    /**
+     * A simplified proxy creation method which merely creates a proxy which supports
+     * all the interfaces implemented by the delegate.
+     * @return a proxy which supports all the interfaces implemented by the delegate
+     */
     public Object createProxy()
     {
         return createProxy( getDelegate().getClass().getInterfaces() );
     }
 
+    /**
+     * A simplified proxy creation method which merely creates a proxy which supports
+     * all the interfaces implemented by the delegate, using the specified class loader.
+     * @return a proxy which supports all the interfaces implemented by the delegate,
+     * using the specified class loader.
+     */
     public Object createProxy( ClassLoader classLoader )
     {
         return createProxy( classLoader, getDelegate().getClass().getInterfaces() );

@@ -18,6 +18,7 @@ package org.apache.commons.proxy.factory.reflect;
 import org.apache.commons.proxy.ObjectProvider;
 
 /**
+ * An invocation handler which delegates to an object supplied by an {@link ObjectProvider}.
  * @author James Carman
  * @version 1.0
  */
