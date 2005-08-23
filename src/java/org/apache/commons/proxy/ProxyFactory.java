@@ -18,7 +18,7 @@ package org.apache.commons.proxy;
 import org.aopalliance.intercept.MethodInterceptor;
 
 /**
- * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy."  All Syringe proxies are created using
+ * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy."  All <code>commons-proxy</code> proxies are created using
  * a <code>ProxyFactory</code>.  So, to change the proxying strategy, simply provide a different <code>ProxyFactory</code>
  * implementation.
  *
