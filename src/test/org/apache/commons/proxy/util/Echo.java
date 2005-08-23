@@ -15,8 +15,6 @@
  */
 package org.apache.commons.proxy.util;
 
-import java.util.Comparator;
-
 /**
  * @author James Carman
  * @version 1.0
@@ -24,11 +22,4 @@ import java.util.Comparator;
 public interface Echo
 {
     public String echoBack( String message );
-    public boolean isInitialized();
-
-    String getStringDependency();
-
-    Integer getIntegerDependency();
-
-    Comparator getComparator();
 }

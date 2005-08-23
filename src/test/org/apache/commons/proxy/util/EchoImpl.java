@@ -15,83 +15,14 @@
  */
 package org.apache.commons.proxy.util;
 
-import java.util.Comparator;
-
 /**
  * @author James Carman
  * @version 1.0
  */
 public class EchoImpl implements Echo
 {
-    private boolean initialized = false;
-    private String stringDependency;
-    private Integer integerDependency;
-    private Comparator comparator;
-
-    public EchoImpl()
-    {
-    }
-
-    public EchoImpl( String stringDependency, Integer integerDependency, Comparator comparator )
-    {
-        this.stringDependency = stringDependency;
-        this.integerDependency = integerDependency;
-        this.comparator = comparator;
-    }
-
-    public EchoImpl( String stringDependency, Integer integerDependency )
-    {
-        this.stringDependency = stringDependency;
-        this.integerDependency = integerDependency;
-    }
-
-    public EchoImpl( Comparator comparator )
-    {
-        this.comparator = comparator;
-    }
-
-    public String getStringDependency()
-    {
-        return stringDependency;
-    }
-
-    public void setComparator( Comparator comparator )
-    {
-        this.comparator = comparator;
-    }
-
-    public Comparator getComparator()
-    {
-        return comparator;
-    }
-
-    public void setStringDependency( String stringDependency )
-    {
-        this.stringDependency = stringDependency;
-    }
-
-    public Integer getIntegerDependency()
-    {
-        return integerDependency;
-    }
-
-    public void setIntegerDependency( Integer integerDependency )
-    {
-        this.integerDependency = integerDependency;
-    }
-
     public String echoBack( String message )
     {
         return message;
-    }
-
-    public void init()
-    {
-        this.initialized = true;
-    }
-
-    public boolean isInitialized()
-    {
-        return initialized;
     }
 }
