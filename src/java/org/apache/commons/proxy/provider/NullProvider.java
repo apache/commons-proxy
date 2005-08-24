@@ -16,6 +16,8 @@
 package org.apache.commons.proxy.provider;
 
 /**
+ * Always returns null.
+ * 
  * @author James Carman
  * @version 1.0
  */
