@@ -18,6 +18,7 @@ package org.apache.commons.proxy.interceptor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.provider.AbstractObjectProvider;
 
 /**
  * A <code>MethodInterceptorChain</code> assists with creating proxies which go through
@@ -59,7 +60,7 @@ public class MethodInterceptorChain
         return currentTarget;
     }
 
-    private class ProxyObjectProvider implements ObjectProvider
+    private class ProxyObjectProvider extends AbstractObjectProvider
     {
         private final ClassLoader classLoader;
         private final Class[] proxyInterfaces;

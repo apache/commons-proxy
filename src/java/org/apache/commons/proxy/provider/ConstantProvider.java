@@ -15,15 +15,13 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.ObjectProvider;
-
 /**
  * Always returns the same object.
  *
  * @author James Carman
  * @version 1.0
  */
-public class ConstantProvider<T> implements ObjectProvider<T>
+public class ConstantProvider<T> extends AbstractObjectProvider<T>
 {
     private final T constant;
 

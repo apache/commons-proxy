@@ -15,7 +15,6 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
 /**
@@ -24,7 +23,7 @@ import org.apache.commons.proxy.exception.ObjectProviderException;
  * @author James Carman
  * @version $Rev: 57 $
  */
-public class BeanProvider<T> implements ObjectProvider
+public class BeanProvider<T> extends AbstractObjectProvider<T>
 {
     private final Class<? extends T> beanClass;
 
