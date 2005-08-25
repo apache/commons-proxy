@@ -98,6 +98,7 @@
                 <fileset refid="build-dependencies"/>
             </classpath>
         </javac>
+        <rmic base="${dir.build.test}" includes="**/Rmi*Impl.class" />
     </target>
 
     <target name="build" depends="compile-java">

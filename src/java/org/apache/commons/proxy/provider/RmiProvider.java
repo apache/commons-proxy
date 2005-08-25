@@ -15,7 +15,6 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import java.rmi.AccessException;
@@ -31,7 +30,7 @@ import java.rmi.server.RMIClientSocketFactory;
  * @author James Carman
  * @version 1.0
  */
-public class RmiProvider<T> implements ObjectProvider
+public class RmiProvider<T> extends AbstractObjectProvider<T>
 {
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;
@@ -98,10 +97,12 @@ public class RmiProvider<T> implements ObjectProvider
         {
             if( clientSocketFactory != null )
             {
+                log.debug( "Looking up RMI registry at " + host + ":" + port + " using specified client socket factory..." );
                 return LocateRegistry.getRegistry( host, port, clientSocketFactory );
             }
             else
             {
+                log.debug( "Looking up RMI registry at " + host + ":" + port + "..." );
                 return LocateRegistry.getRegistry( host, port );
             }
         }
