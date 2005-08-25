@@ -29,7 +29,11 @@ public class TestPatternMethodFilter extends TestCase
     {
         final PatternMethodFilter filter = new PatternMethodFilter( "set\\w+|get\\w+" );
         assertTrue( filter.accepts( Date.class.getMethod( "getSeconds" ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "getMinutes" ) ) );
         assertTrue( filter.accepts( Date.class.getMethod( "setSeconds", Integer.TYPE ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "setMinutes", Integer.TYPE ) ) );
         assertFalse( filter.accepts( Date.class.getMethod( "toString" ) ) );
+        assertFalse( filter.accepts( Date.class.getMethod( "hashCode" ) ) );
+
     }
 }
