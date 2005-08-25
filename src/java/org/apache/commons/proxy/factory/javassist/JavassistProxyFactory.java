@@ -43,7 +43,6 @@ import java.lang.reflect.Method;
 public class JavassistProxyFactory extends AbstractProxyFactory
 {
     private static final Log log = LogFactory.getLog( JavassistProxyFactory.class );
-
     private static int classNumber = 0;
     private static final ClassPool classPool = ClassPool.getDefault();
 
@@ -51,7 +50,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
     {
         try
         {
-            enclosingClass.addField( new CtField( resolve( fieldType ), fieldName, enclosingClass )  );
+            enclosingClass.addField( new CtField( resolve( fieldType ), fieldName, enclosingClass ) );
         }
         catch( CannotCompileException e )
         {
@@ -88,15 +87,15 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
         catch( CannotCompileException e )
         {
-            throw new ObjectProviderException( "Could not compile class.", e );
+            throw new ProxyFactoryException( "Could not compile class.", e );
         }
         catch( NoSuchMethodException e )
         {
-            throw new ObjectProviderException( "Could not find constructor in generated proxy class.", e );
+            throw new ProxyFactoryException( "Could not find constructor in generated proxy class.", e );
         }
         catch( Exception e )
         {
-            throw new ObjectProviderException( "Unable to instantiate proxy from generated proxy class.", e );
+            throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
         }
     }
 
@@ -139,7 +138,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
         catch( CannotCompileException e )
         {
-            throw new RuntimeException( "Oops!", e );
+            throw new ProxyFactoryException( "Could not compile Javassist generated class.", e );
         }
     }
 
@@ -148,7 +147,11 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         final StringBuffer proceedBody = new StringBuffer( "{\n" );
         if( !Void.TYPE.equals( method.getReturnType() ) )
         {
-            proceedBody.append( "\treturn ( $r )" );
+            proceedBody.append( "\treturn " );
+        }
+        else
+        {
+            proceedBody.append( "\t" );
         }
         proceedBody.append( "target." + method.getName() + "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
@@ -160,6 +163,10 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             }
         }
         proceedBody.append( ");\n" );
+        if( Void.TYPE.equals( method.getReturnType() ) )
+        {
+            proceedBody.append( "return null;" );
+        }
         proceedBody.append( "}" );
         return proceedBody.toString();
     }
@@ -190,15 +197,15 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
         catch( CannotCompileException e )
         {
-            throw new ObjectProviderException( "Could not compile class.", e );
+            throw new ProxyFactoryException( "Could not compile class.", e );
         }
         catch( NoSuchMethodException e )
         {
-            throw new ObjectProviderException( "Could not find constructor in generated proxy class.", e );
+            throw new ProxyFactoryException( "Could not find constructor in generated proxy class.", e );
         }
         catch( Exception e )
         {
-            throw new ObjectProviderException( "Unable to instantiate proxy from generated proxy class.", e );
+            throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
         }
     }
 

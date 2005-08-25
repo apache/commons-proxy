@@ -25,4 +25,8 @@ public class EchoImpl implements Echo
     {
         return message;
     }
+
+    public void echo()
+    {
+    }
 }

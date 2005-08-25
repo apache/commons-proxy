@@ -22,4 +22,5 @@ package org.apache.commons.proxy.util;
 public interface Echo
 {
     public String echoBack( String message );
+    public void echo();
 }

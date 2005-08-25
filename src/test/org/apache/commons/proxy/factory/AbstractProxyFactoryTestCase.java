@@ -39,6 +39,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     public void testCreateProxy()
     {
         final Echo echo = ( Echo )factory.createProxy( new SingletonProvider<Echo>( new BeanProvider<Echo>( EchoImpl.class ) ), Echo.class );
+        echo.echo();
         assertEquals( "message", echo.echoBack( "message" ) );
     }
 
@@ -46,6 +47,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
         final Echo target = ( Echo )factory.createProxy( new SingletonProvider<Echo>( new BeanProvider<Echo>( EchoImpl.class ) ), Echo.class );
         final Echo proxy = ( Echo )factory.createInterceptorProxy( target, new SuffixMethodInterceptor( " suffix" ), Echo.class );
+        proxy.echo();
         assertEquals( "message suffix", proxy.echoBack( "message" ) );
     }
 }
