@@ -13,18 +13,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.commons.proxy.factory.javassist;
-
-import org.apache.commons.proxy.factory.AbstractProxyFactoryTestCase;
+package org.apache.commons.proxy.exception;
 
 /**
+ * A runtime exception type to be used by {@link org.apache.commons.proxy.ProxyFactory proxy factories} when a
+ * problem occurs.
+ * 
  * @author James Carman
  * @version 1.0
  */
-public class TestJavassistProxyFactory extends AbstractProxyFactoryTestCase
+public class ProxyFactoryException extends RuntimeException
 {
-    public TestJavassistProxyFactory()
+    public ProxyFactoryException()
     {
-        super( new JavassistProxyFactory() );
+    }
+
+    public ProxyFactoryException( String message )
+    {
+        super( message );
+    }
+
+    public ProxyFactoryException( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
+
+    public ProxyFactoryException( Throwable cause )
+    {
+        super( cause );
     }
 }
