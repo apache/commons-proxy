@@ -64,6 +64,7 @@
         <runtime-dependency groupId="axis" artifactId="axis-jaxrpc" version="1.2.1" />
         <runtime-dependency groupId="axis" artifactId="axis-saaj" version="1.2.1" />
         <runtime-dependency groupId="axis" artifactId="axis-wsdl4j" version="1.5.1" />
+        <runtime-dependency groupId="log4j" version="1.2.9" />
         <runtime-dependency groupId="commons-discovery" version="0.2" />
         <runtime-dependency groupId="javassist" version="3.0"/>
         <build-dependency groupId="junit" version="3.8.1"/>
