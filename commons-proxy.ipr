@@ -34,6 +34,7 @@
       <entry name="?*.html" />
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
+      <entry name="?*.conf" />
     </wildcardResourcePatterns>
   </component>
   <component name="DataSourceManagerImpl" />
