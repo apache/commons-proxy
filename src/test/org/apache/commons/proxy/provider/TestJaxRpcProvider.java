@@ -22,7 +22,7 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObject() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider<QuoteService>( QuoteService.class );
-        provider.setUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
         provider.setServiceNamespaceUri( "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
         provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
