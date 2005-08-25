@@ -33,7 +33,7 @@ import java.net.URL;
 public class JaxRpcProvider<T> extends AbstractObjectProvider<T>
 {
     private final Class<? extends T> serviceInterface;
-    private String url;
+    private String wsdlUrl;
     private String serviceNamespaceUri;
     private String serviceLocalPart;
     private String servicePrefix;
@@ -50,7 +50,7 @@ public class JaxRpcProvider<T> extends AbstractObjectProvider<T>
     {
         try
         {
-            final Service service = ( url == null ? ServiceFactory.newInstance().createService( getServiceQName() ) : ServiceFactory.newInstance().createService( new URL( url ), getServiceQName() ) );
+            final Service service = ( wsdlUrl == null ? ServiceFactory.newInstance().createService( getServiceQName() ) : ServiceFactory.newInstance().createService( new URL( wsdlUrl ), getServiceQName() ) );
             final QName portQName = getPortQName();
             return serviceInterface.cast( portQName == null ? service.getPort( serviceInterface ) : service.getPort( portQName, serviceInterface ) );
         }
@@ -121,8 +121,8 @@ public class JaxRpcProvider<T> extends AbstractObjectProvider<T>
         this.servicePrefix = servicePrefix;
     }
 
-    public void setUrl( String url )
+    public void setWsdlUrl( String wsdlUrl )
     {
-        this.url = url;
+        this.wsdlUrl = wsdlUrl;
     }
 }
