@@ -87,24 +87,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/runtime/commons-logging/commons-logging.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/runtime/commons-discovery/commons-discovery.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/runtime/axis/axis-saaj.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -142,6 +124,15 @@
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/runtime/commons-collections/commons-collections.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/runtime/commons-logging/commons-logging.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
