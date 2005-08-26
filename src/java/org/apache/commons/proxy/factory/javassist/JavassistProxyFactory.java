@@ -24,8 +24,6 @@ import javassist.CtMethod;
 import javassist.NotFoundException;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
@@ -42,7 +40,6 @@ import java.lang.reflect.Method;
  */
 public class JavassistProxyFactory extends AbstractProxyFactory
 {
-    private static final Log log = LogFactory.getLog( JavassistProxyFactory.class );
     private static int classNumber = 0;
     private static final ClassPool classPool = ClassPool.getDefault();
 
@@ -121,7 +118,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             constructorBody.append( "\tthis.target = $1;\n" );
             for( int i = 0; i < argumentTypes.length; i++ )
             {
-                constructorBody.append( "\tthis.argument" + i + " = $" + ( 2 + i ) + ";\n" );
+                constructorBody.append( "\tthis.argument" ).append( i ).append( " = $" ).append( 2 + i ).append( ";\n" );
 
             }
             constructorBody.append( "}" );
@@ -153,10 +150,10 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         {
             proceedBody.append( "\t" );
         }
-        proceedBody.append( "target." + method.getName() + "(" );
+        proceedBody.append( "target." ).append( method.getName() ).append( "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
         {
-            proceedBody.append( "argument" + i );
+            proceedBody.append( "argument" ).append( i );
             if( i != argumentTypes.length - 1 )
             {
                 proceedBody.append( ", " );
