@@ -1,6 +1,6 @@
 <project name="commons-proxy" basedir="." default="compile-java">
     <property file="build.properties"/>
-    <property name="version" value="1.0-SNAPSHOT" />
+    <property name="version" value="0.1-SNAPSHOT" />
     <property name="dir.src" location="src"/>
     <property name="dir.src.java" location="${dir.src}/java"/>
     <property name="dir.src.test" location="${dir.src}/test"/>
