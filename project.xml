@@ -64,9 +64,9 @@
     <developers>
         <developer>
             <name>James Carman</name>
-            <id>carman</id>
+            <id>jcarman</id>
             <email>james@carmanconsulting.com</email>
-            <organization>carmanconsulting.com</organization>
+            <organization>Carman Consulting, Inc.</organization>
             <roles>
                 <role>admin</role>
                 <role>designer</role>
@@ -75,25 +75,36 @@
             <url>http://www.carmanconsulting.com/</url>
             <timezone>+1</timezone>
         </developer>
-
-    </developers>
-
-    <contributors>
-        <contributor>
-            <name>J#246;rg Hohwiller</name>
+        <developer>
+            <name>Knut Wannheden</name>
+            <id>knut</id>
+            <email>knut@apache.org</email>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+6</timezone>
+        </developer>
+        <developer>
+            <name>J&#246;rg Hohwiller</name>
             <email>hohwille@users.sourceforge.net</email>
             <organization/>
             <roles>
                 <role>mavenizer</role>
+                <role>developer</role>
             </roles>
             <url></url>
-        </contributor>
+        </developer>
+    </developers>
+
+    <contributors>
         <contributor>
-            <name>J#246;rg Schaible</name>
+            <name>J&#246;rg Schaible</name>
             <email>joerg.schaible@gmx.de</email>
             <organization/>
             <roles>
-                <role></role>
+                <role>advisor</role>
+                <role>designer</role>
             </roles>
             <url></url>
         </contributor>
