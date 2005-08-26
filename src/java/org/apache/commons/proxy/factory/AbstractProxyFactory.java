@@ -18,6 +18,8 @@ package org.apache.commons.proxy.factory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -26,6 +28,13 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public abstract class AbstractProxyFactory implements ProxyFactory
 {
+    protected Log log = LogFactory.getLog( getClass() );
+
+    public void setLog( Log log )
+    {
+        this.log = log;
+    }
+    
     public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces )
     {
         return createInterceptorProxy( Thread.currentThread().getContextClassLoader(), target, interceptor, proxyInterfaces );
