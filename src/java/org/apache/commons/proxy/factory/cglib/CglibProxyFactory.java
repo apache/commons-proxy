@@ -82,7 +82,7 @@ public class CglibProxyFactory extends AbstractProxyFactory
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
-            this.args = args;
+            this.args = args == null || args.length == 0 ? null : args;
         }
 
         public Method getMethod()
@@ -102,12 +102,12 @@ public class CglibProxyFactory extends AbstractProxyFactory
 
         public Object getThis()
         {
-            return null;
+            return target;
         }
 
         public AccessibleObject getStaticPart()
         {
-            return null;
+            return method;
         }
     }
 

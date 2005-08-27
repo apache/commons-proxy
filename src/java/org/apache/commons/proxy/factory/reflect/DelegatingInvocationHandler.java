@@ -16,6 +16,7 @@
 package org.apache.commons.proxy.factory.reflect;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * An invocation handler which delegates to another object.
@@ -29,12 +30,20 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        return method.invoke( getDelegate(), args );
+        try
+        {
+            return method.invoke( getDelegate(), args );
+        }
+        catch( InvocationTargetException e )
+        {
+            throw e.getTargetException();
+        }
     }
 
     /**
      * A simplified proxy creation method which merely creates a proxy which supports
      * all the interfaces implemented by the delegate.
+     *
      * @return a proxy which supports all the interfaces implemented by the delegate
      */
     public Object createProxy()
@@ -45,8 +54,9 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
     /**
      * A simplified proxy creation method which merely creates a proxy which supports
      * all the interfaces implemented by the delegate, using the specified class loader.
+     *
      * @return a proxy which supports all the interfaces implemented by the delegate,
-     * using the specified class loader.
+     *         using the specified class loader.
      */
     public Object createProxy( ClassLoader classLoader )
     {

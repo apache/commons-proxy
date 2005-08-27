@@ -15,6 +15,8 @@
  */
 package org.apache.commons.proxy.util;
 
+import java.io.IOException;
+
 /**
  * @author James Carman
  * @version 1.0
@@ -22,5 +24,9 @@ package org.apache.commons.proxy.util;
 public interface Echo
 {
     public String echoBack( String message );
+    public String echoBack( String message1, String message2 );
     public void echo();
+
+    public void ioException() throws IOException;
+    public void illegalArgument();
 }

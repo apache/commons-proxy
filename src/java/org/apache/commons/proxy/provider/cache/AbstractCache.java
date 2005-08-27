@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public abstract class AbstractCache implements Cache
 {
-    protected abstract Map<Object,CachedObject> getCachedObjectMap();
+    protected abstract Map<Object, CachedObject> getCachedObjectMap();
 
     public void storeObject( Object key, Object value )
     {
@@ -44,17 +44,15 @@ public abstract class AbstractCache implements Cache
 
     public void clearCache()
     {
-        for( Object cacheKey: new LinkedList<Object>( getCachedObjectMap().keySet() ) )
+        for( Object cacheKey : new LinkedList<Object>( getCachedObjectMap().keySet() ) )
         {
             final CachedObject cachedObject = getCachedObjectMap().get( cacheKey );
-            if( cachedObject != null )
+            getCachedObjectMap().remove( cacheKey );
+            if( cachedObject.getListener() != null )
             {
-                getCachedObjectMap().remove( cacheKey );
-                if( cachedObject.getListener() != null )
-                {
-                    cachedObject.getListener().objectEvicted( new CacheEvictionEvent( cacheKey, cachedObject.getObject() ) );
-                }
+                cachedObject.getListener().objectEvicted( new CacheEvictionEvent( cacheKey, cachedObject.getObject() ) );
             }
+
         }
     }
 

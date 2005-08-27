@@ -25,7 +25,7 @@ public class CountingProvider<T> extends ProviderDecorator<T>
 {
     private int count = 0;
 
-    public CountingProvider( ObjectProvider<T> inner )
+    public CountingProvider( ObjectProvider<? extends T> inner )
     {
         super( inner );
     }

@@ -41,7 +41,8 @@ public class TestCachedProvider extends TestCase
     {
         final CountingProvider<Echo> counter = new CountingProvider<Echo>( new ConstantProvider<Echo>( new EchoImpl() ) );
         final CachedProvider<Echo> provider = new CachedProvider<Echo>( counter );
-        provider.setCache( new ThreadLocalCache() );
+        final ThreadLocalCache cache = new ThreadLocalCache();
+        provider.setCache( cache );
         final CountDownLatch latch = new CountDownLatch( 10 );
         for( int i = 0; i < 10; ++i )
         {
@@ -50,6 +51,7 @@ public class TestCachedProvider extends TestCase
                 public void run()
                 {
                     provider.getObject().echoBack( "Hello, World" );
+                    cache.clearCache();
                     latch.countDown();
                 }
             }).start();

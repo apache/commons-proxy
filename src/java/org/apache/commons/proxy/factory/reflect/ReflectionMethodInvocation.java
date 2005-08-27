@@ -18,11 +18,12 @@ package org.apache.commons.proxy.factory.reflect;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
  * A reflection-based implementation of the <code>MethodInvocation</code> interface.
- * 
+ *
  * @author James Carman
  * @version 1.0
  */
@@ -51,7 +52,20 @@ class ReflectionMethodInvocation implements MethodInvocation
 
     public Object proceed() throws Throwable
     {
-        return method.invoke( target, arguments );
+        try
+        {
+            return method.invoke( target, arguments );
+        }
+        catch( InvocationTargetException e )
+        {
+            throw e.getTargetException();
+        }
+        catch( Exception e )
+        {
+            System.out.println( "An unknown exception happened:" );
+            e.printStackTrace( System.out );
+            throw e;
+        }
     }
 
     public Object getThis()

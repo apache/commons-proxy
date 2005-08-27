@@ -15,6 +15,8 @@
  */
 package org.apache.commons.proxy.util;
 
+import java.io.IOException;
+
 /**
  * @author James Carman
  * @version 1.0
@@ -26,7 +28,22 @@ public class EchoImpl implements Echo
         return message;
     }
 
+    public String echoBack( String message1, String message2 )
+    {
+        return message1 + message2;
+    }
+
     public void echo()
     {
+    }
+
+    public void ioException() throws IOException
+    {
+        throw new IOException( "dummy message" );
+    }
+
+    public void illegalArgument()
+    {
+        throw new IllegalArgumentException( "dummy message" );
     }
 }

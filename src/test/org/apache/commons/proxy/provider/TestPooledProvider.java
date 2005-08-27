@@ -23,12 +23,13 @@ import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
 import java.util.concurrent.CountDownLatch;
+import static org.apache.commons.proxy.provider.ProviderUtils.constantProvider;
 
 public class TestPooledProvider extends TestCase
 {
     public void testWithSimpleCache()
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( new ConstantProvider<Echo>( new EchoImpl() ) );
+        final CountingProvider<Echo> counter = new CountingProvider<Echo>( constantProvider( new EchoImpl() ) );
         final PooledProvider<Echo> provider = new PooledProvider<Echo>( counter );
         final SimpleCache cache = new SimpleCache();
         provider.setCache( cache );
@@ -43,11 +44,16 @@ public class TestPooledProvider extends TestCase
 
     public void testWithThreadLocalCache() throws Exception
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( new ConstantProvider<Echo>( new EchoImpl() ) );
+        final CountingProvider<Echo> counter = new CountingProvider<Echo>( constantProvider( new EchoImpl() ) );
         final PooledProvider<Echo> provider = new PooledProvider<Echo>( counter );
         provider.setMaxActive( 10 );
         provider.setMinIdle( 5 );
         provider.setWhenExhaustedAction( GenericObjectPool.WHEN_EXHAUSTED_GROW );
+        provider.setMaxWait( 1000 );
+        provider.setMinEvictableIdleTimeMillis( 10000 );
+        provider.setTestOnBorrow( false );
+        provider.setTestOnReturn( false );
+        provider.setTestWhileIdle( false );
         final ThreadLocalCache cache = new ThreadLocalCache();
         provider.setCache( cache );
         final CountDownLatch goLatch = new CountDownLatch( 1 );

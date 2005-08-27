@@ -28,7 +28,12 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractProxyFactory implements ProxyFactory
 {
-    protected Log log = LogFactory.getLog( getClass() );
+    protected Log log;
+
+    protected AbstractProxyFactory()
+    {
+        setLog( LogFactory.getLog( getClass() ) );
+    }
 
     public void setLog( Log log )
     {
