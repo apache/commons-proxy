@@ -38,10 +38,9 @@
 
     <repository>
 
-        <connection>scm:svn:http:svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk</connection>
+        <connection>scm:svn:http://svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk</connection>
 
-        <developerConnection>
-            scm:svn:https:svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk</developerConnection>
+        <developerConnection>scm:svn:https://svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk</developerConnection>
 
         <url>http://svn.apache.org/viewcvs.cgi/jakarta/commons/sandbox/proxy/trunk/</url>
     </repository>
