@@ -73,7 +73,7 @@
                 <role>developer</role>
             </roles>
             <url>http://www.carmanconsulting.com/</url>
-            <timezone>+1</timezone>
+            <timezone>-5</timezone>
         </developer>
         <developer>
             <name>Knut Wannheden</name>
@@ -121,8 +121,8 @@
     <dependencies>
         <dependency>
             <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.1</version>
+            <artifactId>cglib-full</artifactId>
+            <version>2.0.2</version>
             <url>http://cglib.sourceforge.net</url>
             <properties>
                 <comment>code generation library</comment>
@@ -228,6 +228,15 @@
                 <comment>collection API</comment>
             </properties>
         </dependency>
+        <dependency>
+            <groupId>commons-discovery</groupId>
+            <artifactId>commons-discovery</artifactId>
+            <version>0.2</version>
+            <url>http://jakarta.apache.org/commons/discovery/</url>
+            <properties>
+                <comment>discovery API</comment>
+            </properties>
+        </dependency>
     </dependencies>
 
     <build>
@@ -239,7 +248,7 @@
 
         <unitTest>
             <includes>
-                <include>**/*TC.java</include>
+                <include>**/Test*.java</include>
             </includes>
             <excludes></excludes>
             <resources>
