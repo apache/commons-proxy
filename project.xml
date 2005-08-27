@@ -17,8 +17,8 @@
     <shortDescription>Java library for dynamic proxying</shortDescription>
     <url>http://jakarta.apache.org/commons/sandbox/proxy</url>
     <issueTrackingUrl>http://issues.apache.org/bugzilla</issueTrackingUrl>
-    <siteAddress>jakarta.apache.org</siteAddress>
-    <siteDirectory>/somewhere/commons/sandbox/proxy/</siteDirectory>
+    <siteAddress>cvs.apache.org</siteAddress>
+    <siteDirectory>/www/jakarta.apache.org/commons/sandbox/proxy/</siteDirectory>
     <description><![CDATA[
     <p>
     Commons proxy is a java library for creating dynamic proxys.
