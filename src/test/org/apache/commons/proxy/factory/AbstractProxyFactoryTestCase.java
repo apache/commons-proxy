@@ -18,17 +18,15 @@ package org.apache.commons.proxy.factory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.provider.ConstantProvider;
-import static org.apache.commons.proxy.provider.ProviderUtils.beanProvider;
-import static org.apache.commons.proxy.provider.ProviderUtils.singletonProvider;
+import static org.apache.commons.proxy.provider.ProviderUtils.*;
 import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixMethodInterceptor;
 
+import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.io.IOException;
 
 /**
  * @author James Carman
@@ -84,7 +82,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithCheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createProxy( new ConstantProvider( new EchoImpl() ), Echo.class );
+        final Echo proxy = ( Echo ) factory.createProxy( constantProvider( new EchoImpl() ), Echo.class );
         try
         {
             proxy.ioException();
@@ -97,7 +95,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithUncheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createProxy( new ConstantProvider( new EchoImpl() ), Echo.class );
+        final Echo proxy = ( Echo ) factory.createProxy( constantProvider( new EchoImpl() ), Echo.class );
         try
         {
             proxy.illegalArgument();
@@ -141,8 +139,23 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     }
 
+    public void testChangingArguments()
+    {
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new ChangeArgumentInterceptor(), Echo.class );
+        assertEquals( "something different", proxy.echoBack( "whatever" ) );
+    }
+
     private static class PrivateEcho extends EchoImpl
     {
+    }
+
+    private static class ChangeArgumentInterceptor implements MethodInterceptor
+    {
+        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+        {
+            methodInvocation.getArguments()[0] = "something different";
+            return methodInvocation.proceed();
+        }
     }
 
     private static class NoOpMethodInterceptor implements MethodInterceptor
