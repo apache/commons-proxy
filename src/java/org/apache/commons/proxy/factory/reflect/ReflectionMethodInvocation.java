@@ -60,12 +60,6 @@ class ReflectionMethodInvocation implements MethodInvocation
         {
             throw e.getTargetException();
         }
-        catch( Exception e )
-        {
-            System.out.println( "An unknown exception happened:" );
-            e.printStackTrace( System.out );
-            throw e;
-        }
     }
 
     public Object getThis()
