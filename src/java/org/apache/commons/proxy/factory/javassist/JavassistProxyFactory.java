@@ -103,7 +103,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         {
             final CtClass invocationClass = createClass();
             invocationClass.addInterface( resolve( MethodInvocation.class ) );
-            addField( Object.class, "target", invocationClass );
+            addField( method.getDeclaringClass(), "target", invocationClass );
             addField( Object[].class, "arguments", invocationClass );
             final Class[] argumentTypes = method.getParameterTypes();
             final Class[] constructorArgs = new Class[argumentTypes.length + 1];
@@ -127,7 +127,11 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             }
             for( int i = 0; i < argumentTypes.length; i++ )
             {
-                constructorBody.append( "\tthis.arguments[" + i + "] = $" + ( i + 2 ) + ";\n" );
+                constructorBody.append( "\tthis.arguments[" );
+                constructorBody.append( i );
+                constructorBody.append( "] = $" );
+                constructorBody.append( i + 2 );
+                constructorBody.append( ";\n" );
             }
             constructorBody.append( "}" );
             log.debug( "Constructor body:\n" + constructorBody );
@@ -139,39 +143,70 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             log.debug( "Proceed method body:\n" + proceedBody );
             proceedMethod.setBody( proceedBody.toString() );
             invocationClass.addMethod( proceedMethod );
-            final CtMethod getMethodMethod = new CtMethod( resolve( Method.class ), "getMethod", resolve( new Class[0] ), invocationClass );
-            final StringBuffer getMethodBody = new StringBuffer();
-            getMethodBody.append( "{\n\tfinal Class[] parameterTypes = new Class[" + argumentTypes.length + "];\n" );
-            for( int i = 0; i < argumentTypes.length; ++i )
-            {
-                getMethodBody.append( "\tparameterTypes[" + i + "] = " + argumentTypes[i].getName() + ".class;\n" );
-            }
-            getMethodBody.append( "\ttry\n\t{\n\t\treturn " + method.getDeclaringClass().getName() + ".class.getMethod(\"" + method.getName() + "\", parameterTypes );\n\t}\n\tcatch( NoSuchMethodException e )\n\t{\n\t\treturn null;\n\t}" );
-            getMethodBody.append( "}" );
-            log.debug( "getMethod() body:\n" + getMethodBody.toString() );
-            getMethodMethod.setBody( getMethodBody.toString() );
-            invocationClass.addMethod( getMethodMethod );
-            final CtMethod getArgumentsMethod = new CtMethod( resolve( Object[].class ), "getArguments", resolve( new Class[0] ), invocationClass );
-            final String getArgumentsBody = "{\n\treturn arguments;\n}";
-            log.debug( "getArguments() body:\n" + getArgumentsBody );
-            getArgumentsMethod.setBody( getArgumentsBody );
-            invocationClass.addMethod( getArgumentsMethod );
-            final CtMethod getStaticPartMethod = new CtMethod( resolve( AccessibleObject.class ), "getStaticPart", resolve( new Class[0] ), invocationClass );
-            final String getStaticPartBody = "{\n\treturn getMethod();\n}";
-            log.debug( "getStaticPart() body:\n" + getStaticPartBody );
-            getStaticPartMethod.setBody( getStaticPartBody );
-            invocationClass.addMethod( getStaticPartMethod );
-            final CtMethod getThisMethod = new CtMethod( resolve( Object.class ), "getThis", resolve( new Class[0] ), invocationClass );
-            final String getThisMethodBody = "{\n\treturn target;\n}";
-            log.debug( "getThis() body:\n" + getThisMethodBody );
-            getThisMethod.setBody( getThisMethodBody );
-            invocationClass.addMethod( getThisMethod );
+            addGetMethodMethod( invocationClass, argumentTypes, method );
+            addGetArgumentsMethod( invocationClass );
+            addGetStaticPartMethod( invocationClass );
+            addGetThisMethod( invocationClass );
             return invocationClass.toClass( classLoader );
         }
         catch( CannotCompileException e )
         {
             throw new ProxyFactoryException( "Could not compile Javassist generated class.", e );
         }
+    }
+
+    private void addGetMethodMethod( CtClass invocationClass, Class[] argumentTypes, Method method )
+            throws CannotCompileException
+    {
+        final CtMethod getMethodMethod = new CtMethod( resolve( Method.class ), "getMethod", resolve( new Class[0] ), invocationClass );
+        final StringBuffer getMethodBody = new StringBuffer();
+        getMethodBody.append( "{\n\tfinal Class[] parameterTypes = new Class[" );
+        getMethodBody.append( argumentTypes.length );
+        getMethodBody.append( "];\n" );
+        for( int i = 0; i < argumentTypes.length; ++i )
+        {
+            getMethodBody.append( "\tparameterTypes[" );
+            getMethodBody.append( i );
+            getMethodBody.append( "] = " );
+            getMethodBody.append( argumentTypes[i].getName() );
+            getMethodBody.append( ".class;\n" );
+        }
+        getMethodBody.append( "\ttry\n\t{\n\t\treturn " );
+        getMethodBody.append( method.getDeclaringClass().getName() );
+        getMethodBody.append( ".class.getMethod(\"" );
+        getMethodBody.append( method.getName() );
+        getMethodBody.append( "\", parameterTypes );\n\t}\n\tcatch( NoSuchMethodException e )\n\t{\n\t\treturn null;\n\t}" );
+        getMethodBody.append( "}" );
+        log.debug( "getMethod() body:\n" + getMethodBody.toString() );
+        getMethodMethod.setBody( getMethodBody.toString() );
+        invocationClass.addMethod( getMethodMethod );
+    }
+
+    private void addGetStaticPartMethod( CtClass invocationClass ) throws CannotCompileException
+    {
+        final CtMethod getStaticPartMethod = new CtMethod( resolve( AccessibleObject.class ), "getStaticPart", resolve( new Class[0] ), invocationClass );
+        final String getStaticPartBody = "{\n\treturn getMethod();\n}";
+        log.debug( "getStaticPart() body:\n" + getStaticPartBody );
+        getStaticPartMethod.setBody( getStaticPartBody );
+        invocationClass.addMethod( getStaticPartMethod );
+    }
+
+    private void addGetThisMethod( CtClass invocationClass ) throws CannotCompileException
+    {
+        final CtMethod getThisMethod = new CtMethod( resolve( Object.class ), "getThis", resolve( new Class[0] ), invocationClass );
+        final String getThisMethodBody = "{\n\treturn target;\n}";
+        log.debug( "getThis() body:\n" + getThisMethodBody );
+        getThisMethod.setBody( getThisMethodBody );
+        invocationClass.addMethod( getThisMethod );
+    }
+
+    private void addGetArgumentsMethod( CtClass invocationClass ) throws CannotCompileException
+    {
+        final CtMethod method = new CtMethod( resolve( Object[].class ), "getArguments", resolve( new Class[0] ), invocationClass );
+        final String body = "{\n\treturn arguments;\n}";
+        log.debug( "getArguments() body:\n" + body );
+        method.setBody( body );
+        invocationClass.addMethod( method );
     }
 
     private String generateProceedBody( Method method, Class[] argumentTypes )
@@ -185,10 +220,16 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         {
             proceedBody.append( "\t" );
         }
-        proceedBody.append( "( ( " + method.getDeclaringClass().getName() + " )target )." ).append( method.getName() ).append( "(" );
+        proceedBody.append( "target." );
+        proceedBody.append( method.getName() );
+        proceedBody.append( "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
         {
-            proceedBody.append( "(" + argumentTypes[i].getName() + ")arguments[" ).append( i ).append( "]" );
+            proceedBody.append( "(" );
+            proceedBody.append( argumentTypes[i].getName() );
+            proceedBody.append( ")arguments[" );
+            proceedBody.append( i );
+            proceedBody.append( "]" );
             if( i != argumentTypes.length - 1 )
             {
                 proceedBody.append( ", " );
