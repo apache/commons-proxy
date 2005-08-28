@@ -21,7 +21,7 @@
     <siteDirectory>/www/jakarta.apache.org/commons/sandbox/proxy/</siteDirectory>
     <description><![CDATA[
     <p>
-    Commons proxy is a java library for creating dynamic proxys.
+    Commons proxy is a java library for creating dynamic proxies.
     </p>
     <section name="Features">
       <p>
