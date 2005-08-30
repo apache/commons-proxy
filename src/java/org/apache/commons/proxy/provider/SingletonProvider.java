@@ -18,8 +18,6 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.DelegateProvider;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
  * Wraps another delegate provider, making sure to only call it once, returning the value returned from the wrapped
  * provider on all subsequent invocations.
@@ -30,7 +28,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SingletonProvider extends ProviderDecorator
 {
     private Object instance;
-    private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
 
     public SingletonProvider( DelegateProvider inner )
     {
@@ -39,20 +36,14 @@ public class SingletonProvider extends ProviderDecorator
 
     public Object getDelegate()
     {
-        rwl.readLock().lock();
-        if( instance == null )
+        synchronized( this )
         {
-            rwl.readLock().unlock();
-            rwl.writeLock().lock();
             if( instance == null )
             {
                 instance = super.getDelegate();
                 inner = null; // Garbage collection
             }
-            rwl.readLock().lock();
-            rwl.writeLock().unlock();
         }
-        rwl.readLock().unlock();
         return instance;
     }
 }
