@@ -30,8 +30,8 @@ public class TestRmiProvider extends TestCase
     {
         final Registry registry = LocateRegistry.createRegistry( Registry.REGISTRY_PORT );
         registry.bind( "echo", new RmiEchoImpl() );
-        final RmiProvider<RmiEcho> provider = new RmiProvider<RmiEcho>( "echo", RmiEcho.class );
-        final RmiEcho echo = provider.getObject();
+        final RmiProvider provider = new RmiProvider( "echo" );
+        final RmiEcho echo = ( RmiEcho )provider.getDelegate();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
 }

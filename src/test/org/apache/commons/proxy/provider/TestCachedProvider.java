@@ -27,20 +27,20 @@ public class TestCachedProvider extends TestCase
 {
     public void testWithSimpleCache()
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( new ConstantProvider<Echo>( new EchoImpl() ) );
-        final CachedProvider<Echo> provider = new CachedProvider<Echo>( counter );
+        final CountingProvider counter = new CountingProvider( new ConstantProvider( new EchoImpl() ) );
+        final CachedProvider provider = new CachedProvider( counter );
         provider.setCache( new SimpleCache() );
         for( int i = 0; i < 10; ++i )
         {
-            provider.getObject().echoBack( "Hello, World" );
+           ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
         }
         assertEquals( 1, counter.getCount() );
     }
 
     public void testWithThreadLocalCache() throws Exception
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( new ConstantProvider<Echo>( new EchoImpl() ) );
-        final CachedProvider<Echo> provider = new CachedProvider<Echo>( counter );
+        final CountingProvider counter = new CountingProvider( new ConstantProvider( new EchoImpl() ) );
+        final CachedProvider provider = new CachedProvider( counter );
         final ThreadLocalCache cache = new ThreadLocalCache();
         provider.setCache( cache );
         final CountDownLatch latch = new CountDownLatch( 10 );
@@ -50,7 +50,7 @@ public class TestCachedProvider extends TestCase
             {
                 public void run()
                 {
-                    provider.getObject().echoBack( "Hello, World" );
+                    ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
                     cache.clearCache();
                     latch.countDown();
                 }

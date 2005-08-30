@@ -1,29 +1,30 @@
-/*
- *  Copyright 2005 The Apache Software Foundation
+/* $Id$
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.proxy.interceptor;
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.DelegateProvider;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.provider.AbstractObjectProvider;
+import org.apache.commons.proxy.provider.AbstractDelegateProvider;
 
 /**
- * A <code>MethodInterceptorChain</code> assists with creating proxies which go through
- * a series of <code>MethodInterceptors</code>.
- * 
+ * A <code>MethodInterceptorChain</code> assists with creating proxies which go through a series of
+ * <code>MethodInterceptors</code>.
+ *
  * @author James Carman
  * @version 1.0
  */
@@ -36,38 +37,43 @@ public class MethodInterceptorChain
         this.interceptors = interceptors;
     }
 
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus, Class... proxyInterfaces )
+    public DelegateProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+                                                 Class... proxyInterfaces )
     {
         if( proxyInterfaces.length == 0 )
         {
             proxyInterfaces = terminus.getClass().getInterfaces();
         }
-        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
+        return new ProxyDelegateProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
     }
 
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
+    public DelegateProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
     {
-        return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus, proxyInterfaces );
+        return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
+                                    proxyInterfaces );
     }
 
-    private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus, Class... proxyInterfaces )
+    private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+                                Class... proxyInterfaces )
     {
         Object currentTarget = terminus;
         for( int i = interceptors.length - 1; i >= 0; --i )
         {
-            currentTarget = proxyFactory.createInterceptorProxy( classLoader, currentTarget, interceptors[i], proxyInterfaces );
+            currentTarget = proxyFactory
+                    .createInterceptingProxy( classLoader, currentTarget, interceptors[i], proxyInterfaces );
         }
         return currentTarget;
     }
 
-    private class ProxyObjectProvider extends AbstractObjectProvider
+    private class ProxyDelegateProvider extends AbstractDelegateProvider
     {
         private final ClassLoader classLoader;
         private final Class[] proxyInterfaces;
         private final Object terminus;
         private final ProxyFactory proxyFactory;
 
-        public ProxyObjectProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus, Class[] proxyInterfaces )
+        public ProxyDelegateProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+                                      Class[] proxyInterfaces )
         {
             this.classLoader = classLoader;
             this.proxyInterfaces = proxyInterfaces;
@@ -75,7 +81,7 @@ public class MethodInterceptorChain
             this.proxyFactory = proxyFactory;
         }
 
-        public Object getObject()
+        public Object getDelegate()
         {
             return createProxy( proxyFactory, classLoader, terminus, proxyInterfaces );
         }

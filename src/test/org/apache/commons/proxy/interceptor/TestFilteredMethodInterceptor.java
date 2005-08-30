@@ -30,13 +30,13 @@ public class TestFilteredMethodInterceptor extends TestCase
 {
     public void testFilterAccepts()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter( "echoBack" ) ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter( "echoBack" ) ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getDelegate();
         assertEquals( "messagea", echo.echoBack( "message" ) );
     }
 
     public void testFilterDenies()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter() ) ).createProxyProvider(  new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter() ) ).createProxyProvider(  new CglibProxyFactory(), new EchoImpl() ).getDelegate();
         assertEquals( "message", echo.echoBack( "message" ) );
     }
 }

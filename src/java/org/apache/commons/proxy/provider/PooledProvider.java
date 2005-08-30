@@ -1,24 +1,25 @@
-/*
- *  Copyright 2005 The Apache Software Foundation
+/* $Id$
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.exception.DelegateProviderException;
 import org.apache.commons.proxy.provider.cache.Cache;
 import org.apache.commons.proxy.provider.cache.CacheEvictionEvent;
 import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
@@ -27,13 +28,13 @@ import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
  * @author James Carman
  * @version 1.0
  */
-public class PooledProvider<T> extends ProviderDecorator<T> implements CacheEvictionListener
+public class PooledProvider extends ProviderDecorator implements CacheEvictionListener
 {
     private final Object cacheKey = new Object();
     private final GenericObjectPool pool;
     private Cache cache;
 
-    public PooledProvider( ObjectProvider<? extends T> inner )
+    public PooledProvider( DelegateProvider inner )
     {
         super( inner );
         pool = new GenericObjectPool( new Factory() );
@@ -57,23 +58,24 @@ public class PooledProvider<T> extends ProviderDecorator<T> implements CacheEvic
         }
     }
 
-    public T getObject()
+    public Object getDelegate()
     {
         try
         {
             log.debug( "Checking for object in cache in thread " + Thread.currentThread().getName() + "..." );
-            T object = ( T ) cache.retrieveObject( cacheKey );
+            Object object = cache.retrieveObject( cacheKey );
             if( object == null )
             {
-                log.debug( "Did not object in cache; borrowing from pool in thread " + Thread.currentThread().getName() + "..." );
-                object = ( T ) pool.borrowObject();
+                log.debug( "Did not object in cache; borrowing from pool in thread " +
+                           Thread.currentThread().getName() + "..." );
+                object = pool.borrowObject();
                 cache.storeObject( cacheKey, object, this );
             }
             return object;
         }
         catch( Exception e )
         {
-            throw new ObjectProviderException( "Unable to borrow object from pool.", e );
+            throw new DelegateProviderException( "Unable to borrow object from pool.", e );
         }
     }
 
@@ -134,10 +136,10 @@ public class PooledProvider<T> extends ProviderDecorator<T> implements CacheEvic
 
     private class Factory extends BasePoolableObjectFactory
     {
-        public T makeObject() throws Exception
+        public Object makeObject() throws Exception
         {
             log.debug( "Creating new object for pool in thread " + Thread.currentThread().getName() + "..." );
-            return inner.getObject();
+            return inner.getDelegate();
         }
     }
 }

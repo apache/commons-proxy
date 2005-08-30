@@ -1,21 +1,22 @@
-/*
- *  Copyright 2005 The Apache Software Foundation
+/* $Id$
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.exception.DelegateProviderException;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Service;
@@ -30,9 +31,9 @@ import java.net.URL;
  * @author James Carman
  * @version 1.0
  */
-public class JaxRpcProvider<T> extends AbstractObjectProvider<T>
+public class JaxRpcProvider extends AbstractDelegateProvider
 {
-    private final Class<? extends T> serviceInterface;
+    private final Class serviceInterface;
     private String wsdlUrl;
     private String serviceNamespaceUri;
     private String serviceLocalPart;
@@ -41,26 +42,29 @@ public class JaxRpcProvider<T> extends AbstractObjectProvider<T>
     private String portLocalPart;
     private String portPrefix;
 
-    public JaxRpcProvider( Class<? extends T> serviceInterface )
+    public JaxRpcProvider( Class serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }
 
-    public T getObject()
+    public Object getDelegate()
     {
         try
         {
-            final Service service = ( wsdlUrl == null ? ServiceFactory.newInstance().createService( getServiceQName() ) : ServiceFactory.newInstance().createService( new URL( wsdlUrl ), getServiceQName() ) );
+            final Service service = ( wsdlUrl == null ?
+                                      ServiceFactory.newInstance().createService( getServiceQName() ) : ServiceFactory
+                    .newInstance().createService( new URL( wsdlUrl ), getServiceQName() ) );
             final QName portQName = getPortQName();
-            return serviceInterface.cast( portQName == null ? service.getPort( serviceInterface ) : service.getPort( portQName, serviceInterface ) );
+            return portQName == null ? service.getPort( serviceInterface ) :
+                   service.getPort( portQName, serviceInterface );
         }
         catch( ServiceException e )
         {
-            throw new ObjectProviderException( "Unable to create JAX-RPC service proxy.", e );
+            throw new DelegateProviderException( "Unable to create JAX-RPC service proxy.", e );
         }
         catch( MalformedURLException e )
         {
-            throw new ObjectProviderException( "Invalid URL given.", e );
+            throw new DelegateProviderException( "Invalid URL given.", e );
         }
     }
 

@@ -43,7 +43,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testCreateProxy()
     {
-        final Echo echo = ( Echo ) factory.createProxy( singletonProvider( beanProvider( EchoImpl.class ) ), Echo.class );
+        final Echo echo = ( Echo ) factory.createDelegatingProxy( singletonProvider( beanProvider( EchoImpl.class ) ), Echo.class );
         echo.echo();
         assertEquals( "message", echo.echoBack( "message" ) );
         assertEquals( "ab", echo.echoBack( "a", "b" ) );
@@ -51,8 +51,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testCreateInterceptorProxy()
     {
-        final Echo target = ( Echo ) factory.createProxy( singletonProvider( beanProvider( EchoImpl.class ) ), Echo.class );
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, new SuffixMethodInterceptor( " suffix" ), Echo.class );
+        final Echo target = ( Echo ) factory.createDelegatingProxy( singletonProvider( beanProvider( EchoImpl.class ) ), Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( target, new SuffixMethodInterceptor( " suffix" ), Echo.class );
         proxy.echo();
         assertEquals( "message suffix", proxy.echoBack( "message" ) );
     }
@@ -61,7 +61,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
         final MethodInvocationTester tester = new MethodInvocationTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( target, tester, Echo.class );
         proxy.echo();
         assertNull( tester.arguments );
         assertEquals( Echo.class.getMethod( "echo" ), tester.method );
@@ -82,7 +82,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithCheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createProxy( constantProvider( new EchoImpl() ), Echo.class );
+        final Echo proxy = ( Echo ) factory.createDelegatingProxy( constantProvider( new EchoImpl() ), Echo.class );
         try
         {
             proxy.ioException();
@@ -95,7 +95,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithUncheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createProxy( constantProvider( new EchoImpl() ), Echo.class );
+        final Echo proxy = ( Echo ) factory.createDelegatingProxy( constantProvider( new EchoImpl() ), Echo.class );
         try
         {
             proxy.illegalArgument();
@@ -108,7 +108,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testInterceptorProxyWithUncheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(),  Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( new EchoImpl(), new NoOpMethodInterceptor(),  Echo.class );
         try
         {
             proxy.illegalArgument();
@@ -121,7 +121,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testInterceptorProxyWithCheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(),  Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( new EchoImpl(), new NoOpMethodInterceptor(),  Echo.class );
         try
         {
             proxy.ioException();
@@ -134,14 +134,14 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testWithNonAccessibleTargetType()
     {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new PrivateEcho(), new NoOpMethodInterceptor(), Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( new PrivateEcho(), new NoOpMethodInterceptor(), Echo.class );
         proxy.echo();
 
     }
 
     public void testChangingArguments()
     {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new ChangeArgumentInterceptor(), Echo.class );
+        final Echo proxy = ( Echo ) factory.createInterceptingProxy( new EchoImpl(), new ChangeArgumentInterceptor(), Echo.class );
         assertEquals( "something different", proxy.echoBack( "whatever" ) );
     }
 

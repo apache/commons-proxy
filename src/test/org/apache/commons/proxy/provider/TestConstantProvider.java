@@ -26,7 +26,7 @@ public class TestConstantProvider extends AbstractTestCase
     public void testGetObject() throws Exception
     {
         final String s = "Hello, World!";
-        final ConstantProvider<String> provider = new ConstantProvider<String>( s );
-        assertSame( s, provider.getObject() );
+        final ConstantProvider provider = new ConstantProvider( s );
+        assertSame( s, provider.getDelegate() );
     }
 }

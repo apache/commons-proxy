@@ -29,13 +29,13 @@ public class TestPooledProvider extends TestCase
 {
     public void testWithSimpleCache()
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( constantProvider( new EchoImpl() ) );
-        final PooledProvider<Echo> provider = new PooledProvider<Echo>( counter );
+        final CountingProvider counter = new CountingProvider( constantProvider( new EchoImpl() ) );
+        final PooledProvider provider = new PooledProvider( counter );
         final SimpleCache cache = new SimpleCache();
         provider.setCache( cache );
         for( int i = 0; i < 10; ++i )
         {
-            provider.getObject().echoBack( "Hello, World" );
+            ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
             cache.clearCache();
         }
         assertEquals( 1, counter.getCount() );
@@ -44,8 +44,8 @@ public class TestPooledProvider extends TestCase
 
     public void testWithThreadLocalCache() throws Exception
     {
-        final CountingProvider<Echo> counter = new CountingProvider<Echo>( constantProvider( new EchoImpl() ) );
-        final PooledProvider<Echo> provider = new PooledProvider<Echo>( counter );
+        final CountingProvider counter = new CountingProvider( constantProvider( new EchoImpl() ) );
+        final PooledProvider provider = new PooledProvider( counter );
         provider.setMaxActive( 10 );
         provider.setMinIdle( 5 );
         provider.setWhenExhaustedAction( GenericObjectPool.WHEN_EXHAUSTED_GROW );
@@ -67,12 +67,12 @@ public class TestPooledProvider extends TestCase
                 {
                     try
                     {
-                        provider.getObject().echoBack( "Hello, World" );
+                        ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
                         borrowedLatch.countDown();
                         goLatch.await();
                         for( int i = 0; i < 10; ++i )
                         {
-                            provider.getObject().echoBack( "Hello, World" );
+                            ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
 
                         }
                         cache.clearCache();

@@ -1,21 +1,22 @@
-/*
- *  Copyright 2005 The Apache Software Foundation
+/* $Id$
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.DelegateProvider;
 
 /**
  * @author James Carman
@@ -23,23 +24,23 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public class ProviderUtils
 {
-    public static <T> ObjectProvider<T> constantProvider( T value )
+    public static DelegateProvider constantProvider( Object value )
     {
-        return new ConstantProvider<T>( value );
+        return new ConstantProvider( value );
     }
 
-    public static <T> ObjectProvider<T> beanProvider( Class<T> beanClass )
+    public static DelegateProvider beanProvider( Class beanClass )
     {
-        return new BeanProvider<T>( beanClass );
+        return new BeanProvider( beanClass );
     }
 
-    public static <T> ObjectProvider<T> singletonProvider( ObjectProvider<T> inner )
+    public static DelegateProvider singletonProvider( DelegateProvider inner )
     {
-        return new SingletonProvider<T>( inner );
+        return new SingletonProvider( inner );
     }
 
-    public static <T> ObjectProvider<T> synchronizedProvider( ObjectProvider<T> inner )
+    public static DelegateProvider synchronizedProvider( DelegateProvider inner )
     {
-        return new SynchronizedProvider<T>( inner );
+        return new SynchronizedProvider( inner );
     }
 }

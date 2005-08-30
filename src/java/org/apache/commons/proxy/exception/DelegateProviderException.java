@@ -14,27 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.provider.cache;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.apache.commons.proxy.exception;
 
 /**
+ * {@link org.apache.commons.proxy.DelegateProvider} implementations should throw this exception type to indicate that
+ * there was a problem creating/finding the object.
+ *
  * @author James Carman
  * @version 1.0
  */
-public class ThreadLocalCache extends AbstractCache
+public class DelegateProviderException extends RuntimeException
 {
-    private ThreadLocal<Map<Object, CachedObject>> threadLocalMap = new ThreadLocal<Map<Object, CachedObject>>();
-
-    public Map<Object, CachedObject> getCachedObjectMap()
+    public DelegateProviderException()
     {
-        Map<Object, CachedObject> map = threadLocalMap.get();
-        if( map == null )
-        {
-            map = new HashMap<Object, CachedObject>();
-            threadLocalMap.set( map );
-        }
-        return map;
+    }
+
+    public DelegateProviderException( String message )
+    {
+        super( message );
+    }
+
+    public DelegateProviderException( String message, Throwable cause )
+    {
+        super( message, cause );
+    }
+
+    public DelegateProviderException( Throwable cause )
+    {
+        super( cause );
     }
 }

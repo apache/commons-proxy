@@ -14,27 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.provider.cache;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.apache.commons.proxy;
 
 /**
+ * Provides an object to a delegating proxy.
+ *
  * @author James Carman
  * @version 1.0
  */
-public class ThreadLocalCache extends AbstractCache
+public interface DelegateProvider
 {
-    private ThreadLocal<Map<Object, CachedObject>> threadLocalMap = new ThreadLocal<Map<Object, CachedObject>>();
-
-    public Map<Object, CachedObject> getCachedObjectMap()
-    {
-        Map<Object, CachedObject> map = threadLocalMap.get();
-        if( map == null )
-        {
-            map = new HashMap<Object, CachedObject>();
-            threadLocalMap.set( map );
-        }
-        return map;
-    }
+    /**
+     * Returns an object.  Implementing classes should throw a
+     * {@link org.apache.commons.proxy.exception.DelegateProviderException} if any problems arise while
+     * constructing/finding the object.
+     *
+     * @return the object on which the method should be called
+     */
+    public Object getDelegate();
 }

@@ -1,21 +1,22 @@
-/*
- *  Copyright 2005 The Apache Software Foundation
+/* $Id$
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Copyright 2005 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.exception.DelegateProviderException;
 
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -26,67 +27,65 @@ import java.rmi.server.RMIClientSocketFactory;
 
 /**
  * Provides an object by looking it up in an RMI registry.
- * 
+ *
  * @author James Carman
  * @version 1.0
  */
-public class RmiProvider<T> extends AbstractObjectProvider<T>
+public class RmiProvider extends AbstractDelegateProvider
 {
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;
     private RMIClientSocketFactory clientSocketFactory;
     private final String name;
-    private final Class<T> serviceInterface;
 
-    public RmiProvider( String name, Class<T> serviceInterface )
+    public RmiProvider( String name )
     {
         this.name = name;
-        this.serviceInterface = serviceInterface;
+
     }
 
-    public RmiProvider( String host, String name, Class<T> serviceInterface )
+    public RmiProvider( String host, String name )
     {
         this.host = host;
         this.name = name;
-        this.serviceInterface = serviceInterface;
     }
 
-    public RmiProvider( String host, int port, String name, Class<T> serviceInterface )
+    public RmiProvider( String host, int port, String name )
     {
         this.host = host;
         this.name = name;
-        this.serviceInterface = serviceInterface;
         this.port = port;
     }
 
-    public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name, Class<T> serviceInterface )
+    public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name )
     {
         this.host = host;
         this.port = port;
         this.clientSocketFactory = clientSocketFactory;
         this.name = name;
-        this.serviceInterface = serviceInterface;
     }
 
-    public T getObject()
+    public Object getDelegate()
     {
         Registry reg = null;
         try
         {
             reg = getRegistry();
-            return serviceInterface.cast( reg.lookup( name ) );
+            return reg.lookup( name );
         }
         catch( NotBoundException e )
         {
-            throw new ObjectProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".", e );
+            throw new DelegateProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".",
+                                                 e );
         }
         catch( AccessException e )
         {
-            throw new ObjectProviderException( "Registry at " + host + ":" + port + " did not allow lookup.", e );
+            throw new DelegateProviderException( "Registry at " + host + ":" + port + " did not allow lookup.", e );
         }
         catch( RemoteException e )
         {
-            throw new ObjectProviderException( "Unable to lookup service named " + name + " in registry at " + host + ":" + port + "." );
+            throw new DelegateProviderException(
+                    "Unable to lookup service named " + name + " in registry at " + host + ":" + port + "." );
         }
 
     }
@@ -97,7 +96,8 @@ public class RmiProvider<T> extends AbstractObjectProvider<T>
         {
             if( clientSocketFactory != null )
             {
-                log.debug( "Looking up RMI registry at " + host + ":" + port + " using specified client socket factory..." );
+                log.debug( "Looking up RMI registry at " + host + ":" + port +
+                           " using specified client socket factory..." );
                 return LocateRegistry.getRegistry( host, port, clientSocketFactory );
             }
             else
@@ -108,7 +108,7 @@ public class RmiProvider<T> extends AbstractObjectProvider<T>
         }
         catch( RemoteException e )
         {
-            throw new ObjectProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
+            throw new DelegateProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
         }
     }
 

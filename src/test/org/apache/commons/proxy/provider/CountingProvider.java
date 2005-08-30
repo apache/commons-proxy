@@ -15,25 +15,25 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.DelegateProvider;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class CountingProvider<T> extends ProviderDecorator<T>
+public class CountingProvider extends ProviderDecorator
 {
     private int count = 0;
 
-    public CountingProvider( ObjectProvider<? extends T> inner )
+    public CountingProvider( DelegateProvider inner )
     {
         super( inner );
     }
 
-    public synchronized T getObject()
+    public synchronized Object getDelegate()
     {
         count++;
-        return super.getObject();
+        return super.getDelegate();
     }
 
     public synchronized int getCount()

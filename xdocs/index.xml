@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!--
+   Copyright 2005 The Apache Software Foundation
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<document>
+    <properties>
+        <title>Overview</title>
+        <author email="commons-dev AT jakarta DOT apache DOT org">Jakarta Commons Development Team</author>
+        <author email="jcarman AT apache DOT org">James Carman</author>
+    </properties>
+
+    <body>
+        <section name="Commons Proxy: Dynamic Proxies Made Easy">
+            <p>
+                The <em>Proxy</em> design pattern (<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201633612/qid=1125413337/sr=1-1/ref=sr_1_1/104-0714405-6441551?v=glance&amp;s=books">GoF</a>)
+                allows you to provide &quot;a surrogate or placeholder for another object to control access to it&quot;.
+                Proxies can be used in many ways.  Some of which are:
+                <ul>
+                    <li><b>Lazy initialization</b> - the proxy acts as a "stand-in" for the actual implementation allowing
+                    it to be instantiated only when absolutely necessary.</li>
+                    <li><b>Security</b> - the proxy object can verify that the user actually has the permission to execute
+                    the method (a la EJB).</li>
+                    <li><b>Logging</b> - the proxy can log evey method invocation, providing valuable debugging information.</li>
+                    <li><b>Performance Monitoring</b> - the proxy can log each method invocation to a performance monitor
+                    allowing system administrators to see what parts of the system are potentially bogged down.</li>
+                </ul>
+                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, delegate providers, and
+                method interceptors.
+            </p>
+            <subsection name="Proxy Factories">
+                <p>
+                    <a href="apidocs/org/apache/commons/proxy/ProxyFactory.html">Proxy factories</a>
+                    encapsulate all necessary proxying logic away from your code.  Switching proxying
+                    techniques/technologies is as simple as using a different proxy factory implementation class.
+                    Currently,  <em>Commons Proxy</em> provides proxy factory implementations using JDK proxies,
+                    <a href="http://cglib.sourceforge.net">CGLIB</a>, and
+                    <a href="http://www.jboss.org/products/javassist">Javassist</a>.  Proxy factories allow you to create
+                    two different types of proxy objects:
+                    <ul>
+                        <li><b>Delegating Proxies</b> - a proxy that merely delegates each method invocation to an
+                            object provided by a delegate provider.</li>
+                        <li><b>Intercepting Proxies</b> - a proxy that allows a method interceptor to intercept each
+                            method invocation.</li>
+                    </ul>
+
+                </p>
+            </subsection>
+            <subsection name="Delegate Providers">
+                <p>
+                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Delegate Providers</a>
+                    provide the
+                    objects which will be the &quot;target&quot; of a proxy. There are two types of delegate providers:
+
+                    <ul>
+                        <li><b>Core Delegate Provider</b> - a provider which provides the core implementation
+                            object.</li>
+                        <li><b>Decorating Delegate Provider</b> - a provider which decorates the delegate returned by
+                        another provider.</li>
+                    </ul>
+                </p>
+            </subsection>
+            <subsection name="Method Interceptors">
+                <p>
+                    <cm>Commons Proxy</cm> uses the <a href="http://aopalliance.sourceforge.net">AOP Alliance</a> API
+                    for method interceptor support.  Method interceptors provide <em>rudimentary</em> aspect-oriented
+                    programming support, allowing you to alter the results/effects of a method invocation without actually
+                    changing the implementation of the method itself.  <em>Commons Proxy</em> provides a
+                    <a href="apidocs/org/apache/commons/proxy/interceptor/FilteredMethodInterceptor.html">filtered</a>
+                    method interceptor implementation allowing you to specify which methods are intercepted using a
+                    <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a>.
+                </p>
+            </subsection>
+        </section>
+
+        <section name="Status">
+            <p>
+                <ul>
+                    <li>This code is in the commons <i>sandbox</i>.</li>
+                    <li>The code is unreleased.</li>
+                    <li>Methods and classes can and will appear and disappear without warning.</li>
+                    <li>If you like the code and want to push it towards a release, join the mailing list!</li>
+                </ul>
+            </p>
+        </section>
+    </body>
+</document>

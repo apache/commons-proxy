@@ -29,13 +29,13 @@ public class TestMethodInterceptorChain extends TestCase
 {
     public void testWithSingleInterceptor()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new SuffixMethodInterceptor( "a" ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(), Echo.class ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new SuffixMethodInterceptor( "a" ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(), Echo.class ).getDelegate();
         assertEquals( "messagea", echo.echoBack( "message" ) );
     }
 
     public void testWithMultipleInterceptors()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new SuffixMethodInterceptor( "a" ), new SuffixMethodInterceptor( "b" ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(), Echo.class ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new SuffixMethodInterceptor( "a" ), new SuffixMethodInterceptor( "b" ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(), Echo.class ).getDelegate();
         assertEquals( "messageba", echo.echoBack( "message" ) );
     }
 }

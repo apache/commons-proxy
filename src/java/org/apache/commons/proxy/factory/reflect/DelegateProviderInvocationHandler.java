@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.provider.cache;
+package org.apache.commons.proxy.factory.reflect;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.proxy.DelegateProvider;
 
 /**
+ * An invocation handler which delegates to an object supplied by an {@link DelegateProvider}.
+ *
  * @author James Carman
  * @version 1.0
  */
-public class ThreadLocalCache extends AbstractCache
+public class DelegateProviderInvocationHandler extends DelegatingInvocationHandler
 {
-    private ThreadLocal<Map<Object, CachedObject>> threadLocalMap = new ThreadLocal<Map<Object, CachedObject>>();
+    private final DelegateProvider delegateProvider;
 
-    public Map<Object, CachedObject> getCachedObjectMap()
+    public DelegateProviderInvocationHandler( DelegateProvider delegateProvider )
     {
-        Map<Object, CachedObject> map = threadLocalMap.get();
-        if( map == null )
-        {
-            map = new HashMap<Object, CachedObject>();
-            threadLocalMap.set( map );
-        }
-        return map;
+        this.delegateProvider = delegateProvider;
+    }
+
+    protected Object getDelegate()
+    {
+        return delegateProvider.getDelegate();
     }
 }
