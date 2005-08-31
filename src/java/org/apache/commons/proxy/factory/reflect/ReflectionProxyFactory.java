@@ -17,7 +17,7 @@
 package org.apache.commons.proxy.factory.reflect;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.AbstractProxyFactory;
 
 import java.lang.reflect.Proxy;
@@ -37,7 +37,7 @@ public class ReflectionProxyFactory extends AbstractProxyFactory
                 .createProxy( classLoader, proxyInterfaces );
     }
 
-    public Object createDelegatingProxy( ClassLoader classLoader, DelegateProvider targetProvider,
+    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                          Class... proxyInterfaces )
     {
         return Proxy.newProxyInstance( classLoader, proxyInterfaces,

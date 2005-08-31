@@ -19,7 +19,7 @@ package org.apache.commons.proxy.factory;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 
 import java.lang.reflect.Method;
@@ -55,7 +55,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
                                         proxyInterfaces );
     }
 
-    public Object createDelegatingProxy( DelegateProvider targetProvider, Class... proxyInterfaces )
+    public Object createDelegatingProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
     {
         return createDelegatingProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
     }

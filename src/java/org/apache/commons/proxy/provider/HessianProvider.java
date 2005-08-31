@@ -27,7 +27,7 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @version 1.0
  */
-public class HessianProvider extends AbstractDelegateProvider
+public class HessianProvider extends AbstractObjectProvider
 {
     private final Class serviceInterface;
     private final String url;

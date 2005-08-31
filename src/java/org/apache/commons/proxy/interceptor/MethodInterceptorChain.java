@@ -17,9 +17,9 @@
 package org.apache.commons.proxy.interceptor;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.provider.AbstractDelegateProvider;
+import org.apache.commons.proxy.provider.AbstractObjectProvider;
 
 /**
  * A <code>MethodInterceptorChain</code> assists with creating proxies which go through a series of
@@ -37,17 +37,17 @@ public class MethodInterceptorChain
         this.interceptors = interceptors;
     }
 
-    public DelegateProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                                  Class... proxyInterfaces )
     {
         if( proxyInterfaces.length == 0 )
         {
             proxyInterfaces = terminus.getClass().getInterfaces();
         }
-        return new ProxyDelegateProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
+        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
     }
 
-    public DelegateProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
     {
         return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
                                     proxyInterfaces );
@@ -65,15 +65,15 @@ public class MethodInterceptorChain
         return currentTarget;
     }
 
-    private class ProxyDelegateProvider extends AbstractDelegateProvider
+    private class ProxyObjectProvider extends AbstractObjectProvider
     {
         private final ClassLoader classLoader;
         private final Class[] proxyInterfaces;
         private final Object terminus;
         private final ProxyFactory proxyFactory;
 
-        public ProxyDelegateProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                      Class[] proxyInterfaces )
+        public ProxyObjectProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+                                    Class[] proxyInterfaces )
         {
             this.classLoader = classLoader;
             this.proxyInterfaces = proxyInterfaces;

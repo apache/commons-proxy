@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.provider;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.proxy.DelegateProvider;
+package org.apache.commons.proxy;
 
 /**
+ * Provides an object to a delegating proxy.
+ *
  * @author James Carman
  * @version 1.0
  */
-public abstract class AbstractDelegateProvider implements DelegateProvider
+public interface ObjectProvider
 {
-    protected Log log = LogFactory.getLog( getClass() );
-
-    public void setLog( Log log )
-    {
-        this.log = log;
-    }
+    /**
+     * Returns an object.  Implementing classes should throw a
+     * {@link org.apache.commons.proxy.exception.DelegateProviderException} if any problems arise while
+     * constructing/finding the object.
+     *
+     * @return the object on which the method should be called
+     */
+    public Object getDelegate();
 }

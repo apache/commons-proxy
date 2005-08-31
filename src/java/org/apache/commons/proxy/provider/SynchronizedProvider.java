@@ -16,10 +16,10 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
- * Wraps another delegate provider, making it synchronized.
+ * Wraps another object provider, making it synchronized.
  *
  * @author James Carman
  * @version 1.0
@@ -28,13 +28,13 @@ public class SynchronizedProvider extends ProviderDecorator
 {
     private final Object monitor;
 
-    public SynchronizedProvider( DelegateProvider inner, Object monitor )
+    public SynchronizedProvider( ObjectProvider inner, Object monitor )
     {
         super( inner );
         this.monitor = monitor;
     }
 
-    public SynchronizedProvider( DelegateProvider inner )
+    public SynchronizedProvider( ObjectProvider inner )
     {
         super( inner );
         monitor = this;

@@ -31,7 +31,7 @@ import java.rmi.server.RMIClientSocketFactory;
  * @author James Carman
  * @version 1.0
  */
-public class RmiProvider extends AbstractDelegateProvider
+public class RmiProvider extends AbstractObjectProvider
 {
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;

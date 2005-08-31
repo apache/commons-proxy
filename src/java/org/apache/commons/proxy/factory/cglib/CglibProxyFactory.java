@@ -21,7 +21,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodProxy;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.AbstractProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
@@ -46,7 +46,7 @@ public class CglibProxyFactory extends AbstractProxyFactory
         return enhancer.create();
     }
 
-    public Object createDelegatingProxy( ClassLoader classLoader, DelegateProvider targetProvider,
+    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                          Class... proxyInterfaces )
     {
         final Enhancer enhancer = new Enhancer();
@@ -116,9 +116,9 @@ public class CglibProxyFactory extends AbstractProxyFactory
 
     private class DelegateProviderDispatcher implements Dispatcher
     {
-        private final DelegateProvider delegateProvider;
+        private final ObjectProvider delegateProvider;
 
-        public DelegateProviderDispatcher( DelegateProvider delegateProvider )
+        public DelegateProviderDispatcher( ObjectProvider delegateProvider )
         {
             this.delegateProvider = delegateProvider;
         }

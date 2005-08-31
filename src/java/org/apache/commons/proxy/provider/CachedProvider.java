@@ -16,7 +16,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.provider.cache.Cache;
 
 /**
@@ -28,7 +28,7 @@ public class CachedProvider<T> extends ProviderDecorator
     private final Object cacheKey = new Object();
     private Cache cache;
 
-    public CachedProvider( DelegateProvider inner )
+    public CachedProvider( ObjectProvider inner )
     {
         super( inner );
     }

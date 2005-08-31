@@ -31,7 +31,7 @@ import java.net.URL;
  * @author James Carman
  * @version 1.0
  */
-public class JaxRpcProvider extends AbstractDelegateProvider
+public class JaxRpcProvider extends AbstractObjectProvider
 {
     private final Class serviceInterface;
     private String wsdlUrl;

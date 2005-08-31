@@ -36,7 +36,7 @@
                     <li><b>Performance Monitoring</b> - the proxy can log each method invocation to a performance monitor
                     allowing system administrators to see what parts of the system are potentially bogged down.</li>
                 </ul>
-                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, delegate providers, and
+                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, object providers, and
                 method interceptors.
             </p>
             <subsection name="Proxy Factories">
@@ -50,23 +50,23 @@
                     two different types of proxy objects:
                     <ul>
                         <li><b>Delegating Proxies</b> - a proxy that merely delegates each method invocation to an
-                            object provided by a delegate provider.</li>
+                            object provided by a object provider.</li>
                         <li><b>Intercepting Proxies</b> - a proxy that allows a method interceptor to intercept each
                             method invocation.</li>
                     </ul>
 
                 </p>
             </subsection>
-            <subsection name="Delegate Providers">
+            <subsection name="Object Providers">
                 <p>
-                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Delegate Providers</a>
+                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Object Providers</a>
                     provide the
-                    objects which will be the &quot;target&quot; of a proxy. There are two types of delegate providers:
+                    objects which will be the &quot;target&quot; of a proxy. There are two types of object providers:
 
                     <ul>
-                        <li><b>Core Delegate Provider</b> - a provider which provides the core implementation
+                        <li><b>Core Object Providers</b> - a provider which provides the core implementation
                             object.</li>
-                        <li><b>Decorating Delegate Provider</b> - a provider which decorates the delegate returned by
+                        <li><b>Decorating Object Providers</b> - a provider which decorates the object returned by
                         another provider.</li>
                     </ul>
                 </p>

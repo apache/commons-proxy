@@ -17,7 +17,7 @@
 package org.apache.commons.proxy.exception;
 
 /**
- * {@link org.apache.commons.proxy.DelegateProvider} implementations should throw this exception type to indicate that
+ * {@link org.apache.commons.proxy.ObjectProvider} implementations should throw this exception type to indicate that
  * there was a problem creating/finding the object.
  *
  * @author James Carman

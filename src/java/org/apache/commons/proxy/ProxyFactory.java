@@ -55,14 +55,14 @@ public interface ProxyFactory
     public Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces );
 
     /**
-     * Creates a proxy which delegates to the object provided by the delegate provider.  The proxy will be
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
      * generated using the current thread's "context class loader."
      *
      * @param delegateProvider  the delegate provider
      * @param proxyInterfaces the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatingProxy( DelegateProvider delegateProvider, Class... proxyInterfaces );
+    public Object createDelegatingProxy( ObjectProvider delegateProvider, Class... proxyInterfaces );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
@@ -72,6 +72,6 @@ public interface ProxyFactory
      * @param proxyInterfaces the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
-    public Object createDelegatingProxy( ClassLoader classLoader, DelegateProvider delegateProvider,
+    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
                                          Class... proxyInterfaces );
 }

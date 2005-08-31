@@ -21,7 +21,7 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.factory.AbstractProxyFactory;
 
@@ -103,7 +103,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
     }
 
-    public Object createDelegatingProxy( ClassLoader classLoader, DelegateProvider targetProvider,
+    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                          Class... proxyInterfaces )
     {
         synchronized( delegatingProxyClassCache )
@@ -118,9 +118,9 @@ public class JavassistProxyFactory extends AbstractProxyFactory
                 try
                 {
                     final CtClass proxyClass = JavassistUtils.createClass();
-                    JavassistUtils.addField( DelegateProvider.class, "provider", proxyClass );
+                    JavassistUtils.addField( ObjectProvider.class, "provider", proxyClass );
                     final CtConstructor proxyConstructor = new CtConstructor(
-                            JavassistUtils.resolve( new Class[]{DelegateProvider.class} ),
+                            JavassistUtils.resolve( new Class[]{ObjectProvider.class} ),
                             proxyClass );
                     proxyConstructor.setBody( "{ this.provider = $1; }" );
                     proxyClass.addConstructor( proxyConstructor );
@@ -135,7 +135,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             }
             try
             {
-                return clazz.getConstructor( DelegateProvider.class ).newInstance( targetProvider );
+                return clazz.getConstructor( ObjectProvider.class ).newInstance( targetProvider );
             }
             catch( Exception e )
             {

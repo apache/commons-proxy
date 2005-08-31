@@ -18,7 +18,7 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.DelegateProviderException;
 import org.apache.commons.proxy.provider.cache.Cache;
 import org.apache.commons.proxy.provider.cache.CacheEvictionEvent;
@@ -34,7 +34,7 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
     private final GenericObjectPool pool;
     private Cache cache;
 
-    public PooledProvider( DelegateProvider inner )
+    public PooledProvider( ObjectProvider inner )
     {
         super( inner );
         pool = new GenericObjectPool( new Factory() );

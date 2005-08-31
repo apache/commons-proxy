@@ -22,7 +22,7 @@ package org.apache.commons.proxy.provider;
  * @author James Carman
  * @version 1.0
  */
-public class ConstantProvider extends AbstractDelegateProvider
+public class ConstantProvider extends AbstractObjectProvider
 {
     private final Object constant;
 

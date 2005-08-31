@@ -16,7 +16,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
  * @author James Carman
@@ -24,22 +24,22 @@ import org.apache.commons.proxy.DelegateProvider;
  */
 public class ProviderUtils
 {
-    public static DelegateProvider constantProvider( Object value )
+    public static ObjectProvider constantProvider( Object value )
     {
         return new ConstantProvider( value );
     }
 
-    public static DelegateProvider beanProvider( Class beanClass )
+    public static ObjectProvider beanProvider( Class beanClass )
     {
         return new BeanProvider( beanClass );
     }
 
-    public static DelegateProvider singletonProvider( DelegateProvider inner )
+    public static ObjectProvider singletonProvider( ObjectProvider inner )
     {
         return new SingletonProvider( inner );
     }
 
-    public static DelegateProvider synchronizedProvider( DelegateProvider inner )
+    public static ObjectProvider synchronizedProvider( ObjectProvider inner )
     {
         return new SynchronizedProvider( inner );
     }

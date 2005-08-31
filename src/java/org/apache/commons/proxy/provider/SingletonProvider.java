@@ -16,10 +16,10 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
- * Wraps another delegate provider, making sure to only call it once, returning the value returned from the wrapped
+ * Wraps another object provider, making sure to only call it once, returning the value returned from the wrapped
  * provider on all subsequent invocations.
  *
  * @author James Carman
@@ -29,7 +29,7 @@ public class SingletonProvider extends ProviderDecorator
 {
     private Object instance;
 
-    public SingletonProvider( DelegateProvider inner )
+    public SingletonProvider( ObjectProvider inner )
     {
         super( inner );
     }

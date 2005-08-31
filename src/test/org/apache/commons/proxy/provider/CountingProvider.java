@@ -15,7 +15,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
  * @author James Carman
@@ -25,7 +25,7 @@ public class CountingProvider extends ProviderDecorator
 {
     private int count = 0;
 
-    public CountingProvider( DelegateProvider inner )
+    public CountingProvider( ObjectProvider inner )
     {
         super( inner );
     }

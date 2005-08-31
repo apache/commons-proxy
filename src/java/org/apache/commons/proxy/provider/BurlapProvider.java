@@ -27,7 +27,7 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @version 1.0
  */
-public class BurlapProvider extends AbstractDelegateProvider
+public class BurlapProvider extends AbstractObjectProvider
 {
     private final Class serviceInterface;
     private final String url;

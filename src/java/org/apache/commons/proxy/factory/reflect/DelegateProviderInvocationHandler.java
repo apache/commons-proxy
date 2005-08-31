@@ -16,19 +16,19 @@
  */
 package org.apache.commons.proxy.factory.reflect;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
- * An invocation handler which delegates to an object supplied by an {@link DelegateProvider}.
+ * An invocation handler which delegates to an object supplied by an {@link ObjectProvider}.
  *
  * @author James Carman
  * @version 1.0
  */
 public class DelegateProviderInvocationHandler extends DelegatingInvocationHandler
 {
-    private final DelegateProvider delegateProvider;
+    private final ObjectProvider delegateProvider;
 
-    public DelegateProviderInvocationHandler( DelegateProvider delegateProvider )
+    public DelegateProviderInvocationHandler( ObjectProvider delegateProvider )
     {
         this.delegateProvider = delegateProvider;
     }

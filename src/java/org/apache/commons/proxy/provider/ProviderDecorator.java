@@ -16,17 +16,17 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.DelegateProvider;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class ProviderDecorator extends AbstractDelegateProvider
+public class ProviderDecorator extends AbstractObjectProvider
 {
-    protected DelegateProvider inner;
+    protected ObjectProvider inner;
 
-    public ProviderDecorator( DelegateProvider inner )
+    public ProviderDecorator( ObjectProvider inner )
     {
         this.inner = inner;
     }

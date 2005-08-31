@@ -24,7 +24,7 @@ import org.apache.commons.proxy.exception.DelegateProviderException;
  * @author James Carman
  * @version $Rev: 57 $
  */
-public class BeanProvider extends AbstractDelegateProvider
+public class BeanProvider extends AbstractObjectProvider
 {
     private final Class beanClass;
 
