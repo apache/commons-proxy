@@ -21,7 +21,7 @@ import java.io.IOException;
  * @author James Carman
  * @version 1.0
  */
-public class EchoImpl implements Echo
+public class EchoImpl implements Echo, DuplicateEcho
 {
     public String echoBack( String message )
     {
@@ -31,6 +31,11 @@ public class EchoImpl implements Echo
     public String echoBack( String message1, String message2 )
     {
         return message1 + message2;
+    }
+
+    public int echoBack( int i )
+    {
+        return i;
     }
 
     public void echo()

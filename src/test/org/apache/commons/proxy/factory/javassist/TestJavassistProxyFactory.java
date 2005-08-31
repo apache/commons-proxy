@@ -16,6 +16,12 @@
 package org.apache.commons.proxy.factory.javassist;
 
 import org.apache.commons.proxy.factory.AbstractProxyFactoryTestCase;
+import org.apache.commons.proxy.util.Echo;
+import org.apache.commons.proxy.util.DuplicateEcho;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.LinkedList;
 
 /**
  * @author James Carman

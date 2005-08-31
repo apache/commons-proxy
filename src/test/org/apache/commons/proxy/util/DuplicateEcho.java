@@ -1,5 +1,6 @@
-/*
- * Copyright (c) 2005 Carman Consulting, Inc. All Rights Reserved.
+/* $Id$
+ *
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +16,11 @@
  */
 package org.apache.commons.proxy.util;
 
-import java.io.IOException;
-
 /**
  * @author James Carman
  * @version 1.0
  */
-public interface Echo
+public interface DuplicateEcho
 {
     public String echoBack( String message );
-    public String echoBack( String message1, String message2 );
-    public int echoBack( int i );
-    public void echo();
-
-    public void ioException() throws IOException;
-    public void illegalArgument();
 }
