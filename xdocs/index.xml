@@ -59,7 +59,7 @@
             </subsection>
             <subsection name="Object Providers">
                 <p>
-                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Object Providers</a>
+                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Object providers</a>
                     provide the
                     objects which will be the &quot;target&quot; of a proxy. There are two types of object providers:
 
