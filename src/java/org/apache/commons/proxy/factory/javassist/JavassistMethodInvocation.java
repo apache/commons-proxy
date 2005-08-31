@@ -21,15 +21,11 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.HashMap;
 
 /**
@@ -39,8 +35,8 @@ import java.util.HashMap;
 public abstract class JavassistMethodInvocation implements MethodInvocation
 {
     // TODO: Make sure this doesn't cause memory leaks in application servers!
-    private static final HashMap invocationClassCache = new HashMap();
-
+    private static final HashMap<CacheKey,Class> invocationClassCache = new HashMap<CacheKey,Class>();
+    private static final Log log = LogFactory.getLog( JavassistMethodInvocation.class );
     protected final Method method;
     protected final Object target;
     protected final Object[] arguments;
@@ -81,6 +77,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         Class invocationClass = ( Class ) invocationClassCache.get( key );
         if( invocationClass == null )
         {
+            log.debug( "Generating method invocation class for method " + interfaceMethod + "..." );
             final CtClass ctClass = JavassistUtils.createClass(
                     interfaceMethod.getDeclaringClass().getSimpleName() + "_" + interfaceMethod.getName() +
                     "_invocation",
@@ -154,76 +151,11 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
                 return false;
             }
             final CacheKey cacheKey = ( CacheKey ) o;
-            if( classLoader != null ? !classLoader.equals( cacheKey.classLoader ) : cacheKey.classLoader != null )
+            if( !classLoader.equals( cacheKey.classLoader ) )
             {
                 return false;
             }
-            if( method != null ? !method.equals( cacheKey.method ) : cacheKey.method != null )
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public int hashCode()
-        {
-            int result;
-            result = ( classLoader != null ? classLoader.hashCode() : 0 );
-            result = 29 * result + ( method != null ? method.hashCode() : 0 );
-            return result;
-        }
-    }
-
-    public static Method[] getImplementationMethods( Class... proxyInterfaces )
-    {
-        final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
-        final List<Method> resultingMethods = new LinkedList<Method>();
-        for( int i = 0; i < proxyInterfaces.length; i++ )
-        {
-            Class proxyInterface = proxyInterfaces[i];
-            final Method[] methods = proxyInterface.getDeclaredMethods();
-            for( int j = 0; j < methods.length; j++ )
-            {
-                final MethodSignature signature = new MethodSignature( methods[j] );
-                if( !signatures.contains( signature ) )
-                {
-                    signatures.add( signature );
-                    resultingMethods.add( methods[j] );
-                }
-            }
-        }
-        final Method[] results = new Method[resultingMethods.size()];
-        return resultingMethods.toArray( results );
-    }
-
-    private static class MethodSignature
-    {
-        private final String name;
-        private final List<Class> parameterTypes;
-
-        public MethodSignature( Method method )
-        {
-            this.name = method.getName();
-            this.parameterTypes = Arrays.<Class>asList( method.getParameterTypes() );
-        }
-
-        public boolean equals( Object o )
-        {
-            if( this == o )
-            {
-                return true;
-            }
-            if( o == null || getClass() != o.getClass() )
-            {
-                return false;
-            }
-            final MethodSignature that = ( MethodSignature ) o;
-            if( name != null ? !name.equals( that.name ) : that.name != null )
-            {
-                return false;
-            }
-            if( parameterTypes != null ? !parameterTypes.equals( that.parameterTypes ) :
-                that.parameterTypes != null )
+            if( !method.equals( cacheKey.method ) )
             {
                 return false;
             }
@@ -233,8 +165,8 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         public int hashCode()
         {
             int result;
-            result = ( name != null ? name.hashCode() : 0 );
-            result = 29 * result + ( parameterTypes != null ? parameterTypes.hashCode() : 0 );
+            result = classLoader.hashCode();
+            result = 29 * result + method.hashCode();
             return result;
         }
     }

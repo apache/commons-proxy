@@ -23,11 +23,10 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 
 import java.lang.reflect.Method;
-import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
 import java.util.LinkedList;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -80,48 +79,5 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         }
         final Method[] results = new Method[resultingMethods.size()];
         return resultingMethods.toArray( results );
-    }
-
-    private static class MethodSignature
-    {
-        private final String name;
-        private final List<Class> parameterTypes;
-
-        public MethodSignature( Method method )
-        {
-            this.name = method.getName();
-            this.parameterTypes = Arrays.<Class>asList( method.getParameterTypes() );
-        }
-
-        public boolean equals( Object o )
-        {
-            if( this == o )
-            {
-                return true;
-            }
-            if( o == null || getClass() != o.getClass() )
-            {
-                return false;
-            }
-            final MethodSignature that = ( MethodSignature ) o;
-            if( name != null ? !name.equals( that.name ) : that.name != null )
-            {
-                return false;
-            }
-            if( parameterTypes != null ? !parameterTypes.equals( that.parameterTypes ) :
-                that.parameterTypes != null )
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public int hashCode()
-        {
-            int result;
-            result = ( name != null ? name.hashCode() : 0 );
-            result = 29 * result + ( parameterTypes != null ? parameterTypes.hashCode() : 0 );
-            return result;
-        }
     }
 }

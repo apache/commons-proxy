@@ -114,10 +114,11 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
         final MethodInvocationTester tester = new MethodInvocationTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) factory.createInterceptingProxy( target, tester, Echo.class );
-        proxy.echoBack( "hello1" );
+        final Echo proxy1 = ( Echo ) factory.createInterceptingProxy( target, tester, Echo.class );
+        final Echo proxy2 = ( Echo ) factory.createInterceptingProxy( target, tester, Echo.class, DuplicateEcho.class );
+        proxy1.echoBack( "hello1" );
         final Class invocationClass1 = tester.invocationClass;
-        proxy.echoBack( "hello2" );
+        proxy2.echoBack( "hello2" );
         assertEquals( invocationClass1, tester.invocationClass );
     }
 
