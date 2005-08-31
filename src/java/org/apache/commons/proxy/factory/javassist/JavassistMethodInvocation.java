@@ -24,12 +24,13 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
-import java.util.WeakHashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
+import java.util.HashMap;
 
 /**
  * @author James Carman
@@ -37,6 +38,9 @@ import java.util.Arrays;
  */
 public abstract class JavassistMethodInvocation implements MethodInvocation
 {
+    // TODO: Make sure this doesn't cause memory leaks in application servers!
+    private static final HashMap invocationClassCache = new HashMap();
+
     protected final Method method;
     protected final Object target;
     protected final Object[] arguments;
@@ -68,7 +72,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         return method;
     }
 
-    private static final WeakHashMap invocationClassCache = new WeakHashMap();
+
 
     public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException

@@ -40,7 +40,9 @@ import java.util.List;
  */
 public class JavassistProxyFactory extends AbstractProxyFactory
 {
+    // TODO: Make sure this doesn't cause memory leaks in application servers!
     private static HashMap<ProxyClassDescriptor, Class> delegatingProxyClassCache = new HashMap<ProxyClassDescriptor, Class>();
+    // TODO: Make sure this doesn't cause memory leaks in application servers!
     private static HashMap<ProxyClassDescriptor, Class> interceptingProxyClassCache = new HashMap<ProxyClassDescriptor, Class>();
 
     public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
