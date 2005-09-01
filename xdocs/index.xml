@@ -28,7 +28,7 @@
                 allows you to provide &quot;a surrogate or placeholder for another object to control access to it&quot;.
                 Proxies can be used in many ways.  Some of which are:
                 <ul>
-                    <li><b>Lazy initialization</b> - the proxy acts as a "stand-in" for the actual implementation allowing
+                    <li><b>Deferred Initialization</b> - the proxy acts as a "stand-in" for the actual implementation allowing
                     it to be instantiated only when absolutely necessary.</li>
                     <li><b>Security</b> - the proxy object can verify that the user actually has the permission to execute
                     the method (a la EJB).</li>
