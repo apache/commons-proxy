@@ -79,7 +79,7 @@
                 <role>designer</role>
                 <role>developer</role>
             </roles>
-            <timezone>+6</timezone>
+            <timezone>+1</timezone>
         </developer>
         <developer>
             <name>J&#246;rg Hohwiller</name>
