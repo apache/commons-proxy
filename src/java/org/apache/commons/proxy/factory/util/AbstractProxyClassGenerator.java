@@ -14,13 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.factory;
-
-import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.ProxyFactory;
+package org.apache.commons.proxy.factory.util;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -29,37 +23,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
- *
  * @author James Carman
  * @version 1.0
  */
-public abstract class AbstractProxyFactory implements ProxyFactory
+public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
-    protected Log log;
-
-    protected AbstractProxyFactory()
-    {
-        setLog( LogFactory.getLog( getClass() ) );
-    }
-
-    public void setLog( Log log )
-    {
-        this.log = log;
-    }
-
-    public Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces )
-    {
-        return createInterceptingProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
-                                        proxyInterfaces );
-    }
-
-    public Object createDelegatingProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
-    {
-        return createDelegatingProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
-    }
-
-    protected Method[] getImplementationMethods( Class... proxyInterfaces )
+    public static Method[] getImplementationMethods( Class... proxyInterfaces )
     {
         final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
         final List<Method> resultingMethods = new LinkedList<Method>();

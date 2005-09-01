@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.factory;
+package org.apache.commons.proxy.factory.util;
 import junit.framework.TestCase;
 import org.apache.commons.proxy.util.DuplicateEcho;
 import org.apache.commons.proxy.util.Echo;
+import org.apache.commons.proxy.factory.util.MethodSignature;
 
 public class TestMethodSignature extends TestCase
 {

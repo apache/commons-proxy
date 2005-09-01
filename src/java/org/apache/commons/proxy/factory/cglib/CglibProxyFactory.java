@@ -22,7 +22,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.factory.AbstractProxyFactory;
+import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;

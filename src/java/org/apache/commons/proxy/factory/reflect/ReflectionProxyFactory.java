@@ -18,7 +18,7 @@ package org.apache.commons.proxy.factory.reflect;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.factory.AbstractProxyFactory;
+import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
 import java.lang.reflect.Proxy;
 
