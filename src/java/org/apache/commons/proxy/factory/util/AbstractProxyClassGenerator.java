@@ -23,11 +23,21 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * A useful superclass for {@link ProxyClassGenerator} implementations.
+ *
  * @author James Carman
  * @version 1.0
  */
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
+    /**
+     * Returns all methods that a proxy class must implement from the
+     * proxy interfaces.  This method makes sure there are no method signature clashes.
+     * For methods with the same signature (name and parameter types), the one encountered
+     * first will be returned in the result.
+     * @param proxyInterfaces the interfaces the proxy class must implement
+     * @return all methods that the proxy class must implement
+     */
     public static Method[] getImplementationMethods( Class... proxyInterfaces )
     {
         final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
@@ -35,7 +45,7 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
         for( int i = 0; i < proxyInterfaces.length; i++ )
         {
             Class proxyInterface = proxyInterfaces[i];
-            final Method[] methods = proxyInterface.getDeclaredMethods();
+            final Method[] methods = proxyInterface.getMethods();
             for( int j = 0; j < methods.length; j++ )
             {
                 final MethodSignature signature = new MethodSignature( methods[j] );

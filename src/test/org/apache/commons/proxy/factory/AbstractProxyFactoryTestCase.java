@@ -19,7 +19,6 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ProxyFactory;
 import static org.apache.commons.proxy.provider.ProviderUtils.*;
-import org.apache.commons.proxy.provider.ConstantProvider;
 import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
@@ -32,6 +31,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author James Carman
@@ -46,11 +47,17 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         this.factory = factory;
     }
 
+    public void testInterfaceHierarchies()
+    {
+        final SortedSet<String> set = ( SortedSet<String> ) factory.createDelegatingProxy( constantProvider( new TreeSet<String>() ), SortedSet.class );
+        set.add( "Hello" );
+    }
+
     public void testDelegatingProxyInterfaceOrder()
     {
         final Echo echo = ( Echo ) factory.createDelegatingProxy( singletonProvider( beanProvider( EchoImpl.class ) ), Echo.class, DuplicateEcho.class );
-        final List expected = new LinkedList( Arrays.asList( Echo.class, DuplicateEcho.class ) );
-        final List actual = new LinkedList( Arrays.asList( echo.getClass().getInterfaces() ) );
+        final List<Class> expected = new LinkedList<Class>( Arrays.asList( Echo.class, DuplicateEcho.class ) );
+        final List<Class> actual = new LinkedList<Class>( Arrays.asList( echo.getClass().getInterfaces() ) );
         actual.retainAll( expected );  // Doesn't alter order!
         assertEquals( expected, actual );
     }
