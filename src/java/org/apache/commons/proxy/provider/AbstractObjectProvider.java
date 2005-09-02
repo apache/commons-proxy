@@ -32,4 +32,9 @@ public abstract class AbstractObjectProvider implements ObjectProvider
     {
         this.log = log;
     }
+
+    public Log getLog()
+    {
+        return log;
+    }
 }
