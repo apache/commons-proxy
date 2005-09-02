@@ -16,7 +16,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Service;
@@ -60,11 +60,11 @@ public class JaxRpcProvider extends AbstractObjectProvider
         }
         catch( ServiceException e )
         {
-            throw new DelegateProviderException( "Unable to create JAX-RPC service proxy.", e );
+            throw new ObjectProviderException( "Unable to create JAX-RPC service proxy.", e );
         }
         catch( MalformedURLException e )
         {
-            throw new DelegateProviderException( "Invalid URL given.", e );
+            throw new ObjectProviderException( "Invalid URL given.", e );
         }
     }
 

@@ -20,6 +20,6 @@ public class TestDelegateProviderException extends AbstractExceptionClassTestCas
 {
     public TestDelegateProviderException()
     {
-        super( DelegateProviderException.class );
+        super( ObjectProviderException.class );
     }
 }

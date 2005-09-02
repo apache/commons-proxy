@@ -16,7 +16,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
@@ -41,12 +41,12 @@ public class BeanProvider extends AbstractObjectProvider
         }
         catch( InstantiationException e )
         {
-            throw new DelegateProviderException( "Class " + beanClass.getName() + " is not concrete.", e );
+            throw new ObjectProviderException( "Class " + beanClass.getName() + " is not concrete.", e );
         }
         catch( IllegalAccessException e )
         {
-            throw new DelegateProviderException( "Constructor for class " + beanClass.getName() + " is not accessible.",
-                                                 e );
+            throw new ObjectProviderException( "Constructor for class " + beanClass.getName() + " is not accessible.",
+                                               e );
         }
     }
 }

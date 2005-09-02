@@ -21,7 +21,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 /**
  * @author James Carman
@@ -57,7 +57,7 @@ public class JavassistUtils
         }
         catch( NotFoundException e )
         {
-            throw new DelegateProviderException(
+            throw new ObjectProviderException(
                     "Unable to find class " + clazz.getName() + " in default Javassist class pool.", e );
         }
     }

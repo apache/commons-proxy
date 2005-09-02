@@ -16,7 +16,7 @@
 package org.apache.commons.proxy.provider;
 
 import junit.framework.TestCase;
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 public class TestBeanProvider extends TestCase
 {
@@ -27,7 +27,7 @@ public class TestBeanProvider extends TestCase
             new BeanProvider( Number.class ).getDelegate();
             fail();
         }
-        catch( DelegateProviderException e )
+        catch( ObjectProviderException e )
         {
 
         }
@@ -40,7 +40,7 @@ public class TestBeanProvider extends TestCase
             new BeanProvider( MyBean.class ).getDelegate();
             fail();
         }
-        catch( DelegateProviderException e )
+        catch( ObjectProviderException e )
         {
 
         }

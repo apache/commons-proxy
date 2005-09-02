@@ -17,7 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import com.caucho.hessian.client.HessianProxyFactory;
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import java.net.MalformedURLException;
 
@@ -46,7 +46,7 @@ public class HessianProvider extends AbstractObjectProvider
         }
         catch( MalformedURLException e )
         {
-            throw new DelegateProviderException( "Invalid url given.", e );
+            throw new ObjectProviderException( "Invalid url given.", e );
         }
     }
 }

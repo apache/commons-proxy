@@ -16,7 +16,7 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -75,16 +75,16 @@ public class RmiProvider extends AbstractObjectProvider
         }
         catch( NotBoundException e )
         {
-            throw new DelegateProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".",
-                                                 e );
+            throw new ObjectProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".",
+                                               e );
         }
         catch( AccessException e )
         {
-            throw new DelegateProviderException( "Registry at " + host + ":" + port + " did not allow lookup.", e );
+            throw new ObjectProviderException( "Registry at " + host + ":" + port + " did not allow lookup.", e );
         }
         catch( RemoteException e )
         {
-            throw new DelegateProviderException(
+            throw new ObjectProviderException(
                     "Unable to lookup service named " + name + " in registry at " + host + ":" + port + "." );
         }
 
@@ -108,7 +108,7 @@ public class RmiProvider extends AbstractObjectProvider
         }
         catch( RemoteException e )
         {
-            throw new DelegateProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
+            throw new ObjectProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
         }
     }
 

@@ -23,23 +23,23 @@ package org.apache.commons.proxy.exception;
  * @author James Carman
  * @version 1.0
  */
-public class DelegateProviderException extends RuntimeException
+public class ObjectProviderException extends RuntimeException
 {
-    public DelegateProviderException()
+    public ObjectProviderException()
     {
     }
 
-    public DelegateProviderException( String message )
+    public ObjectProviderException( String message )
     {
         super( message );
     }
 
-    public DelegateProviderException( String message, Throwable cause )
+    public ObjectProviderException( String message, Throwable cause )
     {
         super( message, cause );
     }
 
-    public DelegateProviderException( Throwable cause )
+    public ObjectProviderException( Throwable cause )
     {
         super( cause );
     }

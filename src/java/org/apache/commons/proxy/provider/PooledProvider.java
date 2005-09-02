@@ -19,7 +19,7 @@ package org.apache.commons.proxy.provider;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.exception.DelegateProviderException;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.provider.cache.Cache;
 import org.apache.commons.proxy.provider.cache.CacheEvictionEvent;
 import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
@@ -75,7 +75,7 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         }
         catch( Exception e )
         {
-            throw new DelegateProviderException( "Unable to borrow object from pool.", e );
+            throw new ObjectProviderException( "Unable to borrow object from pool.", e );
         }
     }
 
