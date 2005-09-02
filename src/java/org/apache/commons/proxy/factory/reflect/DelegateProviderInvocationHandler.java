@@ -35,6 +35,6 @@ public class DelegateProviderInvocationHandler extends DelegatingInvocationHandl
 
     protected Object getDelegate()
     {
-        return delegateProvider.getDelegate();
+        return delegateProvider.getObject();
     }
 }

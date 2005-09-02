@@ -31,8 +31,8 @@ public class ProviderDecorator extends AbstractObjectProvider
         this.inner = inner;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
-        return inner.getDelegate();
+        return inner.getObject();
     }
 }

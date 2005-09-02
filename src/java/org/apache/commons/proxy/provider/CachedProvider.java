@@ -38,12 +38,12 @@ public class CachedProvider<T> extends ProviderDecorator
         this.cache = cache;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         Object object = cache.retrieveObject( cacheKey );
         if( object == null )
         {
-            object = super.getDelegate();
+            object = super.getObject();
             cache.storeObject( cacheKey, object );
         }
         return object;

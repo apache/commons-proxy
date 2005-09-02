@@ -65,7 +65,7 @@ public class RmiProvider extends AbstractObjectProvider
         this.name = name;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         Registry reg = null;
         try

@@ -30,10 +30,10 @@ public class CountingProvider extends ProviderDecorator
         super( inner );
     }
 
-    public synchronized Object getDelegate()
+    public synchronized Object getObject()
     {
         count++;
-        return super.getDelegate();
+        return super.getObject();
     }
 
     public synchronized int getCount()

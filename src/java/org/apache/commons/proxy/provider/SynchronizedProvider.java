@@ -40,11 +40,11 @@ public class SynchronizedProvider extends ProviderDecorator
         monitor = this;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         synchronized( monitor )
         {
-            return super.getDelegate();
+            return super.getObject();
         }
     }
 }

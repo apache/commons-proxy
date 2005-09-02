@@ -58,7 +58,7 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         }
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         try
         {
@@ -139,7 +139,7 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         public Object makeObject() throws Exception
         {
             log.debug( "Creating new object for pool in thread " + Thread.currentThread().getName() + "..." );
-            return inner.getDelegate();
+            return inner.getObject();
         }
     }
 }

@@ -35,7 +35,7 @@ public class TestPooledProvider extends TestCase
         provider.setCache( cache );
         for( int i = 0; i < 10; ++i )
         {
-            ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
+            ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
             cache.clearCache();
         }
         assertEquals( 1, counter.getCount() );
@@ -67,12 +67,12 @@ public class TestPooledProvider extends TestCase
                 {
                     try
                     {
-                        ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
+                        ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
                         borrowedLatch.countDown();
                         goLatch.await();
                         for( int i = 0; i < 10; ++i )
                         {
-                            ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
+                            ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
 
                         }
                         cache.clearCache();

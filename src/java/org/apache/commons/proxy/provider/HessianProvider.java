@@ -38,7 +38,7 @@ public class HessianProvider extends AbstractObjectProvider
         this.url = url;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         try
         {

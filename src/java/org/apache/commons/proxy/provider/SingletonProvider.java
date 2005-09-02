@@ -34,13 +34,13 @@ public class SingletonProvider extends ProviderDecorator
         super( inner );
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         synchronized( this )
         {
             if( instance == null )
             {
-                instance = super.getDelegate();
+                instance = super.getObject();
                 inner = null; // Garbage collection
             }
         }

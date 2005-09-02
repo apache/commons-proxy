@@ -24,7 +24,7 @@ public class TestBeanProvider extends TestCase
     {
         try
         {
-            new BeanProvider( Number.class ).getDelegate();
+            new BeanProvider( Number.class ).getObject();
             fail();
         }
         catch( ObjectProviderException e )
@@ -37,7 +37,7 @@ public class TestBeanProvider extends TestCase
     {
         try
         {
-            new BeanProvider( MyBean.class ).getDelegate();
+            new BeanProvider( MyBean.class ).getObject();
             fail();
         }
         catch( ObjectProviderException e )

@@ -125,7 +125,7 @@ public class CglibProxyFactory extends AbstractProxyFactory
 
         public Object loadObject()
         {
-            return delegateProvider.getDelegate();
+            return delegateProvider.getObject();
         }
     }
 

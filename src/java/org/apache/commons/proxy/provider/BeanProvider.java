@@ -33,7 +33,7 @@ public class BeanProvider extends AbstractObjectProvider
         this.beanClass = beanClass;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         try
         {

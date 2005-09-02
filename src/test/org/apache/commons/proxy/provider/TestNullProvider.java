@@ -26,6 +26,6 @@ public class TestNullProvider extends TestCase
     public void testGetObject()
     {
         final NullProvider provider = new NullProvider();
-        assertNull( provider.getDelegate() );
+        assertNull( provider.getObject() );
     }
 }

@@ -47,7 +47,7 @@ public class JaxRpcProvider extends AbstractObjectProvider
         this.serviceInterface = serviceInterface;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         try
         {

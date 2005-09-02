@@ -32,7 +32,7 @@ public class TestCachedProvider extends TestCase
         provider.setCache( new SimpleCache() );
         for( int i = 0; i < 10; ++i )
         {
-           ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
+           ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
         }
         assertEquals( 1, counter.getCount() );
     }
@@ -50,7 +50,7 @@ public class TestCachedProvider extends TestCase
             {
                 public void run()
                 {
-                    ( ( Echo )provider.getDelegate() ).echoBack( "Hello, World" );
+                    ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
                     cache.clearCache();
                     latch.countDown();
                 }

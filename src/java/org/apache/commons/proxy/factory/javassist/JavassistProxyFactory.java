@@ -138,7 +138,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
                                                             JavassistUtils.resolve( method.getParameterTypes() ),
                                                             proxyClass );
                     ctMethod.setBody( "{ return ( $r ) ( ( " + method.getDeclaringClass().getName() +
-                                      " )provider.getDelegate() )." +
+                                      " )provider.getObject() )." +
                                       method.getName() + "($$); }" );
                     proxyClass.addMethod( ctMethod );
                 }

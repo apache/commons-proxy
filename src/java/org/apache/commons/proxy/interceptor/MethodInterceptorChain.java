@@ -81,7 +81,7 @@ public class MethodInterceptorChain
             this.proxyFactory = proxyFactory;
         }
 
-        public Object getDelegate()
+        public Object getObject()
         {
             return createProxy( proxyFactory, classLoader, terminus, proxyInterfaces );
         }

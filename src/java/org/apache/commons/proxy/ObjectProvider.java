@@ -31,5 +31,5 @@ public interface ObjectProvider
      *
      * @return the object on which the method should be called
      */
-    public Object getDelegate();
+    public Object getObject();
 }

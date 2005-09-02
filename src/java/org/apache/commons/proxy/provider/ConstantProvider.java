@@ -31,7 +31,7 @@ public class ConstantProvider extends AbstractObjectProvider
         this.constant = constant;
     }
 
-    public Object getDelegate()
+    public Object getObject()
     {
         return constant;
     }
