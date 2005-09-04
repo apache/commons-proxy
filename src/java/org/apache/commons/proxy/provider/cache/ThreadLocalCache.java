@@ -25,7 +25,15 @@ import java.util.Map;
  */
 public class ThreadLocalCache extends AbstractCache
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private ThreadLocal<Map<Object, CachedObject>> threadLocalMap = new ThreadLocal<Map<Object, CachedObject>>();
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public Map<Object, CachedObject> getCachedObjectMap()
     {
@@ -38,3 +46,4 @@ public class ThreadLocalCache extends AbstractCache
         return map;
     }
 }
+

@@ -33,15 +33,22 @@ import java.rmi.server.RMIClientSocketFactory;
  */
 public class RmiProvider extends AbstractObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;
     private RMIClientSocketFactory clientSocketFactory;
     private final String name;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
     public RmiProvider( String name )
     {
         this.name = name;
-
     }
 
     public RmiProvider( String host, String name )
@@ -65,6 +72,10 @@ public class RmiProvider extends AbstractObjectProvider
         this.name = name;
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
     public Object getObject()
     {
         Registry reg = null;
@@ -87,8 +98,30 @@ public class RmiProvider extends AbstractObjectProvider
             throw new ObjectProviderException(
                     "Unable to lookup service named " + name + " in registry at " + host + ":" + port + "." );
         }
-
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setClientSocketFactory( RMIClientSocketFactory clientSocketFactory )
+    {
+        this.clientSocketFactory = clientSocketFactory;
+    }
+
+    public void setHost( String host )
+    {
+        this.host = host;
+    }
+
+    public void setPort( int port )
+    {
+        this.port = port;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     private Registry getRegistry()
     {
@@ -111,19 +144,5 @@ public class RmiProvider extends AbstractObjectProvider
             throw new ObjectProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
         }
     }
-
-    public void setHost( String host )
-    {
-        this.host = host;
-    }
-
-    public void setPort( int port )
-    {
-        this.port = port;
-    }
-
-    public void setClientSocketFactory( RMIClientSocketFactory clientSocketFactory )
-    {
-        this.clientSocketFactory = clientSocketFactory;
-    }
 }
+

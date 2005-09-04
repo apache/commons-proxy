@@ -31,12 +31,9 @@ import java.lang.reflect.Proxy;
  */
 public class ReflectionProxyFactory extends AbstractProxyFactory
 {
-    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                           Class... proxyInterfaces )
-    {
-        return new MethodInterceptorInvocationHandler( target, interceptor )
-                .createProxy( classLoader, proxyInterfaces );
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// ProxyFactory Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                          Class... proxyInterfaces )
@@ -45,9 +42,17 @@ public class ReflectionProxyFactory extends AbstractProxyFactory
                                        new DelegateProviderInvocationHandler( targetProvider ) );
     }
 
+    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+                                           Class... proxyInterfaces )
+    {
+        return new MethodInterceptorInvocationHandler( target, interceptor )
+                .createProxy( classLoader, proxyInterfaces );
+    }
+
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
                                                 Class... proxyInterfaces )
     {
         return Proxy.newProxyInstance( classLoader, proxyInterfaces, invocationHandler );
     }
 }
+

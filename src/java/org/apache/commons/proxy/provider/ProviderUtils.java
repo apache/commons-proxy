@@ -24,14 +24,18 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public class ProviderUtils
 {
-    public static ObjectProvider constantProvider( Object value )
-    {
-        return new ConstantProvider( value );
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public static ObjectProvider beanProvider( Class beanClass )
     {
         return new BeanProvider( beanClass );
+    }
+
+    public static ObjectProvider constantProvider( Object value )
+    {
+        return new ConstantProvider( value );
     }
 
     public static ObjectProvider singletonProvider( ObjectProvider inner )
@@ -44,3 +48,4 @@ public class ProviderUtils
         return new SynchronizedProvider( inner );
     }
 }
+

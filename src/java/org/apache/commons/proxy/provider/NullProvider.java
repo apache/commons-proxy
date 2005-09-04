@@ -24,8 +24,13 @@ package org.apache.commons.proxy.provider;
  */
 public class NullProvider extends ConstantProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
     public NullProvider()
     {
         super( null );
     }
 }
+

@@ -24,5 +24,10 @@ import java.util.EventListener;
  */
 public interface CacheEvictionListener extends EventListener
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public void objectEvicted( CacheEvictionEvent e );
 }
+

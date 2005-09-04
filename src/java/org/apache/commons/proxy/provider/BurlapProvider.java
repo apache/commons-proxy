@@ -29,14 +29,26 @@ import java.net.MalformedURLException;
  */
 public class BurlapProvider extends AbstractObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Class serviceInterface;
     private final String url;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public BurlapProvider( Class serviceInterface, String url )
     {
         this.serviceInterface = serviceInterface;
         this.url = url;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getObject()
     {
@@ -50,3 +62,4 @@ public class BurlapProvider extends AbstractObjectProvider
         }
     }
 }
+

@@ -29,24 +29,22 @@ import org.apache.commons.proxy.exception.ObjectProviderException;
  */
 public class JavassistUtils
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
+    public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
     private static int classNumber = 0;
     private static final ClassPool classPool = ClassPool.getDefault();
-    public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
 
-    public static void addInterfaces( CtClass ctClass, Class... proxyInterfaces )
-    {
-        for( int i = 0; i < proxyInterfaces.length; i++ )
-        {
-            Class proxyInterface = proxyInterfaces[i];
-            ctClass.addInterface( resolve( proxyInterface ) );
-        }
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public static void addField( Class fieldType, String fieldName, CtClass enclosingClass ) throws
                                                                                              CannotCompileException
     {
         enclosingClass.addField( new CtField( resolve( fieldType ), fieldName, enclosingClass ) );
-
     }
 
     public static CtClass resolve( Class clazz )
@@ -62,14 +60,22 @@ public class JavassistUtils
         }
     }
 
-    public static CtClass[] resolve( Class[] classes )
+    public static String getJavaClassName( Class inputClass )
     {
-        final CtClass[] ctClasses = new CtClass[classes.length];
-        for( int i = 0; i < ctClasses.length; ++i )
+        if( inputClass.isArray() )
         {
-            ctClasses[i] = resolve( classes[i] );
+            return getJavaClassName( inputClass.getComponentType() ) + "[]";
         }
-        return ctClasses;
+        return inputClass.getName();
+    }
+
+    public static void addInterfaces( CtClass ctClass, Class... proxyInterfaces )
+    {
+        for( int i = 0; i < proxyInterfaces.length; i++ )
+        {
+            Class proxyInterface = proxyInterfaces[i];
+            ctClass.addInterface( resolve( proxyInterface ) );
+        }
     }
 
     public static CtClass createClass()
@@ -92,14 +98,14 @@ public class JavassistUtils
         return classPool.makeClass( baseName + "_" + classNumber++, resolve( superclass ) );
     }
 
-    public static String getJavaClassName( Class inputClass )
+    public static CtClass[] resolve( Class[] classes )
     {
-        if( inputClass.isArray() )
+        final CtClass[] ctClasses = new CtClass[classes.length];
+        for( int i = 0; i < ctClasses.length; ++i )
         {
-            return getJavaClassName( inputClass.getComponentType() ) + "[]";
+            ctClasses[i] = resolve( classes[i] );
         }
-        return inputClass.getName();
+        return ctClasses;
     }
-
-
 }
+

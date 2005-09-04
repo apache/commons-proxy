@@ -37,15 +37,9 @@ import java.lang.reflect.Method;
  */
 public class CglibProxyFactory extends AbstractProxyFactory
 {
-    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                           Class... proxyInterfaces )
-    {
-        final Enhancer enhancer = new Enhancer();
-        enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( proxyInterfaces );
-        enhancer.setCallback( new InterceptorBridge( target, interceptor ) );
-        return enhancer.create();
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// ProxyFactory Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                          Class... proxyInterfaces )
@@ -54,6 +48,16 @@ public class CglibProxyFactory extends AbstractProxyFactory
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( proxyInterfaces );
         enhancer.setCallback( new ObjectProviderDispatcher( targetProvider ) );
+        return enhancer.create();
+    }
+
+    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+                                           Class... proxyInterfaces )
+    {
+        final Enhancer enhancer = new Enhancer();
+        enhancer.setClassLoader( classLoader );
+        enhancer.setInterfaces( proxyInterfaces );
+        enhancer.setCallback( new InterceptorBridge( target, interceptor ) );
         return enhancer.create();
     }
 
@@ -66,6 +70,10 @@ public class CglibProxyFactory extends AbstractProxyFactory
         enhancer.setCallback( new InvocationHandlerBridge( invocationHandler ) );
         return enhancer.create();
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
 
     private class InvocationHandlerBridge implements net.sf.cglib.proxy.InvocationHandler
     {
@@ -154,5 +162,5 @@ public class CglibProxyFactory extends AbstractProxyFactory
             return delegateProvider.getObject();
         }
     }
-
 }
+

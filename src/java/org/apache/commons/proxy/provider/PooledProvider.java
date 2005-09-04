@@ -30,9 +30,17 @@ import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
  */
 public class PooledProvider extends ProviderDecorator implements CacheEvictionListener
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Object cacheKey = new Object();
     private final GenericObjectPool pool;
     private Cache cache;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public PooledProvider( ObjectProvider inner )
     {
@@ -40,10 +48,9 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         pool = new GenericObjectPool( new Factory() );
     }
 
-    public void setCache( Cache cache )
-    {
-        this.cache = cache;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// CacheEvictionListener Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public void objectEvicted( CacheEvictionEvent e )
     {
@@ -57,6 +64,10 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
             // Do nothing.
         }
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getObject()
     {
@@ -79,19 +90,22 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         }
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setCache( Cache cache )
+    {
+        this.cache = cache;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     public void setMaxActive( int i )
     {
         pool.setMaxActive( i );
-    }
-
-    public void setWhenExhaustedAction( byte b )
-    {
-        pool.setWhenExhaustedAction( b );
-    }
-
-    public void setMaxWait( long l )
-    {
-        pool.setMaxWait( l );
     }
 
     public void setMaxIdle( int i )
@@ -99,29 +113,9 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         pool.setMaxIdle( i );
     }
 
-    public void setTestOnReturn( boolean b )
+    public void setMaxWait( long l )
     {
-        pool.setTestOnReturn( b );
-    }
-
-    public void setTestOnBorrow( boolean b )
-    {
-        pool.setTestOnBorrow( b );
-    }
-
-    public void setMinIdle( int i )
-    {
-        pool.setMinIdle( i );
-    }
-
-    public void setTimeBetweenEvictionRunsMillis( long l )
-    {
-        pool.setTimeBetweenEvictionRunsMillis( l );
-    }
-
-    public void setNumTestsPerEvictionRun( int i )
-    {
-        pool.setNumTestsPerEvictionRun( i );
+        pool.setMaxWait( l );
     }
 
     public void setMinEvictableIdleTimeMillis( long l )
@@ -129,10 +123,44 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         pool.setMinEvictableIdleTimeMillis( l );
     }
 
+    public void setMinIdle( int i )
+    {
+        pool.setMinIdle( i );
+    }
+
+    public void setNumTestsPerEvictionRun( int i )
+    {
+        pool.setNumTestsPerEvictionRun( i );
+    }
+
+    public void setTestOnBorrow( boolean b )
+    {
+        pool.setTestOnBorrow( b );
+    }
+
+    public void setTestOnReturn( boolean b )
+    {
+        pool.setTestOnReturn( b );
+    }
+
     public void setTestWhileIdle( boolean b )
     {
         pool.setTestWhileIdle( b );
     }
+
+    public void setTimeBetweenEvictionRunsMillis( long l )
+    {
+        pool.setTimeBetweenEvictionRunsMillis( l );
+    }
+
+    public void setWhenExhaustedAction( byte b )
+    {
+        pool.setWhenExhaustedAction( b );
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
 
     private class Factory extends BasePoolableObjectFactory
     {
@@ -143,3 +171,4 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
         }
     }
 }
+

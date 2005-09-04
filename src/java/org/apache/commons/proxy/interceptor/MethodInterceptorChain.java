@@ -30,28 +30,24 @@ import org.apache.commons.proxy.provider.AbstractObjectProvider;
  */
 public class MethodInterceptorChain
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final MethodInterceptor[] interceptors;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public MethodInterceptorChain( MethodInterceptor... interceptors )
     {
         this.interceptors = interceptors;
     }
 
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                               Class... proxyInterfaces )
-    {
-        if( proxyInterfaces.length == 0 )
-        {
-            proxyInterfaces = terminus.getClass().getInterfaces();
-        }
-        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
-    }
-
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
-    {
-        return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
-                                    proxyInterfaces );
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                 Class... proxyInterfaces )
@@ -64,6 +60,26 @@ public class MethodInterceptorChain
         }
         return currentTarget;
     }
+
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
+    {
+        return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
+                                    proxyInterfaces );
+    }
+
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
+                                               Class... proxyInterfaces )
+    {
+        if( proxyInterfaces.length == 0 )
+        {
+            proxyInterfaces = terminus.getClass().getInterfaces();
+        }
+        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
 
     private class ProxyObjectProvider extends AbstractObjectProvider
     {
@@ -87,3 +103,4 @@ public class MethodInterceptorChain
         }
     }
 }
+

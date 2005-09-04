@@ -27,7 +27,15 @@ import java.lang.reflect.Method;
  */
 public abstract class DelegatingInvocationHandler extends AbstractInvocationHandler
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Abstract Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     protected abstract Object getDelegate();
+
+//----------------------------------------------------------------------------------------------------------------------
+// InvocationHandler Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
@@ -40,6 +48,10 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
             throw e.getTargetException();
         }
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * A simplified proxy creation method which merely creates a proxy which supports all the interfaces implemented by
@@ -63,3 +75,4 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
         return createProxy( classLoader, getDelegate().getClass().getInterfaces() );
     }
 }
+

@@ -30,6 +30,10 @@ import java.util.Set;
  */
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
      * are no method signature clashes. For methods with the same signature (name and parameter types), the one
@@ -60,3 +64,4 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
         return resultingMethods.toArray( results );
     }
 }
+

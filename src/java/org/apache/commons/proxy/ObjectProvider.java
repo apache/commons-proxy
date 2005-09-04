@@ -24,6 +24,10 @@ package org.apache.commons.proxy;
  */
 public interface ObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Returns an object.  Implementing classes should throw a {@link org.apache.commons.proxy.exception.ObjectProviderException}
      * if any problems arise while constructing/finding the object.
@@ -32,3 +36,4 @@ public interface ObjectProvider
      */
     public Object getObject();
 }
+

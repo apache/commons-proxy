@@ -39,12 +39,34 @@ import java.lang.reflect.Method;
  */
 public class JavassistProxyFactory extends AbstractProxyFactory
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final ProxyClassCache delegatingProxyClassCache = new ProxyClassCache(
             new DelegatingProxyClassGenerator() );
     private static final ProxyClassCache interceptingProxyClassCache = new ProxyClassCache(
             new InterceptingProxyClassGenerator() );
     private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache(
             new InvocationHandlerProxyClassGenerator() );
+
+//----------------------------------------------------------------------------------------------------------------------
+// ProxyFactory Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
+                                         Class... proxyInterfaces )
+    {
+        try
+        {
+            final Class clazz = delegatingProxyClassCache.getProxyClass( classLoader, proxyInterfaces );
+            return clazz.getConstructor( ObjectProvider.class ).newInstance( targetProvider );
+        }
+        catch( Exception e )
+        {
+            throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
+        }
+    }
 
     public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
                                            Class... proxyInterfaces )
@@ -59,21 +81,6 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         catch( Exception e )
         {
             throw new ProxyFactoryException( "Unable to instantiate proxy class instance.", e );
-
-        }
-    }
-
-    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                         Class... proxyInterfaces )
-    {
-        try
-        {
-            final Class clazz = delegatingProxyClassCache.getProxyClass( classLoader, proxyInterfaces );
-            return clazz.getConstructor( ObjectProvider.class ).newInstance( targetProvider );
-        }
-        catch( Exception e )
-        {
-            throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
         }
     }
 
@@ -92,6 +99,10 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
         }
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
 
     private static class InvocationHandlerProxyClassGenerator extends AbstractProxyClassGenerator
     {
@@ -208,3 +219,4 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
     }
 }
+

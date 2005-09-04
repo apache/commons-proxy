@@ -22,8 +22,16 @@ package org.apache.commons.proxy.provider.cache;
  */
 public class CachedObject
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Object object;
     private final CacheEvictionListener listener;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public CachedObject( Object object )
     {
@@ -37,13 +45,18 @@ public class CachedObject
         this.listener = listener;
     }
 
-    public Object getObject()
-    {
-        return object;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public CacheEvictionListener getListener()
     {
         return listener;
     }
+
+    public Object getObject()
+    {
+        return object;
+    }
 }
+

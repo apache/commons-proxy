@@ -27,6 +27,10 @@ import java.lang.reflect.Proxy;
  */
 public abstract class AbstractInvocationHandler implements InvocationHandler
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a proxy object which implements the specified proxy interfaces.
      *

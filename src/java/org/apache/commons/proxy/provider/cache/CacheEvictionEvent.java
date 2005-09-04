@@ -24,8 +24,16 @@ import java.util.EventObject;
  */
 public class CacheEvictionEvent extends EventObject
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Object cacheKey;
     private final Object evictedObject;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public CacheEvictionEvent( Object cacheKey, Object evictedObject )
     {
@@ -33,6 +41,10 @@ public class CacheEvictionEvent extends EventObject
         this.cacheKey = cacheKey;
         this.evictedObject = evictedObject;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getCacheKey()
     {
@@ -43,6 +55,5 @@ public class CacheEvictionEvent extends EventObject
     {
         return evictedObject;
     }
-
-
 }
+

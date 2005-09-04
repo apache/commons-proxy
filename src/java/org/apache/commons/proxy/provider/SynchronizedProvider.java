@@ -26,7 +26,21 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public class SynchronizedProvider extends ProviderDecorator
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Object monitor;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
+    public SynchronizedProvider( ObjectProvider inner )
+    {
+        super( inner );
+        monitor = this;
+    }
 
     public SynchronizedProvider( ObjectProvider inner, Object monitor )
     {
@@ -34,11 +48,9 @@ public class SynchronizedProvider extends ProviderDecorator
         this.monitor = monitor;
     }
 
-    public SynchronizedProvider( ObjectProvider inner )
-    {
-        super( inner );
-        monitor = this;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getObject()
     {
@@ -48,3 +60,4 @@ public class SynchronizedProvider extends ProviderDecorator
         }
     }
 }
+

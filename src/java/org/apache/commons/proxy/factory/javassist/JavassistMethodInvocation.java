@@ -35,53 +35,18 @@ import java.util.WeakHashMap;
  */
 public abstract class JavassistMethodInvocation implements MethodInvocation
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>>();
     protected final Method method;
     protected final Object target;
     protected final Object[] arguments;
 
-    public JavassistMethodInvocation( Method method, Object target, Object[] arguments )
-    {
-        this.method = method;
-        this.target = target;
-        this.arguments = ( arguments == null || arguments.length == 0 ? null : arguments );
-    }
-
-    public Method getMethod()
-    {
-        return method;
-    }
-
-    public Object[] getArguments()
-    {
-        return arguments;
-    }
-
-    public Object getThis()
-    {
-        return target;
-    }
-
-    public AccessibleObject getStaticPart()
-    {
-        return method;
-    }
-
-    private static Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
-    {
-        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
-        if( cache == null )
-        {
-            cache = new HashMap<String, WeakReference<Class>>();
-            loaderToClassCache.put( classLoader, cache );
-        }
-        return cache;
-    }
-
-    private static String toClassCacheKey( Method method )
-    {
-        return String.valueOf( method );
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
@@ -108,6 +73,22 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
             }
         }
         return invocationClass;
+    }
+
+    private static Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
+    {
+        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
+        if( cache == null )
+        {
+            cache = new HashMap<String, WeakReference<Class>>();
+            loaderToClassCache.put( classLoader, cache );
+        }
+        return cache;
+    }
+
+    private static String toClassCacheKey( Method method )
+    {
+        return String.valueOf( method );
     }
 
     private static Class createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
@@ -162,4 +143,48 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         invocationClass = ctClass.toClass( classLoader );
         return invocationClass;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
+    public JavassistMethodInvocation( Method method, Object target, Object[] arguments )
+    {
+        this.method = method;
+        this.target = target;
+        this.arguments = ( arguments == null || arguments.length == 0 ? null : arguments );
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Invocation Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    public Object[] getArguments()
+    {
+        return arguments;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Joinpoint Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    public AccessibleObject getStaticPart()
+    {
+        return method;
+    }
+
+    public Object getThis()
+    {
+        return target;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// MethodInvocation Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    public Method getMethod()
+    {
+        return method;
+    }
 }
+

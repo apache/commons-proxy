@@ -33,6 +33,10 @@ import java.net.URL;
  */
 public class JaxRpcProvider extends AbstractObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Class serviceInterface;
     private String wsdlUrl;
     private String serviceNamespaceUri;
@@ -42,10 +46,18 @@ public class JaxRpcProvider extends AbstractObjectProvider
     private String portLocalPart;
     private String portPrefix;
 
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
     public JaxRpcProvider( Class serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getObject()
     {
@@ -66,6 +78,54 @@ public class JaxRpcProvider extends AbstractObjectProvider
         {
             throw new ObjectProviderException( "Invalid URL given.", e );
         }
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setPortLocalPart( String portLocalPart )
+    {
+        this.portLocalPart = portLocalPart;
+    }
+
+    public void setPortNamespaceUri( String portNamespaceUri )
+    {
+        this.portNamespaceUri = portNamespaceUri;
+    }
+
+    public void setPortPrefix( String portPrefix )
+    {
+        this.portPrefix = portPrefix;
+    }
+
+    public void setServiceLocalPart( String serviceLocalPart )
+    {
+        this.serviceLocalPart = serviceLocalPart;
+    }
+
+    public void setServiceNamespaceUri( String serviceNamespaceUri )
+    {
+        this.serviceNamespaceUri = serviceNamespaceUri;
+    }
+
+    public void setServicePrefix( String servicePrefix )
+    {
+        this.servicePrefix = servicePrefix;
+    }
+
+    public void setWsdlUrl( String wsdlUrl )
+    {
+        this.wsdlUrl = wsdlUrl;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    private QName getPortQName()
+    {
+        return getQName( portNamespaceUri, portLocalPart, portPrefix );
     }
 
     private QName getQName( String namespaceUri, String localPart, String prefix )
@@ -89,44 +149,5 @@ public class JaxRpcProvider extends AbstractObjectProvider
     {
         return getQName( serviceNamespaceUri, serviceLocalPart, servicePrefix );
     }
-
-    private QName getPortQName()
-    {
-        return getQName( portNamespaceUri, portLocalPart, portPrefix );
-    }
-
-    public void setPortNamespaceUri( String portNamespaceUri )
-    {
-        this.portNamespaceUri = portNamespaceUri;
-    }
-
-    public void setPortLocalPart( String portLocalPart )
-    {
-        this.portLocalPart = portLocalPart;
-    }
-
-    public void setPortPrefix( String portPrefix )
-    {
-        this.portPrefix = portPrefix;
-    }
-
-    public void setServiceNamespaceUri( String serviceNamespaceUri )
-    {
-        this.serviceNamespaceUri = serviceNamespaceUri;
-    }
-
-    public void setServiceLocalPart( String serviceLocalPart )
-    {
-        this.serviceLocalPart = serviceLocalPart;
-    }
-
-    public void setServicePrefix( String servicePrefix )
-    {
-        this.servicePrefix = servicePrefix;
-    }
-
-    public void setWsdlUrl( String wsdlUrl )
-    {
-        this.wsdlUrl = wsdlUrl;
-    }
 }
+

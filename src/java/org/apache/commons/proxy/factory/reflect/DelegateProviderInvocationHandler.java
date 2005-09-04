@@ -26,15 +26,28 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public class DelegateProviderInvocationHandler extends DelegatingInvocationHandler
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final ObjectProvider delegateProvider;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public DelegateProviderInvocationHandler( ObjectProvider delegateProvider )
     {
         this.delegateProvider = delegateProvider;
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     protected Object getDelegate()
     {
         return delegateProvider.getObject();
     }
 }
+

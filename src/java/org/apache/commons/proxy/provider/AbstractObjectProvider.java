@@ -26,15 +26,24 @@ import org.apache.commons.proxy.ObjectProvider;
  */
 public abstract class AbstractObjectProvider implements ObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     protected Log log = LogFactory.getLog( getClass() );
 
-    public void setLog( Log log )
-    {
-        this.log = log;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public Log getLog()
     {
         return log;
     }
+
+    public void setLog( Log log )
+    {
+        this.log = log;
+    }
 }
+

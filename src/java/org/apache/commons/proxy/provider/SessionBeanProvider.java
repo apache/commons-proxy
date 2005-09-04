@@ -33,9 +33,17 @@ import java.lang.reflect.Method;
  */
 public class SessionBeanProvider extends AbstractObjectProvider
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final String jndiName;
     private final Class serviceInterface;
     private final Class homeInterface;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public SessionBeanProvider( String jndiName, Class serviceInterface, Class homeInterface )
     {
@@ -43,6 +51,10 @@ public class SessionBeanProvider extends AbstractObjectProvider
         this.serviceInterface = serviceInterface;
         this.homeInterface = homeInterface;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// ObjectProvider Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object getObject()
     {
@@ -74,3 +86,4 @@ public class SessionBeanProvider extends AbstractObjectProvider
         }
     }
 }
+

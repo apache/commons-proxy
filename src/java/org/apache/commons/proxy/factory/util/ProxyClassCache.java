@@ -27,13 +27,25 @@ import java.util.WeakHashMap;
  */
 public class ProxyClassCache
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Map<ClassLoader, Map<String, WeakReference<Class>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>>();
     private final ProxyClassGenerator proxyClassGenerator;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public ProxyClassCache( ProxyClassGenerator proxyClassGenerator )
     {
         this.proxyClassGenerator = proxyClassGenerator;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     public synchronized Class getProxyClass( ClassLoader classLoader, Class... proxyInterfaces )
     {
@@ -61,6 +73,17 @@ public class ProxyClassCache
         return proxyClass;
     }
 
+    private Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
+    {
+        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
+        if( cache == null )
+        {
+            cache = new HashMap<String, WeakReference<Class>>();
+            loaderToClassCache.put( classLoader, cache );
+        }
+        return cache;
+    }
+
     private String toClassCacheKey( Class... proxyInterfaces )
     {
         final StringBuffer sb = new StringBuffer();
@@ -75,15 +98,5 @@ public class ProxyClassCache
         }
         return sb.toString();
     }
-
-    private Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
-    {
-        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
-        if( cache == null )
-        {
-            cache = new HashMap<String, WeakReference<Class>>();
-            loaderToClassCache.put( classLoader, cache );
-        }
-        return cache;
-    }
 }
+

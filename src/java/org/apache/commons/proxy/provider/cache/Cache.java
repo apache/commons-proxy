@@ -22,11 +22,15 @@ package org.apache.commons.proxy.provider.cache;
  */
 public interface Cache
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void clearCache();
+
+    public Object retrieveObject( Object key );
     public void storeObject( Object key, Object value );
 
     public void storeObject( Object key, Object value, CacheEvictionListener listener );
-
-    public Object retrieveObject( Object key );
-
-    public void clearCache();
 }
+

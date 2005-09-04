@@ -30,9 +30,17 @@ import java.lang.reflect.Method;
  */
 class ReflectionMethodInvocation implements MethodInvocation
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Method method;
     private final Object[] arguments;
     private final Object target;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public ReflectionMethodInvocation( Object target, Method method, Object[] arguments )
     {
@@ -41,14 +49,27 @@ class ReflectionMethodInvocation implements MethodInvocation
         this.target = target;
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Invocation Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
     public Object[] getArguments()
     {
         return arguments;
     }
 
-    public Method getMethod()
+//----------------------------------------------------------------------------------------------------------------------
+// Joinpoint Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    public AccessibleObject getStaticPart()
     {
         return method;
+    }
+
+    public Object getThis()
+    {
+        return target;
     }
 
     public Object proceed() throws Throwable
@@ -63,13 +84,13 @@ class ReflectionMethodInvocation implements MethodInvocation
         }
     }
 
-    public Object getThis()
-    {
-        return target;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// MethodInvocation Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
-    public AccessibleObject getStaticPart()
+    public Method getMethod()
     {
         return method;
     }
 }
+

@@ -28,14 +28,26 @@ import java.lang.reflect.Method;
  */
 public class MethodInterceptorInvocationHandler extends AbstractInvocationHandler
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final Object target;
     private final MethodInterceptor methodInterceptor;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public MethodInterceptorInvocationHandler( Object target, MethodInterceptor methodInterceptor )
     {
         this.target = target;
         this.methodInterceptor = methodInterceptor;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// InvocationHandler Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {

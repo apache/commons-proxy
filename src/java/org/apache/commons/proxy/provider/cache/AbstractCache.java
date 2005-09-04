@@ -25,23 +25,15 @@ import java.util.Map;
  */
 public abstract class AbstractCache implements Cache
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Abstract Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     protected abstract Map<Object, CachedObject> getCachedObjectMap();
 
-    public void storeObject( Object key, Object value )
-    {
-        getCachedObjectMap().put( key, new CachedObject( value ) );
-    }
-
-    public void storeObject( Object key, Object value, CacheEvictionListener listener )
-    {
-        getCachedObjectMap().put( key, new CachedObject( value, listener ) );
-    }
-
-    public Object retrieveObject( Object key )
-    {
-        CachedObject cachedObject = getCachedObjectMap().get( key );
-        return cachedObject == null ? null : cachedObject.getObject();
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Cache Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public void clearCache()
     {
@@ -54,9 +46,23 @@ public abstract class AbstractCache implements Cache
                 cachedObject.getListener()
                         .objectEvicted( new CacheEvictionEvent( cacheKey, cachedObject.getObject() ) );
             }
-
         }
     }
 
+    public Object retrieveObject( Object key )
+    {
+        CachedObject cachedObject = getCachedObjectMap().get( key );
+        return cachedObject == null ? null : cachedObject.getObject();
+    }
 
+    public void storeObject( Object key, Object value )
+    {
+        getCachedObjectMap().put( key, new CachedObject( value ) );
+    }
+
+    public void storeObject( Object key, Object value, CacheEvictionListener listener )
+    {
+        getCachedObjectMap().put( key, new CachedObject( value, listener ) );
+    }
 }
+

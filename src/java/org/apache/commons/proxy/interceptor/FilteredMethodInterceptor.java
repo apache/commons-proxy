@@ -28,14 +28,26 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public class FilteredMethodInterceptor implements MethodInterceptor
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private final MethodInterceptor inner;
     private final MethodFilter filter;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public FilteredMethodInterceptor( MethodInterceptor inner, MethodFilter filter )
     {
         this.inner = inner;
         this.filter = filter;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// MethodInterceptor Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object invoke( MethodInvocation methodInvocation ) throws Throwable
     {
@@ -49,3 +61,4 @@ public class FilteredMethodInterceptor implements MethodInterceptor
         }
     }
 }
+
