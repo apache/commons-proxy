@@ -52,7 +52,7 @@ public class CglibProxyFactory extends AbstractProxyFactory
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( proxyInterfaces );
-        enhancer.setCallback( new DelegateProviderDispatcher( targetProvider ) );
+        enhancer.setCallback( new ObjectProviderDispatcher( targetProvider ) );
         return enhancer.create();
     }
 
@@ -114,11 +114,11 @@ public class CglibProxyFactory extends AbstractProxyFactory
         }
     }
 
-    private class DelegateProviderDispatcher implements Dispatcher
+    private class ObjectProviderDispatcher implements Dispatcher
     {
         private final ObjectProvider delegateProvider;
 
-        public DelegateProviderDispatcher( ObjectProvider delegateProvider )
+        public ObjectProviderDispatcher( ObjectProvider delegateProvider )
         {
             this.delegateProvider = delegateProvider;
         }
