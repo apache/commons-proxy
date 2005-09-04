@@ -20,17 +20,18 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ProxyFactory;
 import static org.apache.commons.proxy.provider.ProviderUtils.*;
 import org.apache.commons.proxy.util.AbstractTestCase;
+import org.apache.commons.proxy.util.DuplicateEcho;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixMethodInterceptor;
-import org.apache.commons.proxy.util.DuplicateEcho;
 
 import java.io.IOException;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -51,6 +52,17 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
         final SortedSet<String> set = ( SortedSet<String> ) factory.createDelegatingProxy( constantProvider( new TreeSet<String>() ), SortedSet.class );
         set.add( "Hello" );
+    }
+
+    public void testInvocationHandlerProxy() throws Exception
+    {
+        final InvocationHandlerTester tester = new InvocationHandlerTester();
+        final Echo echo = ( Echo )factory.createInvocationHandlerProxy( tester, Echo.class );
+        echo.echoBack( "hello" );
+        assertEquals( Echo.class.getMethod( "echoBack", String.class ), tester.method );
+        assertNotNull( tester.args );
+        assertEquals( 1, tester.args.length );
+        assertEquals( "hello", tester.args[0] );
     }
 
     public void testDelegatingProxyInterfaceOrder()
@@ -226,6 +238,19 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         public Object invoke( MethodInvocation methodInvocation ) throws Throwable
         {
             return methodInvocation.proceed();
+        }
+    }
+
+    private static class InvocationHandlerTester implements InvocationHandler
+    {
+        private Object method;
+        private Object[] args;
+
+        public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
+        {
+            this.method = method;
+            this.args = args;
+            return null;
         }
     }
 

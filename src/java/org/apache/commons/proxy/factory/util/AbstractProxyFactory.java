@@ -17,16 +17,14 @@
 package org.apache.commons.proxy.factory.util;
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
+import org.apache.commons.proxy.provider.NullProvider;
 
-import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.InvocationHandler;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -58,4 +56,32 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     {
         return createDelegatingProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
     }
+
+    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+                                                Class... proxyInterfaces )
+    {
+        return createInterceptingProxy( classLoader, new NullProvider(), new InvocationHandlerMethodInterceptor( invocationHandler ), proxyInterfaces );
+    }
+
+    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )
+    {
+        return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler, proxyInterfaces );
+    }
+
+
+    private static class InvocationHandlerMethodInterceptor implements MethodInterceptor
+    {
+        private final InvocationHandler invocationHandler;
+
+        public InvocationHandlerMethodInterceptor( InvocationHandler invocationHandler )
+        {
+            this.invocationHandler = invocationHandler;
+        }
+
+        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+        {
+            return invocationHandler.invoke( methodInvocation.getThis(), methodInvocation.getMethod(), methodInvocation.getArguments() );
+        }
+    }
+
 }

@@ -18,6 +18,8 @@ package org.apache.commons.proxy;
 
 import org.aopalliance.intercept.MethodInterceptor;
 
+import java.lang.reflect.InvocationHandler;
+
 /**
  * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy."  All <code>commons-proxy</code> proxies
  * are created using a <code>ProxyFactory</code>.  So, to change the proxying strategy, simply provide a different
@@ -58,8 +60,8 @@ public interface ProxyFactory
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
      * generated using the current thread's "context class loader."
      *
-     * @param delegateProvider  the delegate provider
-     * @param proxyInterfaces the interfaces that the proxy should implement
+     * @param delegateProvider the delegate provider
+     * @param proxyInterfaces  the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
     public Object createDelegatingProxy( ObjectProvider delegateProvider, Class... proxyInterfaces );
@@ -67,11 +69,32 @@ public interface ProxyFactory
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
      *
-     * @param classLoader     the class loader to use when generating the proxy
-     * @param delegateProvider  the delegate provider
-     * @param proxyInterfaces the interfaces that the proxy should implement
+     * @param classLoader      the class loader to use when generating the proxy
+     * @param delegateProvider the delegate provider
+     * @param proxyInterfaces  the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
     public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
                                          Class... proxyInterfaces );
+
+    /**
+     * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.
+     *
+     * @param classLoader       the class loader to use when generating the proxy
+     * @param invocationHandler the invocation handler
+     * @param proxyInterfaces   the interfaces that the proxy should implement
+     * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
+     */
+    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+                                                Class... proxyInterfaces );
+
+    /**
+     * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.  The proxy
+     * will be generated using the current thread's "context class loader."
+     *
+     * @param invocationHandler the invocation handler
+     * @param proxyInterfaces   the interfaces that the proxy should implement
+     * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
+     */
+    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces );
 }
