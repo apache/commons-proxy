@@ -47,12 +47,15 @@
                     Currently,  <em>Commons Proxy</em> provides proxy factory implementations using JDK proxies,
                     <a href="http://cglib.sourceforge.net">CGLIB</a>, and
                     <a href="http://www.jboss.org/products/javassist">Javassist</a>.  Proxy factories allow you to create
-                    two different types of proxy objects:
+                    three different types of proxy objects:
                     <ul>
                         <li><b>Delegating Proxies</b> - a proxy that merely delegates each method invocation to an
                             object provided by a object provider.</li>
                         <li><b>Intercepting Proxies</b> - a proxy that allows a method interceptor to intercept each
                             method invocation.</li>
+                        <li><b>Invocation Handler Proxies</b> - a proxy that uses an
+                            <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a> object to handle all method
+                            invocations.</li>
                     </ul>
 
                 </p>
