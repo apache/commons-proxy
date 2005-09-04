@@ -20,8 +20,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * An {@link InvocationHandler} implementation which merely returns null for all method invocations.  This class
- * is useful for scenarios where the "null object" design pattern is needed.
+ * An {@link InvocationHandler} implementation which merely returns null for all method invocations.  This class is
+ * useful for scenarios where the "null object" design pattern is needed.
  *
  * @author James Carman
  * @version 1.0

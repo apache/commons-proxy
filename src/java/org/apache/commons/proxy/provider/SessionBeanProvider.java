@@ -18,15 +18,15 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
-import javax.rmi.PortableRemoteObject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.lang.reflect.Method;
+import javax.rmi.PortableRemoteObject;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
- * Provides a reference to a session bean by looking up the home object and calling (via reflection)
- * the no-argument create() method.  This will work for both local and remote session beans.
+ * Provides a reference to a session bean by looking up the home object and calling (via reflection) the no-argument
+ * create() method.  This will work for both local and remote session beans.
  *
  * @author James Carman
  * @version 1.0

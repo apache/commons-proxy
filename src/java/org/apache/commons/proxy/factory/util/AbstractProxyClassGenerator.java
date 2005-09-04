@@ -31,10 +31,10 @@ import java.util.Set;
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
     /**
-     * Returns all methods that a proxy class must implement from the
-     * proxy interfaces.  This method makes sure there are no method signature clashes.
-     * For methods with the same signature (name and parameter types), the one encountered
-     * first will be returned in the result.
+     * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
+     * are no method signature clashes. For methods with the same signature (name and parameter types), the one
+     * encountered first will be returned in the result.
+     *
      * @param proxyInterfaces the interfaces the proxy class must implement
      * @return all methods that the proxy class must implement
      */

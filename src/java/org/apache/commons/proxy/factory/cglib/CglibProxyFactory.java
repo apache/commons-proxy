@@ -25,8 +25,8 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * A <a href="http://cglib.sourceforge.net/">CGLIB</a>-based {@link org.apache.commons.proxy.ProxyFactory}
@@ -81,6 +81,7 @@ public class CglibProxyFactory extends AbstractProxyFactory
             return original.invoke( object, method, objects );
         }
     }
+
     private class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor
     {
         private final MethodInterceptor inner;

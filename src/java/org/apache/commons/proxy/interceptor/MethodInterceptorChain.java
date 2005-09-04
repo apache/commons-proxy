@@ -38,7 +38,7 @@ public class MethodInterceptorChain
     }
 
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                                 Class... proxyInterfaces )
+                                               Class... proxyInterfaces )
     {
         if( proxyInterfaces.length == 0 )
         {

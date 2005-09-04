@@ -20,8 +20,8 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
-import java.lang.reflect.Proxy;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 
 /**
  * A JDK {@link java.lang.reflect.Proxy Proxy}-based {@link org.apache.commons.proxy.ProxyFactory} implementation.

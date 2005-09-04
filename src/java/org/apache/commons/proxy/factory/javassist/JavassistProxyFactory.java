@@ -27,8 +27,8 @@ import org.apache.commons.proxy.factory.util.AbstractProxyClassGenerator;
 import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 import org.apache.commons.proxy.factory.util.ProxyClassCache;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link org.apache.commons.proxy.ProxyFactory}
@@ -43,7 +43,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             new DelegatingProxyClassGenerator() );
     private static final ProxyClassCache interceptingProxyClassCache = new ProxyClassCache(
             new InterceptingProxyClassGenerator() );
-    private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache( new InvocationHandlerProxyClassGenerator() );
+    private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache(
+            new InvocationHandlerProxyClassGenerator() );
 
     public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
                                            Class... proxyInterfaces )
@@ -81,10 +82,10 @@ public class JavassistProxyFactory extends AbstractProxyFactory
     {
         try
         {
-
             final Class clazz = invocationHandlerProxyClassCache.getProxyClass( classLoader, proxyInterfaces );
             final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyInterfaces );
-            return clazz.getConstructor( Method[].class, InvocationHandler.class ).newInstance( methods, invocationHandler );
+            return clazz.getConstructor( Method[].class, InvocationHandler.class )
+                    .newInstance( methods, invocationHandler );
         }
         catch( Exception e )
         {
@@ -116,7 +117,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory
                                                           methods[i].getName(),
                                                           JavassistUtils.resolve( methods[i].getParameterTypes() ),
                                                           proxyClass );
-                    final String body = "{\n\t return ( $r ) invocationHandler.invoke( this, methods[" + i + "], $args );\n }";
+                    final String body = "{\n\t return ( $r ) invocationHandler.invoke( this, methods[" + i +
+                                        "], $args );\n }";
                     method.setBody( body );
                     proxyClass.addMethod( method );
                 }

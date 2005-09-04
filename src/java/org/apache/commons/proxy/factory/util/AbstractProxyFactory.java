@@ -17,7 +17,6 @@
 package org.apache.commons.proxy.factory.util;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
@@ -45,7 +44,8 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         this.log = log;
     }
 
-    public final Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces )
+    public final Object createInterceptingProxy( Object target, MethodInterceptor interceptor,
+                                                 Class... proxyInterfaces )
     {
         return createInterceptingProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
                                         proxyInterfaces );
@@ -58,6 +58,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
 
     public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )
     {
-        return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler, proxyInterfaces );
+        return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
+                                             proxyInterfaces );
     }
 }

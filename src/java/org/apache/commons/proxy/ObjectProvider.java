@@ -25,9 +25,8 @@ package org.apache.commons.proxy;
 public interface ObjectProvider
 {
     /**
-     * Returns an object.  Implementing classes should throw a
-     * {@link org.apache.commons.proxy.exception.ObjectProviderException} if any problems arise while
-     * constructing/finding the object.
+     * Returns an object.  Implementing classes should throw a {@link org.apache.commons.proxy.exception.ObjectProviderException}
+     * if any problems arise while constructing/finding the object.
      *
      * @return the object on which the method should be called
      */

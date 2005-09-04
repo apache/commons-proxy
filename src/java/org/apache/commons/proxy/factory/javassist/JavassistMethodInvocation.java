@@ -36,11 +36,10 @@ import java.util.WeakHashMap;
 public abstract class JavassistMethodInvocation implements MethodInvocation
 {
     private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>>();
-
     protected final Method method;
     protected final Object target;
     protected final Object[] arguments;
-    
+
     public JavassistMethodInvocation( Method method, Object target, Object[] arguments )
     {
         this.method = method;
