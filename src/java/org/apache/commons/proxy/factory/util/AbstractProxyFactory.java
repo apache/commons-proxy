@@ -60,21 +60,4 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     {
         return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler, proxyInterfaces );
     }
-
-
-    private static class InvocationHandlerMethodInterceptor implements MethodInterceptor
-    {
-        private final InvocationHandler invocationHandler;
-
-        public InvocationHandlerMethodInterceptor( InvocationHandler invocationHandler )
-        {
-            this.invocationHandler = invocationHandler;
-        }
-
-        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
-        {
-            return invocationHandler.invoke( methodInvocation.getThis(), methodInvocation.getMethod(), methodInvocation.getArguments() );
-        }
-    }
-
 }
