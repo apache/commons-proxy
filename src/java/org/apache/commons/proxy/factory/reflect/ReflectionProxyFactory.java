@@ -21,6 +21,7 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
 import java.lang.reflect.Proxy;
+import java.lang.reflect.InvocationHandler;
 
 /**
  * A JDK {@link java.lang.reflect.Proxy Proxy}-based {@link org.apache.commons.proxy.ProxyFactory} implementation.
@@ -44,4 +45,9 @@ public class ReflectionProxyFactory extends AbstractProxyFactory
                                        new DelegateProviderInvocationHandler( targetProvider ) );
     }
 
+    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+                                                Class... proxyInterfaces )
+    {
+        return Proxy.newProxyInstance( classLoader, proxyInterfaces, invocationHandler );
+    }
 }

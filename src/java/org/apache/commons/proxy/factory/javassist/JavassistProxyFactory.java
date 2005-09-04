@@ -28,6 +28,7 @@ import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 import org.apache.commons.proxy.factory.util.ProxyClassCache;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationHandler;
 
 /**
  * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link org.apache.commons.proxy.ProxyFactory}
@@ -42,6 +43,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory
             new DelegatingProxyClassGenerator() );
     private static final ProxyClassCache interceptingProxyClassCache = new ProxyClassCache(
             new InterceptingProxyClassGenerator() );
+    private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache( new InvocationHandlerProxyClassGenerator() );
 
     public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
                                            Class... proxyInterfaces )
@@ -71,6 +73,59 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         catch( Exception e )
         {
             throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
+        }
+    }
+
+    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+                                                Class... proxyInterfaces )
+    {
+        try
+        {
+
+            final Class clazz = invocationHandlerProxyClassCache.getProxyClass( classLoader, proxyInterfaces );
+            final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyInterfaces );
+            return clazz.getConstructor( Method[].class, InvocationHandler.class ).newInstance( methods, invocationHandler );
+        }
+        catch( Exception e )
+        {
+            throw new ProxyFactoryException( "Unable to instantiate proxy from generated proxy class.", e );
+        }
+    }
+
+    private static class InvocationHandlerProxyClassGenerator extends AbstractProxyClassGenerator
+    {
+        public Class generateProxyClass( ClassLoader classLoader, Class... proxyInterfaces )
+        {
+            try
+            {
+                final CtClass proxyClass = JavassistUtils.createClass();
+                final Method[] methods = getImplementationMethods( proxyInterfaces );
+                JavassistUtils.addInterfaces( proxyClass, proxyInterfaces );
+                JavassistUtils.addField( Method[].class, "methods", proxyClass );
+                JavassistUtils.addField( InvocationHandler.class, "invocationHandler", proxyClass );
+                final CtConstructor proxyConstructor = new CtConstructor(
+                        JavassistUtils.resolve(
+                                new Class[]{Method[].class, InvocationHandler.class} ),
+                        proxyClass );
+                proxyConstructor
+                        .setBody( "{\n\tthis.methods = $1;\n\tthis.invocationHandler = $2; }" );
+                proxyClass.addConstructor( proxyConstructor );
+                for( int i = 0; i < methods.length; ++i )
+                {
+                    final CtMethod method = new CtMethod( JavassistUtils.resolve( methods[i].getReturnType() ),
+                                                          methods[i].getName(),
+                                                          JavassistUtils.resolve( methods[i].getParameterTypes() ),
+                                                          proxyClass );
+                    final String body = "{\n\t return ( $r ) invocationHandler.invoke( this, methods[" + i + "], $args );\n }";
+                    method.setBody( body );
+                    proxyClass.addMethod( method );
+                }
+                return proxyClass.toClass( classLoader );
+            }
+            catch( CannotCompileException e )
+            {
+                throw new ProxyFactoryException( "Could not compile class.", e );
+            }
         }
     }
 

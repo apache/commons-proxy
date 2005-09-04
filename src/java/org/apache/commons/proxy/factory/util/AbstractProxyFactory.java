@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.provider.NullProvider;
 
 import java.lang.reflect.InvocationHandler;
 
@@ -46,24 +45,18 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         this.log = log;
     }
 
-    public Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces )
+    public final Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces )
     {
         return createInterceptingProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
                                         proxyInterfaces );
     }
 
-    public Object createDelegatingProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
+    public final Object createDelegatingProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
     {
         return createDelegatingProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
     }
 
-    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyInterfaces )
-    {
-        return createInterceptingProxy( classLoader, new NullProvider(), new InvocationHandlerMethodInterceptor( invocationHandler ), proxyInterfaces );
-    }
-
-    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )
+    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )
     {
         return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler, proxyInterfaces );
     }

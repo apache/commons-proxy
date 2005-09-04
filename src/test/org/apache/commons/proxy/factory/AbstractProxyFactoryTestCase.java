@@ -60,6 +60,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         final Echo echo = ( Echo )factory.createInvocationHandlerProxy( tester, Echo.class );
         echo.echoBack( "hello" );
         assertEquals( Echo.class.getMethod( "echoBack", String.class ), tester.method );
+        assertSame( echo, tester.proxy );
         assertNotNull( tester.args );
         assertEquals( 1, tester.args.length );
         assertEquals( "hello", tester.args[0] );
@@ -245,9 +246,11 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
         private Object method;
         private Object[] args;
+        private Object proxy;
 
         public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
         {
+            this.proxy = proxy;
             this.method = method;
             this.args = args;
             return null;

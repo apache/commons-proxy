@@ -26,6 +26,7 @@ import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationHandler;
 
 /**
  * A <a href="http://cglib.sourceforge.net/">CGLIB</a>-based {@link org.apache.commons.proxy.ProxyFactory}
@@ -56,6 +57,30 @@ public class CglibProxyFactory extends AbstractProxyFactory
         return enhancer.create();
     }
 
+    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+                                                Class... proxyInterfaces )
+    {
+        final Enhancer enhancer = new Enhancer();
+        enhancer.setClassLoader( classLoader );
+        enhancer.setInterfaces( proxyInterfaces );
+        enhancer.setCallback( new InvocationHandlerBridge( invocationHandler ) );
+        return enhancer.create();
+    }
+
+    private class InvocationHandlerBridge implements net.sf.cglib.proxy.InvocationHandler
+    {
+        private final InvocationHandler original;
+
+        public InvocationHandlerBridge( InvocationHandler original )
+        {
+            this.original = original;
+        }
+
+        public Object invoke( Object object, Method method, Object[] objects ) throws Throwable
+        {
+            return original.invoke( object, method, objects );
+        }
+    }
     private class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor
     {
         private final MethodInterceptor inner;
