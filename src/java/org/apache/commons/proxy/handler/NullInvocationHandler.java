@@ -34,7 +34,43 @@ public class NullInvocationHandler implements InvocationHandler
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        return null;
+        final Class<?> returnType = method.getReturnType();
+        if( returnType.isPrimitive() )
+        {
+            if( Integer.TYPE.equals( returnType ) )
+            {
+                return 0;
+            }
+            else if( Long.TYPE.equals( returnType ) )
+            {
+                return 0L;
+            }
+            else if( Double.TYPE.equals( returnType ) )
+            {
+                return 0.0;
+            }
+            else if( Float.TYPE.equals( returnType ) )
+            {
+                return 0.0f;
+            }
+            else if( Short.TYPE.equals( returnType ) )
+            {
+                return ( short )0;
+            }
+            else if( Character.TYPE.equals( returnType ) )
+            {
+                return ( char )0;
+            }
+            else if( Byte.TYPE.equals( returnType ) )
+            {
+                return ( byte )0;
+            }
+            return 0;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
 
