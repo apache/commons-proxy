@@ -56,16 +56,16 @@ public abstract class AbstractProxyFactory implements ProxyFactory
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public final Object createDelegatingProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
+    public final Object createDelegatorProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
     {
-        return createDelegatingProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
+        return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
     }
 
-    public final Object createInterceptingProxy( Object target, MethodInterceptor interceptor,
-                                                 Class... proxyInterfaces )
+    public final Object createInterceptorProxy( Object target, MethodInterceptor interceptor,
+                                                Class... proxyInterfaces )
     {
-        return createInterceptingProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
-                                        proxyInterfaces );
+        return createInterceptorProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
+                                       proxyInterfaces );
     }
 
     public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )

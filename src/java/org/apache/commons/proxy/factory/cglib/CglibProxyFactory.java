@@ -41,8 +41,8 @@ public class CglibProxyFactory extends AbstractProxyFactory
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                         Class... proxyInterfaces )
+    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
+                                        Class... proxyInterfaces )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
@@ -51,8 +51,8 @@ public class CglibProxyFactory extends AbstractProxyFactory
         return enhancer.create();
     }
 
-    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                           Class... proxyInterfaces )
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+                                          Class... proxyInterfaces )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );

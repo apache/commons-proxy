@@ -54,8 +54,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                         Class... proxyInterfaces )
+    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
+                                        Class... proxyInterfaces )
     {
         try
         {
@@ -68,8 +68,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory
         }
     }
 
-    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                           Class... proxyInterfaces )
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+                                          Class... proxyInterfaces )
     {
         try
         {

@@ -42,7 +42,7 @@ public interface ProxyFactory
      * @param proxyInterfaces  the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatingProxy( ObjectProvider delegateProvider, Class... proxyInterfaces );
+    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyInterfaces );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
@@ -52,8 +52,8 @@ public interface ProxyFactory
      * @param proxyInterfaces  the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
-    public Object createDelegatingProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
-                                         Class... proxyInterfaces );
+    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
+                                        Class... proxyInterfaces );
 
     /**
      * Creates a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
@@ -65,7 +65,7 @@ public interface ProxyFactory
      * @return a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
      *         the <code>target</code> object.
      */
-    public Object createInterceptingProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces );
+    public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces );
     /**
      * Creates a proxy which passes through a {@link org.aopalliance.intercept.MethodInterceptor method interceptor}
      * before eventually reaching the <code>target</code> object.
@@ -77,8 +77,8 @@ public interface ProxyFactory
      * @return a proxy which passes through a {@link org.aopalliance.intercept.MethodInterceptor method interceptor}
      *         before eventually reaching the <code>target</code> object.
      */
-    public Object createInterceptingProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                           Class... proxyInterfaces );
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+                                          Class... proxyInterfaces );
 
     /**
      * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.  The proxy

@@ -56,7 +56,7 @@ public class MethodInterceptorChain
         for( int i = interceptors.length - 1; i >= 0; --i )
         {
             currentTarget = proxyFactory
-                    .createInterceptingProxy( classLoader, currentTarget, interceptors[i], proxyInterfaces );
+                    .createInterceptorProxy( classLoader, currentTarget, interceptors[i], proxyInterfaces );
         }
         return currentTarget;
     }
