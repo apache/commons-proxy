@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 package org.apache.commons.proxy;
-import junit.framework.*;
-import org.apache.commons.proxy.ProxyUtils;
-import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
+import junit.framework.TestCase;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 
@@ -26,6 +24,14 @@ public class TestProxyUtils extends TestCase
     public void testCreateNullObject() throws Exception
     {
         final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class );
+        assertNull( nullEcho.echoBack( "hello" ) );
+        assertNull( nullEcho.echoBack( "hello", "world" ) );
+        assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
+    }
+
+    public void testCreateNullObjectWithClassLoader() throws Exception
+    {
+        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class.getClassLoader(), Echo.class );
         assertNull( nullEcho.echoBack( "hello" ) );
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );

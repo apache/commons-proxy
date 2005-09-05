@@ -87,6 +87,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
 
     /**
      * Returns true if a suitable superclass can be found, given the desired <code>proxyClasses</code>.
+     *
      * @param proxyClasses the proxy classes
      * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
      */

@@ -18,6 +18,8 @@ package org.apache.commons.proxy.handler;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An {@link InvocationHandler} implementation which merely returns null for all method invocations.  This class is
@@ -28,6 +30,17 @@ import java.lang.reflect.Method;
  */
 public class NullInvocationHandler implements InvocationHandler
 {
+    private static Map<Class,Object> primitiveValueMap = new HashMap<Class,Object>();
+    static
+    {
+        primitiveValueMap.put( Integer.TYPE, new Integer( 0 ) );
+        primitiveValueMap.put( Long.TYPE, new Long( 0 ) );
+        primitiveValueMap.put( Short.TYPE, new Short( ( short )0 ) );
+        primitiveValueMap.put( Byte.TYPE, new Byte( ( byte )0 ) );
+        primitiveValueMap.put( Float.TYPE, new Float( 0.0f ) );
+        primitiveValueMap.put( Double.TYPE, new Double( 0.0 ) );
+        primitiveValueMap.put( Character.TYPE, new Character( ( char )0 ) );
+    }
 //----------------------------------------------------------------------------------------------------------------------
 // InvocationHandler Implementation
 //----------------------------------------------------------------------------------------------------------------------
@@ -37,35 +50,7 @@ public class NullInvocationHandler implements InvocationHandler
         final Class<?> returnType = method.getReturnType();
         if( returnType.isPrimitive() )
         {
-            if( Integer.TYPE.equals( returnType ) )
-            {
-                return 0;
-            }
-            else if( Long.TYPE.equals( returnType ) )
-            {
-                return 0L;
-            }
-            else if( Double.TYPE.equals( returnType ) )
-            {
-                return 0.0;
-            }
-            else if( Float.TYPE.equals( returnType ) )
-            {
-                return 0.0f;
-            }
-            else if( Short.TYPE.equals( returnType ) )
-            {
-                return ( short )0;
-            }
-            else if( Character.TYPE.equals( returnType ) )
-            {
-                return ( char )0;
-            }
-            else if( Byte.TYPE.equals( returnType ) )
-            {
-                return ( byte )0;
-            }
-            return 0;
+            return primitiveValueMap.get( returnType );
         }
         else
         {

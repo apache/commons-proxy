@@ -14,32 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.interceptor;
+package org.apache.commons.proxy.interceptor.filter;
+import junit.framework.*;
+import org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-/**
- * @author James Carman
- * @version 1.0
- */
-public abstract class AbstractMethodInterceptor implements MethodInterceptor
+public class TestReturnTypeFilter extends TestCase
 {
-    protected Log log;
-
-    protected AbstractMethodInterceptor()
+    public void testAcceptsMethod() throws Exception
     {
-        setLog( LogFactory.getLog( getClass() ) );
+        final ReturnTypeFilter filter = new ReturnTypeFilter( String.class, Integer.TYPE );
+        assertTrue( filter.accepts( Object.class.getMethod( "toString" ) ) );
+        assertTrue( filter.accepts( Object.class.getMethod( "hashCode" ) ) );
+        assertFalse( filter.accepts( Object.class.getMethod( "equals", Object.class ) ) );
     }
 
-    public Log getLog()
-    {
-        return log;
-    }
 
-    public void setLog( Log log )
-    {
-        this.log = log;
-    }
 }
