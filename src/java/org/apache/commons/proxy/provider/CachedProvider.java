@@ -23,7 +23,7 @@ import org.apache.commons.proxy.provider.cache.Cache;
  * @author James Carman
  * @version 1.0
  */
-public class CachedProvider<T> extends ProviderDecorator
+public class CachedProvider extends ProviderDecorator
 {
 
 //----------------------------------------------------------------------------------------------------------------------
