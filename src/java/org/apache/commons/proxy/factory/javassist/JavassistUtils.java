@@ -69,11 +69,11 @@ public class JavassistUtils
         return inputClass.getName();
     }
 
-    public static void addInterfaces( CtClass ctClass, Class... proxyInterfaces )
+    public static void addInterfaces( CtClass ctClass, Class... proxyClasses )
     {
-        for( int i = 0; i < proxyInterfaces.length; i++ )
+        for( int i = 0; i < proxyClasses.length; i++ )
         {
-            Class proxyInterface = proxyInterfaces[i];
+            Class proxyInterface = proxyClasses[i];
             ctClass.addInterface( resolve( proxyInterface ) );
         }
     }

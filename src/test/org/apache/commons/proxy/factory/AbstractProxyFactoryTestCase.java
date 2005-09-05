@@ -48,6 +48,12 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         this.factory = factory;
     }
 
+    public void testCanProxy()
+    {
+        assertTrue( factory.canProxy( Echo.class ) );
+        assertFalse( factory.canProxy( EchoImpl.class ) );
+    }
+
     public void testInterfaceHierarchies()
     {
         final SortedSet<String> set = ( SortedSet<String> ) factory.createDelegatorProxy( constantProvider( new TreeSet<String>() ), SortedSet.class );
@@ -234,7 +240,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         }
     }
 
-    private static class NoOpMethodInterceptor implements MethodInterceptor
+    protected static class NoOpMethodInterceptor implements MethodInterceptor
     {
         public Object invoke( MethodInvocation methodInvocation ) throws Throwable
         {

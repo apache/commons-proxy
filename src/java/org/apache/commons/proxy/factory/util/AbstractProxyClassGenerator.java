@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.factory.util;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,21 +40,21 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
      * are no method signature clashes. For methods with the same signature (name and parameter types), the one
      * encountered first will be returned in the result.
      *
-     * @param proxyInterfaces the interfaces the proxy class must implement
+     * @param proxyClasses the interfaces the proxy class must implement
      * @return all methods that the proxy class must implement
      */
-    public static Method[] getImplementationMethods( Class... proxyInterfaces )
+    public static Method[] getImplementationMethods( Class... proxyClasses )
     {
         final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
         final List<Method> resultingMethods = new LinkedList<Method>();
-        for( int i = 0; i < proxyInterfaces.length; i++ )
+        for( int i = 0; i < proxyClasses.length; i++ )
         {
-            Class proxyInterface = proxyInterfaces[i];
+            Class proxyInterface = proxyClasses[i];
             final Method[] methods = proxyInterface.getMethods();
             for( int j = 0; j < methods.length; j++ )
             {
                 final MethodSignature signature = new MethodSignature( methods[j] );
-                if( !signatures.contains( signature ) )
+                if( !signatures.contains( signature ) && !Modifier.isFinal( methods[j].getModifiers() ) )
                 {
                     signatures.add( signature );
                     resultingMethods.add( methods[j] );

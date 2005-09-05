@@ -16,12 +16,13 @@
 package org.apache.commons.proxy.factory.cglib;
 
 import org.apache.commons.proxy.factory.AbstractProxyFactoryTestCase;
+import org.apache.commons.proxy.factory.AbstractSubclassingProxyFactoryTestCase;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class TestCglibProxyFactory extends AbstractProxyFactoryTestCase
+public class TestCglibProxyFactory extends AbstractSubclassingProxyFactoryTestCase
 {
     public TestCglibProxyFactory()
     {

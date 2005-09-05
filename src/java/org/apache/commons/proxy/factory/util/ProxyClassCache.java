@@ -47,15 +47,15 @@ public class ProxyClassCache
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public synchronized Class getProxyClass( ClassLoader classLoader, Class... proxyInterfaces )
+    public synchronized Class getProxyClass( ClassLoader classLoader, Class... proxyClasses )
     {
         final Map<String, WeakReference<Class>> classCache = getClassCache( classLoader );
-        final String key = toClassCacheKey( proxyInterfaces );
+        final String key = toClassCacheKey( proxyClasses );
         Class proxyClass;
         WeakReference<Class> proxyClassReference = classCache.get( key );
         if( proxyClassReference == null )
         {
-            proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyInterfaces );
+            proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyClasses );
             classCache.put( key, new WeakReference<Class>( proxyClass ) );
         }
         else
@@ -65,7 +65,7 @@ public class ProxyClassCache
                 proxyClass = proxyClassReference.get();
                 if( proxyClass == null )
                 {
-                    proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyInterfaces );
+                    proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyClasses );
                     classCache.put( key, new WeakReference<Class>( proxyClass ) );
                 }
             }
@@ -84,14 +84,14 @@ public class ProxyClassCache
         return cache;
     }
 
-    private String toClassCacheKey( Class... proxyInterfaces )
+    private String toClassCacheKey( Class... proxyClasses )
     {
         final StringBuffer sb = new StringBuffer();
-        for( int i = 0; i < proxyInterfaces.length; i++ )
+        for( int i = 0; i < proxyClasses.length; i++ )
         {
-            Class proxyInterface = proxyInterfaces[i];
+            Class proxyInterface = proxyClasses[i];
             sb.append( proxyInterface.getName() );
-            if( i != proxyInterfaces.length - 1 )
+            if( i != proxyClasses.length - 1 )
             {
                 sb.append( "," );
             }

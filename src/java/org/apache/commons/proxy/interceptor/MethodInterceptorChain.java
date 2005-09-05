@@ -50,31 +50,31 @@ public class MethodInterceptorChain
 //----------------------------------------------------------------------------------------------------------------------
 
     private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                Class... proxyInterfaces )
+                                Class... proxyClasses )
     {
         Object currentTarget = terminus;
         for( int i = interceptors.length - 1; i >= 0; --i )
         {
             currentTarget = proxyFactory
-                    .createInterceptorProxy( classLoader, currentTarget, interceptors[i], proxyInterfaces );
+                    .createInterceptorProxy( classLoader, currentTarget, interceptors[i], proxyClasses );
         }
         return currentTarget;
     }
 
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyInterfaces )
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyClasses )
     {
         return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
-                                    proxyInterfaces );
+                                    proxyClasses );
     }
 
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                               Class... proxyInterfaces )
+                                               Class... proxyClasses )
     {
-        if( proxyInterfaces.length == 0 )
+        if( proxyClasses.length == 0 )
         {
-            proxyInterfaces = terminus.getClass().getInterfaces();
+            proxyClasses = terminus.getClass().getInterfaces();
         }
-        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyInterfaces );
+        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyClasses );
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,22 +84,22 @@ public class MethodInterceptorChain
     private class ProxyObjectProvider extends AbstractObjectProvider
     {
         private final ClassLoader classLoader;
-        private final Class[] proxyInterfaces;
+        private final Class[] proxyClasses;
         private final Object terminus;
         private final ProxyFactory proxyFactory;
 
         public ProxyObjectProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                    Class[] proxyInterfaces )
+                                    Class[] proxyClasses )
         {
             this.classLoader = classLoader;
-            this.proxyInterfaces = proxyInterfaces;
+            this.proxyClasses = proxyClasses;
             this.terminus = terminus;
             this.proxyFactory = proxyFactory;
         }
 
         public Object getObject()
         {
-            return createProxy( proxyFactory, classLoader, terminus, proxyInterfaces );
+            return createProxy( proxyFactory, classLoader, terminus, proxyClasses );
         }
     }
 }

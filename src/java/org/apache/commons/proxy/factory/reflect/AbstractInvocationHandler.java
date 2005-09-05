@@ -34,24 +34,24 @@ public abstract class AbstractInvocationHandler implements InvocationHandler
     /**
      * Creates a proxy object which implements the specified proxy interfaces.
      *
-     * @param proxyInterfaces the proxy interfaces
+     * @param proxyClasses the proxy interfaces
      * @return a proxy object which implements the specified proxy interfaces
      */
-    public Object createProxy( Class... proxyInterfaces )
+    public Object createProxy( Class... proxyClasses )
     {
-        return createProxy( Thread.currentThread().getContextClassLoader(), proxyInterfaces );
+        return createProxy( Thread.currentThread().getContextClassLoader(), proxyClasses );
     }
 
     /**
      * Creates a proxy object which implements the specified proxy interfaces, using the specified class loader.
      *
      * @param classLoader     the class loader
-     * @param proxyInterfaces the proxy interfaces
+     * @param proxyClasses the proxy interfaces
      * @return a proxy object which implements the specified proxy interfaces, using the specified class loader.
      */
-    public Object createProxy( ClassLoader classLoader, Class... proxyInterfaces )
+    public Object createProxy( ClassLoader classLoader, Class... proxyClasses )
     {
-        return Proxy.newProxyInstance( classLoader, proxyInterfaces, this );
+        return Proxy.newProxyInstance( classLoader, proxyClasses, this );
     }
 }
 

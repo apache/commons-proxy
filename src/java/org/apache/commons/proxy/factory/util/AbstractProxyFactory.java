@@ -21,8 +21,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
+import org.apache.commons.proxy.exception.ProxyFactoryException;
 
 import java.lang.reflect.InvocationHandler;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Collection;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -56,21 +60,34 @@ public abstract class AbstractProxyFactory implements ProxyFactory
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public final Object createDelegatorProxy( ObjectProvider targetProvider, Class... proxyInterfaces )
+    public final Object createDelegatorProxy( ObjectProvider targetProvider, Class... proxyClasses )
     {
-        return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyInterfaces );
+        return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyClasses );
     }
 
     public final Object createInterceptorProxy( Object target, MethodInterceptor interceptor,
-                                                Class... proxyInterfaces )
+                                                Class... proxyClasses )
     {
         return createInterceptorProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
-                                       proxyInterfaces );
+                                       proxyClasses );
     }
 
-    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces )
+    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyClasses )
     {
         return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
-                                             proxyInterfaces );
+                                             proxyClasses );
+    }
+
+    public boolean canProxy( Class... proxyClasses )
+    {
+        for( int i = 0; i < proxyClasses.length; i++ )
+        {
+            Class proxyClass = proxyClasses[i];
+            if( !proxyClass.isInterface() )
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

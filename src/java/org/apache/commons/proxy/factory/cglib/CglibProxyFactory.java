@@ -22,7 +22,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
+import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.InvocationHandler;
@@ -35,38 +35,41 @@ import java.lang.reflect.Method;
  * @author James Carman
  * @version 1.0
  */
-public class CglibProxyFactory extends AbstractProxyFactory
+public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
 //----------------------------------------------------------------------------------------------------------------------
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                        Class... proxyInterfaces )
+                                        Class... proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( proxyInterfaces );
+        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
+        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
         enhancer.setCallback( new ObjectProviderDispatcher( targetProvider ) );
         return enhancer.create();
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                          Class... proxyInterfaces )
+                                          Class... proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( proxyInterfaces );
+        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
+        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
         enhancer.setCallback( new InterceptorBridge( target, interceptor ) );
         return enhancer.create();
     }
 
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyInterfaces )
+                                                Class... proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( proxyInterfaces );
+        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
+        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
         enhancer.setCallback( new InvocationHandlerBridge( invocationHandler ) );
         return enhancer.create();
     }

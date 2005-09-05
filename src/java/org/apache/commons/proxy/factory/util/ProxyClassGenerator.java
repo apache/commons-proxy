@@ -26,6 +26,6 @@ public interface ProxyClassGenerator
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Class generateProxyClass( ClassLoader classLoader, Class... proxyInterfaces );
+    public Class generateProxyClass( ClassLoader classLoader, Class... proxyClasses );
 }
 

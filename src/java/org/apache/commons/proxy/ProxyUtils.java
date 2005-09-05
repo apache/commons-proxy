@@ -25,25 +25,25 @@ import org.apache.commons.proxy.handler.NullInvocationHandler;
 public class ProxyUtils
 {
     /**
-     * Creates a "null object" which implements the <code>proxyInterfaces</code>.
+     * Creates a "null object" which implements the <code>proxyClasses</code>.
      * @param proxyFactory the proxy factory to be used to create the proxy object
-     * @param proxyInterfaces the proxy interfaces
-     * @return a "null object" which implements the <code>proxyInterfaces</code>.
+     * @param proxyClasses the proxy interfaces
+     * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject( ProxyFactory proxyFactory, Class... proxyInterfaces )
+    public static Object createNullObject( ProxyFactory proxyFactory, Class... proxyClasses )
     {
-        return proxyFactory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyInterfaces );
+        return proxyFactory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyClasses );
     }
 
     /**
-     * Creates a "null object" which implements the <code>proxyInterfaces</code>.
+     * Creates a "null object" which implements the <code>proxyClasses</code>.
      * @param proxyFactory the proxy factory to be used to create the proxy object
      * @param classLoader the class loader to be used by the proxy factory to create the proxy object
-     * @param proxyInterfaces the proxy interfaces
-     * @return a "null object" which implements the <code>proxyInterfaces</code>.
+     * @param proxyClasses the proxy interfaces
+     * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class... proxyInterfaces )
+    public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class... proxyClasses )
     {
-        return proxyFactory.createInvocationHandlerProxy( classLoader, new NullInvocationHandler(), proxyInterfaces );
+        return proxyFactory.createInvocationHandlerProxy( classLoader, new NullInvocationHandler(), proxyClasses );
     }
 }

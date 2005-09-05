@@ -39,66 +39,77 @@ public interface ProxyFactory
      * generated using the current thread's "context class loader."
      *
      * @param delegateProvider the delegate provider
-     * @param proxyInterfaces  the interfaces that the proxy should implement
+     * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyInterfaces );
+    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyClasses );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
      *
      * @param classLoader      the class loader to use when generating the proxy
      * @param delegateProvider the delegate provider
-     * @param proxyInterfaces  the interfaces that the proxy should implement
+     * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
-                                        Class... proxyInterfaces );
+                                        Class... proxyClasses );
 
     /**
      * Creates a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
      * the <code>target</code> object.  The proxy will be generated using the current thread's "context class loader."
      *
-     * @param target          the target object
-     * @param interceptor     the method interceptor
-     * @param proxyInterfaces the interfaces that the proxy should implement
+     * @param target       the target object
+     * @param interceptor  the method interceptor
+     * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
      *         the <code>target</code> object.
      */
-    public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class... proxyInterfaces );
+    public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class... proxyClasses );
+
     /**
      * Creates a proxy which passes through a {@link org.aopalliance.intercept.MethodInterceptor method interceptor}
      * before eventually reaching the <code>target</code> object.
      *
-     * @param classLoader     the class loader to use when generating the proxy
-     * @param target          the target object
-     * @param interceptor     the method interceptor
-     * @param proxyInterfaces the interfaces that the proxy should implement.
+     * @param classLoader  the class loader to use when generating the proxy
+     * @param target       the target object
+     * @param interceptor  the method interceptor
+     * @param proxyClasses the interfaces that the proxy should implement.
      * @return a proxy which passes through a {@link org.aopalliance.intercept.MethodInterceptor method interceptor}
      *         before eventually reaching the <code>target</code> object.
      */
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                          Class... proxyInterfaces );
+                                          Class... proxyClasses );
 
     /**
      * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.  The proxy
      * will be generated using the current thread's "context class loader."
      *
      * @param invocationHandler the invocation handler
-     * @param proxyInterfaces   the interfaces that the proxy should implement
+     * @param proxyClasses      the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
      */
-    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyInterfaces );
+    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyClasses );
 
     /**
      * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.
      *
      * @param classLoader       the class loader to use when generating the proxy
      * @param invocationHandler the invocation handler
-     * @param proxyInterfaces   the interfaces that the proxy should implement
+     * @param proxyClasses      the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
      */
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyInterfaces );
+                                                Class... proxyClasses );
+
+    /**
+     * Returns true if this proxy factory can generate a proxy class which extends/implements
+     * the <code>proxyClasses</code>.
+     *
+     * @param proxyClasses the desired proxy classes
+     * @return true if this proxy factory can generate a proxy class which extends/implements
+     *         the <code>proxyClasses</code>.
+     */
+    public boolean canProxy( Class... proxyClasses );
 }
 
