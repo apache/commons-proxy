@@ -37,6 +37,10 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     {
         assertTrue( factory.canProxy( Echo.class ) );
         assertTrue( factory.canProxy( EchoImpl.class ) );
+        assertFalse( factory.canProxy( FinalEcho.class ) );
+        assertFalse( factory.canProxy( NoDefaultConstructorEcho.class ) );
+        assertTrue( factory.canProxy( ProtectedConstructorEcho.class ) );
+        assertFalse( factory.canProxy( InvisibleEcho.class ) );
     }
 
     public void testDelegatorWithSuperclass()
@@ -55,5 +59,30 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     {
         final Echo echo = ( Echo )factory.createInvocationHandlerProxy( new NullInvocationHandler(), Echo.class, EchoImpl.class );
         assertTrue( echo instanceof EchoImpl );
+    }
+
+    public static final class FinalEcho extends EchoImpl
+    {
+
+    }
+
+    public static class NoDefaultConstructorEcho extends EchoImpl
+    {
+        public NoDefaultConstructorEcho( String param )
+        {
+        }
+    }
+
+    public static class ProtectedConstructorEcho extends EchoImpl
+    {
+        protected ProtectedConstructorEcho()
+        {
+
+        }
+    }
+
+    private static class InvisibleEcho extends EchoImpl
+    {
+
     }
 }

@@ -21,12 +21,11 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.factory.util.AbstractProxyClassGenerator;
-import org.apache.commons.proxy.factory.util.ProxyClassCache;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
+import org.apache.commons.proxy.factory.util.ProxyClassCache;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -124,8 +123,6 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 proxyClass.addConstructor( proxyConstructor );
                 for( int i = 0; i < methods.length; ++i )
                 {
-                    LogFactory.getLog( getClass() )
-                            .debug( "Adding method " + methods[i] + " to delegating proxy class..." );
                     final CtMethod method = new CtMethod( JavassistUtils.resolve( methods[i].getReturnType() ),
                                                           methods[i].getName(),
                                                           JavassistUtils.resolve( methods[i].getParameterTypes() ),

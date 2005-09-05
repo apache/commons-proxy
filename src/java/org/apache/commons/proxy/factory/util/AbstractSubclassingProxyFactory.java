@@ -18,6 +18,7 @@ package org.apache.commons.proxy.factory.util;
 
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -29,53 +30,21 @@ import java.util.List;
  */
 public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFactory
 {
-    /**
-     * Returns either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
-     * class from <code>proxyClasses</code>.
-     *
-     * @param proxyClasses the proxy classes
-     * @return either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
-     *         class from <code>proxyClasses</code>
-     * @throws ProxyFactoryException if multiple non-interface classes are contained in <code>proxyClasses</code> or any
-     *                               of the non-interface classes are final
-     */
-    protected static Class getSuperclass( Class... proxyClasses )
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    private static boolean hasSuitableDefaultConstructor( Class superclass )
     {
-        final Class[] superclasses = toNonInterfaces( proxyClasses );
-        switch( superclasses.length )
+        for( Constructor constructor : superclass.getDeclaredConstructors() )
         {
-            case 0:
-                return Object.class;
-            case 1:
-                final Class superclass = superclasses[0];
-                if( Modifier.isFinal( superclass.getModifiers() ) )
-                {
-                    throw new ProxyFactoryException(
-                            "Proxy class cannot extend " + superclass.getName() + " as it is final." );
-                }
-                try
-                {
-                    superclass.getConstructor();
-                }
-                catch( NoSuchMethodException e )
-                {
-                    throw new ProxyFactoryException( "Proxy class cannot extend " + superclass.getName() + ", because it has no \"default\" constructor.", e );
-                }
-                return superclass;
-            default:
-                final StringBuffer errorMessage = new StringBuffer( "Proxy class cannot extend " );
-                for( int i = 0; i < superclasses.length; i++ )
-                {
-                    Class c = superclasses[i];
-                    errorMessage.append( c.getName() );
-                    if( i != superclasses.length - 1 )
-                    {
-                        errorMessage.append( ", " );
-                    }
-                }
-                errorMessage.append( "; multiple inheritance not allowed." );
-                throw new ProxyFactoryException( errorMessage.toString() );
+            if( constructor.getParameterTypes().length == 0 && ( Modifier.isPublic( constructor.getModifiers() ) ||
+                                                                 Modifier.isProtected( constructor.getModifiers() ) ) )
+            {
+                return true;
+            }
         }
+        return false;
     }
 
     /**
@@ -98,6 +67,29 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
         return ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
     }
 
+    private static Class[] toNonInterfaces( Class... proxyClasses )
+    {
+        final List<Class> superclasses = new LinkedList<Class>();
+        for( int i = 0; i < proxyClasses.length; i++ )
+        {
+            Class proxyClass = proxyClasses[i];
+            if( !proxyClass.isInterface() )
+            {
+                superclasses.add( proxyClass );
+            }
+        }
+        return ( Class[] ) superclasses.toArray( new Class[superclasses.size()] );
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns true if a suitable superclass can be found, given the desired <code>proxyClasses</code>.
+     * @param proxyClasses the proxy classes
+     * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
+     */
     public boolean canProxy( Class... proxyClasses )
     {
         try
@@ -111,18 +103,50 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
         }
     }
 
-    private static Class[] toNonInterfaces( Class... proxyClasses )
+    /**
+     * Returns either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
+     * class from <code>proxyClasses</code>.
+     *
+     * @param proxyClasses the proxy classes
+     * @return either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
+     *         class from <code>proxyClasses</code>
+     * @throws ProxyFactoryException if multiple non-interface classes are contained in <code>proxyClasses</code> or any
+     *                               of the non-interface classes are final
+     */
+    public static Class getSuperclass( Class... proxyClasses )
     {
-        final List<Class> superclasses = new LinkedList<Class>();
-        for( int i = 0; i < proxyClasses.length; i++ )
+        final Class[] superclasses = toNonInterfaces( proxyClasses );
+        switch( superclasses.length )
         {
-            Class proxyClass = proxyClasses[i];
-            if( !proxyClass.isInterface() )
-            {
-                superclasses.add( proxyClass );
-            }
+            case 0:
+                return Object.class;
+            case 1:
+                final Class superclass = superclasses[0];
+                if( Modifier.isFinal( superclass.getModifiers() ) )
+                {
+                    throw new ProxyFactoryException(
+                            "Proxy class cannot extend " + superclass.getName() + " as it is final." );
+                }
+                if( !hasSuitableDefaultConstructor( superclass ) )
+                {
+                    throw new ProxyFactoryException( "Proxy class cannot extend " + superclass.getName() +
+                                                     ", because it has no visible \"default\" constructor." );
+                }
+                return superclass;
+            default:
+                final StringBuffer errorMessage = new StringBuffer( "Proxy class cannot extend " );
+                for( int i = 0; i < superclasses.length; i++ )
+                {
+                    Class c = superclasses[i];
+                    errorMessage.append( c.getName() );
+                    if( i != superclasses.length - 1 )
+                    {
+                        errorMessage.append( ", " );
+                    }
+                }
+                errorMessage.append( "; multiple inheritance not allowed." );
+                throw new ProxyFactoryException( errorMessage.toString() );
         }
-        return ( Class[] ) superclasses.toArray( new Class[superclasses.size()] );
-
     }
 }
+

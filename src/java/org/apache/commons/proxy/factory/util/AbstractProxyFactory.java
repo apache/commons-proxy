@@ -21,12 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.exception.ProxyFactoryException;
 
 import java.lang.reflect.InvocationHandler;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Collection;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -60,6 +56,24 @@ public abstract class AbstractProxyFactory implements ProxyFactory
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Returns true if all <code>proxyClasses</code> are interfaces.
+     * @param proxyClasses the proxy classes
+     * @return true if all <code>proxyClasses</code> are interfaces
+     */
+    public boolean canProxy( Class... proxyClasses )
+    {
+        for( int i = 0; i < proxyClasses.length; i++ )
+        {
+            Class proxyClass = proxyClasses[i];
+            if( !proxyClass.isInterface() )
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public final Object createDelegatorProxy( ObjectProvider targetProvider, Class... proxyClasses )
     {
         return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyClasses );
@@ -76,18 +90,5 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     {
         return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
                                              proxyClasses );
-    }
-
-    public boolean canProxy( Class... proxyClasses )
-    {
-        for( int i = 0; i < proxyClasses.length; i++ )
-        {
-            Class proxyClass = proxyClasses[i];
-            if( !proxyClass.isInterface() )
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }
