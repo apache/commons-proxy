@@ -31,6 +31,7 @@ public class TestNullInvocationHandler extends TestCase
         assertEquals( ( char )0, tester.charMethod() );
         assertEquals( 0.0f, tester.floatMethod() );
         assertEquals( 0.0, tester.doubleMethod() );
+        assertFalse( tester.booleanMethod() );
         assertNull( tester.stringMethod() );
     }
 
@@ -44,5 +45,6 @@ public class TestNullInvocationHandler extends TestCase
         public double doubleMethod();
         public float floatMethod();
         public String stringMethod();
+        public boolean booleanMethod();
     }
 }

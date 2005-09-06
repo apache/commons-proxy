@@ -40,6 +40,7 @@ public class NullInvocationHandler implements InvocationHandler
         primitiveValueMap.put( Float.TYPE, new Float( 0.0f ) );
         primitiveValueMap.put( Double.TYPE, new Double( 0.0 ) );
         primitiveValueMap.put( Character.TYPE, new Character( ( char )0 ) );
+        primitiveValueMap.put( Boolean.TYPE, Boolean.FALSE );
     }
 //----------------------------------------------------------------------------------------------------------------------
 // InvocationHandler Implementation
