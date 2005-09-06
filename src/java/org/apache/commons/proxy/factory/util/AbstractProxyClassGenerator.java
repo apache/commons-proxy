@@ -18,9 +18,10 @@ package org.apache.commons.proxy.factory.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,15 +39,15 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
     /**
      * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
      * are no method signature clashes. For methods with the same signature (name and parameter types), the one
-     * encountered first will be returned in the result.
+     * encountered first will be returned in the result. Final methods are also excluded from the result.
      *
      * @param proxyClasses the interfaces the proxy class must implement
      * @return all methods that the proxy class must implement
      */
     public static Method[] getImplementationMethods( Class... proxyClasses )
     {
-        final Set<MethodSignature> signatures = new HashSet<MethodSignature>();
-        final List<Method> resultingMethods = new LinkedList<Method>();
+        final Map<MethodSignature, Method> signatureMethodMap = new HashMap<MethodSignature, Method>();
+        final Set<MethodSignature> finalizedSignatures = new HashSet<MethodSignature>();
         for( int i = 0; i < proxyClasses.length; i++ )
         {
             Class proxyInterface = proxyClasses[i];
@@ -54,12 +55,20 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
             for( int j = 0; j < methods.length; j++ )
             {
                 final MethodSignature signature = new MethodSignature( methods[j] );
-                if( !signatures.contains( signature ) && !Modifier.isFinal( methods[j].getModifiers() ) )
+                if( Modifier.isFinal( methods[j].getModifiers() ) )
                 {
-                    signatures.add( signature );
-                    resultingMethods.add( methods[j] );
+                    finalizedSignatures.add( signature );
+                }
+                else if( !signatureMethodMap.containsKey( signature ) )
+                {
+                    signatureMethodMap.put( signature, methods[j] );
                 }
             }
+        }
+        final Collection<Method> resultingMethods = signatureMethodMap.values();
+        for( MethodSignature signature : finalizedSignatures )
+        {
+            resultingMethods.remove( signatureMethodMap.get( signature ) );
         }
         final Method[] results = new Method[resultingMethods.size()];
         return resultingMethods.toArray( results );

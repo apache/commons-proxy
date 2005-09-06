@@ -39,6 +39,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertTrue( factory.canProxy( Echo.class ) );
         assertTrue( factory.canProxy( EchoImpl.class ) );
         assertFalse( factory.canProxy( FinalEcho.class ) );
+        assertTrue( factory.canProxy( FinalMethodEcho.class, Echo.class ) );
         assertFalse( factory.canProxy( NoDefaultConstructorEcho.class ) );
         assertTrue( factory.canProxy( ProtectedConstructorEcho.class ) );
         assertFalse( factory.canProxy( InvisibleEcho.class ) );
@@ -64,6 +65,21 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         final Echo echo = ( Echo ) factory
                 .createInvocationHandlerProxy( new NullInvocationHandler(), Echo.class, EchoImpl.class );
         assertTrue( echo instanceof EchoImpl );
+    }
+
+    public void testProxiesWithFinalMethodSuperclass()
+    {
+        Echo proxy = ( Echo )factory.createDelegatorProxy(
+                new ConstantProvider( new EchoImpl() ), Echo.class, FinalMethodEcho.class );
+        assertTrue( proxy instanceof FinalMethodEcho );
+
+        proxy = ( Echo )factory.createInterceptorProxy(
+                new EchoImpl(), new NoOpMethodInterceptor(), Echo.class, FinalMethodEcho.class );
+        assertTrue( proxy instanceof EchoImpl );
+
+        proxy = ( Echo )factory.createInvocationHandlerProxy(
+                new NullInvocationHandler(), Echo.class, FinalMethodEcho.class );
+        assertTrue( proxy instanceof FinalMethodEcho );
     }
 
     public void testDelegatorWithMultipleSuperclasses()
@@ -107,6 +123,15 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public static final class FinalEcho extends EchoImpl
     {
+    }
+
+    public static class FinalMethodEcho extends EchoImpl
+    {
+        @Override
+        public final void echo()
+        {
+            super.echo();
+        }
     }
 
     public static class NoDefaultConstructorEcho extends EchoImpl
