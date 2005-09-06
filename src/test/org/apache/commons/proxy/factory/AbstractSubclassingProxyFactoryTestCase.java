@@ -67,19 +67,17 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertTrue( echo instanceof EchoImpl );
     }
 
-    public void testProxiesWithFinalMethodSuperclass()
+    public void testProxiesWithClashingFinalMethodInSuperclass()
     {
-        Echo proxy = ( Echo )factory.createDelegatorProxy(
-                new ConstantProvider( new EchoImpl() ), Echo.class, FinalMethodEcho.class );
-        assertTrue( proxy instanceof FinalMethodEcho );
+        final Class[] proxyClasses = new Class[]{Echo.class, FinalMethodEcho.class};
+        Echo proxy = ( Echo )factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), proxyClasses );
+        assertEquals( "final", proxy.echoBack("echo") );
 
-        proxy = ( Echo )factory.createInterceptorProxy(
-                new EchoImpl(), new NoOpMethodInterceptor(), Echo.class, FinalMethodEcho.class );
-        assertTrue( proxy instanceof EchoImpl );
+        proxy = ( Echo )factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), proxyClasses );
+        assertEquals( "final", proxy.echoBack("echo") );
 
-        proxy = ( Echo )factory.createInvocationHandlerProxy(
-                new NullInvocationHandler(), Echo.class, FinalMethodEcho.class );
-        assertTrue( proxy instanceof FinalMethodEcho );
+        proxy = ( Echo )factory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyClasses );
+        assertEquals( "final", proxy.echoBack("echo") );
     }
 
     public void testDelegatorWithMultipleSuperclasses()
@@ -128,9 +126,9 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     public static class FinalMethodEcho extends EchoImpl
     {
         @Override
-        public final void echo()
+        public final String echoBack( String message )
         {
-            super.echo();
+            return "final";
         }
     }
 
