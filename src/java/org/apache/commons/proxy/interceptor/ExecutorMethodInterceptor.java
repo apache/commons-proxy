@@ -22,10 +22,12 @@ import java.util.concurrent.Executor;
 
 /**
  * A method interceptor that uses an {@link Executor} to execute the method invocation.
- * <p />
- * <b>Note</b>: Only <em>void</em> methods can be intercepted using this class!  Any attempts to intercept
- * non-void methods will result in an {@link IllegalArgumentException}.  If the proxy interfaces include non-void
- * methods, try using a {@link FilteredMethodInterceptor} along with a {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter} to wrap an instance of this class.
+ * <p/>
+ * <b>Note</b>: Only <em>void</em> methods can be intercepted using this class!  Any attempts to intercept non-void
+ * methods will result in an {@link IllegalArgumentException}.  If the proxy interfaces include non-void methods, try
+ * using a {@link FilteredMethodInterceptor} along with a {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter}
+ * to wrap an instance of this class.
+ *
  * @author James Carman
  * @version 1.0
  */
@@ -42,21 +44,30 @@ public class ExecutorMethodInterceptor extends AbstractMethodInterceptor
     {
         if( Void.TYPE.equals( methodInvocation.getMethod().getReturnType() ) )
         {
-            executor.execute( new Runnable()
+            // Special case for finalize() method (should not be run in a different thread...
+            if( !( methodInvocation.getMethod().getName().equals( "finalize" ) &&
+                   methodInvocation.getMethod().getParameterTypes().length == 0 ) )
             {
-                public void run()
+                executor.execute( new Runnable()
                 {
-                    try
+                    public void run()
                     {
-                        methodInvocation.proceed();
+                        try
+                        {
+                            methodInvocation.proceed();
+                        }
+                        catch( Throwable t )
+                        {
+                            getLog().error( "Method invocation threw an exception.", t );
+                        }
                     }
-                    catch( Throwable t )
-                    {
-                        getLog().error( "Method invocation threw an exception.", t );
-                    }
-                }
-            } );
-            return null;
+                } );
+                return null;
+            }
+            else
+            {
+                return methodInvocation.proceed();
+            }
         }
         else
         {
