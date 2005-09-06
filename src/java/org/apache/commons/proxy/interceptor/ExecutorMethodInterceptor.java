@@ -44,7 +44,7 @@ public class ExecutorMethodInterceptor extends AbstractMethodInterceptor
     {
         if( Void.TYPE.equals( methodInvocation.getMethod().getReturnType() ) )
         {
-            // Special case for finalize() method (should not be run in a different thread...
+            // Special case for finalize() method (should not be run in a different thread)...
             if( !( methodInvocation.getMethod().getName().equals( "finalize" ) &&
                    methodInvocation.getMethod().getParameterTypes().length == 0 ) )
             {
