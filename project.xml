@@ -100,9 +100,17 @@
             <organization/>
             <roles>
                 <role>advisor</role>
-                <role>designer</role>
             </roles>
             <url></url>
+        </contributor>
+        <contributor>
+            <name>Howard M. Lewis Ship</name>
+            <email>hlship@apache.org</email>
+            <organization/>
+            <roles>
+                <role>advisor</role>
+            </roles>
+            <url>http://www.howardlewisship.com/</url>
         </contributor>
     </contributors>
 
