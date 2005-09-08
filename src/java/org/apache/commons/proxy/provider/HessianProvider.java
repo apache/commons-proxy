@@ -18,6 +18,7 @@ package org.apache.commons.proxy.provider;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 import java.net.MalformedURLException;
 
@@ -27,7 +28,7 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @version 1.0
  */
-public class HessianProvider extends AbstractObjectProvider
+public class HessianProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields

@@ -18,6 +18,7 @@ package org.apache.commons.proxy.provider;
 
 import com.caucho.burlap.client.BurlapProxyFactory;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 import java.net.MalformedURLException;
 
@@ -27,7 +28,7 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @version 1.0
  */
-public class BurlapProvider extends AbstractObjectProvider
+public class BurlapProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields

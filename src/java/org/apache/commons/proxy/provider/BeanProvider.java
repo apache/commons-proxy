@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
@@ -24,7 +25,7 @@ import org.apache.commons.proxy.exception.ObjectProviderException;
  * @author James Carman
  * @version $Rev: 57 $
  */
-public class BeanProvider extends AbstractObjectProvider
+public class BeanProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields

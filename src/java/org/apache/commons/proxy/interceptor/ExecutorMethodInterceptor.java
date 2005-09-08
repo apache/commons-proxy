@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.interceptor;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.aopalliance.intercept.MethodInterceptor;
 
 import java.util.concurrent.Executor;
 
@@ -31,7 +32,7 @@ import java.util.concurrent.Executor;
  * @author James Carman
  * @version 1.0
  */
-public class ExecutorMethodInterceptor extends AbstractMethodInterceptor
+public class ExecutorMethodInterceptor implements MethodInterceptor
 {
     private final Executor executor;
 
@@ -58,7 +59,7 @@ public class ExecutorMethodInterceptor extends AbstractMethodInterceptor
                         }
                         catch( Throwable t )
                         {
-                            getLog().error( "Method invocation threw an exception.", t );
+                            // What to do here?  I can't convey the failure back to the caller.
                         }
                     }
                 } );

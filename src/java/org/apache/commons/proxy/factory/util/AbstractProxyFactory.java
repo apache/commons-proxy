@@ -17,8 +17,6 @@
 package org.apache.commons.proxy.factory.util;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 
@@ -33,31 +31,12 @@ import java.lang.reflect.InvocationHandler;
 public abstract class AbstractProxyFactory implements ProxyFactory
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
-
-    protected Log log;
-
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
-
-    protected AbstractProxyFactory()
-    {
-        setLog( LogFactory.getLog( getClass() ) );
-    }
-
-    public void setLog( Log log )
-    {
-        this.log = log;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns true if all <code>proxyClasses</code> are interfaces.
+     *
      * @param proxyClasses the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */

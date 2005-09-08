@@ -33,7 +33,6 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     private final Object cacheKey = new Object();
     private final GenericObjectPool pool;
     private Cache cache;
@@ -56,7 +55,6 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
     {
         try
         {
-            log.debug( "Returning object to pool in thread " + Thread.currentThread().getName() + "..." );
             pool.returnObject( e.getEvictedObject() );
         }
         catch( Exception e1 )
@@ -73,12 +71,9 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
     {
         try
         {
-            log.debug( "Checking for object in cache in thread " + Thread.currentThread().getName() + "..." );
             Object object = cache.retrieveObject( cacheKey );
             if( object == null )
             {
-                log.debug( "Did not object in cache; borrowing from pool in thread " +
-                           Thread.currentThread().getName() + "..." );
                 object = pool.borrowObject();
                 cache.storeObject( cacheKey, object, this );
             }
@@ -166,7 +161,6 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
     {
         public Object makeObject() throws Exception
         {
-            log.debug( "Creating new object for pool in thread " + Thread.currentThread().getName() + "..." );
             return inner.getObject();
         }
     }

@@ -22,7 +22,7 @@ import org.apache.commons.proxy.ObjectProvider;
  * @author James Carman
  * @version 1.0
  */
-public class ProviderDecorator extends AbstractObjectProvider
+public class ProviderDecorator implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields

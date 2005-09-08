@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
@@ -31,7 +32,7 @@ import java.rmi.server.RMIClientSocketFactory;
  * @author James Carman
  * @version 1.0
  */
-public class RmiProvider extends AbstractObjectProvider
+public class RmiProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
@@ -129,13 +130,10 @@ public class RmiProvider extends AbstractObjectProvider
         {
             if( clientSocketFactory != null )
             {
-                log.debug( "Looking up RMI registry at " + host + ":" + port +
-                           " using specified client socket factory..." );
                 return LocateRegistry.getRegistry( host, port, clientSocketFactory );
             }
             else
             {
-                log.debug( "Looking up RMI registry at " + host + ":" + port + "..." );
                 return LocateRegistry.getRegistry( host, port );
             }
         }

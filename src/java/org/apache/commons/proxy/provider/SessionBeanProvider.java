@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -31,7 +32,7 @@ import java.lang.reflect.Method;
  * @author James Carman
  * @version 1.0
  */
-public class SessionBeanProvider extends AbstractObjectProvider
+public class SessionBeanProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields

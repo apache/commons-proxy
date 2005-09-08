@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ObjectProvider;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Service;
@@ -31,7 +32,7 @@ import java.net.URL;
  * @author James Carman
  * @version 1.0
  */
-public class JaxRpcProvider extends AbstractObjectProvider
+public class JaxRpcProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
