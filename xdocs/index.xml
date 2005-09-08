@@ -50,7 +50,7 @@
                     three different types of proxy objects:
                     <ul>
                         <li><b>Delegator Proxies</b> - a proxy that merely delegates each method invocation to an
-                            object provided by an <a href="apidocs/org/apache/commons/proxy/provider/ObjectProvider.html">object provider</a>.</li>
+                            object provided by an <a href="apidocs/org/apache/commons/proxy/ObjectProvider.html">object provider</a>.</li>
                         <li><b>Interceptor Proxies</b> - a proxy that allows a <a href="http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInterceptor.html">method interceptor</a> to intercept each
                             method invocation.</li>
                         <li><b>Invocation Handler Proxies</b> - a proxy that uses an
