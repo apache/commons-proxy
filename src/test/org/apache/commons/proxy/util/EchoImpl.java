@@ -21,12 +21,8 @@ import java.io.IOException;
  * @author James Carman
  * @version 1.0
  */
-public class EchoImpl implements Echo, DuplicateEcho
+public class EchoImpl extends AbstractEcho implements DuplicateEcho
 {
-    public String echoBack( String message )
-    {
-        return message;
-    }
 
     public String echoBack( String message1, String message2 )
     {

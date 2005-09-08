@@ -20,6 +20,7 @@ import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.handler.NullInvocationHandler;
 import org.apache.commons.proxy.provider.ConstantProvider;
+import org.apache.commons.proxy.util.AbstractEcho;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
@@ -32,6 +33,13 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     protected AbstractSubclassingProxyFactoryTestCase( ProxyFactory factory )
     {
         super( factory );
+    }
+
+    public void testWithAbstractSuperclass()
+    {
+        final Echo echo = ( Echo )factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), AbstractEcho.class );
+        assertEquals( "hello", echo.echoBack( "hello" ) );
+        assertEquals( "helloworld", echo.echoBack( "hello", "world" ) );
     }
 
     public void testCanProxy()

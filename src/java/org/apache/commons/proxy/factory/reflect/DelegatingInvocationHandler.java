@@ -16,6 +16,8 @@
  */
 package org.apache.commons.proxy.factory.reflect;
 
+import org.apache.commons.proxy.ProxyUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -61,7 +63,7 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
      */
     public Object createProxy()
     {
-        return createProxy( getDelegate().getClass().getInterfaces() );
+        return createProxy( ProxyUtils.getAllInterfaces( getDelegate().getClass() ) );
     }
 
     /**
@@ -72,7 +74,7 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
      */
     public Object createProxy( ClassLoader classLoader )
     {
-        return createProxy( classLoader, getDelegate().getClass().getInterfaces() );
+        return createProxy( classLoader, ProxyUtils.getAllInterfaces( getDelegate().getClass() ) );
     }
 }
 

@@ -19,7 +19,12 @@ package org.apache.commons.proxy.interceptor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
+import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.provider.AbstractObjectProvider;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A <code>MethodInterceptorChain</code> assists with creating proxies which go through a series of
@@ -33,7 +38,6 @@ public class MethodInterceptorChain
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     private final MethodInterceptor[] interceptors;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -67,12 +71,14 @@ public class MethodInterceptorChain
                                     proxyClasses );
     }
 
+
+
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                                Class... proxyClasses )
     {
         if( proxyClasses.length == 0 )
         {
-            proxyClasses = terminus.getClass().getInterfaces();
+            proxyClasses = ProxyUtils.getAllInterfaces( terminus.getClass() );
         }
         return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyClasses );
     }
