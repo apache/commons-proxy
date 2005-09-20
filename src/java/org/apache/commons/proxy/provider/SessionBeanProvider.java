@@ -24,6 +24,7 @@ import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
  * Provides a reference to a session bean by looking up the home object and calling (via reflection) the no-argument
@@ -41,6 +42,7 @@ public class SessionBeanProvider implements ObjectProvider
     private final String jndiName;
     private final Class serviceInterface;
     private final Class homeInterface;
+    private final Properties properties;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -51,6 +53,15 @@ public class SessionBeanProvider implements ObjectProvider
         this.jndiName = jndiName;
         this.serviceInterface = serviceInterface;
         this.homeInterface = homeInterface;
+        this.properties = null;
+    }
+
+    public SessionBeanProvider( String jndiName, Class serviceInterface, Class homeInterface, Properties properties )
+    {
+        this.jndiName = jndiName;
+        this.serviceInterface = serviceInterface;
+        this.homeInterface = homeInterface;
+        this.properties = properties;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -61,7 +72,8 @@ public class SessionBeanProvider implements ObjectProvider
     {
         try
         {
-            Object homeObject = PortableRemoteObject.narrow( new InitialContext().lookup( jndiName ), homeInterface );
+            final InitialContext initialContext = properties == null ? new InitialContext() : new InitialContext( properties );
+            Object homeObject = PortableRemoteObject.narrow( initialContext.lookup( jndiName ), homeInterface );
             final Method createMethod = homeObject.getClass().getMethod( "create" );
             return serviceInterface.cast( createMethod.invoke( homeObject ) );
         }
