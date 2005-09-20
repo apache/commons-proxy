@@ -16,8 +16,8 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -38,7 +38,6 @@ public class SessionBeanProvider implements ObjectProvider
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     private final String jndiName;
     private final Class serviceInterface;
     private final Class homeInterface;
@@ -72,7 +71,8 @@ public class SessionBeanProvider implements ObjectProvider
     {
         try
         {
-            final InitialContext initialContext = properties == null ? new InitialContext() : new InitialContext( properties );
+            final InitialContext initialContext = properties == null ? new InitialContext() :
+                                                  new InitialContext( properties );
             Object homeObject = PortableRemoteObject.narrow( initialContext.lookup( jndiName ), homeInterface );
             final Method createMethod = homeObject.getClass().getMethod( "create" );
             return serviceInterface.cast( createMethod.invoke( homeObject ) );
