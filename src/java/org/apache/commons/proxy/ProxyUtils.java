@@ -28,6 +28,9 @@ import java.util.List;
  */
 public class ProxyUtils
 {
+    public static final Object[] EMPTY_ARGUMENTS = new Object[0];
+    public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
+    
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      * @param proxyFactory the proxy factory to be used to create the proxy object

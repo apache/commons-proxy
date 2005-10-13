@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.factory.reflect;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.ProxyUtils;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.InvocationTargetException;
@@ -45,7 +46,7 @@ class ReflectionMethodInvocation implements MethodInvocation
     public ReflectionMethodInvocation( Object target, Method method, Object[] arguments )
     {
         this.method = method;
-        this.arguments = arguments;
+        this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
         this.target = target;
     }
 

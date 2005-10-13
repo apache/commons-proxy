@@ -21,6 +21,7 @@ import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.ProxyUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AccessibleObject;
@@ -111,7 +112,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         constructor.setBody( "{\n\tsuper($$);\n}" );
         ctClass.addConstructor( constructor );
         final CtMethod proceedMethod = new CtMethod( JavassistUtils.resolve( Object.class ), "proceed",
-                                                     JavassistUtils.resolve( new Class[0] ), ctClass );
+                                                     JavassistUtils.resolve( ProxyUtils.EMPTY_ARGUMENT_TYPES ), ctClass );
         final Class[] argumentTypes = interfaceMethod.getParameterTypes();
         final StringBuffer proceedBody = new StringBuffer( "{\n" );
         if( !Void.TYPE.equals( interfaceMethod.getReturnType() ) )
@@ -159,7 +160,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
     {
         this.method = method;
         this.target = target;
-        this.arguments = ( arguments == null || arguments.length == 0 ? null : arguments );
+        this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
     }
 
 //----------------------------------------------------------------------------------------------------------------------

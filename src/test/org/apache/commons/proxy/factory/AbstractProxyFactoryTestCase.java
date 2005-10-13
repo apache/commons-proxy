@@ -116,7 +116,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         final EchoImpl target = new EchoImpl();
         final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, ECHO_ONLY );
         proxy.echo();
-        assertNull( tester.arguments );
+        assertNotNull( tester.arguments );
+        assertEquals( 0, tester.arguments.length );
         assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.method );
         assertEquals( target, tester.target );
         assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.staticPart );

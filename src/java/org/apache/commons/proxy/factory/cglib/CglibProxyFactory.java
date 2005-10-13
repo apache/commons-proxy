@@ -22,6 +22,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
@@ -122,7 +123,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
-            this.args = args == null || args.length == 0 ? null : args;
+            this.args = args == null ? ProxyUtils.EMPTY_ARGUMENTS : args;
         }
 
         public Method getMethod()
