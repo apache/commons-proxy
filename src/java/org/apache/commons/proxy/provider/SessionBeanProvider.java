@@ -17,6 +17,7 @@
 package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import javax.naming.InitialContext;
@@ -74,8 +75,8 @@ public class SessionBeanProvider implements ObjectProvider
             final InitialContext initialContext = properties == null ? new InitialContext() :
                                                   new InitialContext( properties );
             Object homeObject = PortableRemoteObject.narrow( initialContext.lookup( jndiName ), homeInterface );
-            final Method createMethod = homeObject.getClass().getMethod( "create", new Class[] {} );
-            return createMethod.invoke( homeObject, new Object[] {} );
+            final Method createMethod = homeObject.getClass().getMethod( "create", ProxyUtils.EMPTY_ARGUMENT_TYPES );
+            return createMethod.invoke( homeObject, ProxyUtils.EMPTY_ARGUMENTS );
         }
         catch( NoSuchMethodException e )
         {
