@@ -25,17 +25,31 @@ import org.apache.commons.proxy.factory.javassist.JavassistUtils;
  * An interceptor which logs each method invocation.
  * <b>Note</b>: The implementation of this class was borrowed from
  * HiveMind's logging interceptor.
+ *
  * @author James Carman
  * @version 1.0
  */
 public class LoggingMethodInterceptor implements MethodInterceptor
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
+    private static final int BUFFER_SIZE = 100;
     private Log log;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     public LoggingMethodInterceptor( Log log )
     {
         this.log = log;
     }
+
+//----------------------------------------------------------------------------------------------------------------------
+// MethodInterceptor Implementation
+//----------------------------------------------------------------------------------------------------------------------
 
     public Object invoke( MethodInvocation methodInvocation ) throws Throwable
     {
@@ -68,9 +82,11 @@ public class LoggingMethodInterceptor implements MethodInterceptor
         }
     }
 
-    private static final int BUFFER_SIZE = 100;
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
 
-    public void entry( String methodName, Object[] args )
+    private void entry( String methodName, Object[] args )
     {
         StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
         buffer.append( "BEGIN " );
@@ -90,37 +106,7 @@ public class LoggingMethodInterceptor implements MethodInterceptor
         log.debug( buffer.toString() );
     }
 
-    public void exit( String methodName, Object result )
-    {
-        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
-        buffer.append( "END " );
-        buffer.append( methodName );
-        buffer.append( "() [" );
-        convert( buffer, result );
-        buffer.append( "]" );
-        log.debug( buffer.toString() );
-    }
-
-    public void voidExit( String methodName )
-    {
-        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
-        buffer.append( "END " );
-        buffer.append( methodName );
-        buffer.append( "()" );
-        log.debug( buffer.toString() );
-    }
-
-    public void exception( String methodName, Throwable t )
-    {
-        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
-        buffer.append( "EXCEPTION " );
-        buffer.append( methodName );
-        buffer.append( "() -- " );
-        buffer.append( t.getClass().getName() );
-        log.debug( buffer.toString(), t );
-    }
-
-    public void convert( StringBuffer buffer, Object input )
+    private void convert( StringBuffer buffer, Object input )
     {
         if( input == null )
         {
@@ -154,4 +140,35 @@ public class LoggingMethodInterceptor implements MethodInterceptor
         }
         buffer.append( "}" );
     }
+
+    private void exception( String methodName, Throwable t )
+    {
+        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
+        buffer.append( "EXCEPTION " );
+        buffer.append( methodName );
+        buffer.append( "() -- " );
+        buffer.append( t.getClass().getName() );
+        log.debug( buffer.toString(), t );
+    }
+
+    private void exit( String methodName, Object result )
+    {
+        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
+        buffer.append( "END " );
+        buffer.append( methodName );
+        buffer.append( "() [" );
+        convert( buffer, result );
+        buffer.append( "]" );
+        log.debug( buffer.toString() );
+    }
+
+    private void voidExit( String methodName )
+    {
+        StringBuffer buffer = new StringBuffer( BUFFER_SIZE );
+        buffer.append( "END " );
+        buffer.append( methodName );
+        buffer.append( "()" );
+        log.debug( buffer.toString() );
+    }
 }
+
