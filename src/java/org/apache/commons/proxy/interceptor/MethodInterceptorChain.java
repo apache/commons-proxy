@@ -62,7 +62,7 @@ public class MethodInterceptorChain
 
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus )
     {
-        return createProxyProvider( proxyFactory, terminus, new Class[] {} );
+        return createProxyProvider( proxyFactory, terminus, null );
     }
 
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class[] proxyClasses )
@@ -74,7 +74,7 @@ public class MethodInterceptorChain
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                                Class[] proxyClasses )
     {
-        if( proxyClasses.length == 0 )
+        if( proxyClasses == null || proxyClasses.length == 0 )
         {
             proxyClasses = ProxyUtils.getAllInterfaces( terminus.getClass() );
         }
