@@ -35,15 +35,20 @@ public class SimpleMethodFilter implements MethodFilter
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Set<String> methodNames;
+    private final Set methodNames;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public SimpleMethodFilter( String... methodNames )
+    public SimpleMethodFilter()
     {
-        this.methodNames = new HashSet<String>( Arrays.asList( methodNames ) );
+        this.methodNames = new HashSet();
+    }
+    
+    public SimpleMethodFilter( String[] methodNames )
+    {
+        this.methodNames = new HashSet( Arrays.asList( methodNames ) );
     }
 
 //----------------------------------------------------------------------------------------------------------------------

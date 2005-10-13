@@ -40,7 +40,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      * @param proxyClasses the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
-    public boolean canProxy( Class... proxyClasses )
+    public boolean canProxy( Class[] proxyClasses )
     {
         for( int i = 0; i < proxyClasses.length; i++ )
         {
@@ -53,19 +53,19 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         return true;
     }
 
-    public final Object createDelegatorProxy( ObjectProvider targetProvider, Class... proxyClasses )
+    public final Object createDelegatorProxy( ObjectProvider targetProvider, Class[] proxyClasses )
     {
         return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyClasses );
     }
 
     public final Object createInterceptorProxy( Object target, MethodInterceptor interceptor,
-                                                Class... proxyClasses )
+                                                Class[] proxyClasses )
     {
         return createInterceptorProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
                                        proxyClasses );
     }
 
-    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyClasses )
+    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class[] proxyClasses )
     {
         return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
                                              proxyClasses );

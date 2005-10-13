@@ -24,12 +24,12 @@ public class TestMethodSignature extends TestCase
 {
     public void testEquals() throws Exception
     {
-        final MethodSignature sig = new MethodSignature( Echo.class.getMethod( "echoBack", String.class ) );
+        final MethodSignature sig = new MethodSignature( Echo.class.getMethod( "echoBack",  new Class[] { String.class } ) );
         assertTrue( sig.equals( sig ) );
         assertFalse( sig.equals( "echoBack" ) );
-        assertEquals( sig, new MethodSignature( Echo.class.getMethod( "echoBack", String.class ) ) );
-        assertEquals( sig, new MethodSignature( DuplicateEcho.class.getMethod( "echoBack", String.class ) ) );
-        assertFalse( sig.equals( new MethodSignature( Echo.class.getMethod( "echoBack", String.class, String.class ) ) ) );
-        assertFalse( sig.equals( new MethodSignature( Echo.class.getMethod( "echo" ) ) ) );
+        assertEquals( sig, new MethodSignature( Echo.class.getMethod( "echoBack",  new Class[] { String.class } ) ) );
+        assertEquals( sig, new MethodSignature( DuplicateEcho.class.getMethod( "echoBack",  new Class[] { String.class } ) ) );
+        assertFalse( sig.equals( new MethodSignature( Echo.class.getMethod( "echoBack",  new Class[] { String.class, String.class } ) ) ) );
+        assertFalse( sig.equals( new MethodSignature( Echo.class.getMethod( "echo",  new Class[] {} ) ) ) );
     }
 }

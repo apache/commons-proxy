@@ -23,7 +23,7 @@ public class TestProxyUtils extends TestCase
 {
     public void testCreateNullObject() throws Exception
     {
-        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class );
+        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(),  new Class[] { Echo.class } );
         assertNull( nullEcho.echoBack( "hello" ) );
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
@@ -31,7 +31,7 @@ public class TestProxyUtils extends TestCase
 
     public void testCreateNullObjectWithClassLoader() throws Exception
     {
-        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class.getClassLoader(), Echo.class );
+        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class.getClassLoader(),  new Class[] { Echo.class } );
         assertNull( nullEcho.echoBack( "hello" ) );
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );

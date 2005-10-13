@@ -28,12 +28,12 @@ public class TestPatternMethodFilter extends TestCase
     public void testAccepts() throws Exception
     {
         final PatternMethodFilter filter = new PatternMethodFilter( "set\\w+|get\\w+" );
-        assertTrue( filter.accepts( Date.class.getMethod( "getSeconds" ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "getMinutes" ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "setSeconds", Integer.TYPE ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "setMinutes", Integer.TYPE ) ) );
-        assertFalse( filter.accepts( Date.class.getMethod( "toString" ) ) );
-        assertFalse( filter.accepts( Date.class.getMethod( "hashCode" ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "getSeconds", new Class[] {} ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "getMinutes",  new Class[] {} ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "setSeconds",  new Class[] { Integer.TYPE } ) ) );
+        assertTrue( filter.accepts( Date.class.getMethod( "setMinutes",  new Class[] { Integer.TYPE } ) ) );
+        assertFalse( filter.accepts( Date.class.getMethod( "toString",  new Class[] {} ) ) );
+        assertFalse( filter.accepts( Date.class.getMethod( "hashCode",  new Class[] {} ) ) );
 
     }
 }

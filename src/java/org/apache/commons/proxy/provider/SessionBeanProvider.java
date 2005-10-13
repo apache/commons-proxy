@@ -74,8 +74,8 @@ public class SessionBeanProvider implements ObjectProvider
             final InitialContext initialContext = properties == null ? new InitialContext() :
                                                   new InitialContext( properties );
             Object homeObject = PortableRemoteObject.narrow( initialContext.lookup( jndiName ), homeInterface );
-            final Method createMethod = homeObject.getClass().getMethod( "create" );
-            return serviceInterface.cast( createMethod.invoke( homeObject ) );
+            final Method createMethod = homeObject.getClass().getMethod( "create", new Class[] {} );
+            return createMethod.invoke( homeObject, new Object[] {} );
         }
         catch( NoSuchMethodException e )
         {

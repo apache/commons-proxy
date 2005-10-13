@@ -16,8 +16,8 @@
  */
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.

@@ -36,21 +36,21 @@ public class ReflectionProxyFactory extends AbstractProxyFactory
 //----------------------------------------------------------------------------------------------------------------------
 
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                        Class... proxyClasses )
+                                        Class[] proxyClasses )
     {
         return Proxy.newProxyInstance( classLoader, proxyClasses,
                                        new DelegateProviderInvocationHandler( targetProvider ) );
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                          Class... proxyClasses )
+                                          Class[] proxyClasses )
     {
         return new MethodInterceptorInvocationHandler( target, interceptor )
                 .createProxy( classLoader, proxyClasses );
     }
 
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyClasses )
+                                                Class[] proxyClasses )
     {
         return Proxy.newProxyInstance( classLoader, proxyClasses, invocationHandler );
     }

@@ -69,7 +69,7 @@ public class JavassistUtils
         return inputClass.getName();
     }
 
-    public static void addInterfaces( CtClass ctClass, Class... proxyClasses )
+    public static void addInterfaces( CtClass ctClass, Class[] proxyClasses )
     {
         for( int i = 0; i < proxyClasses.length; i++ )
         {

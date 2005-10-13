@@ -42,7 +42,7 @@ public interface ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyClasses );
+    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class[] proxyClasses );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
@@ -53,7 +53,7 @@ public interface ProxyFactory
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
-                                        Class... proxyClasses );
+                                        Class[] proxyClasses );
 
     /**
      * Creates a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
@@ -65,7 +65,7 @@ public interface ProxyFactory
      * @return a proxy which passes through a {@link MethodInterceptor method interceptor} before eventually reaching
      *         the <code>target</code> object.
      */
-    public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class... proxyClasses );
+    public Object createInterceptorProxy( Object target, MethodInterceptor interceptor, Class[] proxyClasses );
 
     /**
      * Creates a proxy which passes through a {@link org.aopalliance.intercept.MethodInterceptor method interceptor}
@@ -79,7 +79,7 @@ public interface ProxyFactory
      *         before eventually reaching the <code>target</code> object.
      */
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                          Class... proxyClasses );
+                                          Class[] proxyClasses );
 
     /**
      * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.  The proxy
@@ -89,7 +89,7 @@ public interface ProxyFactory
      * @param proxyClasses      the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
      */
-    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class... proxyClasses );
+    public Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class[] proxyClasses );
 
     /**
      * Creates a proxy which uses the provided {@link InvocationHandler} to handle all method invocations.
@@ -100,7 +100,7 @@ public interface ProxyFactory
      * @return a proxy which uses the provided {@link InvocationHandler} to handle all method invocations
      */
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyClasses );
+                                                Class[] proxyClasses );
 
     /**
      * Returns true if this proxy factory can generate a proxy class which extends/implements
@@ -110,6 +110,6 @@ public interface ProxyFactory
      * @return true if this proxy factory can generate a proxy class which extends/implements
      *         the <code>proxyClasses</code>.
      */
-    public boolean canProxy( Class... proxyClasses );
+    public boolean canProxy( Class[] proxyClasses );
 }
 

@@ -37,41 +37,41 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public void testWithAbstractSuperclass()
     {
-        final Echo echo = ( Echo )factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), AbstractEcho.class );
+        final Echo echo = ( Echo )factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ),  new Class[] { AbstractEcho.class } );
         assertEquals( "hello", echo.echoBack( "hello" ) );
         assertEquals( "helloworld", echo.echoBack( "hello", "world" ) );
     }
 
     public void testCanProxy()
     {
-        assertTrue( factory.canProxy( Echo.class ) );
-        assertTrue( factory.canProxy( EchoImpl.class ) );
-        assertFalse( factory.canProxy( FinalEcho.class ) );
-        assertTrue( factory.canProxy( FinalMethodEcho.class, Echo.class ) );
-        assertFalse( factory.canProxy( NoDefaultConstructorEcho.class ) );
-        assertTrue( factory.canProxy( ProtectedConstructorEcho.class ) );
-        assertFalse( factory.canProxy( InvisibleEcho.class ) );
-        assertFalse( factory.canProxy( Echo.class, EchoImpl.class, String.class ) );
+        assertTrue( factory.canProxy(  new Class[] { Echo.class } ) );
+        assertTrue( factory.canProxy(  new Class[] { EchoImpl.class } ) );
+        assertFalse( factory.canProxy(  new Class[] { FinalEcho.class } ) );
+        assertTrue( factory.canProxy(  new Class[] { FinalMethodEcho.class, Echo.class } ) );
+        assertFalse( factory.canProxy(  new Class[] { NoDefaultConstructorEcho.class } ) );
+        assertTrue( factory.canProxy(  new Class[] { ProtectedConstructorEcho.class } ) );
+        assertFalse( factory.canProxy(  new Class[] { InvisibleEcho.class } ) );
+        assertFalse( factory.canProxy(  new Class[] { Echo.class, EchoImpl.class, String.class } ) );
     }
 
     public void testDelegatorWithSuperclass()
     {
         final Echo echo = ( Echo ) factory
-                .createDelegatorProxy( new ConstantProvider( new EchoImpl() ), Echo.class, EchoImpl.class );
+                .createDelegatorProxy( new ConstantProvider( new EchoImpl() ),  new Class[] { Echo.class, EchoImpl.class } );
         assertTrue( echo instanceof EchoImpl );
     }
 
     public void testInterceptorWithSuperclass()
     {
         final Echo echo = ( Echo ) factory
-                .createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), Echo.class, EchoImpl.class );
+                .createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(),  new Class[] { Echo.class, EchoImpl.class } );
         assertTrue( echo instanceof EchoImpl );
     }
 
     public void testInvocationHandlerWithSuperclass()
     {
         final Echo echo = ( Echo ) factory
-                .createInvocationHandlerProxy( new NullInvocationHandler(), Echo.class, EchoImpl.class );
+                .createInvocationHandlerProxy( new NullInvocationHandler(),  new Class[] { Echo.class, EchoImpl.class } );
         assertTrue( echo instanceof EchoImpl );
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         try
         {
             factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ),
-                                          EchoImpl.class, String.class );
+                                           new Class[] { EchoImpl.class, String.class } );
             fail();
         }
         catch( ProxyFactoryException e )
@@ -106,7 +106,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         try
         {
             factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(),
-                                            EchoImpl.class, String.class );
+                                             new Class[] { EchoImpl.class, String.class } );
             fail();
         }
         catch( ProxyFactoryException e )
@@ -119,7 +119,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         try
         {
             factory.createInvocationHandlerProxy( new NullInvocationHandler(),
-                                                  EchoImpl.class, String.class );
+                                                   new Class[] { EchoImpl.class, String.class } );
             fail();
         }
         catch( ProxyFactoryException e )
@@ -133,7 +133,6 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public static class FinalMethodEcho extends EchoImpl
     {
-        @Override
         public final String echoBack( String message )
         {
             return "final";

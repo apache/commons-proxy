@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 package org.apache.commons.proxy.interceptor.filter;
-import junit.framework.*;
-import org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter;
+import junit.framework.TestCase;
 
 public class TestReturnTypeFilter extends TestCase
 {
     public void testAcceptsMethod() throws Exception
     {
-        final ReturnTypeFilter filter = new ReturnTypeFilter( String.class, Integer.TYPE );
-        assertTrue( filter.accepts( Object.class.getMethod( "toString" ) ) );
-        assertTrue( filter.accepts( Object.class.getMethod( "hashCode" ) ) );
-        assertFalse( filter.accepts( Object.class.getMethod( "equals", Object.class ) ) );
+        final ReturnTypeFilter filter = new ReturnTypeFilter(  new Class[] { String.class, Integer.TYPE } );
+        assertTrue( filter.accepts( Object.class.getMethod( "toString",  new Class[] {} ) ) );
+        assertTrue( filter.accepts( Object.class.getMethod( "hashCode",  new Class[] {} ) ) );
+        assertFalse( filter.accepts( Object.class.getMethod( "equals",  new Class[] { Object.class } ) ) );
     }
 
 

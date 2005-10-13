@@ -24,16 +24,16 @@ import junit.framework.TestCase;
  */
 public abstract class AbstractExceptionClassTestCase extends TestCase
 {
-    private final Class<? extends Exception> exceptionClass;
+    private final Class exceptionClass;
 
-    public AbstractExceptionClassTestCase( Class<? extends Exception> exceptionClass )
+    public AbstractExceptionClassTestCase( Class exceptionClass )
     {
         this.exceptionClass = exceptionClass;
     }
 
     public void testNoArgConstructor() throws Exception
     {
-        Exception e = exceptionClass.getConstructor().newInstance();
+        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] {} ).newInstance( new Object[] {} );
         assertNull( e.getMessage() );
         assertNull( e.getCause() );
     }
@@ -41,7 +41,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
     public void testMessageOnlyConstructor() throws Exception
     {
         final String message = "message";
-        Exception e = exceptionClass.getConstructor( String.class ).newInstance( message );
+        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { String.class } ).newInstance( new Object[] { message } );
         assertEquals( message, e.getMessage() );
         assertNull( e.getCause() );
     }
@@ -49,7 +49,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
     public void testCauseOnlyConstructor() throws Exception
     {
         final Exception cause = new Exception();
-        Exception e = exceptionClass.getConstructor( Throwable.class ).newInstance( cause );
+        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { Throwable.class } ).newInstance( new Object[] { cause } );
         assertEquals( cause.toString(), e.getMessage() );
         assertEquals( cause, e.getCause() );
     }
@@ -58,7 +58,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
     {
         final Exception cause = new Exception();
         final String message = "message";
-        Exception e = exceptionClass.getConstructor( String.class, Throwable.class ).newInstance( message, cause );
+        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { String.class, Throwable.class } ).newInstance( new Object[] { message, cause } );
         assertEquals( message, e.getMessage() );
         assertEquals( cause, e.getCause() );
     }

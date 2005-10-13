@@ -18,9 +18,9 @@ package org.apache.commons.proxy;
 
 import org.apache.commons.proxy.handler.NullInvocationHandler;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author James Carman
@@ -34,7 +34,7 @@ public class ProxyUtils
      * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject( ProxyFactory proxyFactory, Class... proxyClasses )
+    public static Object createNullObject( ProxyFactory proxyFactory, Class[] proxyClasses )
     {
         return proxyFactory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyClasses );
     }
@@ -46,7 +46,7 @@ public class ProxyUtils
      * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class... proxyClasses )
+    public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class[] proxyClasses )
     {
         return proxyFactory.createInvocationHandlerProxy( classLoader, new NullInvocationHandler(), proxyClasses );
     }
@@ -70,17 +70,27 @@ public class ProxyUtils
      */
     public static Class[] getAllInterfaces( Class cls )
     {
-        final List<Class> interfaces = getAllInterfacesImpl( cls );
+        final List interfaces = getAllInterfacesImpl( cls );
         return ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
     }
 
-    private static List<Class> getAllInterfacesImpl( Class cls )
+    public static Class[] toClassArray( Class c0 )
+    {
+        return new Class[] { c0 };
+    }
+
+    public static Object[] toObjectArray( Object o0 )
+    {
+        return new Object[] { o0 };
+    }
+
+    private static List getAllInterfacesImpl( Class cls )
     {
         if( cls == null )
         {
             return null;
         }
-        List<Class> list = new ArrayList<Class>();
+        List list = new ArrayList();
         while( cls != null )
         {
             Class[] interfaces = cls.getInterfaces();

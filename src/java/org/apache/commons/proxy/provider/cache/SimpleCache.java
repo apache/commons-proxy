@@ -30,13 +30,13 @@ public class SimpleCache extends AbstractCache
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Map<Object, CachedObject> map = Collections.synchronizedMap( new HashMap<Object, CachedObject>() );
+    private final Map map = Collections.synchronizedMap( new HashMap() );
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected Map<Object, CachedObject> getCachedObjectMap()
+    protected Map getCachedObjectMap()
     {
         return map;
     }

@@ -39,7 +39,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>>();
+    private static WeakHashMap loaderToClassCache = new WeakHashMap();
     protected final Method method;
     protected final Object target;
     protected final Object[] arguments;
@@ -51,36 +51,36 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
     public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
     {
-        final Map<String, WeakReference<Class>> classCache = getClassCache( classLoader );
+        final Map classCache = getClassCache( classLoader );
         final String key = toClassCacheKey( interfaceMethod );
-        final WeakReference<Class> invocationClassRef = classCache.get( key );
+        final WeakReference invocationClassRef = ( WeakReference )classCache.get( key );
         Class invocationClass;
         if( invocationClassRef == null )
         {
             invocationClass = createInvocationClass( classLoader, interfaceMethod );
-            classCache.put( key, new WeakReference<Class>( invocationClass ) );
+            classCache.put( key, new WeakReference( invocationClass ) );
         }
         else
         {
             synchronized( invocationClassRef )
             {
-                invocationClass = invocationClassRef.get();
+                invocationClass = ( Class )invocationClassRef.get();
                 if( invocationClass == null )
                 {
                     invocationClass = createInvocationClass( classLoader, interfaceMethod );
-                    classCache.put( key, new WeakReference<Class>( invocationClass ) );
+                    classCache.put( key, new WeakReference( invocationClass ) );
                 }
             }
         }
         return invocationClass;
     }
 
-    private static Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
+    private static Map getClassCache( ClassLoader classLoader )
     {
-        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
+        Map cache = ( Map )loaderToClassCache.get( classLoader );
         if( cache == null )
         {
-            cache = new HashMap<String, WeakReference<Class>>();
+            cache = new HashMap();
             loaderToClassCache.put( classLoader, cache );
         }
         return cache;
@@ -91,12 +91,19 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         return String.valueOf( method );
     }
 
+    private static String getSimpleName( Class c )
+    {
+        final String name = c.getName();
+        final int ndx = name.lastIndexOf( '.' );
+        return ndx == -1 ? name : name.substring( ndx + 1 );
+    }
+
     private static Class createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
     {
         Class invocationClass;
         final CtClass ctClass = JavassistUtils.createClass(
-                interfaceMethod.getDeclaringClass().getSimpleName() + "_" + interfaceMethod.getName() +
+                getSimpleName( interfaceMethod.getDeclaringClass() ) + "_" + interfaceMethod.getName() +
                 "_invocation",
                 JavassistMethodInvocation.class );
         final CtConstructor constructor = new CtConstructor(

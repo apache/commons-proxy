@@ -29,18 +29,18 @@ public class ThreadLocalCache extends AbstractCache
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private ThreadLocal<Map<Object, CachedObject>> threadLocalMap = new ThreadLocal<Map<Object, CachedObject>>();
+    private ThreadLocal threadLocalMap = new ThreadLocal();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Map<Object, CachedObject> getCachedObjectMap()
+    public Map getCachedObjectMap()
     {
-        Map<Object, CachedObject> map = threadLocalMap.get();
+        Map map = ( Map )threadLocalMap.get();
         if( map == null )
         {
-            map = new HashMap<Object, CachedObject>();
+            map = new HashMap();
             threadLocalMap.set( map );
         }
         return map;

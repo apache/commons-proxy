@@ -23,14 +23,14 @@ public class TestNullInvocationHandler extends TestCase
 {
     public void testReturnValues()
     {
-        final Tester tester = ( Tester )ProxyUtils.createNullObject( new CglibProxyFactory(), Tester.class );
+        final Tester tester = ( Tester )ProxyUtils.createNullObject( new CglibProxyFactory(), new Class[] { Tester.class } );
         assertEquals( 0, tester.intMethod() );
         assertEquals( 0L, tester.longMethod() );
         assertEquals( ( short )0, tester.shortMethod() );
         assertEquals( ( byte )0, tester.byteMethod() );
         assertEquals( ( char )0, tester.charMethod() );
-        assertEquals( 0.0f, tester.floatMethod() );
-        assertEquals( 0.0, tester.doubleMethod() );
+        assertEquals( 0.0f, tester.floatMethod(), 0.0f );
+        assertEquals( 0.0, tester.doubleMethod(), 0.0f );
         assertFalse( tester.booleanMethod() );
         assertNull( tester.stringMethod() );
     }

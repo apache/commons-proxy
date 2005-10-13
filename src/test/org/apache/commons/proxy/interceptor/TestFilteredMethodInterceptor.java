@@ -20,6 +20,7 @@ import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixMethodInterceptor;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.interceptor.filter.SimpleMethodFilter;
+import org.aopalliance.intercept.MethodInterceptor;
 import junit.framework.TestCase;
 
 /**
@@ -30,13 +31,13 @@ public class TestFilteredMethodInterceptor extends TestCase
 {
     public void testFilterAccepts()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter( "echoBack" ) ) ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter( new String[] { "echoBack" } ) ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
         assertEquals( "messagea", echo.echoBack( "message" ) );
     }
 
     public void testFilterDenies()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter() ) ).createProxyProvider(  new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter() ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
         assertEquals( "message", echo.echoBack( "message" ) );
     }
 }

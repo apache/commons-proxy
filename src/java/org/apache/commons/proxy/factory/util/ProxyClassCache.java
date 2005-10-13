@@ -31,7 +31,7 @@ public class ProxyClassCache
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Map<ClassLoader, Map<String, WeakReference<Class>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String, WeakReference<Class>>>();
+    private final Map loaderToClassCache = new WeakHashMap();
     private final ProxyClassGenerator proxyClassGenerator;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -47,44 +47,44 @@ public class ProxyClassCache
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public synchronized Class getProxyClass( ClassLoader classLoader, Class... proxyClasses )
+    public synchronized Class getProxyClass( ClassLoader classLoader, Class[] proxyClasses )
     {
-        final Map<String, WeakReference<Class>> classCache = getClassCache( classLoader );
+        final Map classCache = getClassCache( classLoader );
         final String key = toClassCacheKey( proxyClasses );
         Class proxyClass;
-        WeakReference<Class> proxyClassReference = classCache.get( key );
+        WeakReference proxyClassReference = ( WeakReference )classCache.get( key );
         if( proxyClassReference == null )
         {
             proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyClasses );
-            classCache.put( key, new WeakReference<Class>( proxyClass ) );
+            classCache.put( key, new WeakReference( proxyClass ) );
         }
         else
         {
             synchronized( proxyClassReference )
             {
-                proxyClass = proxyClassReference.get();
+                proxyClass = ( Class )proxyClassReference.get();
                 if( proxyClass == null )
                 {
                     proxyClass = proxyClassGenerator.generateProxyClass( classLoader, proxyClasses );
-                    classCache.put( key, new WeakReference<Class>( proxyClass ) );
+                    classCache.put( key, new WeakReference( proxyClass ) );
                 }
             }
         }
         return proxyClass;
     }
 
-    private Map<String, WeakReference<Class>> getClassCache( ClassLoader classLoader )
+    private Map getClassCache( ClassLoader classLoader )
     {
-        Map<String, WeakReference<Class>> cache = loaderToClassCache.get( classLoader );
+        Map cache = ( Map )loaderToClassCache.get( classLoader );
         if( cache == null )
         {
-            cache = new HashMap<String, WeakReference<Class>>();
+            cache = new HashMap();
             loaderToClassCache.put( classLoader, cache );
         }
         return cache;
     }
 
-    private String toClassCacheKey( Class... proxyClasses )
+    private String toClassCacheKey( Class[] proxyClasses )
     {
         final StringBuffer sb = new StringBuffer();
         for( int i = 0; i < proxyClasses.length; i++ )

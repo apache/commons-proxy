@@ -20,9 +20,8 @@ import junit.framework.TestCase;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
+import EDU.oswego.cs.dl.util.concurrent.Executor;
+import EDU.oswego.cs.dl.util.concurrent.CountDown;
 
 public class TestExecutorMethodInterceptor extends TestCase
 {
@@ -31,9 +30,9 @@ public class TestExecutorMethodInterceptor extends TestCase
         final ExecutedEcho impl = new ExecutedEcho();
         final OneShotExecutor executor = new OneShotExecutor();
         final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), Echo.class );
+                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), new Class[] { Echo.class } );
         proxy.echo();
-        executor.getLatch().await();
+        executor.getLatch().acquire();
         assertEquals( executor.getThread(), impl.getExecutionThread() );
     }
 
@@ -42,7 +41,7 @@ public class TestExecutorMethodInterceptor extends TestCase
         final ExecutedEcho impl = new ExecutedEcho();
         final OneShotExecutor executor = new OneShotExecutor();
         final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), Echo.class );
+                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), new Class[] { Echo.class } );
         try
         {
             proxy.echoBack( "hello" );
@@ -71,7 +70,7 @@ public class TestExecutorMethodInterceptor extends TestCase
     private static class OneShotExecutor implements Executor
     {
         private Thread thread;
-        private CountDownLatch latch = new CountDownLatch( 1 );
+        private CountDown latch = new CountDown( 1 );
 
         public void execute( final Runnable command )
         {
@@ -85,7 +84,7 @@ public class TestExecutorMethodInterceptor extends TestCase
                     }
                     finally
                     {
-                        latch.countDown();
+                        latch.release();
                     }
                 }
             } );
@@ -97,7 +96,7 @@ public class TestExecutorMethodInterceptor extends TestCase
             return thread;
         }
 
-        public CountDownLatch getLatch()
+        public CountDown getLatch()
         {
             return latch;
         }

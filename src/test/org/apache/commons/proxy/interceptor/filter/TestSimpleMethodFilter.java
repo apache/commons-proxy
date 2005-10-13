@@ -27,9 +27,9 @@ public class TestSimpleMethodFilter extends TestCase
 {
     public void testAccepts() throws Exception
     {
-        final SimpleMethodFilter filter = new SimpleMethodFilter( "echoBack" );
-        assertTrue( filter.accepts( Echo.class.getMethod( "echoBack", String.class ) ) );
-        assertFalse( filter.accepts( EchoImpl.class.getMethod( "hashCode" ) ) );
+        final SimpleMethodFilter filter = new SimpleMethodFilter( new String[] { "echoBack" } );
+        assertTrue( filter.accepts( Echo.class.getMethod( "echoBack", new Class[] { String.class } ) ) );
+        assertFalse( filter.accepts( EchoImpl.class.getMethod( "hashCode",  new Class[] {} ) ) );
     }
 
 }

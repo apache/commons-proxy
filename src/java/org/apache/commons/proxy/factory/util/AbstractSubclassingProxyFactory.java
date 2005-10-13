@@ -36,8 +36,10 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
 
     private static boolean hasSuitableDefaultConstructor( Class superclass )
     {
-        for( Constructor constructor : superclass.getDeclaredConstructors() )
+        final Constructor[] declaredConstructors = superclass.getDeclaredConstructors();
+        for( int i = 0; i < declaredConstructors.length; i++ )
         {
+            Constructor constructor = declaredConstructors[i];
             if( constructor.getParameterTypes().length == 0 && ( Modifier.isPublic( constructor.getModifiers() ) ||
                                                                  Modifier.isProtected( constructor.getModifiers() ) ) )
             {
@@ -53,9 +55,9 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @param proxyClasses the proxy classes
      * @return the <code>proxyClasses</code> transformed into an array of only the interface classes
      */
-    protected static Class[] toInterfaces( Class... proxyClasses )
+    protected static Class[] toInterfaces( Class[] proxyClasses )
     {
-        final Collection<Class> interfaces = new LinkedList<Class>();
+        final Collection interfaces = new LinkedList();
         for( int i = 0; i < proxyClasses.length; i++ )
         {
             Class proxyInterface = proxyClasses[i];
@@ -67,9 +69,9 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
         return ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
     }
 
-    private static Class[] toNonInterfaces( Class... proxyClasses )
+    private static Class[] toNonInterfaces( Class[] proxyClasses )
     {
-        final List<Class> superclasses = new LinkedList<Class>();
+        final List superclasses = new LinkedList();
         for( int i = 0; i < proxyClasses.length; i++ )
         {
             Class proxyClass = proxyClasses[i];
@@ -91,7 +93,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @param proxyClasses the proxy classes
      * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
      */
-    public boolean canProxy( Class... proxyClasses )
+    public boolean canProxy( Class[] proxyClasses )
     {
         try
         {
@@ -114,7 +116,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @throws ProxyFactoryException if multiple non-interface classes are contained in <code>proxyClasses</code> or any
      *                               of the non-interface classes are final
      */
-    public static Class getSuperclass( Class... proxyClasses )
+    public static Class getSuperclass( Class[] proxyClasses )
     {
         final Class[] superclasses = toNonInterfaces( proxyClasses );
         switch( superclasses.length )

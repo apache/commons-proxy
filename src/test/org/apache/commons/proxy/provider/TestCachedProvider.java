@@ -20,8 +20,7 @@ import org.apache.commons.proxy.provider.cache.SimpleCache;
 import org.apache.commons.proxy.provider.cache.ThreadLocalCache;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-
-import java.util.concurrent.CountDownLatch;
+import EDU.oswego.cs.dl.util.concurrent.CountDown;
 
 public class TestCachedProvider extends TestCase
 {
@@ -43,7 +42,7 @@ public class TestCachedProvider extends TestCase
         final CachedProvider provider = new CachedProvider( counter );
         final ThreadLocalCache cache = new ThreadLocalCache();
         provider.setCache( cache );
-        final CountDownLatch latch = new CountDownLatch( 10 );
+        final CountDown latch = new CountDown( 10 );
         for( int i = 0; i < 10; ++i )
         {
             new Thread( new Runnable()
@@ -52,11 +51,11 @@ public class TestCachedProvider extends TestCase
                 {
                     ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
                     cache.clearCache();
-                    latch.countDown();
+                    latch.release();
                 }
             }).start();
         }
-        latch.await();
+        latch.acquire();
         assertEquals( 10, counter.getCount() );
     }
 }

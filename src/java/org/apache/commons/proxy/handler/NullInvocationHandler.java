@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class NullInvocationHandler implements InvocationHandler
 {
-    private static Map<Class,Object> primitiveValueMap = new HashMap<Class,Object>();
+    private static Map primitiveValueMap = new HashMap();
     static
     {
         primitiveValueMap.put( Integer.TYPE, new Integer( 0 ) );
@@ -48,7 +48,7 @@ public class NullInvocationHandler implements InvocationHandler
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        final Class<?> returnType = method.getReturnType();
+        final Class returnType = method.getReturnType();
         if( returnType.isPrimitive() )
         {
             return primitiveValueMap.get( returnType );

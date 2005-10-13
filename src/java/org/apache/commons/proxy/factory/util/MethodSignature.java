@@ -31,7 +31,7 @@ public class MethodSignature
 //----------------------------------------------------------------------------------------------------------------------
 
     private final String name;
-    private final List<Class> parameterTypes;
+    private final List parameterTypes;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -40,7 +40,7 @@ public class MethodSignature
     public MethodSignature( Method method )
     {
         this.name = method.getName();
-        this.parameterTypes = Arrays.<Class>asList( method.getParameterTypes() );
+        this.parameterTypes = Arrays.asList( method.getParameterTypes() );
     }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ public class MethodInterceptorChain
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public MethodInterceptorChain( MethodInterceptor... interceptors )
+    public MethodInterceptorChain( MethodInterceptor[] interceptors )
     {
         this.interceptors = interceptors;
     }
@@ -49,7 +49,7 @@ public class MethodInterceptorChain
 //----------------------------------------------------------------------------------------------------------------------
 
     private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                Class... proxyClasses )
+                                Class[] proxyClasses )
     {
         Object currentTarget = terminus;
         for( int i = interceptors.length - 1; i >= 0; --i )
@@ -60,16 +60,19 @@ public class MethodInterceptorChain
         return currentTarget;
     }
 
-    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class... proxyClasses )
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus )
+    {
+        return createProxyProvider( proxyFactory, terminus, new Class[] {} );
+    }
+
+    public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class[] proxyClasses )
     {
         return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
                                     proxyClasses );
     }
 
-
-
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
-                                               Class... proxyClasses )
+                                               Class[] proxyClasses )
     {
         if( proxyClasses.length == 0 )
         {

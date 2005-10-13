@@ -15,6 +15,7 @@
  */
 package org.apache.commons.proxy.provider;
 
+import EDU.oswego.cs.dl.util.concurrent.CountDown;
 import junit.framework.TestCase;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.commons.proxy.provider.cache.SimpleCache;
@@ -22,14 +23,11 @@ import org.apache.commons.proxy.provider.cache.ThreadLocalCache;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
-import java.util.concurrent.CountDownLatch;
-import static org.apache.commons.proxy.provider.ProviderUtils.constantProvider;
-
 public class TestPooledProvider extends TestCase
 {
     public void testWithSimpleCache()
     {
-        final CountingProvider counter = new CountingProvider( constantProvider( new EchoImpl() ) );
+        final CountingProvider counter = new CountingProvider( ProviderUtils.constantProvider( new EchoImpl() ) );
         final PooledProvider provider = new PooledProvider( counter );
         final SimpleCache cache = new SimpleCache();
         provider.setCache( cache );
@@ -44,7 +42,7 @@ public class TestPooledProvider extends TestCase
 
     public void testWithThreadLocalCache() throws Exception
     {
-        final CountingProvider counter = new CountingProvider( constantProvider( new EchoImpl() ) );
+        final CountingProvider counter = new CountingProvider( ProviderUtils.constantProvider( new EchoImpl() ) );
         final PooledProvider provider = new PooledProvider( counter );
         provider.setMaxActive( 10 );
         provider.setMinIdle( 5 );
@@ -56,9 +54,9 @@ public class TestPooledProvider extends TestCase
         provider.setTestWhileIdle( false );
         final ThreadLocalCache cache = new ThreadLocalCache();
         provider.setCache( cache );
-        final CountDownLatch goLatch = new CountDownLatch( 1 );
-        final CountDownLatch borrowedLatch = new CountDownLatch( 10 );
-        final CountDownLatch finished = new CountDownLatch( 10 );
+        final CountDown goLatch = new CountDown( 1 );
+        final CountDown borrowedLatch = new CountDown( 10 );
+        final CountDown finished = new CountDown( 10 );
         for( int i = 0; i < 10; ++i )
         {
             new Thread( new Runnable()
@@ -68,15 +66,15 @@ public class TestPooledProvider extends TestCase
                     try
                     {
                         ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
-                        borrowedLatch.countDown();
-                        goLatch.await();
+                        borrowedLatch.release();
+                        goLatch.acquire();
                         for( int i = 0; i < 10; ++i )
                         {
                             ( ( Echo )provider.getObject() ).echoBack( "Hello, World" );
 
                         }
                         cache.clearCache();
-                        finished.countDown();
+                        finished.release();
                     }
                     catch( InterruptedException e )
                     {
@@ -84,9 +82,9 @@ public class TestPooledProvider extends TestCase
                 }
             } ).start();
         }
-        borrowedLatch.await();
-        goLatch.countDown();
-        finished.await();
+        borrowedLatch.acquire();
+        goLatch.release();
+        finished.acquire();
         assertEquals( 10, counter.getCount() );
     }
 }

@@ -16,10 +16,9 @@
  */
 package org.apache.commons.proxy.interceptor;
 
-import org.aopalliance.intercept.MethodInvocation;
+import EDU.oswego.cs.dl.util.concurrent.Executor;
 import org.aopalliance.intercept.MethodInterceptor;
-
-import java.util.concurrent.Executor;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * A method interceptor that uses an {@link Executor} to execute the method invocation.

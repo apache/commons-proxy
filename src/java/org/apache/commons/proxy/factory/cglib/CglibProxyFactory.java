@@ -42,7 +42,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 //----------------------------------------------------------------------------------------------------------------------
 
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                        Class... proxyClasses )
+                                        Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
@@ -53,7 +53,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
-                                          Class... proxyClasses )
+                                          Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
@@ -64,7 +64,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class... proxyClasses )
+                                                Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );

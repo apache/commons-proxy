@@ -25,17 +25,17 @@ public class TestAbstractInvocationHandler extends TestCase
     public void testCreateProxy() throws Exception
     {
         final TestingInvocationHandler handler = new TestingInvocationHandler();
-        Echo echo = ( Echo )handler.createProxy( Echo.class );
+        Echo echo = ( Echo )handler.createProxy( new Class[] { Echo.class } );
         echo.echo();
-        assertEquals( Echo.class.getMethod( "echo" ), handler.method );
+        assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), handler.method );
         assertNull( handler.arguments );
         echo.echoBack( "hello" );
-        assertEquals( Echo.class.getMethod( "echoBack", String.class ), handler.method );
+        assertEquals( Echo.class.getMethod( "echoBack",  new Class[] { String.class } ), handler.method );
         assertNotNull( handler.arguments );
         assertEquals( 1, handler.arguments.length );
         assertEquals( "hello", handler.arguments[0] );
         echo.echoBack( "hello", "world" );
-        assertEquals( Echo.class.getMethod( "echoBack", String.class, String.class ), handler.method );
+        assertEquals( Echo.class.getMethod( "echoBack",  new Class[] { String.class, String.class } ), handler.method );
         assertNotNull( handler.arguments );
         assertEquals( 2, handler.arguments.length );
         assertEquals( "hello", handler.arguments[0] );

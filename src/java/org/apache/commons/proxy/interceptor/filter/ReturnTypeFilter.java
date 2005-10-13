@@ -18,11 +18,11 @@ package org.apache.commons.proxy.interceptor.filter;
 
 import org.apache.commons.proxy.interceptor.MethodFilter;
 
-import java.util.Set;
-import java.util.HashSet;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
-import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Filters methods based on their return type.
@@ -31,14 +31,14 @@ import java.lang.reflect.Method;
  */
 public class ReturnTypeFilter implements MethodFilter
 {
-    private final Set<Class> validReturnTypes = new HashSet<Class>();
+    private final Set validReturnTypes = new HashSet();
 
-    public ReturnTypeFilter( Class... validReturnTypes )
+    public ReturnTypeFilter( Class[] validReturnTypes )
     {
         this( Arrays.asList( validReturnTypes ) );
     }
 
-    public ReturnTypeFilter( Collection<Class> validReturnTypes )
+    public ReturnTypeFilter( Collection validReturnTypes )
     {
         this.validReturnTypes.addAll( validReturnTypes );
     }

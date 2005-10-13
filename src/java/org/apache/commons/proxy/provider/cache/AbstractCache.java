@@ -16,6 +16,7 @@
  */
 package org.apache.commons.proxy.provider.cache;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public abstract class AbstractCache implements Cache
 // Abstract Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected abstract Map<Object, CachedObject> getCachedObjectMap();
+    protected abstract Map getCachedObjectMap();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Cache Implementation
@@ -37,9 +38,11 @@ public abstract class AbstractCache implements Cache
 
     public void clearCache()
     {
-        for( Object cacheKey : new LinkedList<Object>( getCachedObjectMap().keySet() ) )
+        final LinkedList cacheKeys = new LinkedList( getCachedObjectMap().keySet() );
+        for( Iterator i = cacheKeys.iterator(); i.hasNext(); )
         {
-            final CachedObject cachedObject = getCachedObjectMap().get( cacheKey );
+            Object cacheKey = i.next();
+            final CachedObject cachedObject = ( CachedObject )getCachedObjectMap().get( cacheKey );
             getCachedObjectMap().remove( cacheKey );
             if( cachedObject.getListener() != null )
             {
@@ -51,7 +54,7 @@ public abstract class AbstractCache implements Cache
 
     public Object retrieveObject( Object key )
     {
-        CachedObject cachedObject = getCachedObjectMap().get( key );
+        CachedObject cachedObject = ( CachedObject )getCachedObjectMap().get( key );
         return cachedObject == null ? null : cachedObject.getObject();
     }
 
