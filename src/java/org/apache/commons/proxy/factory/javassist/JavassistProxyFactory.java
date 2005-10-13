@@ -60,7 +60,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         try
         {
             final Class clazz = delegatingProxyClassCache.getProxyClass( classLoader, proxyClasses );
-            return clazz.getConstructor( ProxyUtils.toClassArray( ObjectProvider.class ) ).newInstance( ProxyUtils.toObjectArray( targetProvider ) );
+            return clazz.getConstructor( ProxyUtils.toClassArray( ObjectProvider.class ) )
+                    .newInstance( ProxyUtils.toObjectArray( targetProvider ) );
         }
         catch( Exception e )
         {
@@ -75,8 +76,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         {
             final Class clazz = interceptingProxyClassCache.getProxyClass( classLoader, proxyClasses );
             final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyClasses );
-            return clazz.getConstructor( new Class[] { Method[].class, Object.class, MethodInterceptor.class } )
-                    .newInstance( new Object[] { methods, target, interceptor } );
+            return clazz.getConstructor( new Class[]{ Method[].class, Object.class, MethodInterceptor.class } )
+                    .newInstance( new Object[]{ methods, target, interceptor } );
         }
         catch( Exception e )
         {
@@ -91,8 +92,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         {
             final Class clazz = invocationHandlerProxyClassCache.getProxyClass( classLoader, proxyClasses );
             final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyClasses );
-            return clazz.getConstructor( new Class[] { Method[].class, InvocationHandler.class } )
-                    .newInstance( new Object[] { methods, invocationHandler } );
+            return clazz.getConstructor( new Class[]{ Method[].class, InvocationHandler.class } )
+                    .newInstance( new Object[]{ methods, invocationHandler } );
         }
         catch( Exception e )
         {
@@ -117,7 +118,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 JavassistUtils.addField( InvocationHandler.class, "invocationHandler", proxyClass );
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[]{Method[].class, InvocationHandler.class} ),
+                                new Class[]{ Method[].class, InvocationHandler.class } ),
                         proxyClass );
                 proxyConstructor
                         .setBody( "{\n\tthis.methods = $1;\n\tthis.invocationHandler = $2; }" );
@@ -156,7 +157,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 JavassistUtils.addField( MethodInterceptor.class, "interceptor", proxyClass );
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[]{Method[].class, Object.class, MethodInterceptor.class} ),
+                                new Class[]{ Method[].class, Object.class, MethodInterceptor.class } ),
                         proxyClass );
                 proxyConstructor
                         .setBody( "{\n\tthis.methods = $1;\n\tthis.target = $2;\n\tthis.interceptor = $3; }" );
@@ -192,7 +193,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 final CtClass proxyClass = JavassistUtils.createClass( getSuperclass( proxyClasses ) );
                 JavassistUtils.addField( ObjectProvider.class, "provider", proxyClass );
                 final CtConstructor proxyConstructor = new CtConstructor(
-                        JavassistUtils.resolve( new Class[]{ObjectProvider.class} ),
+                        JavassistUtils.resolve( new Class[]{ ObjectProvider.class } ),
                         proxyClass );
                 proxyConstructor.setBody( "{ this.provider = $1; }" );
                 proxyClass.addConstructor( proxyConstructor );

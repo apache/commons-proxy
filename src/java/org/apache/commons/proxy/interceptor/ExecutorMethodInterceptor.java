@@ -25,8 +25,8 @@ import org.aopalliance.intercept.MethodInvocation;
  * <p/>
  * <b>Note</b>: Only <em>void</em> methods can be intercepted using this class!  Any attempts to intercept non-void
  * methods will result in an {@link IllegalArgumentException}.  If the proxy interfaces include non-void methods, try
- * using a {@link FilteredMethodInterceptor} along with a {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter}
- * to wrap an instance of this class.
+ * using a {@link FilteredMethodInterceptor} along with a
+ * {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter} to wrap an instance of this class.
  *
  * @author James Carman
  * @version 1.0
