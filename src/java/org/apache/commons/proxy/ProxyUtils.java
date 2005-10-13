@@ -77,16 +77,6 @@ public class ProxyUtils
         return ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
     }
 
-    public static Class[] toClassArray( Class c0 )
-    {
-        return new Class[] { c0 };
-    }
-
-    public static Object[] toObjectArray( Object o0 )
-    {
-        return new Object[] { o0 };
-    }
-
     private static List getAllInterfacesImpl( Class cls )
     {
         if( cls == null )

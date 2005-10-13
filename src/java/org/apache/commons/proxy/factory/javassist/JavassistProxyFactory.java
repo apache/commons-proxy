@@ -22,7 +22,6 @@ import javassist.CtConstructor;
 import javassist.CtMethod;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.factory.util.AbstractProxyClassGenerator;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
@@ -60,8 +59,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         try
         {
             final Class clazz = delegatingProxyClassCache.getProxyClass( classLoader, proxyClasses );
-            return clazz.getConstructor( ProxyUtils.toClassArray( ObjectProvider.class ) )
-                    .newInstance( ProxyUtils.toObjectArray( targetProvider ) );
+            return clazz.getConstructor( new Class[]{ ObjectProvider.class } )
+                    .newInstance( new Object[]{ targetProvider } );
         }
         catch( Exception e )
         {
