@@ -71,6 +71,7 @@
         <runtime-dependency groupId="commons-discovery" version="0.2" />
         <runtime-dependency groupId="javassist" version="3.0"/>
         <build-dependency groupId="junit" version="3.8.1"/>
+        <build-dependency groupId="jmock" version="1.0.1" />
     </target>
 
     <target name="clean">
