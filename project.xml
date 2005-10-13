@@ -250,6 +250,15 @@
                 <comment>Doug Lea's Concurrency API</comment>
             </properties>
         </dependency>
+        <dependency>
+            <groupId>jmock</groupId>
+            <artifactId>jmock</artifactId>
+            <version>1.0.1</version>
+            <url>http://www.jmock.org/</url>
+            <properties>
+                <comment>The JMock Mock Objects Library</comment>
+            </properties>
+        </dependency>
     </dependencies>
 
     <build>
