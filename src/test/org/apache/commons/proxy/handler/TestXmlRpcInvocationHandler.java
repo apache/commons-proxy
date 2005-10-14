@@ -28,6 +28,7 @@ import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcClientLite;
 
 /**
  * @author James Carman
@@ -66,7 +67,7 @@ public class TestXmlRpcInvocationHandler extends TestCase
                 server = new WebServer( 9999 );
                 server.addHandler( "echo", new EchoImpl() );
                 server.start();
-                client = new XmlRpcClient( "http://localhost:9999/RPC2" );
+                client = new XmlRpcClientLite( "http://localhost:9999/RPC2" );
             }
 
             protected void tearDown() throws Exception
