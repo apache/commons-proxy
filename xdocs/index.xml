@@ -76,7 +76,6 @@
                             <tr><td><b>Cloning</b></td><td>Reflectively calls the public clone() method on a Cloneable object</td></tr>
                             <tr><td><b>Hessian</b></td><td>Returns a <a href="http://www.caucho.com/hessian/index.xtp">Hessian</a>-based service object</td></tr>
                             <tr><td><b>Burlap</b></td><td>Returns a <a href="http://www.caucho.com/burlap/index.xtp">Burlap</a>-based service object</td></tr>
-                            <tr><td><b>Apache XML-RPC</b></td><td>Returns an <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a>-based service object</td></tr>
                             <tr><td><b>JAX-RPC</b></td><td>Returns a <a href="http://java.sun.com/webservices/jaxrpc/index.jsp">JAX-RPC</a>-based service object</td></tr>
                             <tr><td><b>Session Bean</b></td><td>Returns a reference to a Session EJB (stateless session beans only)</td></tr>
                         </table>
@@ -101,7 +100,7 @@
                     An <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">invocation handler</a> handles all
                     method invocations using a single method.  <em>Commons Proxy</em> provides a couple invocation handler implementations:
                     <table border="0">
-                            <tr><td><b>Null</b></td><td>A provider which always returns a null (useful for the "Null Object" pattern)</td></tr>
+                            <tr><td><b>Null</b></td><td>Always returns a null (useful for the "Null Object" pattern)</td></tr>
                             <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
                         </table>
                 </p>
@@ -115,13 +114,13 @@
                     changing the implementation of the method itself.  <em>Commons Proxy</em> provides a few method interceptor
                     implementations including:
                     <table border="0">
-                            <tr><td><b>Executor</b></td><td>Uses an
-                                <a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/Executor.html">Executor</a> to execute the method in possibly another thread (only void methods are supported).</td></tr>
-                            <tr><td><b>Logging</b></td><td>Logs all method invocations using the
-                                <a href="http://jakarta.apache.org/commons/logging/">Jakarta Commons Logging</a> API</td></tr>
-                            <tr><td><b>Filtered</b></td><td>Optionally intercepts a method invocation based on a
-                                <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a></td></tr>
-                        </table>
+                      <tr><td><b>Executor</b></td><td>Uses an
+                      <a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/Executor.html">Executor</a> to execute the method in possibly another thread (only void methods are supported).</td></tr>
+                      <tr><td><b>Logging</b></td><td>Logs all method invocations using the
+                      <a href="http://jakarta.apache.org/commons/logging/">Jakarta Commons Logging</a> API</td></tr>
+                      <tr><td><b>Filtered</b></td><td>Optionally intercepts a method invocation based on a
+                      <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a></td></tr>
+                      </table>
                 </p>
             </section>
         </section>
