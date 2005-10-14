@@ -112,7 +112,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         constructor.setBody( "{\n\tsuper($$);\n}" );
         ctClass.addConstructor( constructor );
         final CtMethod proceedMethod = new CtMethod( JavassistUtils.resolve( Object.class ), "proceed",
-                                                     JavassistUtils.resolve( ProxyUtils.EMPTY_ARGUMENT_TYPES ), ctClass );
+                                                     JavassistUtils.resolve( new Class[0] ), ctClass );
         final Class[] argumentTypes = interfaceMethod.getParameterTypes();
         final StringBuffer proceedBody = new StringBuffer( "{\n" );
         if( !Void.TYPE.equals( interfaceMethod.getReturnType() ) )
@@ -124,14 +124,14 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
             proceedBody.append( "\t" );
         }
         proceedBody.append( "( (" );
-        proceedBody.append( interfaceMethod.getDeclaringClass().getName() );
+        proceedBody.append( JavassistUtils.getJavaClassName( interfaceMethod.getDeclaringClass() ) );
         proceedBody.append( " )target )." );
         proceedBody.append( interfaceMethod.getName() );
         proceedBody.append( "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
         {
             proceedBody.append( "(" );
-            proceedBody.append( argumentTypes[i].getName() );
+            proceedBody.append( JavassistUtils.getJavaClassName( argumentTypes[i] ) );
             proceedBody.append( ")arguments[" );
             proceedBody.append( i );
             proceedBody.append( "]" );
