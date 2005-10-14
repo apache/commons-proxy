@@ -101,9 +101,8 @@
                     An <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">invocation handler</a> handles all
                     method invocations using a single method.  <em>Commons Proxy</em> provides a couple invocation handler implementations:
                     <table border="0">
-                            <tr><td><b>Null</b></td><td>A provider which always returns a specific object</td></tr>
+                            <tr><td><b>Null</b></td><td>A provider which always returns a null (useful for the "Null Object" pattern)</td></tr>
                             <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
-                            <tr><td><b>Cloning</b></td><td>A provider which reflectively calls the public clone() method on a Cloneable object</td></tr>
                         </table>
                 </p>
 
