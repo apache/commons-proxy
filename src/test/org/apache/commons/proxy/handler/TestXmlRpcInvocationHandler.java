@@ -16,11 +16,16 @@
  */
 package org.apache.commons.proxy.handler;
 
+import junit.extensions.TestSetup;
+import junit.framework.Protectable;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
+import junit.framework.TestSuite;
+import org.apache.commons.proxy.exception.InvocationHandlerException;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-import org.apache.commons.proxy.exception.InvocationHandlerException;
 import org.apache.xmlrpc.WebServer;
 import org.apache.xmlrpc.XmlRpcClient;
 
@@ -29,20 +34,46 @@ import org.apache.xmlrpc.XmlRpcClient;
  */
 public class TestXmlRpcInvocationHandler extends TestCase
 {
-    private WebServer server;
-    private XmlRpcClient client;
+    private static WebServer server;
+    private static XmlRpcClient client;
 
-    protected void setUp() throws Exception
+    public static Test suite()
     {
-        server = new WebServer( 9999 );
-        server.addHandler( "echo", new EchoImpl() );
-        server.start();
-        client = new XmlRpcClient( "http://localhost:9999/RPC2" );
-    }
+        return new TestSetup( new TestSuite( TestXmlRpcInvocationHandler.class ) )
+        {
+            public void run( final TestResult testResult )
+            {
+                Protectable p = new Protectable()
+                {
+                    public void protect() throws Throwable
+                    {
+                        try
+                        {
+                            setUp();
+                            basicRun( testResult );
+                        }
+                        finally
+                        {
+                            tearDown();
+                        }
+                    }
+                };
+                testResult.runProtected( this, p );
+            }
 
-    protected void tearDown() throws Exception
-    {
-        server.shutdown();
+            protected void setUp() throws Exception
+            {
+                server = new WebServer( 9999 );
+                server.addHandler( "echo", new EchoImpl() );
+                server.start();
+                client = new XmlRpcClient( "http://localhost:9999/RPC2" );
+            }
+
+            protected void tearDown() throws Exception
+            {
+                server.shutdown();
+            }
+        };
     }
 
     public void testInvalidHandlerName()
@@ -57,7 +88,6 @@ public class TestXmlRpcInvocationHandler extends TestCase
         }
         catch( InvocationHandlerException e )
         {
-            
         }
     }
 
