@@ -29,6 +29,17 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho
         return message1 + message2;
     }
 
+    public String echoBack( String[] messages )
+    {
+        final StringBuffer sb = new StringBuffer();
+        for( int i = 0; i < messages.length; i++ )
+        {
+            String message = messages[i];
+            sb.append( message );
+        }
+        return sb.toString();
+    }
+
     public int echoBack( int i )
     {
         return i;

@@ -36,11 +36,46 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
         echo = ( Echo ) new CglibProxyFactory()
                 .createInterceptorProxy( new EchoImpl(), new LoggingMethodInterceptor( ( Log ) logMock.proxy() ),
                                          new Class[]{ Echo.class } );
+    }
+
+    public void testWhenLoggingDisabled()
+    {
+        logMock = mock( Log.class );
+        echo = ( Echo ) new CglibProxyFactory()
+                .createInterceptorProxy( new EchoImpl(), new LoggingMethodInterceptor( ( Log ) logMock.proxy() ),
+                                         new Class[]{ Echo.class } );
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( false ) );
+        echo.echoBack( "Hello" );
+
+    }
+
+    public void testWithArrayParameter()
+    {
         logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN echoBack((java.lang.String[]){Hello, World})" ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "END echoBack() [HelloWorld]" ) );
+        echo.echoBack( new String[] { "Hello", "World" } );
+    }
+
+    public void testMultipleParameters()
+    {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN echoBack(Hello, World)" ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "END echoBack() [HelloWorld]" ) );
+        echo.echoBack( "Hello", "World" );
+    }
+
+    public void testNullReturnValue()
+    {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN echoBack(<null>)" ) );
+        logMock.expects( once() ).method( "debug" ).with( eq( "END echoBack() [<null>]" ) );
+        echo.echoBack( ( String )null );
     }
 
     public void testNonVoidMethod()
     {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN echoBack(Hello)" ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "END echoBack() [Hello]" ) );
         echo.echoBack( "Hello" );
@@ -48,6 +83,7 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
 
     public void testException()
     {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN ioException()" ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "EXCEPTION ioException() -- java.io.IOException" ), isA( IOException.class ) );
         try
@@ -63,6 +99,7 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
 
     public void testRuntimeException()
     {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN illegalArgument()" ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "EXCEPTION illegalArgument() -- java.lang.IllegalArgumentException" ), isA( IllegalArgumentException.class ) );
         try
@@ -78,6 +115,7 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
 
     public void testVoidMethod()
     {
+        logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( true ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "BEGIN echo()" ) );
         logMock.expects( once() ).method( "debug" ).with( eq( "END echo()" ) );
         echo.echo();

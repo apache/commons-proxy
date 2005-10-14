@@ -25,6 +25,7 @@ public interface Echo
 {
     public String echoBack( String message );
     public String echoBack( String message1, String message2 );
+    public String echoBack( String[] messages );
     public int echoBack( int i );
     public void echo();
 
