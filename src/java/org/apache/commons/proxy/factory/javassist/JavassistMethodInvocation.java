@@ -124,14 +124,14 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
             proceedBody.append( "\t" );
         }
         proceedBody.append( "( (" );
-        proceedBody.append( JavassistUtils.getJavaClassName( interfaceMethod.getDeclaringClass() ) );
+        proceedBody.append( ProxyUtils.getJavaClassName( interfaceMethod.getDeclaringClass() ) );
         proceedBody.append( " )target )." );
         proceedBody.append( interfaceMethod.getName() );
         proceedBody.append( "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
         {
             proceedBody.append( "(" );
-            proceedBody.append( JavassistUtils.getJavaClassName( argumentTypes[i] ) );
+            proceedBody.append( ProxyUtils.getJavaClassName( argumentTypes[i] ) );
             proceedBody.append( ")arguments[" );
             proceedBody.append( i );
             proceedBody.append( "]" );

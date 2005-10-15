@@ -28,9 +28,17 @@ import java.util.List;
  */
 public class ProxyUtils
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
-    
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      * @param proxyFactory the proxy factory to be used to create the proxy object
@@ -53,7 +61,6 @@ public class ProxyUtils
     {
         return proxyFactory.createInvocationHandlerProxy( classLoader, new NullInvocationHandler(), proxyClasses );
     }
-
 
     /**
      * <p>Gets an array of {@link Class} objects representing all interfaces implemented by the given
@@ -107,4 +114,26 @@ public class ProxyUtils
         }
         return list;
     }
+
+    /**
+     * Returns the class name as you would expect to see it in Java code.
+     * <p>
+     * <b>Examples:</b>
+     * <ul>
+     *   <li>getJavaClassName( Object[].class ) == "Object[]"</li>
+     *   <li>getJavaClassName( Object[][].class ) == "Object[][]"</li>
+     *   <li>getJavaClassName( Integer.TYPE ) == "int"</li>
+     * </p>
+     * @param clazz the class
+     * @return the class' name as you would expect to see it in Java code
+     */
+    public static String getJavaClassName( Class clazz )
+    {
+        if( clazz.isArray() )
+        {
+            return getJavaClassName( clazz.getComponentType() ) + "[]";
+        }
+        return clazz.getName();
+    }
 }
+

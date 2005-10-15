@@ -36,4 +36,19 @@ public class TestProxyUtils extends TestCase
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
     }
+
+    public void testGetJavaClassName() throws Exception
+    {
+        assertEquals( "java.lang.Object[]", ProxyUtils.getJavaClassName( Object[].class ) );
+        assertEquals( "java.lang.Object[][]", ProxyUtils.getJavaClassName( Object[][].class ) );
+        assertEquals( "java.lang.String[][][]", ProxyUtils.getJavaClassName( String[][][].class ) );
+        assertEquals( "int", ProxyUtils.getJavaClassName( Integer.TYPE ) );
+        assertEquals( "float", ProxyUtils.getJavaClassName( Float.TYPE ) );
+        assertEquals( "long", ProxyUtils.getJavaClassName( Long.TYPE ) );
+        assertEquals( "double", ProxyUtils.getJavaClassName( Double.TYPE ) );
+        assertEquals( "short", ProxyUtils.getJavaClassName( Short.TYPE ) );
+        assertEquals( "byte", ProxyUtils.getJavaClassName( Byte.TYPE ) );
+        assertEquals( "char", ProxyUtils.getJavaClassName( Character.TYPE ) );
+        assertEquals( "boolean", ProxyUtils.getJavaClassName( Boolean.TYPE ) );
+    }
 }

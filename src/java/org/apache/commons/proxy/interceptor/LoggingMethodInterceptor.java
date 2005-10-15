@@ -19,7 +19,7 @@ package org.apache.commons.proxy.interceptor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
-import org.apache.commons.proxy.factory.javassist.JavassistUtils;
+import org.apache.commons.proxy.ProxyUtils;
 
 /**
  * An interceptor which logs each method invocation.
@@ -123,7 +123,7 @@ public class LoggingMethodInterceptor implements MethodInterceptor
             return;
         }
         buffer.append( "(" );
-        buffer.append( JavassistUtils.getJavaClassName( input.getClass() ) );
+        buffer.append( ProxyUtils.getJavaClassName( input.getClass() ) );
         buffer.append( "){" );
         Object[] array = ( Object[] ) input;
         int count = array.length;

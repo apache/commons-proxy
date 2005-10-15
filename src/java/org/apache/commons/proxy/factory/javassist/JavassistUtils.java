@@ -22,6 +22,7 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.ProxyUtils;
 
 /**
  * @author James Carman
@@ -51,22 +52,13 @@ public class JavassistUtils
     {
         try
         {
-            return classPool.get( getJavaClassName( clazz ) );
+            return classPool.get( ProxyUtils.getJavaClassName( clazz ) );
         }
         catch( NotFoundException e )
         {
             throw new ObjectProviderException(
                     "Unable to find class " + clazz.getName() + " in default Javassist class pool.", e );
         }
-    }
-
-    public static String getJavaClassName( Class inputClass )
-    {
-        if( inputClass.isArray() )
-        {
-            return getJavaClassName( inputClass.getComponentType() ) + "[]";
-        }
-        return inputClass.getName();
     }
 
     public static void addInterfaces( CtClass ctClass, Class[] proxyClasses )
