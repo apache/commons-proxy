@@ -16,7 +16,9 @@
  */
 package org.apache.commons.proxy;
 import junit.framework.TestCase;
+import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
+import org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 
 public class TestProxyUtils extends TestCase
@@ -50,5 +52,39 @@ public class TestProxyUtils extends TestCase
         assertEquals( "byte", ProxyUtils.getJavaClassName( Byte.TYPE ) );
         assertEquals( "char", ProxyUtils.getJavaClassName( Character.TYPE ) );
         assertEquals( "boolean", ProxyUtils.getJavaClassName( Boolean.TYPE ) );
+    }
+
+    public void testGetProxyFactory() throws Exception
+    {
+        assertTrue( ProxyUtils.getProxyFactory() instanceof JavassistProxyFactory );
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, CglibProxyFactory.class.getName() );
+        assertTrue( ProxyUtils.getProxyFactory() instanceof CglibProxyFactory );
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, ReflectionProxyFactory.class.getName() );
+        assertTrue( ProxyUtils.getProxyFactory() instanceof ReflectionProxyFactory );
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, "" );
+        ClassLoader cl = new IsolatingClassLoader( JavassistProxyFactory.class, Thread.currentThread().getContextClassLoader() );
+        assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof CglibProxyFactory );
+        cl = new IsolatingClassLoader( CglibProxyFactory.class, cl );
+        assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof ReflectionProxyFactory );
+    }
+
+    private static class IsolatingClassLoader extends ClassLoader
+    {
+        private Class isolatedClass;
+
+        public IsolatingClassLoader( Class isolatedClass, ClassLoader parent )
+        {
+            super( parent );
+            this.isolatedClass = isolatedClass;
+        }
+
+        public Class loadClass( String name ) throws ClassNotFoundException
+        {
+            if( isolatedClass.getName().equals( name ) )
+            {
+                throw new ClassNotFoundException( name + " not found." );
+            }
+            return getParent().loadClass( name );
+        }
     }
 }
