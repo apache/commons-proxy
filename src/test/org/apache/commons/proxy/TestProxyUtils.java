@@ -20,6 +20,7 @@ import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory;
 import org.apache.commons.proxy.util.Echo;
+import org.apache.commons.proxy.exception.ProxyFactoryException;
 
 public class TestProxyUtils extends TestCase
 {
@@ -66,6 +67,16 @@ public class TestProxyUtils extends TestCase
         assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof CglibProxyFactory );
         cl = new IsolatingClassLoader( CglibProxyFactory.class, cl );
         assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof ReflectionProxyFactory );
+        cl = new IsolatingClassLoader( ReflectionProxyFactory.class, cl );
+        try
+        {
+            ProxyUtils.getProxyFactory( cl );
+            fail();
+        }
+        catch( ProxyFactoryException e )
+        {
+
+        }
     }
 
     private static class IsolatingClassLoader extends ClassLoader
