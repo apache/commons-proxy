@@ -17,7 +17,7 @@
 package org.apache.commons.proxy;
 
 import org.apache.commons.proxy.exception.ProxyFactoryException;
-import org.apache.commons.proxy.handler.NullInvocationHandler;
+import org.apache.commons.proxy.invoker.NullInvoker;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,7 +50,7 @@ public class ProxyUtils
      */
     public static Object createNullObject( ProxyFactory proxyFactory, Class[] proxyClasses )
     {
-        return proxyFactory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyClasses );
+        return proxyFactory.createInvokerProxy( new NullInvoker(), proxyClasses );
     }
 
     /**
@@ -63,7 +63,7 @@ public class ProxyUtils
      */
     public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class[] proxyClasses )
     {
-        return proxyFactory.createInvocationHandlerProxy( classLoader, new NullInvocationHandler(), proxyClasses );
+        return proxyFactory.createInvokerProxy( classLoader, new NullInvoker(), proxyClasses );
     }
 
     /**

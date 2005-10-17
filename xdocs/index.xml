@@ -36,8 +36,8 @@
                     <li><b>Performance Monitoring</b> - the proxy can log each method invocation to a performance monitor
                     allowing system administrators to see what parts of the system are potentially bogged down.</li>
                 </ul>
-                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, object providers, invocation handlers, and
-                method interceptors.
+                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, object providers, invokers, and
+                interceptors.
             </p>
             <section name="Proxy Factories">
                 <p>
@@ -51,10 +51,10 @@
                     <ul>
                         <li><b>Delegator Proxies</b> - a proxy that merely delegates each method invocation to an
                             object provided by an <a href="apidocs/org/apache/commons/proxy/ObjectProvider.html">object provider</a>.</li>
-                        <li><b>Interceptor Proxies</b> - a proxy that allows a <a href="http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInterceptor.html">method interceptor</a> to intercept each
-                            method invocation.</li>
-                        <li><b>Invocation Handler Proxies</b> - a proxy that uses an
-                            <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/InvocationHandler.html">invocation handler</a> to handle all method
+                        <li><b>Interceptor Proxies</b> - a proxy that allows an <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptor</a> to intercept each
+                            method invocation as it makes its way to the target of the invocation.</li>
+                        <li><b>Invoker Proxies</b> - a proxy that uses an
+                            <a href="apidocs/org/apache/commons/proxy/Invoker.html">invoker</a> to handle all method
                             invocations.</li>
                     </ul>
 
@@ -95,23 +95,25 @@
 
                 </p>
             </section>
-            <section name="Invocation Handlers">
+            <section name="Invokers">
                 <p>
-                    An <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">invocation handler</a> handles all
-                    method invocations using a single method.  <em>Commons Proxy</em> provides a couple invocation handler implementations:
+                    An <a href="apidocs/org/apache/commons/proxy/Invoker.html">invoker</a> handles all
+                    method invocations using a single method.  <em>Commons Proxy</em> provides a few invoker implementations:
                     <table border="0">
-                            <tr><td><b>Null</b></td><td>Always returns a null (useful for the "Null Object" pattern)</td></tr>
-                            <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
-                        </table>
+                      <tr><td><b>Null</b></td><td>Always returns a null (useful for the "Null Object" pattern)</td></tr>
+                      <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
+                      <tr><td><b>Invocation Handler Adapter</b></td><td>Adapts the JDK <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a> interface
+                          to the <em>Commons Proxy</em> <a href="apidocs/org/apache/commons/proxy/Invoker.html">Invoker</a> interface.</td></tr>
+                    </table>
                 </p>
 
             </section>
-            <section name="Method Interceptors">
+            <section name="Interceptors">
                 <p>
-                    <cm>Commons Proxy</cm> uses the <a href="http://aopalliance.sourceforge.net">AOP Alliance</a> API
-                    for method interceptor support.  Method interceptors provide <em>rudimentary</em> aspect-oriented
+                    <cm>Commons Proxy</cm> allows you to &quot;intercept&quot; a method invocation using <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptors</a>.
+                    Interceptors provide <em>rudimentary</em> aspect-oriented
                     programming support, allowing you to alter the results/effects of a method invocation without actually
-                    changing the implementation of the method itself.  <em>Commons Proxy</em> provides a few method interceptor
+                    changing the implementation of the method itself.  <em>Commons Proxy</em> provides a few interceptor
                     implementations including:
                     <table border="0">
                       <tr><td><b>Executor</b></td><td>Uses an
@@ -120,6 +122,9 @@
                       <a href="http://jakarta.apache.org/commons/logging/">Jakarta Commons Logging</a> API</td></tr>
                       <tr><td><b>Filtered</b></td><td>Optionally intercepts a method invocation based on a
                       <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a></td></tr>
+                      <tr><td><b>Method Interceptor Adapter</b></td><td>Adapts the AOP Alliance <a href="http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInterceptor.html">MethodInterceptor</a> interface to the
+                          <em>Commons Proxy</em> <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptor</a> interface.</td></tr>
+
                       </table>
                 </p>
             </section>

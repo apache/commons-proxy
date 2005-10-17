@@ -20,11 +20,10 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.ProxyUtils;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +33,7 @@ import java.util.WeakHashMap;
  * @author James Carman
  * @version 1.0
  */
-public abstract class JavassistMethodInvocation implements MethodInvocation
+public abstract class JavassistInvocation implements Invocation
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
@@ -49,56 +48,6 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
-            throws CannotCompileException
-    {
-        final Map classCache = getClassCache( classLoader );
-        final String key = toClassCacheKey( interfaceMethod );
-        final WeakReference invocationClassRef = ( WeakReference )classCache.get( key );
-        Class invocationClass;
-        if( invocationClassRef == null )
-        {
-            invocationClass = createInvocationClass( classLoader, interfaceMethod );
-            classCache.put( key, new WeakReference( invocationClass ) );
-        }
-        else
-        {
-            synchronized( invocationClassRef )
-            {
-                invocationClass = ( Class )invocationClassRef.get();
-                if( invocationClass == null )
-                {
-                    invocationClass = createInvocationClass( classLoader, interfaceMethod );
-                    classCache.put( key, new WeakReference( invocationClass ) );
-                }
-            }
-        }
-        return invocationClass;
-    }
-
-    private static Map getClassCache( ClassLoader classLoader )
-    {
-        Map cache = ( Map )loaderToClassCache.get( classLoader );
-        if( cache == null )
-        {
-            cache = new HashMap();
-            loaderToClassCache.put( classLoader, cache );
-        }
-        return cache;
-    }
-
-    private static String toClassCacheKey( Method method )
-    {
-        return String.valueOf( method );
-    }
-
-    private static String getSimpleName( Class c )
-    {
-        final String name = c.getName();
-        final int ndx = name.lastIndexOf( '.' );
-        return ndx == -1 ? name : name.substring( ndx + 1 );
-    }
-
     private static Class createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
     {
@@ -106,7 +55,7 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         final CtClass ctClass = JavassistUtils.createClass(
                 getSimpleName( interfaceMethod.getDeclaringClass() ) + "_" + interfaceMethod.getName() +
                 "_invocation",
-                JavassistMethodInvocation.class );
+                JavassistInvocation.class );
         final CtConstructor constructor = new CtConstructor(
                 JavassistUtils.resolve( new Class[]{Method.class, Object.class, Object[].class} ), ctClass );
         constructor.setBody( "{\n\tsuper($$);\n}" );
@@ -152,11 +101,61 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         return invocationClass;
     }
 
+    private static Map getClassCache( ClassLoader classLoader )
+    {
+        Map cache = ( Map )loaderToClassCache.get( classLoader );
+        if( cache == null )
+        {
+            cache = new HashMap();
+            loaderToClassCache.put( classLoader, cache );
+        }
+        return cache;
+    }
+
+    public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
+            throws CannotCompileException
+    {
+        final Map classCache = getClassCache( classLoader );
+        final String key = toClassCacheKey( interfaceMethod );
+        final WeakReference invocationClassRef = ( WeakReference )classCache.get( key );
+        Class invocationClass;
+        if( invocationClassRef == null )
+        {
+            invocationClass = createInvocationClass( classLoader, interfaceMethod );
+            classCache.put( key, new WeakReference( invocationClass ) );
+        }
+        else
+        {
+            synchronized( invocationClassRef )
+            {
+                invocationClass = ( Class )invocationClassRef.get();
+                if( invocationClass == null )
+                {
+                    invocationClass = createInvocationClass( classLoader, interfaceMethod );
+                    classCache.put( key, new WeakReference( invocationClass ) );
+                }
+            }
+        }
+        return invocationClass;
+    }
+
+    private static String getSimpleName( Class c )
+    {
+        final String name = c.getName();
+        final int ndx = name.lastIndexOf( '.' );
+        return ndx == -1 ? name : name.substring( ndx + 1 );
+    }
+
+    private static String toClassCacheKey( Method method )
+    {
+        return String.valueOf( method );
+    }
+
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public JavassistMethodInvocation( Method method, Object target, Object[] arguments )
+    public JavassistInvocation( Method method, Object target, Object[] arguments )
     {
         this.method = method;
         this.target = target;
@@ -172,27 +171,14 @@ public abstract class JavassistMethodInvocation implements MethodInvocation
         return arguments;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Joinpoint Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
-    public AccessibleObject getStaticPart()
-    {
-        return method;
-    }
-
-    public Object getThis()
-    {
-        return target;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// MethodInvocation Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
     public Method getMethod()
     {
         return method;
+    }
+
+    public Object getProxy()
+    {
+        return target;
     }
 }
 

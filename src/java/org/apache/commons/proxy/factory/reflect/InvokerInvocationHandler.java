@@ -14,43 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.interceptor.filter;
+package org.apache.commons.proxy.factory.reflect;
 
-import org.apache.commons.proxy.interceptor.MethodFilter;
+import org.apache.commons.proxy.Invoker;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * A method filter implementation that returns true if the method's name matches a supplied regular expression (JDK
- * regex) pattern string.
+ * Adaptor class to adapt the commons-proxy {@link Invoker} interface to the
+ * {@link InvocationHandler} interface.
  *
  * @author James Carman
  * @version 1.0
  */
-public class PatternMethodFilter implements MethodFilter
+class InvokerInvocationHandler implements InvocationHandler
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final String pattern;
+    private final Invoker invoker;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public PatternMethodFilter( String pattern )
+    public InvokerInvocationHandler( Invoker invoker )
     {
-        this.pattern = pattern;
+        this.invoker = invoker;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-// MethodFilter Implementation
+// InvocationHandler Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public boolean accepts( Method method )
+
+    public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        return method.getName().matches( pattern );
+        return invoker.invoke( proxy, method, args );
     }
 }
 

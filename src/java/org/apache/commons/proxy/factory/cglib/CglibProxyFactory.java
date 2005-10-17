@@ -19,14 +19,14 @@ package org.apache.commons.proxy.factory.cglib;
 import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodProxy;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
@@ -53,7 +53,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         return enhancer.create();
     }
 
-    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
@@ -64,14 +64,14 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         return enhancer.create();
     }
 
-    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
                                                 Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( toInterfaces( proxyClasses ) );
         enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallback( new InvocationHandlerBridge( invocationHandler ) );
+        enhancer.setCallback( new InvokerBridge( invoker ) );
         return enhancer.create();
     }
 
@@ -79,11 +79,11 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private class InvocationHandlerBridge implements net.sf.cglib.proxy.InvocationHandler
+    private class InvokerBridge implements net.sf.cglib.proxy.InvocationHandler
     {
-        private final InvocationHandler original;
+        private final Invoker original;
 
-        public InvocationHandlerBridge( InvocationHandler original )
+        public InvokerBridge( Invoker original )
         {
             this.original = original;
         }
@@ -96,10 +96,10 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor
     {
-        private final MethodInterceptor inner;
+        private final Interceptor inner;
         private final Object target;
 
-        public InterceptorBridge( Object target, MethodInterceptor inner )
+        public InterceptorBridge( Object target, Interceptor inner )
         {
             this.inner = inner;
             this.target = target;
@@ -107,18 +107,18 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
         public Object intercept( Object object, Method method, Object[] args, MethodProxy methodProxy ) throws Throwable
         {
-            return inner.invoke( new MethodProxyMethodInvocation( target, method, args, methodProxy ) );
+            return inner.intercept( new MethodProxyInvocation( target, method, args, methodProxy ) );
         }
     }
 
-    private class MethodProxyMethodInvocation implements MethodInvocation
+    private class MethodProxyInvocation implements Invocation
     {
         private final MethodProxy methodProxy;
         private final Method method;
         private final Object[] args;
         private final Object target;
 
-        public MethodProxyMethodInvocation( Object target, Method method, Object[] args, MethodProxy methodProxy )
+        public MethodProxyInvocation( Object target, Method method, Object[] args, MethodProxy methodProxy )
         {
             this.target = target;
             this.method = method;
@@ -141,7 +141,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             return methodProxy.invoke( target, args );
         }
 
-        public Object getThis()
+        public Object getProxy()
         {
             return target;
         }

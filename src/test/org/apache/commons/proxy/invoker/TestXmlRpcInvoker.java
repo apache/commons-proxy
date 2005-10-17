@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.handler;
+package org.apache.commons.proxy.invoker;
 
 import junit.extensions.TestSetup;
 import junit.framework.Protectable;
@@ -33,14 +33,14 @@ import org.apache.xmlrpc.XmlRpcClientLite;
 /**
  * @author James Carman
  */
-public class TestXmlRpcInvocationHandler extends TestCase
+public class TestXmlRpcInvoker extends TestCase
 {
     private static WebServer server;
     private static XmlRpcClient client;
 
     public static Test suite()
     {
-        return new TestSetup( new TestSuite( TestXmlRpcInvocationHandler.class ) )
+        return new TestSetup( new TestSuite( TestXmlRpcInvoker.class ) )
         {
             public void run( final TestResult testResult )
             {
@@ -79,9 +79,9 @@ public class TestXmlRpcInvocationHandler extends TestCase
 
     public void testInvalidHandlerName()
     {
-        final XmlRpcInvocationHandler handler = new XmlRpcInvocationHandler( client, "invalid" );
+        final XmlRpcInvoker handler = new XmlRpcInvoker( client, "invalid" );
         final Echo echo = ( Echo ) new CglibProxyFactory()
-                .createInvocationHandlerProxy( handler, new Class[]{ Echo.class } );
+                .createInvokerProxy( handler, new Class[]{ Echo.class } );
         try
         {
             echo.echoBack( "Hello" );
@@ -94,9 +94,9 @@ public class TestXmlRpcInvocationHandler extends TestCase
 
     public void testValidInvocation() throws Exception
     {
-        final XmlRpcInvocationHandler handler = new XmlRpcInvocationHandler( client, "echo" );
+        final XmlRpcInvoker handler = new XmlRpcInvoker( client, "echo" );
         final Echo echo = ( Echo ) new CglibProxyFactory()
-                .createInvocationHandlerProxy( handler, new Class[]{ Echo.class } );
+                .createInvokerProxy( handler, new Class[]{ Echo.class } );
         assertEquals( "Hello", echo.echoBack( "Hello" ) );
 
     }

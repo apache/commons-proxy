@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.handler;
+package org.apache.commons.proxy.invoker;
 import junit.framework.TestCase;
 import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 
-public class TestNullInvocationHandler extends TestCase
+public class TestNullInvoker extends TestCase
 {
     public void testReturnValues()
     {

@@ -16,33 +16,33 @@
  */
 package org.apache.commons.proxy.factory.reflect;
 
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.ObjectProvider;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * An invocation handler that passes through a <code>MethodInterceptor</code>.
+ * An invocation handler which delegates to an object provided by an {@link ObjectProvider}.
  *
  * @author James Carman
  * @version 1.0
  */
-public class MethodInterceptorInvocationHandler extends AbstractInvocationHandler
+class DelegatorInvocationHandler implements InvocationHandler
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Object target;
-    private final MethodInterceptor methodInterceptor;
+    private final ObjectProvider delegateProvider;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public MethodInterceptorInvocationHandler( Object target, MethodInterceptor methodInterceptor )
+    protected DelegatorInvocationHandler( ObjectProvider delegateProvider )
     {
-        this.target = target;
-        this.methodInterceptor = methodInterceptor;
+        this.delegateProvider = delegateProvider;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,8 +51,14 @@ public class MethodInterceptorInvocationHandler extends AbstractInvocationHandle
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        final ReflectionMethodInvocation invocation = new ReflectionMethodInvocation( target, method, args );
-        return methodInterceptor.invoke( invocation );
+        try
+        {
+            return method.invoke( delegateProvider.getObject(), args );
+        }
+        catch( InvocationTargetException e )
+        {
+            throw e.getTargetException();
+        }
     }
 }
 

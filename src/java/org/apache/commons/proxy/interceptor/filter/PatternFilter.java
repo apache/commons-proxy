@@ -14,84 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.factory.reflect;
+package org.apache.commons.proxy.interceptor.filter;
 
-import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.interceptor.MethodFilter;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * A reflection-based implementation of the <code>MethodInvocation</code> interface.
+ * A method filter implementation that returns true if the method's name matches a supplied regular expression (JDK
+ * regex) pattern string.
  *
  * @author James Carman
  * @version 1.0
  */
-class ReflectionMethodInvocation implements MethodInvocation
+public class PatternFilter implements MethodFilter
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Method method;
-    private final Object[] arguments;
-    private final Object target;
+    public static String GETTER_SETTER_PATTERN = "get\\w+|set\\w+";
+    private final String pattern;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns a {@link MethodFilter} which accepts only "getters" and "setters."
+     *
+     * @return a {@link MethodFilter} which accepts only "getters" and "setters."
+     */
+    public static MethodFilter getterSetterFilter()
+    {
+        return new PatternFilter( GETTER_SETTER_PATTERN );
+    }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public ReflectionMethodInvocation( Object target, Method method, Object[] arguments )
+    public PatternFilter( String pattern )
     {
-        this.method = method;
-        this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
-        this.target = target;
+        this.pattern = pattern;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-// Invocation Implementation
+// MethodFilter Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Object[] getArguments()
+    public boolean accepts( Method method )
     {
-        return arguments;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Joinpoint Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
-    public AccessibleObject getStaticPart()
-    {
-        return method;
-    }
-
-    public Object getThis()
-    {
-        return target;
-    }
-
-    public Object proceed() throws Throwable
-    {
-        try
-        {
-            return method.invoke( target, arguments );
-        }
-        catch( InvocationTargetException e )
-        {
-            throw e.getTargetException();
-        }
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// MethodInvocation Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
-    public Method getMethod()
-    {
-        return method;
+        return method.getName().matches( pattern );
     }
 }
 

@@ -14,21 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.handler;
+package org.apache.commons.proxy.invoker;
 
-import java.lang.reflect.InvocationHandler;
+import org.apache.commons.proxy.Invoker;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An {@link InvocationHandler} implementation which merely returns null for all method invocations.  This class is
+ * An {@link Invoker} implementation which merely returns null for all method invocations.  This class is
  * useful for scenarios where the "null object" design pattern is needed.
  *
  * @author James Carman
  * @version 1.0
  */
-public class NullInvocationHandler implements InvocationHandler
+public class NullInvoker implements Invoker
 {
     private static Map primitiveValueMap = new HashMap();
     static

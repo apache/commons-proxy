@@ -15,24 +15,24 @@
  */
 package org.apache.commons.proxy.util;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Interceptor;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class SuffixMethodInterceptor implements MethodInterceptor
+public class SuffixInterceptor implements Interceptor
 {
     private final String suffix;
 
-    public SuffixMethodInterceptor( String suffix )
+    public SuffixInterceptor( String suffix )
     {
         this.suffix = suffix;
     }
 
-    public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+    public Object intercept( Invocation methodInvocation ) throws Throwable
     {
-        return methodInvocation.proceed() + suffix; 
+        return methodInvocation.proceed() + suffix;
     }
 }

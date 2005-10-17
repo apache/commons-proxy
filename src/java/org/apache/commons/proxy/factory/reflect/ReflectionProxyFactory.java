@@ -16,11 +16,11 @@
  */
 package org.apache.commons.proxy.factory.reflect;
 
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 /**
@@ -39,20 +39,20 @@ public class ReflectionProxyFactory extends AbstractProxyFactory
                                         Class[] proxyClasses )
     {
         return Proxy.newProxyInstance( classLoader, proxyClasses,
-                                       new DelegateProviderInvocationHandler( targetProvider ) );
+                                       new DelegatorInvocationHandler( targetProvider ) );
     }
 
-    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class[] proxyClasses )
     {
-        return new MethodInterceptorInvocationHandler( target, interceptor )
-                .createProxy( classLoader, proxyClasses );
+        return Proxy
+                .newProxyInstance( classLoader, proxyClasses, new InterceptorInvocationHandler( target, interceptor ) );
     }
 
-    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
-                                                Class[] proxyClasses )
+    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
+                                      Class[] proxyClasses )
     {
-        return Proxy.newProxyInstance( classLoader, proxyClasses, invocationHandler );
+        return Proxy.newProxyInstance( classLoader, proxyClasses, new InvokerInvocationHandler( invoker ) );
     }
 }
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.handler;
+package org.apache.commons.proxy.invoker;
 
-import org.apache.xmlrpc.XmlRpcHandler;
-import org.apache.xmlrpc.XmlRpcException;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.exception.InvocationHandlerException;
+import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.XmlRpcHandler;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
@@ -28,12 +28,12 @@ import java.util.Vector;
  * @author James Carman
  * @version 1.0
  */
-public class XmlRpcInvocationHandler implements InvocationHandler
+public class XmlRpcInvoker implements Invoker
 {
     private final XmlRpcHandler handler;
     private final String handlerName;
 
-    public XmlRpcInvocationHandler( XmlRpcHandler handler, String handlerName )
+    public XmlRpcInvoker( XmlRpcHandler handler, String handlerName )
     {
         this.handler = handler;
         this.handlerName = handlerName;

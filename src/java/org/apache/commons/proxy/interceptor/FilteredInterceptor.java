@@ -14,50 +14,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.interceptor.filter;
+package org.apache.commons.proxy.interceptor;
 
-import org.apache.commons.proxy.interceptor.MethodFilter;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Interceptor;
 
 /**
- * A simple method filter implementation that merely returns true if the method's name is in a set of accepted names.
+ * Decorates another <code>MethodInterceptor</code> by only calling it if the method is accepted by the supplied
+ * <code>MethodFilter</code>.
  *
  * @author James Carman
  * @version 1.0
  */
-public class SimpleMethodFilter implements MethodFilter
+public class FilteredInterceptor implements Interceptor
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Set methodNames;
+    private final Interceptor inner;
+    private final MethodFilter filter;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public SimpleMethodFilter()
+    public FilteredInterceptor( Interceptor inner, MethodFilter filter )
     {
-        this.methodNames = new HashSet();
-    }
-    
-    public SimpleMethodFilter( String[] methodNames )
-    {
-        this.methodNames = new HashSet( Arrays.asList( methodNames ) );
+        this.inner = inner;
+        this.filter = filter;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-// MethodFilter Implementation
+// MethodInterceptor Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public boolean accepts( Method method )
+    public Object intercept( Invocation invocation ) throws Throwable
     {
-        return methodNames.contains( method.getName() );
+        if( filter.accepts( invocation.getMethod() ) )
+        {
+            return inner.intercept( invocation );
+        }
+        else
+        {
+            return invocation.proceed();
+        }
     }
 }
 

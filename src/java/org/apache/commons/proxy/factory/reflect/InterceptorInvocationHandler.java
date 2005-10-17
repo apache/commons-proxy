@@ -16,24 +16,35 @@
  */
 package org.apache.commons.proxy.factory.reflect;
 
-import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.Interceptor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationHandler;
 
 /**
- * An invocation handler which delegates to another object.
+ * An invocation invoker that passes through a {@link Interceptor}.
  *
  * @author James Carman
  * @version 1.0
  */
-public abstract class DelegatingInvocationHandler extends AbstractInvocationHandler
+class InterceptorInvocationHandler implements InvocationHandler
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Abstract Methods
+// Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected abstract Object getDelegate();
+    private final Object target;
+    private final Interceptor methodInterceptor;
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
+    public InterceptorInvocationHandler( Object target, Interceptor methodInterceptor )
+    {
+        this.target = target;
+        this.methodInterceptor = methodInterceptor;
+    }
 
 //----------------------------------------------------------------------------------------------------------------------
 // InvocationHandler Implementation
@@ -41,40 +52,8 @@ public abstract class DelegatingInvocationHandler extends AbstractInvocationHand
 
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        try
-        {
-            return method.invoke( getDelegate(), args );
-        }
-        catch( InvocationTargetException e )
-        {
-            throw e.getTargetException();
-        }
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * A simplified proxy creation method which merely creates a proxy which supports all the interfaces implemented by
-     * the delegate.
-     *
-     * @return a proxy which supports all the interfaces implemented by the delegate
-     */
-    public Object createProxy()
-    {
-        return createProxy( ProxyUtils.getAllInterfaces( getDelegate().getClass() ) );
-    }
-
-    /**
-     * A simplified proxy creation method which merely creates a proxy which supports all the interfaces implemented by
-     * the delegate, using the specified class loader.
-     *
-     * @return a proxy which supports all the interfaces implemented by the delegate, using the specified class loader.
-     */
-    public Object createProxy( ClassLoader classLoader )
-    {
-        return createProxy( classLoader, ProxyUtils.getAllInterfaces( getDelegate().getClass() ) );
+        final ReflectionInvocation invocation = new ReflectionInvocation( target, method, args );
+        return methodInterceptor.intercept( invocation );
     }
 }
 

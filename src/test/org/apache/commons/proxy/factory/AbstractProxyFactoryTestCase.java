@@ -15,8 +15,9 @@
  */
 package org.apache.commons.proxy.factory;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.provider.ProviderUtils;
@@ -24,11 +25,9 @@ import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.DuplicateEcho;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-import org.apache.commons.proxy.util.SuffixMethodInterceptor;
+import org.apache.commons.proxy.util.SuffixInterceptor;
 
 import java.io.IOException;
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -64,8 +63,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testInvocationHandlerProxy() throws Exception
     {
-        final InvocationHandlerTester tester = new InvocationHandlerTester();
-        final Echo echo = ( Echo )factory.createInvocationHandlerProxy( tester, ECHO_ONLY );
+        final InvokerTester tester = new InvokerTester();
+        final Echo echo = ( Echo )factory.createInvokerProxy( tester, ECHO_ONLY );
         echo.echoBack( "hello" );
         assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
         assertSame( echo, tester.proxy );
@@ -100,7 +99,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     public void testCreateInterceptorProxy()
     {
         final Echo target = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), ECHO_ONLY );
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, new SuffixMethodInterceptor( " suffix" ), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, new SuffixInterceptor( " suffix" ), ECHO_ONLY );
         proxy.echo();
         assertEquals( "message suffix", proxy.echoBack( "message" ) );
     }
@@ -112,15 +111,14 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testMethodInvocationImplementation() throws Exception
     {
-        final MethodInvocationTester tester = new MethodInvocationTester();
+        final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
         final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, ECHO_ONLY );
         proxy.echo();
         assertNotNull( tester.arguments );
         assertEquals( 0, tester.arguments.length );
         assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.method );
-        assertEquals( target, tester.target );
-        assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.staticPart );
+        assertEquals( target, tester.proxy );
         proxy.echoBack( "Hello" );
         assertNotNull( tester.arguments );
         assertEquals( 1, tester.arguments.length );
@@ -136,7 +134,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testMethodInvocationDuplicateMethods() throws Exception
     {
-        final MethodInvocationTester tester = new MethodInvocationTester();
+        final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
         final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, new Class[] { Echo.class, DuplicateEcho.class } );
         proxy.echoBack( "hello" );
@@ -146,7 +144,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testMethodInvocationClassCaching() throws Exception
     {
-        final MethodInvocationTester tester = new MethodInvocationTester();
+        final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
         final Echo proxy1 = ( Echo ) factory.createInterceptorProxy( target, tester, ECHO_ONLY );
         final Echo proxy2 = ( Echo ) factory.createInterceptorProxy( target, tester, new Class[] { Echo.class, DuplicateEcho.class } );
@@ -239,24 +237,24 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     {
     }
 
-    private static class ChangeArgumentInterceptor implements MethodInterceptor
+    private static class ChangeArgumentInterceptor implements Interceptor
     {
-        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+        public Object intercept( Invocation methodInvocation ) throws Throwable
         {
             methodInvocation.getArguments()[0] = "something different";
             return methodInvocation.proceed();
         }
     }
 
-    protected static class NoOpMethodInterceptor implements MethodInterceptor
+    protected static class NoOpMethodInterceptor implements Interceptor
     {
-        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+        public Object intercept( Invocation methodInvocation ) throws Throwable
         {
             return methodInvocation.proceed();
         }
     }
 
-    private static class InvocationHandlerTester implements InvocationHandler
+    private static class InvokerTester implements Invoker
     {
         private Object method;
         private Object[] args;
@@ -271,20 +269,18 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         }
     }
 
-    private static class MethodInvocationTester implements MethodInterceptor
+    private static class InterceptorTester implements Interceptor
     {
         private Object[] arguments;
         private Method method;
-        private Object target;
-        private AccessibleObject staticPart;
+        private Object proxy;
         private Class invocationClass;
 
-        public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+        public Object intercept( Invocation methodInvocation ) throws Throwable
         {
             this.arguments = methodInvocation.getArguments();
             this.method = methodInvocation.getMethod();
-            this.target = methodInvocation.getThis();
-            this.staticPart = methodInvocation.getStaticPart();
+            this.proxy = methodInvocation.getProxy();
             this.invocationClass = methodInvocation.getClass();
             return methodInvocation.proceed();
         }

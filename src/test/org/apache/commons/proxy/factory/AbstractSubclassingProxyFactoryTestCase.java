@@ -18,7 +18,7 @@ package org.apache.commons.proxy.factory;
 
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
-import org.apache.commons.proxy.handler.NullInvocationHandler;
+import org.apache.commons.proxy.invoker.NullInvoker;
 import org.apache.commons.proxy.provider.ConstantProvider;
 import org.apache.commons.proxy.util.AbstractEcho;
 import org.apache.commons.proxy.util.Echo;
@@ -71,7 +71,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     public void testInvocationHandlerWithSuperclass()
     {
         final Echo echo = ( Echo ) factory
-                .createInvocationHandlerProxy( new NullInvocationHandler(),  new Class[] { Echo.class, EchoImpl.class } );
+                .createInvokerProxy( new NullInvoker(),  new Class[] { Echo.class, EchoImpl.class } );
         assertTrue( echo instanceof EchoImpl );
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         proxy = ( Echo )factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), proxyClasses );
         assertEquals( "final", proxy.echoBack("echo") );
 
-        proxy = ( Echo )factory.createInvocationHandlerProxy( new NullInvocationHandler(), proxyClasses );
+        proxy = ( Echo )factory.createInvokerProxy( new NullInvoker(), proxyClasses );
         assertEquals( "final", proxy.echoBack("echo") );
     }
 
@@ -118,7 +118,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     {
         try
         {
-            factory.createInvocationHandlerProxy( new NullInvocationHandler(),
+            factory.createInvokerProxy( new NullInvoker(),
                                                    new Class[] { EchoImpl.class, String.class } );
             fail();
         }

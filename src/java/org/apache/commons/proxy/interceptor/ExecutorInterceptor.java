@@ -17,36 +17,36 @@
 package org.apache.commons.proxy.interceptor;
 
 import EDU.oswego.cs.dl.util.concurrent.Executor;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Interceptor;
 
 /**
  * A method interceptor that uses an {@link Executor} to execute the method invocation.
  * <p/>
  * <b>Note</b>: Only <em>void</em> methods can be intercepted using this class!  Any attempts to intercept non-void
  * methods will result in an {@link IllegalArgumentException}.  If the proxy interfaces include non-void methods, try
- * using a {@link FilteredMethodInterceptor} along with a
+ * using a {@link FilteredInterceptor} along with a
  * {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter} to wrap an instance of this class.
  *
  * @author James Carman
  * @version 1.0
  */
-public class ExecutorMethodInterceptor implements MethodInterceptor
+public class ExecutorInterceptor implements Interceptor
 {
     private final Executor executor;
 
-    public ExecutorMethodInterceptor( Executor executor )
+    public ExecutorInterceptor( Executor executor )
     {
         this.executor = executor;
     }
 
-    public Object invoke( final MethodInvocation methodInvocation ) throws Throwable
+    public Object intercept( final Invocation invocation ) throws Throwable
     {
-        if( Void.TYPE.equals( methodInvocation.getMethod().getReturnType() ) )
+        if( Void.TYPE.equals( invocation.getMethod().getReturnType() ) )
         {
             // Special case for finalize() method (should not be run in a different thread)...
-            if( !( methodInvocation.getMethod().getName().equals( "finalize" ) &&
-                   methodInvocation.getMethod().getParameterTypes().length == 0 ) )
+            if( !( invocation.getMethod().getName().equals( "finalize" ) &&
+                   invocation.getMethod().getParameterTypes().length == 0 ) )
             {
                 executor.execute( new Runnable()
                 {
@@ -54,7 +54,7 @@ public class ExecutorMethodInterceptor implements MethodInterceptor
                     {
                         try
                         {
-                            methodInvocation.proceed();
+                            invocation.proceed();
                         }
                         catch( Throwable t )
                         {
@@ -66,7 +66,7 @@ public class ExecutorMethodInterceptor implements MethodInterceptor
             }
             else
             {
-                return methodInvocation.proceed();
+                return invocation.proceed();
             }
         }
         else

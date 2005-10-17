@@ -16,10 +16,10 @@
  */
 package org.apache.commons.proxy.interceptor;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
 
 /**
  * An interceptor which logs each method invocation.
@@ -29,7 +29,7 @@ import org.apache.commons.proxy.ProxyUtils;
  * @author James Carman
  * @version 1.0
  */
-public class LoggingMethodInterceptor implements MethodInterceptor
+public class LoggingInterceptor implements Interceptor
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
@@ -42,7 +42,7 @@ public class LoggingMethodInterceptor implements MethodInterceptor
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public LoggingMethodInterceptor( Log log )
+    public LoggingInterceptor( Log log )
     {
         this.log = log;
     }
@@ -51,16 +51,16 @@ public class LoggingMethodInterceptor implements MethodInterceptor
 // MethodInterceptor Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+    public Object intercept( Invocation invocation ) throws Throwable
     {
         if( log.isDebugEnabled() )
         {
-            final String methodName = methodInvocation.getMethod().getName();
-            entry( methodName, methodInvocation.getArguments() );
+            final String methodName = invocation.getMethod().getName();
+            entry( methodName, invocation.getArguments() );
             try
             {
-                Object result = methodInvocation.proceed();
-                if( Void.TYPE.equals( methodInvocation.getMethod().getReturnType() ) )
+                Object result = invocation.proceed();
+                if( Void.TYPE.equals( invocation.getMethod().getReturnType() ) )
                 {
                     voidExit( methodName );
                 }
@@ -78,7 +78,7 @@ public class LoggingMethodInterceptor implements MethodInterceptor
         }
         else
         {
-            return methodInvocation.proceed();
+            return invocation.proceed();
         }
     }
 

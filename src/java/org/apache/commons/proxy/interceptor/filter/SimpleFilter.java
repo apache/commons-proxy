@@ -14,40 +14,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.factory.reflect;
+package org.apache.commons.proxy.interceptor.filter;
 
-import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.interceptor.MethodFilter;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * An invocation handler which delegates to an object supplied by an {@link ObjectProvider}.
+ * A simple method filter implementation that merely returns true if the method's name is in a set of accepted names.
  *
  * @author James Carman
  * @version 1.0
  */
-public class DelegateProviderInvocationHandler extends DelegatingInvocationHandler
+public class SimpleFilter implements MethodFilter
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final ObjectProvider delegateProvider;
+    private final Set methodNames;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public DelegateProviderInvocationHandler( ObjectProvider delegateProvider )
+    public SimpleFilter()
     {
-        this.delegateProvider = delegateProvider;
+        this.methodNames = new HashSet();
+    }
+    
+    public SimpleFilter( String[] methodNames )
+    {
+        this.methodNames = new HashSet( Arrays.asList( methodNames ) );
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-// Other Methods
+// MethodFilter Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected Object getDelegate()
+    public boolean accepts( Method method )
     {
-        return delegateProvider.getObject();
+        return methodNames.contains( method.getName() );
     }
 }
 

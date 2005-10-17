@@ -23,14 +23,14 @@ import org.apache.commons.proxy.util.EchoImpl;
 import EDU.oswego.cs.dl.util.concurrent.Executor;
 import EDU.oswego.cs.dl.util.concurrent.CountDown;
 
-public class TestExecutorMethodInterceptor extends TestCase
+public class TestExecutorInterceptor extends TestCase
 {
     public void testVoidMethod() throws Exception
     {
         final ExecutedEcho impl = new ExecutedEcho();
         final OneShotExecutor executor = new OneShotExecutor();
         final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), new Class[] { Echo.class } );
+                .createInterceptorProxy( impl, new ExecutorInterceptor( executor ), new Class[] { Echo.class } );
         proxy.echo();
         executor.getLatch().acquire();
         assertEquals( executor.getThread(), impl.getExecutionThread() );
@@ -41,7 +41,7 @@ public class TestExecutorMethodInterceptor extends TestCase
         final ExecutedEcho impl = new ExecutedEcho();
         final OneShotExecutor executor = new OneShotExecutor();
         final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorMethodInterceptor( executor ), new Class[] { Echo.class } );
+                .createInterceptorProxy( impl, new ExecutorInterceptor( executor ), new Class[] { Echo.class } );
         try
         {
             proxy.echoBack( "hello" );

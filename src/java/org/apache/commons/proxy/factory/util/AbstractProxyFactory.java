@@ -16,11 +16,10 @@
  */
 package org.apache.commons.proxy.factory.util;
 
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
-
-import java.lang.reflect.InvocationHandler;
 
 /**
  * A helpful superclass for {@link org.apache.commons.proxy.ProxyFactory} implementations.
@@ -58,16 +57,16 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         return createDelegatorProxy( Thread.currentThread().getContextClassLoader(), targetProvider, proxyClasses );
     }
 
-    public final Object createInterceptorProxy( Object target, MethodInterceptor interceptor,
+    public final Object createInterceptorProxy( Object target, Interceptor interceptor,
                                                 Class[] proxyClasses )
     {
         return createInterceptorProxy( Thread.currentThread().getContextClassLoader(), target, interceptor,
                                        proxyClasses );
     }
 
-    public final Object createInvocationHandlerProxy( InvocationHandler invocationHandler, Class[] proxyClasses )
+    public final Object createInvokerProxy( Invoker invocationHandler, Class[] proxyClasses )
     {
-        return createInvocationHandlerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
+        return createInvokerProxy( Thread.currentThread().getContextClassLoader(), invocationHandler,
                                              proxyClasses );
     }
 }

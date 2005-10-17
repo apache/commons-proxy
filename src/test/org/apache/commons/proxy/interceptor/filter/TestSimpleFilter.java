@@ -23,11 +23,11 @@ import org.apache.commons.proxy.util.EchoImpl;
  * @author James Carman
  * @version 1.0
  */
-public class TestSimpleMethodFilter extends TestCase
+public class TestSimpleFilter extends TestCase
 {
     public void testAccepts() throws Exception
     {
-        final SimpleMethodFilter filter = new SimpleMethodFilter( new String[] { "echoBack" } );
+        final SimpleFilter filter = new SimpleFilter( new String[] { "echoBack" } );
         assertTrue( filter.accepts( Echo.class.getMethod( "echoBack", new Class[] { String.class } ) ) );
         assertFalse( filter.accepts( EchoImpl.class.getMethod( "hashCode",  new Class[] {} ) ) );
     }

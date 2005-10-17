@@ -20,14 +20,14 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.factory.util.AbstractProxyClassGenerator;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 import org.apache.commons.proxy.factory.util.ProxyClassCache;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
@@ -44,10 +44,10 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 //----------------------------------------------------------------------------------------------------------------------
     private static final ProxyClassCache delegatingProxyClassCache = new ProxyClassCache(
             new DelegatingProxyClassGenerator() );
-    private static final ProxyClassCache interceptingProxyClassCache = new ProxyClassCache(
-            new InterceptingProxyClassGenerator() );
+    private static final ProxyClassCache interceptorProxyClassCache = new ProxyClassCache(
+            new InterceptorProxyClassGenerator() );
     private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache(
-            new InvocationHandlerProxyClassGenerator() );
+            new InvokerProxyClassGenerator() );
 
 //----------------------------------------------------------------------------------------------------------------------
 // ProxyFactory Implementation
@@ -68,14 +68,14 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    public Object createInterceptorProxy( ClassLoader classLoader, Object target, MethodInterceptor interceptor,
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class[] proxyClasses )
     {
         try
         {
-            final Class clazz = interceptingProxyClassCache.getProxyClass( classLoader, proxyClasses );
+            final Class clazz = interceptorProxyClassCache.getProxyClass( classLoader, proxyClasses );
             final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyClasses );
-            return clazz.getConstructor( new Class[]{ Method[].class, Object.class, MethodInterceptor.class } )
+            return clazz.getConstructor( new Class[]{ Method[].class, Object.class, Interceptor.class } )
                     .newInstance( new Object[]{ methods, target, interceptor } );
         }
         catch( Exception e )
@@ -84,15 +84,15 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    public Object createInvocationHandlerProxy( ClassLoader classLoader, InvocationHandler invocationHandler,
+    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
                                                 Class[] proxyClasses )
     {
         try
         {
             final Class clazz = invocationHandlerProxyClassCache.getProxyClass( classLoader, proxyClasses );
             final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods( proxyClasses );
-            return clazz.getConstructor( new Class[]{ Method[].class, InvocationHandler.class } )
-                    .newInstance( new Object[]{ methods, invocationHandler } );
+            return clazz.getConstructor( new Class[]{ Method[].class, Invoker.class } )
+                    .newInstance( new Object[]{ methods, invoker } );
         }
         catch( Exception e )
         {
@@ -104,7 +104,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class InvocationHandlerProxyClassGenerator extends AbstractProxyClassGenerator
+    private static class InvokerProxyClassGenerator extends AbstractProxyClassGenerator
     {
         public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses )
         {
@@ -114,13 +114,13 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 final Method[] methods = getImplementationMethods( proxyClasses );
                 JavassistUtils.addInterfaces( proxyClass, toInterfaces( proxyClasses ) );
                 JavassistUtils.addField( Method[].class, "methods", proxyClass );
-                JavassistUtils.addField( InvocationHandler.class, "invocationHandler", proxyClass );
+                JavassistUtils.addField( Invoker.class, "invoker", proxyClass );
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[]{ Method[].class, InvocationHandler.class } ),
+                                new Class[]{ Method[].class, Invoker.class } ),
                         proxyClass );
                 proxyConstructor
-                        .setBody( "{\n\tthis.methods = $1;\n\tthis.invocationHandler = $2; }" );
+                        .setBody( "{\n\tthis.methods = $1;\n\tthis.invoker = $2; }" );
                 proxyClass.addConstructor( proxyConstructor );
                 for( int i = 0; i < methods.length; ++i )
                 {
@@ -128,7 +128,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                                           methods[i].getName(),
                                                           JavassistUtils.resolve( methods[i].getParameterTypes() ),
                                                           proxyClass );
-                    final String body = "{\n\t return ( $r ) invocationHandler.invoke( this, methods[" + i +
+                    final String body = "{\n\t return ( $r ) invoker.invoke( this, methods[" + i +
                                         "], $args );\n }";
                     method.setBody( body );
                     proxyClass.addMethod( method );
@@ -142,7 +142,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    private static class InterceptingProxyClassGenerator extends AbstractProxyClassGenerator
+    private static class InterceptorProxyClassGenerator extends AbstractProxyClassGenerator
     {
         public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses )
         {
@@ -153,10 +153,10 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 JavassistUtils.addInterfaces( proxyClass, toInterfaces( proxyClasses ) );
                 JavassistUtils.addField( Method[].class, "methods", proxyClass );
                 JavassistUtils.addField( Object.class, "target", proxyClass );
-                JavassistUtils.addField( MethodInterceptor.class, "interceptor", proxyClass );
+                JavassistUtils.addField( Interceptor.class, "interceptor", proxyClass );
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[]{ Method[].class, Object.class, MethodInterceptor.class } ),
+                                new Class[]{ Method[].class, Object.class, Interceptor.class } ),
                         proxyClass );
                 proxyConstructor
                         .setBody( "{\n\tthis.methods = $1;\n\tthis.target = $2;\n\tthis.interceptor = $3; }" );
@@ -167,9 +167,9 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                                           methods[i].getName(),
                                                           JavassistUtils.resolve( methods[i].getParameterTypes() ),
                                                           proxyClass );
-                    final Class invocationClass = JavassistMethodInvocation
+                    final Class invocationClass = JavassistInvocation
                             .getMethodInvocationClass( classLoader, methods[i] );
-                    final String body = "{\n\t return ( $r ) interceptor.invoke( new " + invocationClass.getName() +
+                    final String body = "{\n\t return ( $r ) interceptor.intercept( new " + invocationClass.getName() +
                                         "( methods[" + i + "], target, $args ) );\n }";
                     method.setBody( body );
                     proxyClass.addMethod( method );

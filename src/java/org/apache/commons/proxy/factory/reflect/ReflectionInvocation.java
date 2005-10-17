@@ -14,50 +14,70 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.interceptor;
+package org.apache.commons.proxy.factory.reflect;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.ProxyUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
- * Decorates another <code>MethodInterceptor</code> by only calling it if the method is accepted by the supplied
- * <code>MethodFilter</code>.
+ * A reflection-based implementation of the {@link Invocation} interface.
  *
  * @author James Carman
  * @version 1.0
  */
-public class FilteredMethodInterceptor implements MethodInterceptor
+class ReflectionInvocation implements Invocation
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final MethodInterceptor inner;
-    private final MethodFilter filter;
+    private final Method method;
+    private final Object[] arguments;
+    private final Object target;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public FilteredMethodInterceptor( MethodInterceptor inner, MethodFilter filter )
+    public ReflectionInvocation( Object target, Method method, Object[] arguments )
     {
-        this.inner = inner;
-        this.filter = filter;
+        this.method = method;
+        this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
+        this.target = target;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
-// MethodInterceptor Implementation
+// Invocation Implementation
 //----------------------------------------------------------------------------------------------------------------------
 
-    public Object invoke( MethodInvocation methodInvocation ) throws Throwable
+
+    public Object[] getArguments()
     {
-        if( filter.accepts( methodInvocation.getMethod() ) )
+        return arguments;
+    }
+
+    public Method getMethod()
+    {
+        return method;
+    }
+
+    public Object getProxy()
+    {
+        return target;
+    }
+
+    public Object proceed() throws Throwable
+    {
+        try
         {
-            return inner.invoke( methodInvocation );
+            return method.invoke( target, arguments );
         }
-        else
+        catch( InvocationTargetException e )
         {
-            return methodInvocation.proceed();
+            throw e.getTargetException();
         }
     }
 }

@@ -16,27 +16,27 @@
 package org.apache.commons.proxy.interceptor;
 
 import junit.framework.TestCase;
+import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.util.SuffixMethodInterceptor;
 import org.apache.commons.proxy.util.EchoImpl;
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.util.SuffixInterceptor;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class TestMethodInterceptorChain extends TestCase
+public class TestInterceptorChain extends TestCase
 {
     public void testWithSingleInterceptor()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new SuffixMethodInterceptor( "a" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
+        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new SuffixInterceptor( "a" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
         assertEquals( "messagea", echo.echoBack( "message" ) );
     }
 
     public void testWithMultipleInterceptors()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new SuffixMethodInterceptor( "a" ), new SuffixMethodInterceptor( "b" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
+        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new SuffixInterceptor( "a" ), new SuffixInterceptor( "b" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
         assertEquals( "messageba", echo.echoBack( "message" ) );
     }
 }

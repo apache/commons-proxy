@@ -17,27 +17,27 @@ package org.apache.commons.proxy.interceptor;
 
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-import org.apache.commons.proxy.util.SuffixMethodInterceptor;
+import org.apache.commons.proxy.util.SuffixInterceptor;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
-import org.apache.commons.proxy.interceptor.filter.SimpleMethodFilter;
-import org.aopalliance.intercept.MethodInterceptor;
+import org.apache.commons.proxy.interceptor.filter.SimpleFilter;
+import org.apache.commons.proxy.Interceptor;
 import junit.framework.TestCase;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class TestFilteredMethodInterceptor extends TestCase
+public class TestFilteredInterceptor extends TestCase
 {
     public void testFilterAccepts()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter( new String[] { "echoBack" } ) ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new FilteredInterceptor( new SuffixInterceptor( "a" ), new SimpleFilter( new String[] { "echoBack" } ) ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
         assertEquals( "messagea", echo.echoBack( "message" ) );
     }
 
     public void testFilterDenies()
     {
-        Echo echo = ( Echo ) new MethodInterceptorChain( new MethodInterceptor[] { new FilteredMethodInterceptor( new SuffixMethodInterceptor( "a" ), new SimpleMethodFilter() ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
+        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new FilteredInterceptor( new SuffixInterceptor( "a" ), new SimpleFilter() ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl() ).getObject();
         assertEquals( "message", echo.echoBack( "message" ) );
     }
 }

@@ -16,10 +16,10 @@
  */
 package org.apache.commons.proxy.interceptor;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.Interceptor;
 
 /**
  * A <code>MethodInterceptorChain</code> assists with creating proxies which go through a series of
@@ -28,18 +28,18 @@ import org.apache.commons.proxy.ProxyUtils;
  * @author James Carman
  * @version 1.0
  */
-public class MethodInterceptorChain
+public class InterceptorChain
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-    private final MethodInterceptor[] interceptors;
+    private final Interceptor[] interceptors;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public MethodInterceptorChain( MethodInterceptor[] interceptors )
+    public InterceptorChain( Interceptor[] interceptors )
     {
         this.interceptors = interceptors;
     }

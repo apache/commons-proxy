@@ -25,7 +25,7 @@ import org.jmock.MockObjectTestCase;
 
 import java.io.IOException;
 
-public class TestLoggingMethodInterceptor extends MockObjectTestCase
+public class TestLoggingInterceptor extends MockObjectTestCase
 {
     private Mock logMock;
     private Echo echo;
@@ -34,7 +34,7 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
     {
         logMock = mock( Log.class );
         echo = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( new EchoImpl(), new LoggingMethodInterceptor( ( Log ) logMock.proxy() ),
+                .createInterceptorProxy( new EchoImpl(), new LoggingInterceptor( ( Log ) logMock.proxy() ),
                                          new Class[]{ Echo.class } );
     }
 
@@ -42,7 +42,7 @@ public class TestLoggingMethodInterceptor extends MockObjectTestCase
     {
         logMock = mock( Log.class );
         echo = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( new EchoImpl(), new LoggingMethodInterceptor( ( Log ) logMock.proxy() ),
+                .createInterceptorProxy( new EchoImpl(), new LoggingInterceptor( ( Log ) logMock.proxy() ),
                                          new Class[]{ Echo.class } );
         logMock.expects( once() ).method( "isDebugEnabled" ).will( returnValue( false ) );
         echo.echoBack( "Hello" );
