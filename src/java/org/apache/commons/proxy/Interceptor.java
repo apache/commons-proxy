@@ -17,6 +17,8 @@
 package org.apache.commons.proxy;
 
 /**
+ * "Intercepts" a method invocation.
+ * 
  * @author James Carman
  * @version 1.0
  */
