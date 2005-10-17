@@ -42,10 +42,5 @@ public class ProviderUtils
     {
         return new SingletonProvider( inner );
     }
-
-    public static ObjectProvider synchronizedProvider( ObjectProvider inner )
-    {
-        return new SynchronizedProvider( inner );
-    }
 }
 

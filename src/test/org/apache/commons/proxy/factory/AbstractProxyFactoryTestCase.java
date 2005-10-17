@@ -61,7 +61,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         set.add( "Hello" );
     }
 
-    public void testInvocationHandlerProxy() throws Exception
+    public void testInvokerProxy() throws Exception
     {
         final InvokerTester tester = new InvokerTester();
         final Echo echo = ( Echo )factory.createInvokerProxy( tester, ECHO_ONLY );

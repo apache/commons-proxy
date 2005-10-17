@@ -15,18 +15,40 @@
  * limitations under the License.
  */
 package org.apache.commons.proxy;
+
 import junit.framework.TestCase;
+import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory;
+import org.apache.commons.proxy.factory.util.AbstractProxyFactory;
+import org.apache.commons.proxy.util.DuplicateEcho;
 import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.exception.ProxyFactoryException;
+import org.apache.commons.proxy.util.EchoImpl;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class TestProxyUtils extends TestCase
 {
+    private Properties prevProperties;
+
+    protected void setUp() throws Exception
+    {
+        prevProperties = System.getProperties();
+        System.setProperties( new Properties() );
+    }
+
+    protected void tearDown() throws Exception
+    {
+        System.setProperties( prevProperties );
+    }
+
     public void testCreateNullObject() throws Exception
     {
-        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(),  new Class[] { Echo.class } );
+        final Echo nullEcho = ( Echo ) ProxyUtils
+                .createNullObject( new JavassistProxyFactory(), new Class[]{ Echo.class } );
         assertNull( nullEcho.echoBack( "hello" ) );
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
@@ -34,10 +56,18 @@ public class TestProxyUtils extends TestCase
 
     public void testCreateNullObjectWithClassLoader() throws Exception
     {
-        final Echo nullEcho = ( Echo )ProxyUtils.createNullObject( new JavassistProxyFactory(), Echo.class.getClassLoader(),  new Class[] { Echo.class } );
+        final Echo nullEcho = ( Echo ) ProxyUtils.createNullObject( new JavassistProxyFactory(),
+                                                                    Echo.class.getClassLoader(),
+                                                                    new Class[]{ Echo.class } );
         assertNull( nullEcho.echoBack( "hello" ) );
         assertNull( nullEcho.echoBack( "hello", "world" ) );
         assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
+    }
+
+    public void testGetAllInterfaces()
+    {
+        assertNull( ProxyUtils.getAllInterfaces( null ) );
+        assertEquals( Arrays.asList( new Class[] { DuplicateEcho.class, Serializable.class, Echo.class } ), Arrays.asList( ProxyUtils.getAllInterfaces( EchoImpl.class ) ) );
     }
 
     public void testGetJavaClassName() throws Exception
@@ -55,15 +85,20 @@ public class TestProxyUtils extends TestCase
         assertEquals( "boolean", ProxyUtils.getJavaClassName( Boolean.TYPE ) );
     }
 
+
+
     public void testGetProxyFactory() throws Exception
     {
+        assertTrue( ProxyUtils.getProxyFactory() instanceof JavassistProxyFactory );
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, "java.lang.String" );
         assertTrue( ProxyUtils.getProxyFactory() instanceof JavassistProxyFactory );
         System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, CglibProxyFactory.class.getName() );
         assertTrue( ProxyUtils.getProxyFactory() instanceof CglibProxyFactory );
         System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, ReflectionProxyFactory.class.getName() );
         assertTrue( ProxyUtils.getProxyFactory() instanceof ReflectionProxyFactory );
         System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, "" );
-        ClassLoader cl = new IsolatingClassLoader( JavassistProxyFactory.class, Thread.currentThread().getContextClassLoader() );
+        ClassLoader cl = new IsolatingClassLoader( JavassistProxyFactory.class,
+                                                   Thread.currentThread().getContextClassLoader() );
         assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof CglibProxyFactory );
         cl = new IsolatingClassLoader( CglibProxyFactory.class, cl );
         assertTrue( ProxyUtils.getProxyFactory( cl ) instanceof ReflectionProxyFactory );
@@ -75,8 +110,20 @@ public class TestProxyUtils extends TestCase
         }
         catch( ProxyFactoryException e )
         {
-
         }
+    }
+
+    public void testPrivateProxyFactoryConstructor()
+    {
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, PrivateProxyFactory.class.getName() );
+        assertTrue( ProxyUtils.getProxyFactory() instanceof JavassistProxyFactory );
+
+    }
+
+    public void testNonConcreteProxyFactoryClass()
+    {
+        System.setProperty( ProxyUtils.PROXY_FACTORY_PROPERTY, AbstractProxyFactory.class.getName() );
+        assertTrue( ProxyUtils.getProxyFactory() instanceof JavassistProxyFactory );
     }
 
     private static class IsolatingClassLoader extends ClassLoader
@@ -96,6 +143,13 @@ public class TestProxyUtils extends TestCase
                 throw new ClassNotFoundException( name + " not found." );
             }
             return getParent().loadClass( name );
+        }
+    }
+
+    public static class PrivateProxyFactory extends ReflectionProxyFactory
+    {
+        private PrivateProxyFactory()
+        {
         }
     }
 }

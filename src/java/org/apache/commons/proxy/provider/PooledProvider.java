@@ -43,8 +43,13 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
 
     public PooledProvider( ObjectProvider inner )
     {
+        this( inner, new GenericObjectPool.Config() );
+    }
+
+    public PooledProvider( ObjectProvider inner, GenericObjectPool.Config config )
+    {
         super( inner );
-        pool = new GenericObjectPool( new Factory() );
+        pool = new GenericObjectPool( new Factory(), config );
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -92,65 +97,6 @@ public class PooledProvider extends ProviderDecorator implements CacheEvictionLi
     public void setCache( Cache cache )
     {
         this.cache = cache;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
-
-    public void setMaxActive( int i )
-    {
-        pool.setMaxActive( i );
-    }
-
-    public void setMaxIdle( int i )
-    {
-        pool.setMaxIdle( i );
-    }
-
-    public void setMaxWait( long l )
-    {
-        pool.setMaxWait( l );
-    }
-
-    public void setMinEvictableIdleTimeMillis( long l )
-    {
-        pool.setMinEvictableIdleTimeMillis( l );
-    }
-
-    public void setMinIdle( int i )
-    {
-        pool.setMinIdle( i );
-    }
-
-    public void setNumTestsPerEvictionRun( int i )
-    {
-        pool.setNumTestsPerEvictionRun( i );
-    }
-
-    public void setTestOnBorrow( boolean b )
-    {
-        pool.setTestOnBorrow( b );
-    }
-
-    public void setTestOnReturn( boolean b )
-    {
-        pool.setTestOnReturn( b );
-    }
-
-    public void setTestWhileIdle( boolean b )
-    {
-        pool.setTestWhileIdle( b );
-    }
-
-    public void setTimeBetweenEvictionRunsMillis( long l )
-    {
-        pool.setTimeBetweenEvictionRunsMillis( l );
-    }
-
-    public void setWhenExhaustedAction( byte b )
-    {
-        pool.setWhenExhaustedAction( b );
     }
 
 //----------------------------------------------------------------------------------------------------------------------

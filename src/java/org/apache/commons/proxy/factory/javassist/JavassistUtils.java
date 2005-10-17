@@ -69,20 +69,10 @@ public class JavassistUtils
             ctClass.addInterface( resolve( proxyInterface ) );
         }
     }
-
-    public static CtClass createClass()
-    {
-        return createClass( DEFAULT_BASE_NAME );
-    }
-
+   
     public static CtClass createClass( Class superclass )
     {
         return createClass( DEFAULT_BASE_NAME, superclass );
-    }
-
-    public static CtClass createClass( String baseName )
-    {
-        return createClass( baseName, Object.class );
     }
 
     public synchronized static CtClass createClass( String baseName, Class superclass )

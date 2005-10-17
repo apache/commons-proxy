@@ -159,7 +159,7 @@ public abstract class JavassistInvocation implements Invocation
     {
         this.method = method;
         this.target = target;
-        this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
+        this.arguments = arguments;
     }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -22,6 +22,9 @@ import org.apache.commons.proxy.provider.cache.SimpleCache;
 import org.apache.commons.proxy.provider.cache.ThreadLocalCache;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
+import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 public class TestPooledProvider extends TestCase
 {
@@ -43,15 +46,9 @@ public class TestPooledProvider extends TestCase
     public void testWithThreadLocalCache() throws Exception
     {
         final CountingProvider counter = new CountingProvider( ProviderUtils.constantProvider( new EchoImpl() ) );
-        final PooledProvider provider = new PooledProvider( counter );
-        provider.setMaxActive( 10 );
-        provider.setMinIdle( 5 );
-        provider.setWhenExhaustedAction( GenericObjectPool.WHEN_EXHAUSTED_GROW );
-        provider.setMaxWait( 1000 );
-        provider.setMinEvictableIdleTimeMillis( 10000 );
-        provider.setTestOnBorrow( false );
-        provider.setTestOnReturn( false );
-        provider.setTestWhileIdle( false );
+        final GenericObjectPool.Config config = new GenericObjectPool.Config();
+        config.whenExhaustedAction = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+        final PooledProvider provider = new PooledProvider( counter, config );
         final ThreadLocalCache cache = new ThreadLocalCache();
         provider.setCache( cache );
         final CountDown goLatch = new CountDown( 1 );
@@ -86,5 +83,30 @@ public class TestPooledProvider extends TestCase
         goLatch.release();
         finished.acquire();
         assertEquals( 10, counter.getCount() );
+    }
+
+    public void testWithExceptionFromInner()
+    {
+        final PooledProvider provider = new PooledProvider( new ExceptionProvider() );
+                final SimpleCache cache = new SimpleCache();
+                provider.setCache( cache );
+
+        final Echo echo = ( Echo )ProxyUtils.getProxyFactory().createDelegatorProxy( provider, new Class[] { Echo.class } );
+        try
+        {
+            echo.echoBack( "Hello." );
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+
+        }
+    }
+    private class ExceptionProvider implements ObjectProvider
+    {
+        public Object getObject()
+        {
+            throw new ObjectProviderException( "Ha ha!" );
+        }
     }
 }

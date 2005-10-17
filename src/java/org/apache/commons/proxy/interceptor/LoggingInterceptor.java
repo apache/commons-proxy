@@ -92,7 +92,7 @@ public class LoggingInterceptor implements Interceptor
         buffer.append( "BEGIN " );
         buffer.append( methodName );
         buffer.append( "(" );
-        int count = ( args == null ) ? 0 : args.length;
+        int count = args.length;
         for( int i = 0; i < count; i++ )
         {
             Object arg = args[i];

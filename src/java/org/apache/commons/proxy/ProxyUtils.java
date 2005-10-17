@@ -22,6 +22,7 @@ import org.apache.commons.proxy.invoker.NullInvoker;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 
 /**
  * @author James Carman
@@ -83,17 +84,16 @@ public class ProxyUtils
      */
     public static Class[] getAllInterfaces( Class cls )
     {
-        final List interfaces = getAllInterfacesImpl( cls );
-        return ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
+        final List interfaces = getAllInterfacesImpl( cls, new LinkedList() );
+        return interfaces == null ? null : ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
     }
 
-    private static List getAllInterfacesImpl( Class cls )
+    private static List getAllInterfacesImpl( Class cls, List list )
     {
         if( cls == null )
         {
             return null;
         }
-        List list = new ArrayList();
         while( cls != null )
         {
             Class[] interfaces = cls.getInterfaces();
@@ -103,15 +103,7 @@ public class ProxyUtils
                 {
                     list.add( interfaces[i] );
                 }
-                List superInterfaces = getAllInterfacesImpl( interfaces[i] );
-                for( Iterator it = superInterfaces.iterator(); it.hasNext(); )
-                {
-                    Class intface = ( Class ) it.next();
-                    if( !list.contains( intface ) )
-                    {
-                        list.add( intface );
-                    }
-                }
+                getAllInterfacesImpl( interfaces[i], list );
             }
             cls = cls.getSuperclass();
         }
@@ -193,7 +185,7 @@ public class ProxyUtils
                 return null;
             }
             Class proxyFactoryClass = classLoader.loadClass( className );
-            if( proxyFactoryClass.isAssignableFrom( ProxyFactory.class ) )
+            if( !ProxyFactory.class.isAssignableFrom( proxyFactoryClass ) )
             {
                 return null;
             }

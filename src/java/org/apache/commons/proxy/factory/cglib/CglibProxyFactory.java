@@ -19,14 +19,12 @@ package org.apache.commons.proxy.factory.cglib;
 import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodProxy;
-import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 
 /**
@@ -123,7 +121,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
-            this.args = args == null ? ProxyUtils.EMPTY_ARGUMENTS : args;
+            this.args = args;
         }
 
         public Method getMethod()
@@ -144,11 +142,6 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         public Object getProxy()
         {
             return target;
-        }
-
-        public AccessibleObject getStaticPart()
-        {
-            return method;
         }
     }
 

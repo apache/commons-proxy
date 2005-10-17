@@ -27,9 +27,13 @@ public class TestCloningProvider extends TestCase
     {
         final Date now = new Date();
         final CloningProvider provider = new CloningProvider( now );
-        final Date clone = ( Date ) provider.getObject();
-        assertEquals( now, clone );
-        assertNotSame( now, clone );
+        final Date clone1 = ( Date ) provider.getObject();
+        assertEquals( now, clone1 );
+        assertNotSame( now, clone1 );
+        final Date clone2 = ( Date )provider.getObject();
+        assertEquals( now, clone2 );
+        assertNotSame( now, clone2 );
+        assertNotSame( clone2, clone1 );
     }
 
     public void testWithInvalidCloneable()

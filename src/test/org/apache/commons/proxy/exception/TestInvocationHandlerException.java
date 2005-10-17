@@ -14,18 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy.util;
+package org.apache.commons.proxy.exception;
+import junit.framework.*;
+import org.apache.commons.proxy.exception.InvocationHandlerException;
 
-import java.io.Serializable;
-
-/**
- * @author James Carman
- * @version 1.0
- */
-public abstract class AbstractEcho implements Echo, Serializable
+public class TestInvocationHandlerException extends AbstractExceptionClassTestCase
 {
-    public String echoBack( String message )
+    public TestInvocationHandlerException()
     {
-        return message;
+        super( InvocationHandlerException.class );
     }
 }

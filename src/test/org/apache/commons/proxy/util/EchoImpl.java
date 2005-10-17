@@ -16,12 +16,13 @@
 package org.apache.commons.proxy.util;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * @author James Carman
  * @version 1.0
  */
-public class EchoImpl extends AbstractEcho implements DuplicateEcho
+public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializable
 {
 
     public String echoBack( String message1, String message2 )
