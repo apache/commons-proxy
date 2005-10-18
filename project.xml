@@ -323,6 +323,15 @@
               </includes>
             </resource>
             -->
+
+            <resource>
+                <directory>${basedir}</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>NOTICE.txt</include>
+                </includes>
+            </resource>
+
         </resources>
         <jars></jars>
     </build>
