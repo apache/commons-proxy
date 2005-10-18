@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Provides some helpful proxy utility methods.
+ * 
  * @author James Carman
  * @version 1.0
  */
