@@ -17,7 +17,7 @@
 package org.apache.commons.proxy;
 
 /**
- * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy."  All Commons Proxy proxies
+ * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy".  All Commons Proxy proxies
  * are created using a <code>ProxyFactory</code>.  So, to change the proxying strategy, simply provide a different
  * <code>ProxyFactory</code> implementation.
  *
