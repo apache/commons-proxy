@@ -20,8 +20,8 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Merely calls <code>clone()</code> (reflectively) on the given {@link Cloneable} object.
@@ -49,7 +49,8 @@ public class CloningProvider implements ObjectProvider
             }
             catch( NoSuchMethodException e )
             {
-                throw new ObjectProviderException( "Class " + cloneable.getClass().getName() + " does not have a public clone() method." );
+                throw new ObjectProviderException(
+                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method." );
             }
         }
         return cloneMethod;
@@ -63,11 +64,13 @@ public class CloningProvider implements ObjectProvider
         }
         catch( IllegalAccessException e )
         {
-            throw new ObjectProviderException( "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e );
+            throw new ObjectProviderException(
+                    "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e );
         }
         catch( InvocationTargetException e )
         {
-            throw new ObjectProviderException( "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e );
+            throw new ObjectProviderException(
+                    "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e );
         }
     }
 

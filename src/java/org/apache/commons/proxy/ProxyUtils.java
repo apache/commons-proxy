@@ -19,10 +19,8 @@ package org.apache.commons.proxy;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.invoker.NullInvoker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author James Carman
@@ -33,7 +31,6 @@ public class ProxyUtils
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     public static final String PROXY_FACTORY_PROPERTY = "commons-proxy.factory";
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
@@ -75,8 +72,8 @@ public class ProxyUtils
      * its hierarchy up. Then each superclass is considered in the same way. Later duplicates are ignored, so the order
      * is maintained.</p>
      * <p/>
-     * <b>Note</b>: Implementation of this method was "borrowed" from <a href="http://jakarta.apache.org/commons/lang/">Jakarta
-     * Commons Lang</a> to avoid a dependency. </p>
+     * <b>Note</b>: Implementation of this method was "borrowed" from
+     * <a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons Lang</a> to avoid a dependency.</p>
      *
      * @param cls the class to look up, may be <code>null</code>
      * @return an array of {@link Class} objects representing all interfaces implemented by the given class and its
@@ -129,14 +126,13 @@ public class ProxyUtils
     }
 
     /**
-     * Returns an appropriate {@link ProxyFactory} implementation for the current environment.
-     * The implementation class search order is as follows:
-     * <ul>
-     *  <li>Try to use the type indicated by the system property "commons-proxy.factory"</li>
-     *  <li>Try to use {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
-     *  <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li>
-     *  <li>Default to {@link org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li>
-     * </ul>
+     * Returns an appropriate {@link ProxyFactory} implementation for the current environment. The implementation class
+     * search order is as follows: <ul> <li>Try to use the type indicated by the system property
+     * "commons-proxy.factory"</li> <li>Try to use
+     * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
+     * <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li> <li>Default to {@link
+     * org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li> </ul>
+     *
      * @param classLoader the class loader to use to instantiate the proxy factory
      * @return an appropriate {@link ProxyFactory} implementation for the current environment
      */
@@ -159,16 +155,15 @@ public class ProxyUtils
     }
 
     /**
-     * Returns an appropriate {@link ProxyFactory} implementation for the current environment.
-     * The implementation class search order is as follows:
-     * <ul>
-     *  <li>Try to the type indicated by the system property "commons-proxy.factory"</li>
-     *  <li>Try to use {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
-     *  <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li>
-     *  <li>Default to {@link org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li>
-     * </ul>
-     * <p>
+     * Returns an appropriate {@link ProxyFactory} implementation for the current environment. The implementation class
+     * search order is as follows: <ul> <li>Try to the type indicated by the system property
+     * "commons-proxy.factory"</li> <li>Try to use
+     * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
+     * <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li> <li>Default to {@link
+     * org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li> </ul>
+     * <p/>
      * <b>Note</b>: This implementation uses the current thread's context class loader!
+     *
      * @return an appropriate {@link ProxyFactory} implementation for the current environment
      */
     public static ProxyFactory getProxyFactory()
