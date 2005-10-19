@@ -28,7 +28,7 @@ import org.apache.commons.proxy.ProxyUtils;
  * @author James Carman
  * @version 1.0
  */
-public class JavassistUtils
+class JavassistUtils
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
