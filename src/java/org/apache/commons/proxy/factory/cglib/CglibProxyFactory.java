@@ -31,6 +31,12 @@ import java.lang.reflect.Method;
  * A <a href="http://cglib.sourceforge.net/">CGLIB</a>-based {@link org.apache.commons.proxy.ProxyFactory}
  * implementation.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>CGLIB version 2.0.2 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
