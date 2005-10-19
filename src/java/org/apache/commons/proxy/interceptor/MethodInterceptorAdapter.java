@@ -28,6 +28,12 @@ import java.lang.reflect.Method;
  * An adapter class to adapt AOP Alliance's {@link MethodInterceptor} interface to Commons Proxy's
  * {@link Interceptor} interface.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>AOP Alliance API version 1.0 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
