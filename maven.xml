@@ -15,8 +15,24 @@
    limitations under the License.
 -->
 <project xmlns:j="jelly:core" xmlns:ant="jelly:ant" xmlns:u="jelly:util">
-  <postGoal name="test:compile">
-       <!-- Compile RMI stubs  -->
-       <rmic base="${maven.test.dest}" includes="**/Rmi*Impl.class" />
+    <postGoal name="test:compile">
+        <!-- Compile RMI stubs  -->
+        <rmic base="${maven.test.dest}" includes="**/Rmi*Impl.class"/>
     </postGoal>
+
+    <preGoal name="dist:build-bin">
+        <copy todir="${maven.dist.bin.assembly.dir}">
+            <fileset file='${basedir}/RELEASE-NOTES.txt'/>
+            <fileset file='${basedir}/NOTICE.txt'/>
+        </copy>
+    </preGoal>
+
+    <preGoal name="dist:build-src">
+        <copy todir="${maven.dist.src.assembly.dir}">
+            <fileset file='${basedir}/RELEASE-NOTES.txt'/>
+            <fileset file='${basedir}/NOTICE.txt'/>
+        </copy>
+    </preGoal>
+
+
 </project>
