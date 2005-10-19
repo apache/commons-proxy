@@ -28,6 +28,12 @@ import org.apache.commons.proxy.Interceptor;
  * using a {@link FilteredInterceptor} along with a
  * {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter} to wrap an instance of this class.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>Concurrent API version 1.3.4 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
