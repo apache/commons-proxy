@@ -26,6 +26,12 @@ import org.apache.commons.proxy.Invocation;
  * <b>Note</b>: The implementation of this class was borrowed from
  * HiveMind's logging interceptor.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>Jakarta Commons Logging version 1.0.4 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
