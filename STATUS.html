@@ -48,15 +48,15 @@
 <ul>
     <li>
         <a href="http://java.sun.com/j2se">Java Development Kit</a>
-        (Version 1.5 or later)
+        (Version 1.3 or later)
     </li>
     <li>
         <a href="http://jakarta.apache.org/commons/logging">Jakarta Commons Logging</a>
-        (Version 1.0.4 or later) - for logging, <b>required</b> for deployment
+        (Version 1.0.4 or later) - for logging, <b>optional</b> for deployment
     </li>
 
     <li><a href="http://aopalliance.sourceforge.net/">AOP Alliance</a>
-        (Version 1.0 or later) - for method interceptor support, <b>required</b> for deployment
+        (Version 1.0 or later) - for method interceptor support, <b>optional</b> for deployment
     </li>
     <li>
         <a href="http://www.junit.org">JUnit Testing Framework</a>
@@ -103,6 +103,16 @@
         (Version 3.0.1 or later) - used by HessianProvider, not required for deployment unless you wish to
         use HessianProvider
     </li>
+    <li>
+        <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a>
+        (Version 2.0 or later) - used to test XmlRpcInvoker, not required for deployment unless you wish to
+        use XmlRpcInvoker
+    </li>
+    <li>
+        <a href="http://gee.cs.oswego.edu/dl/cpj/">Doug Lea's Concurrency API</a>
+        (Version 1.3.4 or later) - used by ExecutorInterceptor, not required for deployment unless you wish to
+        use ExecutorInterceptor
+    </li>
 </ul>
 
 
@@ -137,7 +147,7 @@
     Want to help?
     All ideas and suggestions should be made to the commons mailing lists,
     commons-user at jakarta.apache.org and commons-dev at jakarta.apache.org.
-    Please prefix any emails by [collections] to pass mail filters.
+    Please prefix any emails by [proxy] to pass mail filters.
 </p>
 
 </body>
