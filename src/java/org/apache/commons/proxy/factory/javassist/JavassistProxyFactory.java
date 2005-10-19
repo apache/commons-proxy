@@ -33,7 +33,12 @@ import java.lang.reflect.Method;
 /**
  * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link org.apache.commons.proxy.ProxyFactory}
  * implementation.
- *
+ * <p>
+ *   <b>Dependencies</b>:
+ * <ul>
+ *   <li>Javassist version 3.0 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
