@@ -1,4 +1,4 @@
-/* $Id$
+/* $Id:XmlRpcInvoker.java 325897 2005-10-17 10:11:52 -0400 (Mon, 17 Oct 2005) jcarman $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -25,6 +25,14 @@ import java.lang.reflect.Method;
 import java.util.Vector;
 
 /**
+ * Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to invoke methods on an XML-RPC service.
+ *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>Apache XML-RPC version 2.0 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
