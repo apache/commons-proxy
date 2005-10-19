@@ -29,6 +29,12 @@ import java.net.URL;
 /**
  * Returns a proxy for a JAX-RPC-based service.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>A JAX-RPC implementation</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */

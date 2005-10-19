@@ -25,6 +25,12 @@ import java.net.MalformedURLException;
 /**
  * Provides a burlap service object.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>Burlap version 2.1.7 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */

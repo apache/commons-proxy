@@ -20,6 +20,8 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.provider.cache.Cache;
 
 /**
+ * Uses a {@link Cache} to store its target object which is provided by an <code>inner</code> object provider.
+ * 
  * @author James Carman
  * @version 1.0
  */

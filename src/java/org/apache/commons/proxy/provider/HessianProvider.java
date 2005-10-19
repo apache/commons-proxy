@@ -25,6 +25,12 @@ import java.net.MalformedURLException;
 /**
  * Provides a hessian service object.
  *
+ * <p>
+ * <b>Dependencies</b>:
+ * <ul>
+ *   <li>Hessian version 3.0.1 or greater</li>
+ * </ul>
+ * </p>
  * @author James Carman
  * @version 1.0
  */
