@@ -20,9 +20,13 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
+import javassist.LoaderClassPath;
 import javassist.NotFoundException;
-import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.exception.ObjectProviderException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author James Carman
@@ -33,31 +37,42 @@ class JavassistUtils
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
     private static int classNumber = 0;
-    private static final ClassPool classPool = ClassPool.getDefault();
-
+    private static final ClassPool classPool = new ClassPool();
+    static
+    {
+        classPool.appendClassPath( new LoaderClassPath( ClassLoader.getSystemClassLoader() ) );
+    }
+    private static final Set classLoaders = new HashSet();
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static void addField( Class fieldType, String fieldName, CtClass enclosingClass ) throws
-                                                                                             CannotCompileException
+    public static void addField( Class fieldType, String fieldName, CtClass enclosingClass ) throws                                                                                        CannotCompileException
     {
         enclosingClass.addField( new CtField( resolve( fieldType ), fieldName, enclosingClass ) );
     }
 
     public static CtClass resolve( Class clazz )
     {
-        try
+        synchronized( classLoaders )
         {
-            return classPool.get( ProxyUtils.getJavaClassName( clazz ) );
-        }
-        catch( NotFoundException e )
-        {
-            throw new ObjectProviderException(
-                    "Unable to find class " + clazz.getName() + " in default Javassist class pool.", e );
+            try
+            {
+                final ClassLoader loader = clazz.getClassLoader();
+                if( loader != null && !classLoaders.contains( loader ) )
+                {
+                    classLoaders.add( loader );
+                    classPool.appendClassPath( new LoaderClassPath( loader ) );
+                }
+                return classPool.get( ProxyUtils.getJavaClassName( clazz ) );
+            }
+            catch( NotFoundException e )
+            {
+                throw new ObjectProviderException(
+                        "Unable to find class " + clazz.getName() + " in default Javassist class pool.", e );
+            }
         }
     }
 
@@ -69,7 +84,7 @@ class JavassistUtils
             ctClass.addInterface( resolve( proxyInterface ) );
         }
     }
-   
+
     public static CtClass createClass( Class superclass )
     {
         return createClass( DEFAULT_BASE_NAME, superclass );
