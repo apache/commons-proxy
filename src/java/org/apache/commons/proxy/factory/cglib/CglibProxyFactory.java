@@ -16,9 +16,12 @@
  */
 package org.apache.commons.proxy.factory.cglib;
 
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodProxy;
+import net.sf.cglib.proxy.NoOp;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
@@ -26,22 +29,22 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * A <a href="http://cglib.sourceforge.net/">CGLIB</a>-based {@link org.apache.commons.proxy.ProxyFactory}
  * implementation.
+ * <p/>
+ * <p/>
+ * <b>Dependencies</b>: <ul> <li>CGLIB version 2.0.2 or greater</li> </ul> </p>
  *
- * <p>
- * <b>Dependencies</b>:
- * <ul>
- *   <li>CGLIB version 2.0.2 or greater</li>
- * </ul>
- * </p>
  * @author James Carman
  * @version 1.0
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
+    private static CallbackFilter callbackFilter = new PublicCallbackFilter();
+
 //----------------------------------------------------------------------------------------------------------------------
 // ProxyFactory Implementation
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,8 +56,17 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( toInterfaces( proxyClasses ) );
         enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallback( new ObjectProviderDispatcher( targetProvider ) );
+        enhancer.setCallbackFilter( callbackFilter );
+        enhancer.setCallbacks( new Callback[]{ new ObjectProviderDispatcher( targetProvider ), NoOp.INSTANCE } );
         return enhancer.create();
+    }
+
+    private static class PublicCallbackFilter implements CallbackFilter
+    {
+        public int accept( Method method )
+        {
+            return Modifier.isPublic( method.getModifiers() ) ? 0 : 1;
+        }
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
@@ -64,18 +76,20 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( toInterfaces( proxyClasses ) );
         enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallback( new InterceptorBridge( target, interceptor ) );
+        enhancer.setCallbackFilter( callbackFilter );
+        enhancer.setCallbacks( new Callback[]{ new InterceptorBridge( target, interceptor ), NoOp.INSTANCE } );
         return enhancer.create();
     }
 
     public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
-                                                Class[] proxyClasses )
+                                      Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader( classLoader );
         enhancer.setInterfaces( toInterfaces( proxyClasses ) );
         enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallback( new InvokerBridge( invoker ) );
+        enhancer.setCallbackFilter( callbackFilter );
+        enhancer.setCallbacks( new Callback[]{ new InvokerBridge( invoker ), NoOp.INSTANCE } );
         return enhancer.create();
     }
 
