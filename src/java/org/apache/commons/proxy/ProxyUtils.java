@@ -32,7 +32,6 @@ public class ProxyUtils
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-    public static final String PROXY_FACTORY_PROPERTY = "commons-proxy.factory";
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
 
