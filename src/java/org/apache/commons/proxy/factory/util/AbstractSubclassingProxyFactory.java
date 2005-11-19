@@ -16,6 +16,7 @@
  */
 package org.apache.commons.proxy.factory.util;
 
+import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 
 import java.lang.reflect.Constructor;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author James Carman
  * @version 1.0
  */
-public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFactory
+public abstract class AbstractSubclassingProxyFactory extends ProxyFactory
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
