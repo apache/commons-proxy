@@ -18,12 +18,33 @@ package org.apache.commons.proxy.provider;
 import junit.framework.TestCase;
 import org.apache.commons.proxy.provider.cache.SimpleCache;
 import org.apache.commons.proxy.provider.cache.ThreadLocalCache;
+import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
+import org.apache.commons.proxy.provider.cache.CacheEvictionEvent;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import EDU.oswego.cs.dl.util.concurrent.CountDown;
 
 public class TestCachedProvider extends TestCase
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void testWithEvictionListener()
+    {
+        final SimpleCache cache = new SimpleCache();
+        EchoImpl echo = new EchoImpl();
+        final CountingProvider counter = new CountingProvider( new ConstantProvider( echo ) );
+                final CachedProvider provider = new CachedProvider( counter );
+        provider.setCache( cache );
+        final CacheEvictionTester tester = new CacheEvictionTester();
+        provider.setEvictionListener( tester );
+        provider.getObject();
+        cache.clearCache();
+        assertNotNull( tester.event );
+        assertEquals( echo, tester.event.getEvictedObject() );
+    }
+
     public void testWithSimpleCache()
     {
         final CountingProvider counter = new CountingProvider( new ConstantProvider( new EchoImpl() ) );
@@ -57,5 +78,19 @@ public class TestCachedProvider extends TestCase
         }
         latch.acquire();
         assertEquals( 10, counter.getCount() );
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Inner Classes
+//----------------------------------------------------------------------------------------------------------------------
+
+    private static class CacheEvictionTester implements CacheEvictionListener
+    {
+        private CacheEvictionEvent event;
+
+        public void objectEvicted( CacheEvictionEvent e )
+        {
+            event = e;
+        }
     }
 }

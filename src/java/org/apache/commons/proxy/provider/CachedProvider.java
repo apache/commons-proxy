@@ -18,10 +18,11 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.provider.cache.Cache;
+import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
 
 /**
  * Uses a {@link Cache} to store its target object which is provided by an <code>inner</code> object provider.
- * 
+ *
  * @author James Carman
  * @version 1.0
  */
@@ -31,8 +32,8 @@ public class CachedProvider extends ProviderDecorator
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     private final Object cacheKey = new Object();
+    private CacheEvictionListener evictionListener;
     private Cache cache;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -54,7 +55,14 @@ public class CachedProvider extends ProviderDecorator
         if( object == null )
         {
             object = super.getObject();
-            cache.storeObject( cacheKey, object );
+            if( evictionListener == null )
+            {
+                cache.storeObject( cacheKey, object );
+            }
+            else
+            {
+                cache.storeObject( cacheKey, object, evictionListener );
+            }
         }
         return object;
     }
@@ -62,6 +70,11 @@ public class CachedProvider extends ProviderDecorator
 //----------------------------------------------------------------------------------------------------------------------
 // Getter/Setter Methods
 //----------------------------------------------------------------------------------------------------------------------
+
+    public void setEvictionListener( CacheEvictionListener evictionListener )
+    {
+        this.evictionListener = evictionListener;
+    }
 
     public void setCache( Cache cache )
     {
