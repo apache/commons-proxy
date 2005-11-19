@@ -43,6 +43,10 @@ import java.lang.reflect.Modifier;
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static CallbackFilter callbackFilter = new PublicCallbackFilter();
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -59,14 +63,6 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setCallbackFilter( callbackFilter );
         enhancer.setCallbacks( new Callback[]{ new ObjectProviderDispatcher( targetProvider ), NoOp.INSTANCE } );
         return enhancer.create();
-    }
-
-    private static class PublicCallbackFilter implements CallbackFilter
-    {
-        public int accept( Method method )
-        {
-            return Modifier.isPublic( method.getModifiers() ) ? 0 : 1;
-        }
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
@@ -96,6 +92,14 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 //----------------------------------------------------------------------------------------------------------------------
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
+
+    private static class PublicCallbackFilter implements CallbackFilter
+    {
+        public int accept( Method method )
+        {
+            return Modifier.isPublic( method.getModifiers() ) ? 0 : 1;
+        }
+    }
 
     private class InvokerBridge implements net.sf.cglib.proxy.InvocationHandler
     {
