@@ -40,16 +40,19 @@ class JavassistUtils
     public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
     private static int classNumber = 0;
     private static final ClassPool classPool = new ClassPool();
+
     static
     {
         classPool.appendClassPath( new LoaderClassPath( ClassLoader.getSystemClassLoader() ) );
     }
+
     private static final Set classLoaders = new HashSet();
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static void addField( Class fieldType, String fieldName, CtClass enclosingClass ) throws                                                                                        CannotCompileException
+    public static void addField( Class fieldType, String fieldName, CtClass enclosingClass )
+            throws CannotCompileException
     {
         enclosingClass.addField( new CtField( resolve( fieldType ), fieldName, enclosingClass ) );
     }
