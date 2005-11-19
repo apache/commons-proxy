@@ -35,9 +35,9 @@
     <siteAddress>cvs.apache.org</siteAddress>
     <siteDirectory>/www/jakarta.apache.org/commons/sandbox/proxy/</siteDirectory>
     <repository>
-        <connection>scm:svn:http://svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk</connection>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk</connection>
         <developerConnection>
-            scm:svn:https://svn.apache.org:repos/asf/jakarta/commons/sandbox/proxy:trunk
+            scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk
         </developerConnection>
         <url>http://svn.apache.org/viewcvs.cgi/jakarta/commons/sandbox/proxy/trunk/</url>
     </repository>
