@@ -16,7 +16,6 @@
  */
 package org.apache.commons.proxy;
 
-import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.invoker.NullInvoker;
 
 import java.util.LinkedList;
@@ -125,81 +124,6 @@ public class ProxyUtils
             return getJavaClassName( clazz.getComponentType() ) + "[]";
         }
         return clazz.getName();
-    }
-
-    /**
-     * Returns an appropriate {@link ProxyFactory} implementation for the current environment. The implementation class
-     * search order is as follows: <ul> <li>Try to use the type indicated by the system property
-     * "commons-proxy.factory"</li> <li>Try to use
-     * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
-     * <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li> <li>Default to {@link
-     * org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li> </ul>
-     *
-     * @param classLoader the class loader to use to instantiate the proxy factory
-     * @return an appropriate {@link ProxyFactory} implementation for the current environment
-     */
-    public static ProxyFactory getProxyFactory( ClassLoader classLoader )
-    {
-        final String[] classNames = new String[]{ System.getProperty( PROXY_FACTORY_PROPERTY ),
-                "org.apache.commons.proxy.factory.javassist.JavassistProxyFactory",
-                "org.apache.commons.proxy.factory.cglib.CglibProxyFactory",
-                "org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory" };
-        for( int i = 0; i < classNames.length; i++ )
-        {
-            final String className = classNames[i];
-            final ProxyFactory factory = instantiateProxyFactory( className, classLoader );
-            if( factory != null )
-            {
-                return factory;
-            }
-        }
-        throw new ProxyFactoryException( "Unable to find a suitable proxy factory implementation class." );
-    }
-
-    /**
-     * Returns an appropriate {@link ProxyFactory} implementation for the current environment. The implementation class
-     * search order is as follows: <ul> <li>Try to the type indicated by the system property
-     * "commons-proxy.factory"</li> <li>Try to use
-     * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory}</li>
-     * <li>Try to use {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory}</li> <li>Default to {@link
-     * org.apache.commons.proxy.factory.reflect.ReflectionProxyFactory} (should always be available)</li> </ul>
-     * <p/>
-     * <b>Note</b>: This implementation uses the current thread's context class loader!
-     *
-     * @return an appropriate {@link ProxyFactory} implementation for the current environment
-     */
-    public static ProxyFactory getProxyFactory()
-    {
-        return getProxyFactory( Thread.currentThread().getContextClassLoader() );
-    }
-
-    private static ProxyFactory instantiateProxyFactory( String className, ClassLoader classLoader )
-    {
-        try
-        {
-            if( className == null )
-            {
-                return null;
-            }
-            Class proxyFactoryClass = classLoader.loadClass( className );
-            if( !ProxyFactory.class.isAssignableFrom( proxyFactoryClass ) )
-            {
-                return null;
-            }
-            return ( ProxyFactory ) proxyFactoryClass.newInstance();
-        }
-        catch( IllegalAccessException e )
-        {
-            return null;
-        }
-        catch( InstantiationException e )
-        {
-            return null;
-        }
-        catch( ClassNotFoundException e )
-        {
-            return null;
-        }
     }
 }
 

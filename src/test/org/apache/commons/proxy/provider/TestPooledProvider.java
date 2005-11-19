@@ -18,13 +18,13 @@ package org.apache.commons.proxy.provider;
 import EDU.oswego.cs.dl.util.concurrent.CountDown;
 import junit.framework.TestCase;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.provider.cache.SimpleCache;
 import org.apache.commons.proxy.provider.cache.ThreadLocalCache;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.ProxyUtils;
-import org.apache.commons.proxy.exception.ObjectProviderException;
 
 public class TestPooledProvider extends TestCase
 {
@@ -91,7 +91,7 @@ public class TestPooledProvider extends TestCase
                 final SimpleCache cache = new SimpleCache();
                 provider.setCache( cache );
 
-        final Echo echo = ( Echo )ProxyUtils.getProxyFactory().createDelegatorProxy( provider, new Class[] { Echo.class } );
+        final Echo echo = ( Echo )new JavassistProxyFactory().createDelegatorProxy( provider, new Class[] { Echo.class } );
         try
         {
             echo.echoBack( "Hello." );

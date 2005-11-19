@@ -25,6 +25,7 @@ public class TestJaxRpcProvider extends TestCase
         provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
         provider.setServiceNamespaceUri( "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setPortNamespaceUri( "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
         final QuoteService quote = ( QuoteService )provider.getObject();
         assertNotNull( quote );

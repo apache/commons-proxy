@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.ProxyUtils;
+import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
@@ -27,7 +28,7 @@ public class TestMethodInterceptorAdapter extends TestCase
 {
     public void testMethodInterception()
     {
-        final Echo proxy = ( Echo ) ProxyUtils.getProxyFactory().createInterceptorProxy( new EchoImpl(),
+        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy( new EchoImpl(),
                                                                                          new MethodInterceptorAdapter( new SuffixMethodInterceptor(
                                                                                                  " suffix" ) ),
                                                                                          new Class[]{ Echo.class } );
@@ -38,7 +39,7 @@ public class TestMethodInterceptorAdapter extends TestCase
     {
         final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) ProxyUtils.getProxyFactory().createInterceptorProxy( target, new MethodInterceptorAdapter( tester ), new Class[] { Echo.class } );
+        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy( target, new MethodInterceptorAdapter( tester ), new Class[] { Echo.class } );
         proxy.echo();
         assertNotNull( tester.invocation.getArguments() );
         assertEquals( 0, tester.invocation.getArguments().length );

@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 package org.apache.commons.proxy.invoker;
-import junit.framework.*;
-import org.apache.commons.proxy.invoker.InvocationHandlerAdapter;
+import junit.framework.TestCase;
+import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.ProxyUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -28,7 +27,7 @@ public class TestInvocationHandlerAdapter extends TestCase
     public void testMethodInvocation() throws Exception
     {
         InvocationHandlerTester tester = new InvocationHandlerTester();
-        final Echo echo = ( Echo ) ProxyUtils.getProxyFactory().createInvokerProxy( new InvocationHandlerAdapter( tester ), new Class[] { Echo.class } );
+        final Echo echo = ( Echo ) new JavassistProxyFactory().createInvokerProxy( new InvocationHandlerAdapter( tester ), new Class[] { Echo.class } );
         echo.echoBack( "hello" );
         assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
         assertSame( echo, tester.proxy );
