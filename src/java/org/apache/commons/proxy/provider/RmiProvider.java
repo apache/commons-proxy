@@ -41,7 +41,7 @@ public class RmiProvider implements ObjectProvider
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;
     private RMIClientSocketFactory clientSocketFactory;
-    private final String name;
+    private String name;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -49,28 +49,28 @@ public class RmiProvider implements ObjectProvider
 
     public RmiProvider( String name )
     {
-        this.name = name;
+        setName( name );
     }
 
     public RmiProvider( String host, String name )
     {
-        this.host = host;
-        this.name = name;
+        setHost( host );
+        setName( name );
     }
 
     public RmiProvider( String host, int port, String name )
     {
-        this.host = host;
-        this.name = name;
-        this.port = port;
+        setHost( host );
+        setName( name );
+        setPort( port );
     }
 
     public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name )
     {
-        this.host = host;
-        this.port = port;
-        this.clientSocketFactory = clientSocketFactory;
-        this.name = name;
+        setHost( host );
+        setPort( port );
+        setClientSocketFactory( clientSocketFactory );
+        setName( name );
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -104,6 +104,11 @@ public class RmiProvider implements ObjectProvider
 //----------------------------------------------------------------------------------------------------------------------
 // Getter/Setter Methods
 //----------------------------------------------------------------------------------------------------------------------
+
+    public void setName( String name )
+    {
+        this.name = name;
+    }
 
     public void setClientSocketFactory( RMIClientSocketFactory clientSocketFactory )
     {

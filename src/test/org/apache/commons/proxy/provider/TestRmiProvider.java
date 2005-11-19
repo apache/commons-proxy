@@ -18,20 +18,71 @@ package org.apache.commons.proxy.provider;
 import junit.framework.TestCase;
 import org.apache.commons.proxy.util.rmi.RmiEcho;
 import org.apache.commons.proxy.util.rmi.RmiEchoImpl;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
+import java.rmi.server.UnicastRemoteObject;
 
 public class TestRmiProvider extends TestCase
 {
-    RmiProvider rmiProvider;
+    private RmiEchoImpl implObject;
+    private Registry registry;
+
+    public void setUp() throws Exception
+    {
+        implObject = new RmiEchoImpl();
+        registry = LocateRegistry.createRegistry( Registry.REGISTRY_PORT );
+        registry.bind( "echo", implObject );
+    }
+
+    public void tearDown() throws Exception
+    {
+        registry.unbind( "echo" );
+        UnicastRemoteObject.unexportObject( implObject, true );
+        UnicastRemoteObject.unexportObject( registry, true );
+    }
 
     public void testGetObject() throws Exception
     {
-        final Registry registry = LocateRegistry.createRegistry( Registry.REGISTRY_PORT );
-        registry.bind( "echo", new RmiEchoImpl() );
         final RmiProvider provider = new RmiProvider( "echo" );
-        final RmiEcho echo = ( RmiEcho )provider.getObject();
+        final RmiEcho echo = ( RmiEcho ) provider.getObject();
+        assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
+    }
+
+    public void testGetObjectWithInvalidName()
+    {
+        final RmiProvider provider = new RmiProvider( "bogus" );
+        try
+        {
+            final RmiEcho echo = ( RmiEcho ) provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testGetObjectWithHost() throws Exception
+    {
+        final RmiProvider provider = new RmiProvider( "localhost", "echo" );
+        final RmiEcho echo = ( RmiEcho ) provider.getObject();
+        assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
+    }
+
+    public void testGetObjectWithPortAndHost() throws Exception
+    {
+        final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT, "echo" );
+        final RmiEcho echo = ( RmiEcho ) provider.getObject();
+        assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
+    }
+
+    public void testGetObjectWithPortAndHostAndFactory() throws Exception
+    {
+        final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT,
+                                                      RMISocketFactory.getDefaultSocketFactory(), "echo" );
+        final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
 }
