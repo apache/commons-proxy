@@ -22,17 +22,26 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * A <code>ProxyFactory</code> essentially encapsulates a "proxying strategy".  All Commons Proxy proxies are created
- * using a <code>ProxyFactory</code>.  So, to change the proxying strategy, simply provide a different
- * <code>ProxyFactory</code> implementation.
+ * A <code>ProxyFactory</code> can be used to create three different &quot;flavors&quot; of proxy objects:
  *
+ * <ul>
+ *   <li>Delegator - the proxy will delegate to an object provided by an {@link ObjectProvider}</li>
+ *   <li>Interceptor - the proxy will pass each method invocation through an {@link Interceptor}</li>
+ *   <li>Invoker - the proxy will allow an {@link Invoker} to handle all method invocations</li>
+ * </ul>
+ *
+ * <p>
+ * Originally, the ProxyFactory class was an interface.  However, to allow for future changes to the
+ * class without breaking binary or semantic compatibility, it has been changed to a concrete class.
+ *
+ * </p>
  * <p>
  * <b>Note</b>: This class uses Java reflection.  For more efficient proxies, try using either
  * {@link org.apache.commons.proxy.factory.cglib.CglibProxyFactory CglibProxyFactory} or
- * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory JavassistProxyFactory}.
- * 
+ * {@link org.apache.commons.proxy.factory.javassist.JavassistProxyFactory JavassistProxyFactory} instead.
+ * </p>
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ProxyFactory
 {
