@@ -14,8 +14,12 @@
  *  limitations under the License.
  */
 package org.apache.commons.proxy.provider;
+
 import junit.framework.TestCase;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.util.QuoteService;
+
+import java.net.MalformedURLException;
 
 public class TestJaxRpcProvider extends TestCase
 {
@@ -23,11 +27,44 @@ public class TestJaxRpcProvider extends TestCase
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
         provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceNamespaceUri( "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setServiceNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
-        provider.setPortNamespaceUri( "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setServicePrefix( "" );
+        provider.setPortNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
-        final QuoteService quote = ( QuoteService )provider.getObject();
+        provider.setPortPrefix( "" );
+        final QuoteService quote = ( QuoteService ) provider.getObject();
         assertNotNull( quote );
+    }
+
+    public void testGetObjectWithoutPrefix() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setServiceNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setPortNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        final QuoteService quote = ( QuoteService ) provider.getObject();
+        assertNotNull( quote );
+    }
+
+    public void testGetObjectWithInvalidUrl() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "yadda yadda yadda" );
+        try
+        {
+            final QuoteService quote = ( QuoteService ) provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+            assertTrue( e.getCause() instanceof MalformedURLException );
+        }
     }
 }
