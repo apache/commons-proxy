@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * A <code>ProxyFactory</code> can be used to create three different &quot;flavors&quot; of proxy objects:
+ * A <code>ProxyFactory</code> can be used to create three different &quot;flavors&quot; of proxy objects.
  *
  * <ul>
  *   <li>Delegator - the proxy will delegate to an object provided by an {@link ObjectProvider}</li>
