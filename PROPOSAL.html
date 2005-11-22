@@ -37,11 +37,15 @@
 <h3>(1) Scope of the Package</h3>
 
 <p>
-    The package shall create and maintain a suite of utility classes for creating proxy objects written in the Java
-    language to be distributed under the ASF license. The package will include many different "object provider"
-    implementations.  The package will also serve as a repository for many useful interceptor implementations. The
-    package will provide multiple "proxy factory" implementations, supporting different proxying technologies (JDK
-    proxies, CGLIB, and Javassist initially).
+    The package shall create and maintain a suite of utility classes for creating dynamic proxy objects written in the
+    Java language to be distributed under the ASF license.  The package will include many different "core object
+    provider" implementations supporting many existing remoting technologies (EJB, Hessian, Burlap, JAX-RPC, Apache
+    XML-RPC, RMI, etc.) as well as many other "in-vm" implementations (bean instantiation, cloning, constant, etc.).
+    The package will also provide "decorator object providers" which add functionality to the object providers they wrap
+    such as pooling, singleton, caching, etc.  The package will also serve as a repository for many useful interceptor
+    implementations which support such features as logging, asynchronous invocation, etc.  The package will provide
+    multiple "proxy factory" implementations, supporting different proxying technologies (JDK proxies, CGLIB, Javassist,
+    etc.).
 </p>
 
 <h3>(1.5) Interaction With Other Packages</h3>
