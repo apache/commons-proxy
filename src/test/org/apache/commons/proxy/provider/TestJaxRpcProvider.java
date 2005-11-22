@@ -39,6 +39,45 @@ public class TestJaxRpcProvider extends TestCase
         assertNotNull( quote );
     }
 
+    public void testGetObjectWithUnspecifiedPort() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setServiceNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setServicePrefix( "" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testGetObjectWithoutWsdl() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setServiceNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setServicePrefix( "" );
+        provider.setPortNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        provider.setPortPrefix( "" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
     public void testGetObjectWithoutPrefix() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
@@ -53,13 +92,61 @@ public class TestJaxRpcProvider extends TestCase
         assertNotNull( quote );
     }
 
+    public void testGetObjectWithoutPrefixOrNamespaceUri() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testGetObjectWithJustWsdl()
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testGetObjectWithoutPrefixOrLocalPart() throws Exception
+    {
+        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
+        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setServiceNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setPortNamespaceUri(
+                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
     public void testGetObjectWithInvalidUrl() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
         provider.setWsdlUrl( "yadda yadda yadda" );
         try
         {
-            final QuoteService quote = ( QuoteService ) provider.getObject();
+            provider.getObject();
             fail();
         }
         catch( ObjectProviderException e )
