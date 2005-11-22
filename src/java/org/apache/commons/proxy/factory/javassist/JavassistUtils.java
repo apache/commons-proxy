@@ -32,7 +32,7 @@ import java.util.Set;
  * @author James Carman
  * @version 1.0
  */
-class JavassistUtils
+public class JavassistUtils
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
