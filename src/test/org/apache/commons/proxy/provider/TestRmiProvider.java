@@ -16,10 +16,12 @@
 package org.apache.commons.proxy.provider;
 
 import junit.framework.TestCase;
+import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.util.rmi.RmiEcho;
 import org.apache.commons.proxy.util.rmi.RmiEchoImpl;
-import org.apache.commons.proxy.exception.ObjectProviderException;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
@@ -39,9 +41,33 @@ public class TestRmiProvider extends TestCase
 
     public void tearDown() throws Exception
     {
+        if( registry != null )
+        {
+            tearDownRegistry();
+        }
+    }
+
+    private void tearDownRegistry()
+            throws RemoteException, NotBoundException
+    {
         registry.unbind( "echo" );
         UnicastRemoteObject.unexportObject( implObject, true );
         UnicastRemoteObject.unexportObject( registry, true );
+        registry = null;
+    }
+
+    public void testWithNoRegistry() throws Exception
+    {
+        tearDownRegistry();
+        final RmiProvider provider = new RmiProvider( "echo" );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
     }
 
     public void testGetObject() throws Exception
@@ -56,7 +82,7 @@ public class TestRmiProvider extends TestCase
         final RmiProvider provider = new RmiProvider( "bogus" );
         try
         {
-            final RmiEcho echo = ( RmiEcho ) provider.getObject();
+            provider.getObject();
             fail();
         }
         catch( ObjectProviderException e )

@@ -19,7 +19,6 @@ package org.apache.commons.proxy.provider;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
-import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -89,10 +88,6 @@ public class RmiProvider implements ObjectProvider
         {
             throw new ObjectProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".",
                                                e );
-        }
-        catch( AccessException e )
-        {
-            throw new ObjectProviderException( "Registry at " + host + ":" + port + " did not allow lookup.", e );
         }
         catch( RemoteException e )
         {
