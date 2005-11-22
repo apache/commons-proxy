@@ -47,14 +47,8 @@ public class TestJaxRpcProvider extends TestCase
                 "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
         provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
         provider.setServicePrefix( "" );
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        final QuoteService quote = ( QuoteService ) provider.getObject();
+        assertNotNull( quote );
     }
 
     public void testGetObjectWithoutWsdl() throws Exception
