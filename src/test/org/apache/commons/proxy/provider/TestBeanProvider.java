@@ -20,11 +20,25 @@ import org.apache.commons.proxy.exception.ObjectProviderException;
 
 public class TestBeanProvider extends TestCase
 {
+    public void testWithNullBeanClass()
+    {
+        try
+        {
+            final BeanProvider p = new BeanProvider();
+            p.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
     public void testAbstractBeanClass()
     {
         try
         {
-            new BeanProvider( Number.class ).getObject();
+            final BeanProvider p = new BeanProvider();
+            p.setBeanClass( Number.class );
+            p.getObject();
             fail();
         }
         catch( ObjectProviderException e )

@@ -46,6 +46,10 @@ public class RmiProvider implements ObjectProvider
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
+    public RmiProvider()
+    {
+    }
+
     public RmiProvider( String name )
     {
         setName( name );

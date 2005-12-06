@@ -44,7 +44,7 @@ public class JaxRpcProvider implements ObjectProvider
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Class serviceInterface;
+    private Class serviceInterface;
     private String wsdlUrl;
     private String serviceNamespaceUri;
     private String serviceLocalPart;
@@ -56,6 +56,10 @@ public class JaxRpcProvider implements ObjectProvider
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
+
+    public JaxRpcProvider()
+    {
+    }
 
     public JaxRpcProvider( Class serviceInterface )
     {
@@ -104,6 +108,11 @@ public class JaxRpcProvider implements ObjectProvider
     public void setPortPrefix( String portPrefix )
     {
         this.portPrefix = portPrefix;
+    }
+
+    public void setServiceInterface( Class serviceInterface )
+    {
+        this.serviceInterface = serviceInterface;
     }
 
     public void setServiceLocalPart( String serviceLocalPart )

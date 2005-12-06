@@ -33,4 +33,19 @@ public class TestBurlapProvider extends TestCase
         {
         }
     }
+
+    public void testWithMalformedUrlBean()
+    {
+        try
+        {
+            final BurlapProvider p = new BurlapProvider();
+            p.setServiceInterface( Echo.class );
+            p.setUrl( "a malformed URL" );
+            p.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
 }

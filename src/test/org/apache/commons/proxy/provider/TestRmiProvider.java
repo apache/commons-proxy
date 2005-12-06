@@ -29,10 +29,18 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class TestRmiProvider extends TestCase
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private RmiEchoImpl implObject;
     private Registry registry;
 
-    public void setUp() throws Exception
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setUpRegistry() throws Exception
     {
         implObject = new RmiEchoImpl();
         registry = LocateRegistry.createRegistry( Registry.REGISTRY_PORT );
@@ -47,19 +55,10 @@ public class TestRmiProvider extends TestCase
         }
     }
 
-    private void tearDownRegistry()
-            throws RemoteException, NotBoundException
-    {
-        registry.unbind( "echo" );
-        UnicastRemoteObject.unexportObject( implObject, true );
-        UnicastRemoteObject.unexportObject( registry, true );
-        registry = null;
-    }
-
     public void testWithNoRegistry() throws Exception
     {
-        tearDownRegistry();
-        final RmiProvider provider = new RmiProvider( "echo" );
+        final RmiProvider provider = new RmiProvider();
+        provider.setName( "echo" );
         try
         {
             provider.getObject();
@@ -69,16 +68,35 @@ public class TestRmiProvider extends TestCase
         {
         }
     }
+    
+    private void tearDownRegistry()
+            throws RemoteException, NotBoundException
+    {
+        registry.unbind( "echo" );
+        UnicastRemoteObject.unexportObject( implObject, true );
+        UnicastRemoteObject.unexportObject( registry, true );
+        registry = null;
+    }
 
     public void testGetObject() throws Exception
     {
+        setUpRegistry();
         final RmiProvider provider = new RmiProvider( "echo" );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
 
-    public void testGetObjectWithInvalidName()
+    public void testGetObjectWithHost() throws Exception
     {
+        setUpRegistry();
+        final RmiProvider provider = new RmiProvider( "localhost", "echo" );
+        final RmiEcho echo = ( RmiEcho ) provider.getObject();
+        assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
+    }
+
+    public void testGetObjectWithInvalidName() throws Exception
+    {
+        setUpRegistry();
         final RmiProvider provider = new RmiProvider( "bogus" );
         try
         {
@@ -90,15 +108,9 @@ public class TestRmiProvider extends TestCase
         }
     }
 
-    public void testGetObjectWithHost() throws Exception
-    {
-        final RmiProvider provider = new RmiProvider( "localhost", "echo" );
-        final RmiEcho echo = ( RmiEcho ) provider.getObject();
-        assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
-    }
-
     public void testGetObjectWithPortAndHost() throws Exception
     {
+        setUpRegistry();
         final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT, "echo" );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
@@ -106,9 +118,12 @@ public class TestRmiProvider extends TestCase
 
     public void testGetObjectWithPortAndHostAndFactory() throws Exception
     {
+        setUpRegistry();
         final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT,
                                                       RMISocketFactory.getDefaultSocketFactory(), "echo" );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
+
+
 }

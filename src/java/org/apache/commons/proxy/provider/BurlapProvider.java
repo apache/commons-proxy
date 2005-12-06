@@ -40,12 +40,16 @@ public class BurlapProvider implements ObjectProvider
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Class serviceInterface;
-    private final String url;
+    private Class serviceInterface;
+    private String url;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
+
+    public BurlapProvider()
+    {
+    }
 
     public BurlapProvider( Class serviceInterface, String url )
     {
@@ -67,6 +71,20 @@ public class BurlapProvider implements ObjectProvider
         {
             throw new ObjectProviderException( "Invalid url given.", e );
         }
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setServiceInterface( Class serviceInterface )
+    {
+        this.serviceInterface = serviceInterface;
+    }
+
+    public void setUrl( String url )
+    {
+        this.url = url;
     }
 }
 

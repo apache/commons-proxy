@@ -23,17 +23,22 @@ import java.net.MalformedURLException;
 
 public class TestJaxRpcProvider extends TestCase
 {
+    private static final String WSDL_URL = "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl";
+    private static final String NAMESPACE_URI =
+            "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/";
+    private static final String SERVICE_LOCAL_PART = "net.xmethods.services.stockquote.StockQuoteService";
+    private static final String PORT_LOCAL_PART = "net.xmethods.services.stockquote.StockQuotePort";
+
     public void testGetObject() throws Exception
     {
-        final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        final JaxRpcProvider provider = new JaxRpcProvider();
+        provider.setServiceInterface( QuoteService.class );
+        provider.setWsdlUrl( WSDL_URL );
+        provider.setServiceNamespaceUri( NAMESPACE_URI );
+        provider.setServiceLocalPart( SERVICE_LOCAL_PART );
         provider.setServicePrefix( "" );
-        provider.setPortNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        provider.setPortNamespaceUri( NAMESPACE_URI );
+        provider.setPortLocalPart( PORT_LOCAL_PART );
         provider.setPortPrefix( "" );
         final QuoteService quote = ( QuoteService ) provider.getObject();
         assertNotNull( quote );
@@ -42,10 +47,9 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithUnspecifiedPort() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setWsdlUrl( WSDL_URL );
+        provider.setServiceNamespaceUri( NAMESPACE_URI );
+        provider.setServiceLocalPart( SERVICE_LOCAL_PART );
         provider.setServicePrefix( "" );
         final QuoteService quote = ( QuoteService ) provider.getObject();
         assertNotNull( quote );
@@ -54,13 +58,11 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithoutWsdl() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setServiceNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
+        provider.setServiceNamespaceUri( NAMESPACE_URI );
+        provider.setServiceLocalPart( SERVICE_LOCAL_PART );
         provider.setServicePrefix( "" );
-        provider.setPortNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        provider.setPortNamespaceUri( NAMESPACE_URI );
+        provider.setPortLocalPart( PORT_LOCAL_PART );
         provider.setPortPrefix( "" );
         try
         {
@@ -75,13 +77,11 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithoutPrefix() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
-        provider.setPortNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        provider.setWsdlUrl( WSDL_URL );
+        provider.setServiceNamespaceUri( NAMESPACE_URI );
+        provider.setServiceLocalPart( SERVICE_LOCAL_PART );
+        provider.setPortNamespaceUri( NAMESPACE_URI );
+        provider.setPortLocalPart( PORT_LOCAL_PART );
         final QuoteService quote = ( QuoteService ) provider.getObject();
         assertNotNull( quote );
     }
@@ -89,9 +89,9 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithoutPrefixOrNamespaceUri() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceLocalPart( "net.xmethods.services.stockquote.StockQuoteService" );
-        provider.setPortLocalPart( "net.xmethods.services.stockquote.StockQuotePort" );
+        provider.setWsdlUrl( WSDL_URL );
+        provider.setServiceLocalPart( SERVICE_LOCAL_PART );
+        provider.setPortLocalPart( PORT_LOCAL_PART );
         try
         {
             provider.getObject();
@@ -105,7 +105,7 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithJustWsdl()
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
+        provider.setWsdlUrl( WSDL_URL );
         try
         {
             provider.getObject();
@@ -119,11 +119,9 @@ public class TestJaxRpcProvider extends TestCase
     public void testGetObjectWithoutPrefixOrLocalPart() throws Exception
     {
         final JaxRpcProvider provider = new JaxRpcProvider( QuoteService.class );
-        provider.setWsdlUrl( "http://services.xmethods.net/soap/urn:xmethods-delayed-quotes.wsdl" );
-        provider.setServiceNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
-        provider.setPortNamespaceUri(
-                "http://www.themindelectric.com/wsdl/net.xmethods.services.stockquote.StockQuote/" );
+        provider.setWsdlUrl( WSDL_URL );
+        provider.setServiceNamespaceUri( NAMESPACE_URI );
+        provider.setPortNamespaceUri( NAMESPACE_URI );
         try
         {
             provider.getObject();

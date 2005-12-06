@@ -26,6 +26,21 @@ public class TestHessianProvider extends TestCase
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    public void testWithMalformedUrlBean()
+    {
+        try
+        {
+            final HessianProvider p = new HessianProvider();
+            p.setServiceInterface( Echo.class );
+            p.setUrl( "a malformed URL" );
+            p.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
     public void testWithMalformedUrl()
     {
         try

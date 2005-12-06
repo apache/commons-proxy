@@ -31,11 +31,15 @@ public class BeanProvider implements ObjectProvider
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Class beanClass;
+    private Class beanClass;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
+
+    public BeanProvider()
+    {
+    }
 
     public BeanProvider( Class beanClass )
     {
@@ -50,6 +54,10 @@ public class BeanProvider implements ObjectProvider
     {
         try
         {
+            if( beanClass == null )
+            {
+                throw new ObjectProviderException( "No bean class provided." );
+            }
             return beanClass.newInstance();
         }
         catch( InstantiationException e )
@@ -61,6 +69,15 @@ public class BeanProvider implements ObjectProvider
             throw new ObjectProviderException( "Constructor for class " + beanClass.getName() + " is not accessible.",
                                                e );
         }
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void setBeanClass( Class beanClass )
+    {
+        this.beanClass = beanClass;
     }
 }
 
