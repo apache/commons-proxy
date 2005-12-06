@@ -26,7 +26,7 @@ import org.apache.commons.proxy.Interceptor;
  * <code>MethodInterceptors</code>.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class InterceptorChain
 {

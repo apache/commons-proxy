@@ -22,7 +22,7 @@ import org.apache.commons.proxy.ObjectProvider;
  * Always returns the same object.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ConstantProvider implements ObjectProvider
 {

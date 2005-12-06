@@ -23,7 +23,7 @@ import java.util.WeakHashMap;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ProxyClassCache
 {

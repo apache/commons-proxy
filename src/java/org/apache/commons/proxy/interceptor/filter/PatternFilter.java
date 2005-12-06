@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
  * regex) pattern string.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class PatternFilter implements MethodFilter
 {

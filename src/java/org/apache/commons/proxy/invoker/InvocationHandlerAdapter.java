@@ -1,4 +1,4 @@
-/* $Id$
+/* $Id:InvocationHandlerAdapter.java 325897 2005-10-17 10:11:52 -0400 (Mon, 17 Oct 2005) jcarman $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationHandler;
  * {@link Invoker} interface.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class InvocationHandlerAdapter implements Invoker
 {

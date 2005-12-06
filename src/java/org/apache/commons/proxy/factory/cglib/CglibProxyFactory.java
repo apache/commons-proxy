@@ -39,7 +39,7 @@ import java.lang.reflect.Modifier;
  * <b>Dependencies</b>: <ul> <li>CGLIB version 2.0.2 or greater</li> </ul> </p>
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {

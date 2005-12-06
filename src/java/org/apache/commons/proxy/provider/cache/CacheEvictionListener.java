@@ -20,7 +20,7 @@ import java.util.EventListener;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface CacheEvictionListener extends EventListener
 {

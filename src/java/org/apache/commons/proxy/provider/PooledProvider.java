@@ -35,7 +35,7 @@ import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
  * </ul>
  * </p>
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class PooledProvider extends ProviderDecorator implements CacheEvictionListener
 {

@@ -25,7 +25,7 @@ import java.util.List;
  * Provides some helpful proxy utility methods.
  * 
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ProxyUtils
 {

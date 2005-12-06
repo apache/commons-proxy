@@ -23,7 +23,7 @@ import org.apache.commons.proxy.ObjectProvider;
  * provider on all subsequent invocations.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class SingletonProvider extends ProviderDecorator
 {

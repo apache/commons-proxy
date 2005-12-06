@@ -21,7 +21,7 @@ package org.apache.commons.proxy.exception;
  * there was a problem creating/finding the object.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ObjectProviderException extends RuntimeException
 {

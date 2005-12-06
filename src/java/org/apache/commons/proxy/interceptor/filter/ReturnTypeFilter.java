@@ -27,7 +27,7 @@ import java.util.Set;
 /**
  * Filters methods based on their return type.
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ReturnTypeFilter implements MethodFilter
 {

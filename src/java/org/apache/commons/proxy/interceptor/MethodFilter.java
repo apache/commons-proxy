@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
  * A <code>MethodFilter</code> determines whether or not a method is accepted.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface MethodFilter
 {

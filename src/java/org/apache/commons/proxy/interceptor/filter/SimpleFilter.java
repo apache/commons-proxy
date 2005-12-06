@@ -27,7 +27,7 @@ import java.util.Set;
  * A simple method filter implementation that merely returns true if the method's name is in a set of accepted names.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class SimpleFilter implements MethodFilter
 {

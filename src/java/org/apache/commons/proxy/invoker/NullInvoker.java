@@ -1,4 +1,4 @@
-/* $Id$
+/* $Id:NullInvoker.java 325897 2005-10-17 10:11:52 -0400 (Mon, 17 Oct 2005) jcarman $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -27,7 +27,7 @@ import java.util.Map;
  * useful for scenarios where the "null object" design pattern is needed.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class NullInvoker implements Invoker
 {

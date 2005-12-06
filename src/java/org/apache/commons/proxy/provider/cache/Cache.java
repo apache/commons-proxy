@@ -18,7 +18,7 @@ package org.apache.commons.proxy.provider.cache;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface Cache
 {

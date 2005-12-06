@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
  * Merely calls <code>clone()</code> (reflectively) on the given {@link Cloneable} object.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class CloningProvider implements ObjectProvider
 {

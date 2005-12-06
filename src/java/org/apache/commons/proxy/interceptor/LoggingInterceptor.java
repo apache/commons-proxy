@@ -33,7 +33,7 @@ import org.apache.commons.proxy.Invocation;
  * </ul>
  * </p>
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class LoggingInterceptor implements Interceptor
 {

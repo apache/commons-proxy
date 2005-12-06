@@ -20,7 +20,7 @@ import org.apache.commons.proxy.ObjectProvider;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ProviderUtils
 {

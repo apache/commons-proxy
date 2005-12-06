@@ -35,7 +35,7 @@ import org.apache.commons.proxy.Interceptor;
  * </ul>
  * </p>
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ExecutorInterceptor implements Interceptor
 {

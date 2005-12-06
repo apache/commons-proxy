@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class ThreadLocalCache extends AbstractCache
 {

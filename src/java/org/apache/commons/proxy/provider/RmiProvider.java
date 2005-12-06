@@ -29,7 +29,7 @@ import java.rmi.server.RMIClientSocketFactory;
  * Provides an object by looking it up in an RMI registry.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class RmiProvider implements ObjectProvider
 {

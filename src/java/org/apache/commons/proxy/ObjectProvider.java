@@ -20,7 +20,7 @@ package org.apache.commons.proxy;
  * Provides an object to a delegating proxy.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface ObjectProvider
 {

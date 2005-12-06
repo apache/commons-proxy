@@ -32,7 +32,7 @@ import java.util.Properties;
  * create() method.  This will work for both local and remote session beans.
  *
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class SessionBeanProvider implements ObjectProvider
 {

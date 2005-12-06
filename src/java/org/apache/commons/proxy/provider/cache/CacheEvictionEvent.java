@@ -20,7 +20,7 @@ import java.util.EventObject;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class CacheEvictionEvent extends EventObject
 {
