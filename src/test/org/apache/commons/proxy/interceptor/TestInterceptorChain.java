@@ -24,7 +24,7 @@ import org.apache.commons.proxy.util.SuffixInterceptor;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class TestInterceptorChain extends TestCase
 {

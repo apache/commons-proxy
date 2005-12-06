@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface Echo
 {

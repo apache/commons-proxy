@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public abstract class AbstractEcho implements Echo, Serializable
 {

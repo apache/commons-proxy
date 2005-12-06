@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public abstract class AbstractTestCase extends TestCase
 {

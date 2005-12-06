@@ -20,7 +20,7 @@ import java.rmi.RemoteException;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public interface QuoteService extends Remote
 {

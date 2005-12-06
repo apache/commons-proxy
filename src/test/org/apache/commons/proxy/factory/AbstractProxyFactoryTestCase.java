@@ -37,7 +37,7 @@ import java.util.TreeSet;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 {

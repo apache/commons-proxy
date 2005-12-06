@@ -23,7 +23,7 @@ import org.apache.commons.proxy.interceptor.MethodFilter;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class TestPatternFilter extends TestCase
 {

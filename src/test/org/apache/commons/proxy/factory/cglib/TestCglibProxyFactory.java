@@ -20,7 +20,7 @@ import org.apache.commons.proxy.factory.AbstractSubclassingProxyFactoryTestCase;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class TestCglibProxyFactory extends AbstractSubclassingProxyFactoryTestCase
 {

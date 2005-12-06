@@ -26,7 +26,7 @@ import java.util.LinkedList;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public class TestJavassistProxyFactory extends AbstractSubclassingProxyFactoryTestCase
 {

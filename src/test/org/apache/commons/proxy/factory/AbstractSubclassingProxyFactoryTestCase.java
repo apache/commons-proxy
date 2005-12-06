@@ -26,7 +26,7 @@ import org.apache.commons.proxy.util.EchoImpl;
 
 /**
  * @author James Carman
- * @version 1.0
+ * @since 1.0
  */
 public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractProxyFactoryTestCase
 {
