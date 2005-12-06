@@ -21,7 +21,7 @@
     <name>Commons Proxy</name>
     <groupId>commons-proxy</groupId>
     <artifactId>commons-proxy</artifactId>
-    <currentVersion>0.1</currentVersion>
+    <currentVersion>1.0</currentVersion>
     <organization>
         <name>Apache Software Foundation</name>
         <url>http://apache.org</url>
