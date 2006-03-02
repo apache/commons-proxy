@@ -55,7 +55,8 @@ public abstract class JavassistInvocation implements Invocation
         }
         else
         {
-            return "( ( " + ProxyUtils.getWrapperClass( type ).getName() + " )" + objectToCast + " )." + type.getName() + "Value()";
+            return "( ( " + ProxyUtils.getWrapperClass( type ).getName() + " )" + objectToCast + " )." +
+                   type.getName() + "Value()";
         }
     }
 
