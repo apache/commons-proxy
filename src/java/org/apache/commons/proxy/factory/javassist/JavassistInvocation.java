@@ -38,7 +38,6 @@ public abstract class JavassistInvocation implements Invocation
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
-
     private static WeakHashMap loaderToClassCache = new WeakHashMap();
     protected final Method method;
     protected final Object target;
@@ -47,6 +46,18 @@ public abstract class JavassistInvocation implements Invocation
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
+
+    private static String createCastExpression( Class type, String objectToCast )
+    {
+        if( !type.isPrimitive() )
+        {
+            return "( " + ProxyUtils.getJavaClassName( type ) + " )" + objectToCast;
+        }
+        else
+        {
+            return "( ( " + ProxyUtils.getWrapperClass( type ).getName() + " )" + objectToCast + " )." + type.getName() + "Value()";
+        }
+    }
 
     private static Class createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
@@ -57,7 +68,8 @@ public abstract class JavassistInvocation implements Invocation
                 "_invocation",
                 JavassistInvocation.class );
         final CtConstructor constructor = new CtConstructor(
-                JavassistUtils.resolve( new Class[]{Method.class, Object.class, Object[].class} ), ctClass );
+                JavassistUtils.resolve( new Class[]{ Method.class, Object.class, Object[].class } ),
+                ctClass );
         constructor.setBody( "{\n\tsuper($$);\n}" );
         ctClass.addConstructor( constructor );
         final CtMethod proceedMethod = new CtMethod( JavassistUtils.resolve( Object.class ), "proceed",
@@ -67,6 +79,12 @@ public abstract class JavassistInvocation implements Invocation
         if( !Void.TYPE.equals( interfaceMethod.getReturnType() ) )
         {
             proceedBody.append( "\treturn " );
+            if( interfaceMethod.getReturnType().isPrimitive() )
+            {
+                proceedBody.append( "new " );
+                proceedBody.append( ProxyUtils.getWrapperClass( interfaceMethod.getReturnType() ).getName() );
+                proceedBody.append( "( " );
+            }
         }
         else
         {
@@ -79,23 +97,28 @@ public abstract class JavassistInvocation implements Invocation
         proceedBody.append( "(" );
         for( int i = 0; i < argumentTypes.length; ++i )
         {
-            proceedBody.append( "(" );
-            proceedBody.append( ProxyUtils.getJavaClassName( argumentTypes[i] ) );
-            proceedBody.append( ")arguments[" );
-            proceedBody.append( i );
-            proceedBody.append( "]" );
+            final Class argumentType = argumentTypes[i];
+            proceedBody.append( createCastExpression( argumentType, "arguments[" + i + "]" ) );
             if( i != argumentTypes.length - 1 )
             {
                 proceedBody.append( ", " );
             }
         }
-        proceedBody.append( ");\n" );
+        if( !Void.TYPE.equals( interfaceMethod.getReturnType() ) && interfaceMethod.getReturnType().isPrimitive() )
+        {
+            proceedBody.append( ") );\n" );
+        }
+        else
+        {
+            proceedBody.append( ");\n" );
+        }
         if( Void.TYPE.equals( interfaceMethod.getReturnType() ) )
         {
             proceedBody.append( "\treturn null;\n" );
         }
         proceedBody.append( "}" );
-        proceedMethod.setBody( proceedBody.toString() );
+        final String body = proceedBody.toString();
+        proceedMethod.setBody( body );
         ctClass.addMethod( proceedMethod );
         invocationClass = ctClass.toClass( classLoader );
         return invocationClass;
@@ -103,7 +126,7 @@ public abstract class JavassistInvocation implements Invocation
 
     private static Map getClassCache( ClassLoader classLoader )
     {
-        Map cache = ( Map )loaderToClassCache.get( classLoader );
+        Map cache = ( Map ) loaderToClassCache.get( classLoader );
         if( cache == null )
         {
             cache = new HashMap();
@@ -112,12 +135,13 @@ public abstract class JavassistInvocation implements Invocation
         return cache;
     }
 
-    public synchronized static Class getMethodInvocationClass( ClassLoader classLoader, Method interfaceMethod )
+    public synchronized static Class getMethodInvocationClass( ClassLoader classLoader,
+                                                               Method interfaceMethod )
             throws CannotCompileException
     {
         final Map classCache = getClassCache( classLoader );
         final String key = toClassCacheKey( interfaceMethod );
-        final WeakReference invocationClassRef = ( WeakReference )classCache.get( key );
+        final WeakReference invocationClassRef = ( WeakReference ) classCache.get( key );
         Class invocationClass;
         if( invocationClassRef == null )
         {
@@ -128,7 +152,7 @@ public abstract class JavassistInvocation implements Invocation
         {
             synchronized( invocationClassRef )
             {
-                invocationClass = ( Class )invocationClassRef.get();
+                invocationClass = ( Class ) invocationClassRef.get();
                 if( invocationClass == null )
                 {
                     invocationClass = createInvocationClass( classLoader, interfaceMethod );

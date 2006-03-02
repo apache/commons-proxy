@@ -33,12 +33,9 @@ import java.lang.reflect.Method;
 /**
  * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link org.apache.commons.proxy.ProxyFactory}
  * implementation.
- * <p>
- *   <b>Dependencies</b>:
- * <ul>
- *   <li>Javassist version 3.0 or greater</li>
- * </ul>
- * </p>
+ * <p/>
+ * <b>Dependencies</b>: <ul> <li>Javassist version 3.0 or greater</li> </ul> </p>
+ *
  * @author James Carman
  * @since 1.0
  */
@@ -90,7 +87,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
-                                                Class[] proxyClasses )
+                                      Class[] proxyClasses )
     {
         try
         {
@@ -164,7 +161,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                 new Class[]{ Method[].class, Object.class, Interceptor.class } ),
                         proxyClass );
                 proxyConstructor
-                        .setBody( "{\n\tthis.methods = $1;\n\tthis.target = $2;\n\tthis.interceptor = $3; }" );
+                        .setBody(
+                                "{\n\tthis.methods = $1;\n\tthis.target = $2;\n\tthis.interceptor = $3; }" );
                 proxyClass.addConstructor( proxyConstructor );
                 for( int i = 0; i < methods.length; ++i )
                 {
@@ -178,6 +176,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                         "( methods[" + i + "], target, $args ) );\n }";
                     method.setBody( body );
                     proxyClass.addMethod( method );
+
                 }
                 return proxyClass.toClass( classLoader );
             }
@@ -210,9 +209,10 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                                             method.getName(),
                                                             JavassistUtils.resolve( method.getParameterTypes() ),
                                                             proxyClass );
-                    ctMethod.setBody( "{ return ( $r ) ( ( " + method.getDeclaringClass().getName() +
-                                      " )provider.getObject() )." +
-                                      method.getName() + "($$); }" );
+                    final String body = "{ return ( $r ) ( ( " + method.getDeclaringClass().getName() +
+                                        " )provider.getObject() )." +
+                                        method.getName() + "($$); }";
+                    ctMethod.setBody( body );
                     proxyClass.addMethod( ctMethod );
 
                 }

@@ -20,6 +20,8 @@ import org.apache.commons.proxy.invoker.NullInvoker;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Provides some helpful proxy utility methods.
@@ -123,6 +125,24 @@ public class ProxyUtils
             return getJavaClassName( clazz.getComponentType() ) + "[]";
         }
         return clazz.getName();
+    }
+
+    private static final Map wrapperClassMap = new HashMap();
+    static
+    {
+        wrapperClassMap.put( Integer.TYPE, Integer.class );
+        wrapperClassMap.put( Character.TYPE, Character.class );
+        wrapperClassMap.put( Boolean.TYPE, Boolean.class );
+        wrapperClassMap.put( Short.TYPE, Short.class );
+        wrapperClassMap.put( Long.TYPE, Long.class );
+        wrapperClassMap.put( Float.TYPE, Float.class );
+        wrapperClassMap.put( Double.TYPE, Double.class );
+        wrapperClassMap.put( Byte.TYPE, Byte.class );
+    }
+
+    public static Class getWrapperClass( Class primitiveType )
+    {
+        return ( Class )wrapperClassMap.get( primitiveType );
     }
 }
 

@@ -90,6 +90,13 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertEquals( "ab", echo.echoBack( "a", "b" ) );
     }
 
+    public void testBooleanInterceptorParameter()
+    {
+        final Echo echo = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new  InterceptorTester(), ECHO_ONLY );
+        assertFalse( echo.echoBack( false ) );
+        assertTrue( echo.echoBack( true ) );
+
+    }
     public void testPrimitiveParameter()
     {
         final Echo echo = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), ECHO_ONLY );
@@ -278,10 +285,10 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
         public Object intercept( Invocation methodInvocation ) throws Throwable
         {
-            this.arguments = methodInvocation.getArguments();
-            this.method = methodInvocation.getMethod();
-            this.proxy = methodInvocation.getProxy();
-            this.invocationClass = methodInvocation.getClass();
+            arguments = methodInvocation.getArguments();
+            method = methodInvocation.getMethod();
+            proxy = methodInvocation.getProxy();
+            invocationClass = methodInvocation.getClass();
             return methodInvocation.proceed();
         }
     }
