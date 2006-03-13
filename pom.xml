@@ -34,7 +34,34 @@
             </resource>
         </resources>
         <testSourceDirectory>src/test</testSourceDirectory>
-        
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-rmic-stubs</id>
+                        <phase>test-compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property environment="env"/>
+                                <path id="rmic.classpath">
+                                    <fileset dir="${java.home}/lib">
+                                        <include name="tools.jar"/>
+                                    </fileset>
+                                </path>
+
+                                <mkdir dir="target/test-classes"/>
+                                <rmic base="target/test-classes" includes="**/RmiEchoImpl.class" classpathref="rmic.classpath"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
     </build>
     <dependencies>
         <dependency>
