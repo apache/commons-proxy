@@ -34,13 +34,26 @@ public class ProxyUtils
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
+
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
+    private static final Map wrapperClassMap = new HashMap();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    static
+    {
+        wrapperClassMap.put( Integer.TYPE, Integer.class );
+        wrapperClassMap.put( Character.TYPE, Character.class );
+        wrapperClassMap.put( Boolean.TYPE, Boolean.class );
+        wrapperClassMap.put( Short.TYPE, Short.class );
+        wrapperClassMap.put( Long.TYPE, Long.class );
+        wrapperClassMap.put( Float.TYPE, Float.class );
+        wrapperClassMap.put( Double.TYPE, Double.class );
+        wrapperClassMap.put( Byte.TYPE, Byte.class );
+    }
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      *
@@ -127,19 +140,11 @@ public class ProxyUtils
         return clazz.getName();
     }
 
-    private static final Map wrapperClassMap = new HashMap();
-    static
-    {
-        wrapperClassMap.put( Integer.TYPE, Integer.class );
-        wrapperClassMap.put( Character.TYPE, Character.class );
-        wrapperClassMap.put( Boolean.TYPE, Boolean.class );
-        wrapperClassMap.put( Short.TYPE, Short.class );
-        wrapperClassMap.put( Long.TYPE, Long.class );
-        wrapperClassMap.put( Float.TYPE, Float.class );
-        wrapperClassMap.put( Double.TYPE, Double.class );
-        wrapperClassMap.put( Byte.TYPE, Byte.class );
-    }
-
+    /**
+     * Returns the wrapper class for the given primitive type.
+     * @param primitiveType the primitive type
+     * @return the wrapper class
+     */
     public static Class getWrapperClass( Class primitiveType )
     {
         return ( Class )wrapperClassMap.get( primitiveType );
