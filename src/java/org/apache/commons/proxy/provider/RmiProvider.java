@@ -96,7 +96,7 @@ public class RmiProvider implements ObjectProvider
         catch( RemoteException e )
         {
             throw new ObjectProviderException(
-                    "Unable to lookup service named " + name + " in registry at " + host + ":" + port + "." );
+                    "Unable to lookup service named " + name + " in registry at " + host + ":" + port + ".", e );
         }
     }
 
