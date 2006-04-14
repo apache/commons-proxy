@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 package org.apache.commons.proxy.exception;
-import junit.framework.*;
-import org.apache.commons.proxy.exception.InvocationHandlerException;
-
 public class TestInvocationHandlerException extends AbstractExceptionClassTestCase
 {
     public TestInvocationHandlerException()
     {
-        super( InvocationHandlerException.class );
+        super( InvokerException.class );
     }
 }

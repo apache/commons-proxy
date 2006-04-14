@@ -17,7 +17,7 @@
 package org.apache.commons.proxy.invoker;
 
 import org.apache.commons.proxy.Invoker;
-import org.apache.commons.proxy.exception.InvocationHandlerException;
+import org.apache.commons.proxy.exception.InvokerException;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.XmlRpcHandler;
 
@@ -52,7 +52,7 @@ public class XmlRpcInvoker implements Invoker
         final Object returnValue = handler.execute( handlerName + "." + method.getName(), toArgumentVector( args ) );
         if( returnValue instanceof XmlRpcException )
         {
-            throw new InvocationHandlerException( "Unable to execute XML-RPC call.", ( XmlRpcException )returnValue );
+            throw new InvokerException( "Unable to execute XML-RPC call.", ( XmlRpcException )returnValue );
 
         }
         return returnValue;

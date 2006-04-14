@@ -17,26 +17,28 @@
 package org.apache.commons.proxy.exception;
 
 /**
+ * To be used by an {@link org.apache.commons.proxy.Invoker} when they encounter an error.
+ *
  * @author James Carman
  * @since 1.0
  */
-public class InvocationHandlerException extends RuntimeException
+public class InvokerException extends RuntimeException
 {
-    public InvocationHandlerException()
+    public InvokerException()
     {
     }
 
-    public InvocationHandlerException( String message )
+    public InvokerException( String message )
     {
         super( message );
     }
 
-    public InvocationHandlerException( Throwable cause )
+    public InvokerException( Throwable cause )
     {
         super( cause );
     }
 
-    public InvocationHandlerException( String message, Throwable cause )
+    public InvokerException( String message, Throwable cause )
     {
         super( message, cause );
     }

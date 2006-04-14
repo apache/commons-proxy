@@ -1,4 +1,4 @@
-/* $Id$
+/* $Id:TestXmlRpcInvoker.java 325897 2005-10-17 10:11:52 -0400 (Mon, 17 Oct 2005) jcarman $
  *
  * Copyright 2005 The Apache Software Foundation.
  *
@@ -22,7 +22,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
-import org.apache.commons.proxy.exception.InvocationHandlerException;
+import org.apache.commons.proxy.exception.InvokerException;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
@@ -87,7 +87,7 @@ public class TestXmlRpcInvoker extends TestCase
             echo.echoBack( "Hello" );
             fail();
         }
-        catch( InvocationHandlerException e )
+        catch( InvokerException e )
         {
         }
     }
