@@ -26,5 +26,14 @@ import java.lang.reflect.Method;
  */
 public interface Invoker
 {
+    /**
+     * "Invokes" the method.  Implementation should throw a {@link org.apache.commons.proxy.exception.InvokerException}
+     * if problems arise while trying to invoke the method.
+     * @param proxy the proxy object
+     * @param method the method being invoked
+     * @param arguments the arguments
+     * @return the return value
+     * @throws Throwable thrown by the implementation
+     */
     public Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable;
 }
