@@ -33,7 +33,7 @@
     <shortDescription>Java library for dynamic proxying</shortDescription>
     <url>http://jakarta.apache.org/commons/sandbox/proxy</url>
     <issueTrackingUrl>http://issues.apache.org/bugzilla</issueTrackingUrl>
-    <siteAddress>cvs.apache.org</siteAddress>
+    <siteAddress>people.apache.org</siteAddress>
     <siteDirectory>/www/jakarta.apache.org/commons/sandbox/proxy/</siteDirectory>
     <repository>
         <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk</connection>
