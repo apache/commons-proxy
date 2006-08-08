@@ -24,8 +24,9 @@ import java.rmi.RemoteException;
  */
 public class RmiEchoImpl extends UnicastRemoteObject implements RmiEcho
 {
-    public RmiEchoImpl() throws RemoteException
+    public RmiEchoImpl(int port) throws RemoteException
     {
+        super(port);
     }
 
     public String echoBack( String message ) throws RemoteException

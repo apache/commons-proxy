@@ -35,6 +35,8 @@ public class TestRmiProvider extends TestCase
 
     private RmiEchoImpl implObject;
     private Registry registry;
+    // A port that is unlikely to clash with another on the build machine
+    private int UNLIKELY_PORT = 13099;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
@@ -42,8 +44,8 @@ public class TestRmiProvider extends TestCase
 
     public void setUpRegistry() throws Exception
     {
-        implObject = new RmiEchoImpl();
-        registry = LocateRegistry.createRegistry( Registry.REGISTRY_PORT );
+        implObject = new RmiEchoImpl( UNLIKELY_PORT );
+        registry = LocateRegistry.createRegistry( UNLIKELY_PORT );
         registry.bind( "echo", implObject );
     }
 
@@ -59,6 +61,7 @@ public class TestRmiProvider extends TestCase
     {
         final RmiProvider provider = new RmiProvider();
         provider.setName( "echo" );
+        provider.setPort( UNLIKELY_PORT );
         try
         {
             provider.getObject();
@@ -82,6 +85,7 @@ public class TestRmiProvider extends TestCase
     {
         setUpRegistry();
         final RmiProvider provider = new RmiProvider( "echo" );
+        provider.setPort( UNLIKELY_PORT );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
@@ -90,6 +94,7 @@ public class TestRmiProvider extends TestCase
     {
         setUpRegistry();
         final RmiProvider provider = new RmiProvider( "localhost", "echo" );
+        provider.setPort( UNLIKELY_PORT );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
@@ -98,6 +103,7 @@ public class TestRmiProvider extends TestCase
     {
         setUpRegistry();
         final RmiProvider provider = new RmiProvider( "bogus" );
+        provider.setPort( UNLIKELY_PORT );
         try
         {
             provider.getObject();
@@ -112,6 +118,7 @@ public class TestRmiProvider extends TestCase
     {
         setUpRegistry();
         final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT, "echo" );
+        provider.setPort( UNLIKELY_PORT );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
     }
@@ -119,7 +126,7 @@ public class TestRmiProvider extends TestCase
     public void testGetObjectWithPortAndHostAndFactory() throws Exception
     {
         setUpRegistry();
-        final RmiProvider provider = new RmiProvider( "localhost", Registry.REGISTRY_PORT,
+        final RmiProvider provider = new RmiProvider( "localhost", UNLIKELY_PORT,
                                                       RMISocketFactory.getDefaultSocketFactory(), "echo" );
         final RmiEcho echo = ( RmiEcho ) provider.getObject();
         assertEquals( "Hello, World!", echo.echoBack( "Hello, World!" ) );
