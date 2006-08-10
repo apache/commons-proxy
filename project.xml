@@ -37,7 +37,7 @@
     <siteDirectory>/www/jakarta.apache.org/commons/sandbox/proxy/</siteDirectory>
     <repository>
         <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/jakarta/commons/sandbox/proxy/trunk</url>
+        <url>http://svn.apache.org/viewvc/jakarta/commons/sandbox/proxy/trunk</url>
     </repository>
     <mailingLists>
         <mailingList>
