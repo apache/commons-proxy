@@ -21,15 +21,79 @@
       <artifactId>commons-sandbox</artifactId>
       <version>1-SNAPSHOT</version>
     </parent>
-    <groupId>commons-proxy</groupId>
     <artifactId>commons-proxy</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Commons Proxy</name>
-    <url>http://jakarta.apache.org/commons/sandbox/proxy</url>
+    <description>Java library for dynamic proxying</description>
+    <url>http://jakarta.apache.org/commons/sandbox/proxy/</url>
     <inceptionYear>2005</inceptionYear>
 
+    <developers>
+        <developer>
+            <id>jcarman</id>
+            <name>James Carman</name>
+            <email>james@carmanconsulting.com</email>
+            <organization>Carman Consulting, Inc.</organization>
+            <roles>
+                <role>admin</role>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+            <url>http://www.carmanconsulting.com/</url>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>knut</id>
+            <name>Knut Wannheden</name>
+            <email>knut@apache.org</email>
+            <roles>
+                <role>designer</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <name>J&#246;rg Hohwiller</name>
+            <email>hohwille@users.sourceforge.net</email>
+            <organization/>
+            <roles>
+                <role>mavenizer</role>
+                <role>developer</role>
+            </roles>
+            <url></url>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>J&#246;rg Schaible</name>
+            <email>joerg.schaible@gmx.de</email>
+            <organization/>
+            <roles>
+                <role>advisor</role>
+            </roles>
+            <url></url>
+        </contributor>
+        <contributor>
+            <name>Howard M. Lewis Ship</name>
+            <email>hlship@apache.org</email>
+            <organization/>
+            <roles>
+                <role>advisor</role>
+            </roles>
+            <url>http://www.howardlewisship.com/</url>
+        </contributor>
+    </contributors>
+
+    <scm>
+      <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</connection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</developerConnection>
+      <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</url>
+    </scm>
+
     <build>
+        <sourceDirectory>src/java</sourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -69,7 +133,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <sourceDirectory>src/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/java</directory>
@@ -78,7 +141,6 @@
                 </excludes>
             </resource>
         </resources>
-        <testSourceDirectory>src/test</testSourceDirectory>
     </build>
     <dependencies>
         <dependency>
@@ -166,5 +228,13 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+      <site>
+        <id>website</id>
+        <name>Apache Website</name>
+        <url>scp://people.apache.org/www/jakarta.apache.org/commons/sandbox/proxy/</url>
+      </site>
+    </distributionManagement>
 
 </project>
