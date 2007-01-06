@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Commons Proxy">
+  <bannerRight>
+    <name>Commons Proxy</name>
+    <src>images/logo.png</src>
+    <href>http://jakarta.apache.org/commons/sandbox/proxy/</href>
+  </bannerRight>
+  <body>
+    <menu name="Commons Proxy">
+      <item name="Overview" href="index.html"/>
+      <item name="Mailing lists" href="/mail-lists.html"/>
+      <item name="Team" href="/team-list.html"/>
+      <!--item name="Tasks" href="/tasks.html"/-->
+      <item name="SVN" href="http://svn.apache.org/viewvc/jakarta/commons/sandbox/proxy/trunk/"/>
+      <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
+    </menu>
+  </body>
+</project>
