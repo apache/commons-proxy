@@ -3,7 +3,7 @@
   <bannerRight>
     <name>Commons Proxy</name>
     <src>images/logo.png</src>
-    <href>http://jakarta.apache.org/commons/sandbox/proxy/</href>
+    <href>http://commons.apache.org/sandbox/proxy/</href>
   </bannerRight>
   <body>
     <menu name="Commons Proxy">
@@ -11,7 +11,7 @@
       <item name="Mailing lists" href="/mail-lists.html"/>
       <item name="Team" href="/team-list.html"/>
       <!--item name="Tasks" href="/tasks.html"/-->
-      <item name="SVN" href="http://svn.apache.org/viewvc/jakarta/commons/sandbox/proxy/trunk/"/>
+      <item name="SVN" href="http://svn.apache.org/viewvc/commons/sandbox/proxy/trunk/"/>
       <item name="Javadoc (SVN latest)" href="apidocs/index.html"/>
     </menu>
   </body>

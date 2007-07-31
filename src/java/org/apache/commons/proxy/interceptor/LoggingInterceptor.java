@@ -29,7 +29,7 @@ import org.apache.commons.proxy.Invocation;
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Jakarta Commons Logging version 1.0.4 or greater</li>
+ *   <li>Apache Commons Logging version 1.0.4 or greater</li>
  * </ul>
  * </p>
  * @author James Carman

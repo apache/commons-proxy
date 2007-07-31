@@ -88,7 +88,7 @@ public class ProxyUtils
      * is maintained.</p>
      * <p/>
      * <b>Note</b>: Implementation of this method was "borrowed" from
-     * <a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons Lang</a> to avoid a dependency.</p>
+     * <a href="http://commons.apache.org/lang/">Apache Commons Lang</a> to avoid a dependency.</p>
      *
      * @param cls the class to look up, may be <code>null</code>
      * @return an array of {@link Class} objects representing all interfaces implemented by the given class and its

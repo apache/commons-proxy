@@ -25,7 +25,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
-    <url>http://jakarta.apache.org/commons/sandbox/proxy/</url>
+    <url>http://commons.apache.org/sandbox/proxy/</url>
     <inceptionYear>2005</inceptionYear>
 
     <developers>
@@ -86,9 +86,9 @@
     </contributors>
 
     <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</developerConnection>
-      <url>http://svn.apache.org/repos/asf/jakarta/commons/sandbox/proxy/trunk/</url>
+      <connection>scm:svn:http://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</connection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</developerConnection>
+      <url>http://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</url>
     </scm>
 
     <build>
@@ -249,7 +249,7 @@
       <site>
         <id>website</id>
         <name>Apache Website</name>
-        <url>scp://people.apache.org/www/jakarta.apache.org/commons/sandbox/proxy/</url>
+        <url>scp://people.apache.org/www/commons.apache.org/sandbox/proxy/</url>
       </site>
     </distributionManagement>
 

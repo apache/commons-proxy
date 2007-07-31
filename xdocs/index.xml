@@ -17,7 +17,7 @@
 <document>
     <properties>
         <title>Overview</title>
-        <author email="commons-dev AT jakarta DOT apache DOT org">Jakarta Commons Development Team</author>
+        <author email="commons-dev AT jakarta DOT apache DOT org">Apache Commons Development Team</author>
         <author email="jcarman AT apache DOT org">James Carman</author>
     </properties>
 
@@ -121,7 +121,7 @@
                       <tr><td><b>Executor</b></td><td>Uses an
                       <a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/Executor.html">Executor</a> to execute the method in possibly another thread (only void methods are supported).</td></tr>
                       <tr><td><b>Logging</b></td><td>Logs all method invocations using the
-                      <a href="http://jakarta.apache.org/commons/logging/">Jakarta Commons Logging</a> API</td></tr>
+                      <a href="http://commons.apache.org/logging/">Apache Commons Logging</a> API</td></tr>
                       <tr><td><b>Filtered</b></td><td>Optionally intercepts a method invocation based on a
                       <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a></td></tr>
                       <tr><td><b>Method Interceptor Adapter</b></td><td>Adapts the AOP Alliance <a href="http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInterceptor.html">MethodInterceptor</a> interface to the

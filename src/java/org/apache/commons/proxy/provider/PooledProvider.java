@@ -25,13 +25,13 @@ import org.apache.commons.proxy.provider.cache.CacheEvictionEvent;
 import org.apache.commons.proxy.provider.cache.CacheEvictionListener;
 
 /**
- * Uses <a href="http://jakarta.apache.org/commons/pool/">Jakarta Commons Pool</a> to maintain a pool of target
+ * Uses <a href="http://commons.apache.org/pool/">Apache Commons Pool</a> to maintain a pool of target
  * objects provided by an <code>inner</code> object provider.
  *
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Jakarta Commons Pool version 1.2 or greater</li>
+ *   <li>Apache Commons Pool version 1.2 or greater</li>
  * </ul>
  * </p>
  * @author James Carman
