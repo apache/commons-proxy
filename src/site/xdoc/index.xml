@@ -103,6 +103,7 @@
                     <table border="0">
                       <tr><td><b>Null</b></td><td>Always returns a null (useful for the "Null Object" pattern)</td></tr>
                       <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
+                        <tr><td><b>Duck Typing</b></td><td>Supports &quot;duck typing&quot; by adapting a class to an interface it does not implement.</td></tr>
                       <tr><td><b>Invocation Handler Adapter</b></td><td>Adapts the JDK <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a> interface
                           to the <em>Commons Proxy</em> <a href="apidocs/org/apache/commons/proxy/Invoker.html">Invoker</a> interface.</td></tr>
                     </table>
