@@ -150,7 +150,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>jboss</groupId>
             <artifactId>javassist</artifactId>
             <version>3.0</version>
             <scope>provided</scope>
