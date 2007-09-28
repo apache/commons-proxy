@@ -89,8 +89,6 @@
                         </p>
                         <table border="0">
                             <tr><td><b>Singleton</b></td><td>Calls a nested provider at most once, returning that original value on all subsequent invocations</td></tr>
-                            <tr><td><b>Cached</b></td><td>Returns an object from a cache (if available).  If no object is available in the cache, the nested provider is called</td></tr>
-                            <tr><td><b>Pooled</b></td><td>Returns an object from a pool, creating new objects using the nested provider</td></tr>
                         </table>
 
                     </subsection>
