@@ -71,11 +71,6 @@ public class DuckTypingInvoker implements Invoker
 // Interface Invoker
 //----------------------------------------------------------------------------------------------------------------------
 
-
-//----------------------------------------------------------------------------------------------------------------------
-// Interface Invoker
-//----------------------------------------------------------------------------------------------------------------------
-
     public Object invoke( final Object proxy, final Method method, final Object[] arguments ) throws Throwable
     {
         final Object target = targetProvider.getObject();
