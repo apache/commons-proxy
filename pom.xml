@@ -21,14 +21,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.commons</groupId>
-        <artifactId>commons-sandbox-parent</artifactId>
-        <version>3-SNAPSHOT</version>
+        <artifactId>commons-parent</artifactId>
+        <version>4</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Commons Proxy (Sandbox)</name>
+    <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
-    <url>http://commons.apache.org/sandbox/proxy/</url>
+    <url>http://commons.apache.org/proxy/</url>
     <inceptionYear>2005</inceptionYear>
 
     <developers>
@@ -89,9 +89,9 @@
     </contributors>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</developerConnection>
-        <url>http://svn.apache.org/repos/asf/commons/sandbox/proxy/trunk/</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</developerConnection>
+        <url>http://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</url>
     </scm>
 
     <build>
@@ -241,7 +241,7 @@
         <site>
             <id>website</id>
             <name>Apache Website</name>
-            <url>scp://people.apache.org/www/commons.apache.org/sandbox/proxy/</url>
+            <url>scp://people.apache.org/www/commons.apache.org/proper/proxy/</url>
         </site>
     </distributionManagement>
 
