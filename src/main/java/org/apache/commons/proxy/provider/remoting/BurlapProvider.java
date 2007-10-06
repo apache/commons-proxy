@@ -15,27 +15,27 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy.provider;
+package org.apache.commons.proxy.provider.remoting;
 
-import com.caucho.hessian.client.HessianProxyFactory;
+import com.caucho.burlap.client.BurlapProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
 import java.net.MalformedURLException;
 
 /**
- * Provides a hessian service object.
+ * Provides a burlap service object.
  *
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Hessian version 3.0.1 or greater</li>
+ *   <li>Burlap version 2.1.7 or greater</li>
  * </ul>
  * </p>
  * @author James Carman
  * @since 1.0
  */
-public class HessianProvider implements ObjectProvider
+public class BurlapProvider implements ObjectProvider
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
@@ -48,11 +48,11 @@ public class HessianProvider implements ObjectProvider
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public HessianProvider()
+    public BurlapProvider()
     {
     }
 
-    public HessianProvider( Class serviceInterface, String url )
+    public BurlapProvider( Class serviceInterface, String url )
     {
         this.serviceInterface = serviceInterface;
         this.url = url;
@@ -66,7 +66,7 @@ public class HessianProvider implements ObjectProvider
     {
         try
         {
-            return new HessianProxyFactory().create( serviceInterface, url );
+            return new BurlapProxyFactory().create( serviceInterface, url );
         }
         catch( MalformedURLException e )
         {

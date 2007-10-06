@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy.provider;
+package org.apache.commons.proxy.provider.remoting;
 
 import junit.framework.TestCase;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 import org.apache.commons.proxy.util.rmi.RmiEcho;
 import org.apache.commons.proxy.util.rmi.RmiEchoImpl;
+import org.apache.commons.proxy.provider.remoting.RmiProvider;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

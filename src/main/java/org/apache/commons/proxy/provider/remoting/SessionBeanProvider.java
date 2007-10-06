@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy.provider;
+package org.apache.commons.proxy.provider.remoting;
 
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyUtils;

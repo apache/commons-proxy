@@ -15,18 +15,26 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy.provider;
-import junit.framework.TestCase;
-import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.exception.ObjectProviderException;
+package org.apache.commons.proxy.provider.remoting;
 
-public class TestBurlapProvider extends TestCase
+import junit.framework.TestCase;
+import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.util.Echo;
+import org.apache.commons.proxy.provider.remoting.HessianProvider;
+
+public class TestHessianProvider extends TestCase
 {
-    public void testWithMalformedUrl()
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public void testWithMalformedUrlBean()
     {
         try
         {
-            final BurlapProvider p = new BurlapProvider( Echo.class, "a malformed URL" );
+            final HessianProvider p = new HessianProvider();
+            p.setServiceInterface( Echo.class );
+            p.setUrl( "a malformed URL" );
             p.getObject();
             fail();
         }
@@ -35,13 +43,11 @@ public class TestBurlapProvider extends TestCase
         }
     }
 
-    public void testWithMalformedUrlBean()
+    public void testWithMalformedUrl()
     {
         try
         {
-            final BurlapProvider p = new BurlapProvider();
-            p.setServiceInterface( Echo.class );
-            p.setUrl( "a malformed URL" );
+            final HessianProvider p = new HessianProvider( Echo.class, "a malformed URL" );
             p.getObject();
             fail();
         }
