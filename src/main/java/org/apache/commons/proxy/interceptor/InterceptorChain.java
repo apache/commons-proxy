@@ -23,8 +23,8 @@ import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.Interceptor;
 
 /**
- * A <code>MethodInterceptorChain</code> assists with creating proxies which go through a series of
- * <code>MethodInterceptors</code>.
+ * An <code>InterceptorChain</code> assists with creating proxies which go through a series of
+ * <code>Interceptors</code>.
  *
  * @author James Carman
  * @since 1.0
