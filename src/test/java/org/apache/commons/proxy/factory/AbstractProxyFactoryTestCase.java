@@ -17,25 +17,15 @@
 
 package org.apache.commons.proxy.factory;
 
-import org.apache.commons.proxy.Invocation;
-import org.apache.commons.proxy.Interceptor;
-import org.apache.commons.proxy.Invoker;
-import org.apache.commons.proxy.ObjectProvider;
-import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.provider.ProviderUtils;
-import org.apache.commons.proxy.util.AbstractTestCase;
-import org.apache.commons.proxy.util.DuplicateEcho;
-import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.util.EchoImpl;
-import org.apache.commons.proxy.util.SuffixInterceptor;
+import org.apache.commons.proxy.*;
+import org.apache.commons.proxy.provider.BeanProvider;
+import org.apache.commons.proxy.provider.ConstantProvider;
+import org.apache.commons.proxy.provider.SingletonProvider;
+import org.apache.commons.proxy.util.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author James Carman
@@ -59,7 +49,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testInterfaceHierarchies()
     {
-        final SortedSet set = ( SortedSet ) factory.createDelegatorProxy( ProviderUtils.constantProvider( new TreeSet() ), new Class[] { SortedSet.class } );
+        final SortedSet set = ( SortedSet ) factory.createDelegatorProxy( new ConstantProvider( new TreeSet() ), new Class[] { SortedSet.class } );
         set.add( "Hello" );
     }
 
@@ -115,7 +105,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     private ObjectProvider createSingletonEcho()
     {
-        return ProviderUtils.singletonProvider( ProviderUtils.beanProvider( EchoImpl.class ) );
+        return new SingletonProvider( new BeanProvider( EchoImpl.class ) );
     }
 
     public void testMethodInvocationImplementation() throws Exception
@@ -165,8 +155,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testDelegatingProxyClassCaching() throws Exception
     {
-        final Echo proxy1 = ( Echo ) factory.createDelegatorProxy( ProviderUtils.constantProvider( new EchoImpl() ), ECHO_ONLY );
-        final Echo proxy2 = ( Echo ) factory.createDelegatorProxy( ProviderUtils.constantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy1 = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy2 = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
         assertEquals( proxy1.getClass(), proxy2.getClass() );
     }
 
@@ -179,7 +169,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithCheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createDelegatorProxy( ProviderUtils.constantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
         try
         {
             proxy.ioException();
@@ -192,7 +182,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     public void testProxyWithUncheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createDelegatorProxy( ProviderUtils.constantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
         try
         {
             proxy.illegalArgument();

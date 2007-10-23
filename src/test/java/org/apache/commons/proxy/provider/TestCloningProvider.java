@@ -37,6 +37,19 @@ public class TestCloningProvider extends TestCase
         assertNotSame( clone2, clone1 );
     }
 
+    public void testWithPrivateCloneMethod()
+    {
+        final CloningProvider provider = new CloningProvider( new PrivateCloneable() );
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+    
     public void testWithInvalidCloneable()
     {
         final CloningProvider provider = new CloningProvider( new InvalidCloneable() );
@@ -67,6 +80,14 @@ public class TestCloningProvider extends TestCase
     {
     }
 
+    public static class PrivateCloneable implements Cloneable
+    {
+        protected Object clone()
+        {
+            return this;
+        }
+    }
+    
     public static class ExceptionCloneable implements Cloneable
     {
         public Object clone()
