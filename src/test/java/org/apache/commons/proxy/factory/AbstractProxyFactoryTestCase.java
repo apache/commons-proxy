@@ -17,21 +17,33 @@
 
 package org.apache.commons.proxy.factory;
 
-import org.apache.commons.proxy.*;
+import junit.framework.TestCase;
+import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
+import org.apache.commons.proxy.Invoker;
+import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.provider.BeanProvider;
 import org.apache.commons.proxy.provider.ConstantProvider;
 import org.apache.commons.proxy.provider.SingletonProvider;
-import org.apache.commons.proxy.util.*;
+import org.apache.commons.proxy.util.DuplicateEcho;
+import org.apache.commons.proxy.util.Echo;
+import org.apache.commons.proxy.util.EchoImpl;
+import org.apache.commons.proxy.util.SuffixInterceptor;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author James Carman
  * @since 1.0
  */
-public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
+public abstract class AbstractProxyFactoryTestCase extends TestCase
 {
     protected final ProxyFactory factory;
     private static final Class[] ECHO_ONLY = new Class[] { Echo.class };

@@ -17,13 +17,12 @@
 
 package org.apache.commons.proxy.provider;
 
-import org.apache.commons.proxy.util.AbstractTestCase;
+import junit.framework.TestCase;
 
 /**
- * @author James Carman
  * @since 1.0
  */
-public class TestConstantProvider extends AbstractTestCase
+public class TestConstantProvider extends TestCase
 {
     public void testGetObject() throws Exception
     {
