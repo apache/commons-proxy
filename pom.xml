@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>5</version>
+        <version>6</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
     <version>1.0-SNAPSHOT</version>
