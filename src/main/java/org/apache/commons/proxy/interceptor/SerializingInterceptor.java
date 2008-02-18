@@ -62,11 +62,13 @@ public class SerializingInterceptor implements Interceptor
         }
         catch (IOException e)
         {
-            throw new RuntimeException( "Unable to make serialized copy of " + original.getClass().getName() + " object.", e );
+            throw new RuntimeException( "Unable to make serialized copy of " +
+                    original.getClass().getName() + " object.", e );
         }
         catch (ClassNotFoundException e)
         {
-            throw new RuntimeException( "Unable to make serialized copy of " + original.getClass().getName() + " object.", e );
+            throw new RuntimeException( "Unable to make serialized copy of " +
+                    original.getClass().getName() + " object.", e );
         }
     }
 }
