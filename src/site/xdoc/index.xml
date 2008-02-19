@@ -130,13 +130,27 @@
                       </table>
             </section>
         </section>
-
-        <section name="Status">
-                <ul>
-                    <li>The code is unreleased.</li>
-                    <li>Methods and classes can and will appear and disappear without warning.</li>
-                    <li>If you like the code and want to push it towards a release, join the mailing list!</li>
-                </ul>
+        <section name="Releases">
+            <p>
+                The latest version is v1.0. -
+                <a href="http://commons.apache.org/downloads/download_proxy.cgi">Download now!</a><br />
+            </p>
+            <p>
+                For previous releases, see the <a href="http://archive.apache.org/dist/commons/proxy/">Apache Archive</a>
+            </p>
+        </section>
+        <section name="Support">
+            <p>
+                The <a href="mail-lists.html">commons mailing lists</a> act as the main support forum.
+                The user list is suitable for most library usage queries.
+                The dev list is intended for the development discussion.
+                Please remember that the lists are shared between all commons components,
+                so prefix your email subject with [proxy].
+            </p>
+            <p>
+                Issues may be reported via <a href="issue-tracking.html">ASF JIRA</a>.
+                Please read the instructions carefully to submit a useful bug report or enhancement request.
+            </p>
         </section>
     </body>
 </document>
