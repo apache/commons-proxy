@@ -138,6 +138,9 @@
             <p>
                 For previous releases, see the <a href="http://archive.apache.org/dist/commons/proxy/">Apache Archive</a>
             </p>
+            <p>
+                <i><b>Note:</b> The 1.x releases are compatible with JDK1.4+.</i>
+            </p>
         </section>
         <section name="Support">
             <p>
