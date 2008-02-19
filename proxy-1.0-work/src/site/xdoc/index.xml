@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<document>
+    <properties>
+        <title>Overview</title>
+        <author email="dev AT commons DOT apache DOT org">Apache Commons Development Team</author>
+        <author email="jcarman AT apache DOT org">James Carman</author>
+    </properties>
+
+    <body>
+        <section name="Commons Proxy: Dynamic Proxies Made Easy">
+            <p>
+                The <em>Proxy</em> design pattern (<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201633612/qid=1125413337/sr=1-1/ref=sr_1_1/104-0714405-6441551?v=glance&amp;s=books">GoF</a>)
+                allows you to provide &quot;a surrogate or placeholder for another object to control access to it&quot;.
+                Proxies can be used in many ways.  Some of which are:
+            </p>
+                <ul>
+                    <li><b>Deferred Initialization</b> - the proxy acts as a "stand-in" for the actual implementation allowing
+                    it to be instantiated only when absolutely necessary.</li>
+                    <li><b>Security</b> - the proxy object can verify that the user actually has the permission to execute
+                    the method (a la EJB).</li>
+                    <li><b>Logging</b> - the proxy can log evey method invocation, providing valuable debugging information.</li>
+                    <li><b>Performance Monitoring</b> - the proxy can log each method invocation to a performance monitor
+                    allowing system administrators to see what parts of the system are potentially bogged down.</li>
+                </ul>
+            <p>
+                <em>Commons Proxy</em> supports dynamic proxy generation using proxy factories, object providers, invokers, and
+                interceptors.
+            </p>
+            <section name="Proxy Factories">
+                <p>
+                    <a href="apidocs/org/apache/commons/proxy/ProxyFactory.html">Proxy factories</a>
+                    encapsulate all necessary proxying logic away from your code.  Switching proxying
+                    techniques/technologies is as simple as using a different proxy factory implementation class.
+                    Currently,  <em>Commons Proxy</em> provides proxy factory implementations using JDK proxies,
+                    <a href="http://cglib.sourceforge.net">CGLIB</a>, and
+                    <a href="http://www.jboss.org/products/javassist">Javassist</a>.  Proxy factories allow you to create
+                    three different types of proxy objects:
+            </p>
+                    <ul>
+                        <li><b>Delegator Proxies</b> - a proxy that merely delegates each method invocation to an
+                            object provided by an <a href="apidocs/org/apache/commons/proxy/ObjectProvider.html">object provider</a>.</li>
+                        <li><b>Interceptor Proxies</b> - a proxy that allows an <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptor</a> to intercept each
+                            method invocation as it makes its way to the target of the invocation.</li>
+                        <li><b>Invoker Proxies</b> - a proxy that uses an
+                            <a href="apidocs/org/apache/commons/proxy/Invoker.html">invoker</a> to handle all method
+                            invocations.</li>
+                    </ul>
+            </section>
+            <section name="Object Providers">
+                <p>
+                    <a href="apidocs/org/apache/commons/proxy/provider/package-summary.html">Object providers</a>
+                    provide the
+                    objects which will be the &quot;target&quot; of a proxy. There are two types of object providers:
+                    <subsection name="Core Object Providers">
+                        <p>
+                        A core object provider provides a core implementation object.  <em>Commons Proxy</em> supports
+                        many different implementations including:
+                        </p>
+                        <table border="0">
+                            <tr><td><b>Constant</b></td><td>Always returns a specific object</td></tr>
+                            <tr><td><b>Bean</b></td><td>Merely instantiates an object of a specified class each time</td></tr>
+                            <tr><td><b>Cloning</b></td><td>Reflectively calls the public clone() method on a Cloneable object</td></tr>
+                            <tr><td><b>Hessian</b></td><td>Returns a <a href="http://www.caucho.com/hessian/index.xtp">Hessian</a>-based service object</td></tr>
+                            <tr><td><b>Burlap</b></td><td>Returns a <a href="http://www.caucho.com/burlap/index.xtp">Burlap</a>-based service object</td></tr>
+                            <tr><td><b>JAX-RPC</b></td><td>Returns a <a href="http://java.sun.com/webservices/jaxrpc/index.jsp">JAX-RPC</a>-based service object</td></tr>
+                            <tr><td><b>Session Bean</b></td><td>Returns a reference to a Session EJB (stateless session beans only)</td></tr>
+                        </table>
+                    </subsection>
+                    <subsection name="Decorating Object Providers">
+                        <p>
+                        A decorating object provider decorates the object returned by another provider.
+                            <em>Commons Proxy</em> provides a few implementations including:
+                        </p>
+                        <table border="0">
+                            <tr><td><b>Singleton</b></td><td>Calls a nested provider at most once, returning that original value on all subsequent invocations</td></tr>
+                        </table>
+
+                    </subsection>
+
+                </p>
+            </section>
+            <section name="Invokers">
+                <p>
+                    An <a href="apidocs/org/apache/commons/proxy/Invoker.html">invoker</a> handles all
+                    method invocations using a single method.  <em>Commons Proxy</em> provides a few invoker implementations:
+                </p>
+                    <table border="0">
+                      <tr><td><b>Null</b></td><td>Always returns a null (useful for the "Null Object" pattern)</td></tr>
+                      <tr><td><b>Apache XML-RPC</b></td><td>Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to fulfill the method invocation</td></tr>
+                        <tr><td><b>Duck Typing</b></td><td>Supports &quot;duck typing&quot; by adapting a class to an interface it does not implement.</td></tr>
+                      <tr><td><b>Invocation Handler Adapter</b></td><td>Adapts the JDK <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a> interface
+                          to the <em>Commons Proxy</em> <a href="apidocs/org/apache/commons/proxy/Invoker.html">Invoker</a> interface.</td></tr>
+                    </table>
+
+            </section>
+            <section name="Interceptors">
+                <p>
+                    <em>Commons Proxy</em> allows you to &quot;intercept&quot; a method invocation using <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptors</a>.
+                    Interceptors provide <em>rudimentary</em> aspect-oriented
+                    programming support, allowing you to alter the results/effects of a method invocation without actually
+                    changing the implementation of the method itself.  <em>Commons Proxy</em> provides a few interceptor
+                    implementations including:
+                </p>
+                    <table border="0">
+                      <tr><td><b>Executor</b></td><td>Uses an
+                      <a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/Executor.html">Executor</a> to execute the method in possibly another thread (only void methods are supported).</td></tr>
+                      <tr><td><b>Logging</b></td><td>Logs all method invocations using the
+                      <a href="http://commons.apache.org/logging/">Apache Commons Logging</a> API</td></tr>
+                      <tr><td><b>Filtered</b></td><td>Optionally intercepts a method invocation based on a
+                      <a href="apidocs/org/apache/commons/proxy/interceptor/MethodFilter.html">method filter</a></td></tr>
+                      <tr><td><b>Method Interceptor Adapter</b></td><td>Adapts the AOP Alliance <a href="http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInterceptor.html">MethodInterceptor</a> interface to the
+                          <em>Commons Proxy</em> <a href="apidocs/org/apache/commons/proxy/Interceptor.html">Interceptor</a> interface.</td></tr>
+
+                      </table>
+            </section>
+        </section>
+
+        <section name="Status">
+                <ul>
+                    <li>The code is unreleased.</li>
+                    <li>Methods and classes can and will appear and disappear without warning.</li>
+                    <li>If you like the code and want to push it towards a release, join the mailing list!</li>
+                </ul>
+        </section>
+    </body>
+</document>
