@@ -26,7 +26,7 @@
         <version>7</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
-    <version>1.0-rc1</version>
+    <version>1.0-rc2</version>
     <packaging>bundle</packaging>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
@@ -139,7 +139,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <dependencies>
         <dependency>
             <groupId>cglib</groupId>
@@ -256,4 +256,8 @@
         </site>
     </distributionManagement>
 
+    <properties>
+        <maven.compile.source>1.4</maven.compile.source>
+        <maven.compile.target>1.4</maven.compile.target>
+    </properties>
 </project>
