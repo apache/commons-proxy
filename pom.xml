@@ -26,6 +26,7 @@
     </parent>
     <artifactId>commons-proxy</artifactId>
     <version>1.0-rc1</version>
+    <packaging>bundle</packaging>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
     <url>http://commons.apache.org/proxy/</url>
@@ -119,6 +120,20 @@
                         <descriptor>src/assembly/src.xml</descriptor>
                     </descriptors>
                     <tarLongFileMode>gnu</tarLongFileMode>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.2.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <excludeDependencies>true</excludeDependencies>
+                    <instructions>
+                        <_nouses>true</_nouses>
+                        <Bundle-SymbolicName>org.apache.commons.proxy</Bundle-SymbolicName>
+                        <Export-Package>org.apache.commons.*;version=${pom.version}</Export-Package>
+                    </instructions>
                 </configuration>
             </plugin>
         </plugins>
