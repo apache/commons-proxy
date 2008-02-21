@@ -31,9 +31,9 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * A Javassist-based {@link Invocation} implementation.  This class actually serves as the superclass
- * for all Javassist-based method invocations.  Subclasses are dynamically created to deal with
- * specific interface methods.
+ * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link Invocation} implementation.  This
+ * class actually serves as the superclass for all <a href="http://www.jboss.org/products/javassist">Javassist</a>-based
+ * method invocations.  Subclasses are dynamically created to deal with specific interface methods (they're hard-wired).
  * 
  * @author James Carman
  * @since 1.0
