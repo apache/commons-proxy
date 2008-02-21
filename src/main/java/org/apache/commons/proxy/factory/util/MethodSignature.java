@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * A class for capturing the signature of a method (its name and parameter types).
+ * 
  * @author James Carman
  * @since 1.0
  */

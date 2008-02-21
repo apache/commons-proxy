@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * A useful superclass for a {@link ProxyFactory} which supports subclassing rather than merely implementing interfaces.
+ * 
  * @author James Carman
  * @since 1.0
  */

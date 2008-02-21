@@ -18,6 +18,8 @@
 package org.apache.commons.proxy.factory.util;
 
 /**
+ * A proxy class generator generates specific type of proxies (interceptor, invoker, etc.).
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -27,6 +29,12 @@ public interface ProxyClassGenerator
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Generates a proxy class for the supplied {@link ClassLoader} and proxy classes.
+     * @param classLoader the classloader
+     * @param proxyClasses the proxy classes
+     * @return the dynamically generated proxy class
+     */
     public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses );
 }
 
