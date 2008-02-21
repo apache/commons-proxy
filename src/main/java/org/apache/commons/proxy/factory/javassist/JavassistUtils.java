@@ -30,12 +30,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Some utility methods for dealing with Javassist.
+ * Some utility methods for dealing with Javassist.  This class is not part of the public API!
  * 
  * @author James Carman
  * @since 1.0
  */
-public class JavassistUtils
+class JavassistUtils
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
