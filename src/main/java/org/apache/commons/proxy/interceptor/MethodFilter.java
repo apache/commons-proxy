@@ -31,6 +31,11 @@ public interface MethodFilter
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Returns whether or not this filter accepts this method.
+     * @param method the method
+     * @return whether or not this filter accepts this method
+     */
     public boolean accepts( Method method );
 }
 
