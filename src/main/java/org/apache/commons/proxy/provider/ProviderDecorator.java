@@ -20,6 +20,10 @@ package org.apache.commons.proxy.provider;
 import org.apache.commons.proxy.ObjectProvider;
 
 /**
+ * Returns the result of the inner {@link ObjectProvider provider}.  Subclasses can override the {@link #getObject()}
+ * method and decorate what comes back from the inner provider in some way (by {@link SingletonProvider caching it} for
+ * example). 
+ * 
  * @author James Carman
  * @since 1.0
  */
