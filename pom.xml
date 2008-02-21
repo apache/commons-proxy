@@ -26,7 +26,7 @@
         <version>7</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
-    <version>1.0-rc2</version>
+    <version>1.0</version>
     <packaging>bundle</packaging>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
