@@ -8,6 +8,10 @@ INTRODUCTION:
 Apache Commons Proxy is a package of utility classes which facilitate the
 creation of dynamic proxies in Java.
 
+REQUIREMENTS:
+
+JDK1.4+
+
 NOTES:
 
 *** This is the initial release ***
