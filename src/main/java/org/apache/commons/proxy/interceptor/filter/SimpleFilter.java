@@ -42,11 +42,18 @@ public class SimpleFilter implements MethodFilter
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Creates a simple filter that accepts no methods.
+     */
     public SimpleFilter()
     {
         this.methodNames = new HashSet();
     }
-    
+
+    /**
+     * Creates a simple filter that accepts methods matching the supplied names.
+     * @param methodNames the names
+     */
     public SimpleFilter( String[] methodNames )
     {
         this.methodNames = new HashSet( Arrays.asList( methodNames ) );
