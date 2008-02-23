@@ -265,7 +265,7 @@
                     <id>stagingSite</id>
                     <name>Release Candidate Staging Site</name>
                     <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/public_html/${artifactId}-${version}
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/public_html/${artifactId}-${version}/site
                     </url>
                 </site>
             </distributionManagement>
