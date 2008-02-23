@@ -35,6 +35,11 @@ public class CloningProvider implements ObjectProvider
     private final Cloneable cloneable;
     private Method cloneMethod;
 
+    /**
+     * Constructs a provider which returns clone copies of the specified {@link Cloneable}
+     * object.
+     * @param cloneable the object to clone
+     */
     public CloningProvider( Cloneable cloneable )
     {
         this.cloneable = cloneable;

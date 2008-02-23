@@ -31,6 +31,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
+ * A <a href="http://www.jboss.org/products/javassist">Javassist</a>-based {@link Invocation} implementation.  This
+ * class actually serves as the superclass for all <a href="http://www.jboss.org/products/javassist">Javassist</a>-based
+ * method invocations.  Subclasses are dynamically created to deal with specific interface methods (they're hard-wired).
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -137,7 +141,15 @@ public abstract class JavassistInvocation implements Invocation
         return cache;
     }
 
-    public synchronized static Class getMethodInvocationClass( ClassLoader classLoader,
+    /**
+     * Returns a method invocation class specifically coded to invoke the supplied interface method.
+     *
+     * @param classLoader the classloader to use
+     * @param interfaceMethod the interface method
+     * @return a method invocation class specifically coded to invoke the supplied interface method
+     * @throws CannotCompileException if a compilation error occurs
+     */
+    synchronized static Class getMethodInvocationClass( ClassLoader classLoader,
                                                                Method interfaceMethod )
             throws CannotCompileException
     {

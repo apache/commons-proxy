@@ -42,6 +42,10 @@ public class BeanProvider implements ObjectProvider
     {
     }
 
+    /**
+     * Constructs a provider which instantiates objects of the specified bean class.
+     * @param beanClass the bean class
+     */
     public BeanProvider( Class beanClass )
     {
         this.beanClass = beanClass;

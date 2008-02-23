@@ -1,0 +1,31 @@
+	     Apache Commons Proxy Package
+			    Version 1.0
+			   Release Notes
+
+
+INTRODUCTION:
+
+Apache Commons Proxy is a package of utility classes which facilitate the
+creation of dynamic proxies in Java.
+
+REQUIREMENTS:
+
+JDK1.4+
+
+NOTES:
+
+*** This is the initial release ***
+
+
+FEEDBACK:
+
+Open source works best when you give feedback:
+http://commons.apache.org/proxy/
+
+Please direct all bug reports to JIRA
+http://issues.apache.org/jira/browse/PROXY
+
+Or subscribe to the commons-user mailing list (please prefix email subject with [proxy])
+http://commons.apache.org/mail-lists.html
+
+The Commons-Proxy Team

@@ -24,7 +24,17 @@ import org.apache.commons.proxy.Interceptor;
 
 /**
  * An <code>InterceptorChain</code> assists with creating proxies which go through a series of
- * <code>Interceptors</code>.
+ * {@link Interceptor interceptors}.
+ *
+ * <pre>
+ *   MyServiceInterface serviceImpl = ...;
+ *   ProxyFactory factory = ...;
+ *   Interceptor[] interceptors = ...;
+ *   InterceptorChain chain = new InterceptorChain(interceptors);
+ *   ObjectProvider provider = chain.createProxyProvider(factory, serviceImpl);
+ *   MyServiceInterface serviceProxy = ( MyServiceInterface )provider.getObject();
+ *   serviceProxy.someServiceMethod(...); // This will go through the interceptors! 
+ * </pre>
  *
  * @author James Carman
  * @since 1.0
@@ -61,17 +71,53 @@ public class InterceptorChain
         return currentTarget;
     }
 
+    /**
+     * Creates an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object.  The proxy will support all
+     * interfaces implemented by the terminus object.  The thread context classloader will be used to generate the
+     * proxy class.
+     * 
+     * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
+     * @param terminus the terminus
+     * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object
+     */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus )
     {
         return createProxyProvider( proxyFactory, terminus, null );
     }
 
+    /**
+     * Creates an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object.  The proxy will support only
+     * the specified interfaces/classes.  The thread context classloader will be used to generate the
+     * proxy class.
+     *
+     * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
+     * @param terminus the terminus
+     * @param proxyClasses the interfaces to support
+     * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object
+     */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class[] proxyClasses )
     {
         return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
                                     proxyClasses );
     }
 
+    /**
+     * Creates an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object.  The proxy will support only
+     * the specified interfaces/classes.  The specified classloader will be used to generate the
+     * proxy class.
+     *
+     * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
+     * @param classLoader the classloader to be used to generate the proxy class
+     * @param terminus the terminus
+     * @param proxyClasses the interfaces to support
+     * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
+     * chain of interceptors and ultimately arrive at the supplied terminus object
+     */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                                Class[] proxyClasses )
     {
