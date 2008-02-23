@@ -254,31 +254,18 @@
     <properties>
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
+        <releaseManager>${user.name}</releaseManager>
     </properties>
 
     <profiles>
         <profile>
             <id>rc</id>
             <distributionManagement>
-                <repository>
-                    <id>staging</id>
-                    <name>Release Candidate Staging</name>
-                    <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
-                    </url>
-                </repository>
-                <snapshotRepository>
-                    <id>staging</id>
-                    <name>Release Candidate Staging</name>
-                    <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
-                    </url>
-                </snapshotRepository>
                 <site>
                     <id>stagingSite</id>
                     <name>Release Candidate Staging Site</name>
                     <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifactId}-${version}/site/
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/public_html/${artifactId}-${version}
                     </url>
                 </site>
             </distributionManagement>
@@ -303,7 +290,7 @@
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
