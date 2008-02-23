@@ -260,25 +260,11 @@
         <profile>
             <id>rc</id>
             <distributionManagement>
-                <repository>
-                    <id>staging</id>
-                    <name>Release Candidate Staging</name>
-                    <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
-                    </url>
-                </repository>
-                <snapshotRepository>
-                    <id>staging</id>
-                    <name>Release Candidate Staging</name>
-                    <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
-                    </url>
-                </snapshotRepository>
                 <site>
                     <id>stagingSite</id>
                     <name>Release Candidate Staging Site</name>
                     <url>
-                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifactId}-${version}/site/
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/public_html/${artifactId}-${version}
                     </url>
                 </site>
             </distributionManagement>
