@@ -259,6 +259,29 @@
     <profiles>
         <profile>
             <id>rc</id>
+            <distributionManagement>
+                <repository>
+                    <id>staging</id>
+                    <name>Release Candidate Staging</name>
+                    <url>
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
+                    </url>
+                </repository>
+                <snapshotRepository>
+                    <id>staging</id>
+                    <name>Release Candidate Staging</name>
+                    <url>
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifact-id}-${version}/
+                    </url>
+                </snapshotRepository>
+                <site>
+                    <id>stagingSite</id>
+                    <name>Release Candidate Staging Site</name>
+                    <url>
+                        ${commons.deployment.protocol}://people.apache.org/home/${releaseManager}/staging/${artifactId}-${version}/site/
+                    </url>
+                </site>
+            </distributionManagement>
             <build>
                 <plugins>
                     <plugin>
@@ -269,6 +292,61 @@
                                     <goal>attached</goal>
                                 </goals>
                                 <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <configuration>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <configuration>
+                            <createChecksum>true</createChecksum>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-source-jar</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <configuration>
+                            <!-- Pass these arguments to the deploy plugin. -->
+                            <arguments>-Prc</arguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-javadoc-jar</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <source>${maven.compile.source}</source>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
