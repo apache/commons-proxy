@@ -254,6 +254,7 @@
     <properties>
         <maven.compile.source>1.4</maven.compile.source>
         <maven.compile.target>1.4</maven.compile.target>
+        <releaseManager>${user.name}</releaseManager>
     </properties>
 
     <profiles>
@@ -289,7 +290,7 @@
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
