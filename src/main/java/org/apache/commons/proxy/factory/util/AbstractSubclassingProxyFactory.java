@@ -155,5 +155,26 @@ public abstract class AbstractSubclassingProxyFactory extends ProxyFactory
                 throw new ProxyFactoryException( errorMessage.toString() );
         }
     }
+
+    /**
+     * Helper method for instantiating a proxy object from its proxy class.  Uses the default constructor.
+     * @param proxyClass the proxy class
+     * @return a proxy object
+     */
+    protected static Object instantiate(Class proxyClass)
+    {
+        try
+        {
+            return proxyClass.newInstance();
+        }
+        catch (InstantiationException e)
+        {
+            throw new ProxyFactoryException("Unable to instantiate proxy object from proxy class.", e);
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new ProxyFactoryException("Unable to instantiate proxy object from proxy class.", e);
+        }
+    }
 }
 
