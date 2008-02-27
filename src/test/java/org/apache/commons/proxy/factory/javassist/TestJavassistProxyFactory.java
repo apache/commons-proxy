@@ -17,14 +17,7 @@
 
 package org.apache.commons.proxy.factory.javassist;
 
-import org.apache.commons.proxy.factory.AbstractProxyFactoryTestCase;
 import org.apache.commons.proxy.factory.AbstractSubclassingProxyFactoryTestCase;
-import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.util.DuplicateEcho;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
 
 /**
  * @author James Carman
@@ -32,8 +25,12 @@ import java.util.LinkedList;
  */
 public class TestJavassistProxyFactory extends AbstractSubclassingProxyFactoryTestCase
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public TestJavassistProxyFactory()
     {
-        super( new JavassistProxyFactory() );
+        super(new JavassistProxyFactory());
     }
 }

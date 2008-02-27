@@ -36,12 +36,20 @@ import org.apache.xmlrpc.XmlRpcClientLite;
  */
 public class TestXmlRpcInvoker extends TestCase
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private static WebServer server;
     private static XmlRpcClient client;
 
+//**********************************************************************************************************************
+// Static Methods
+//**********************************************************************************************************************
+
     public static Test suite()
     {
-        return new TestSetup( new TestSuite( TestXmlRpcInvoker.class ) )
+        return new TestSetup(new TestSuite(TestXmlRpcInvoker.class))
         {
             public void run( final TestResult testResult )
             {
@@ -52,7 +60,7 @@ public class TestXmlRpcInvoker extends TestCase
                         try
                         {
                             setUp();
-                            basicRun( testResult );
+                            basicRun(testResult);
                         }
                         finally
                         {
@@ -60,15 +68,15 @@ public class TestXmlRpcInvoker extends TestCase
                         }
                     }
                 };
-                testResult.runProtected( this, p );
+                testResult.runProtected(this, p);
             }
 
             protected void setUp() throws Exception
             {
-                server = new WebServer( 9999 );
-                server.addHandler( "echo", new EchoImpl() );
+                server = new WebServer(9999);
+                server.addHandler("echo", new EchoImpl());
                 server.start();
-                client = new XmlRpcClientLite( "http://localhost:9999/RPC2" );
+                client = new XmlRpcClientLite("http://localhost:9999/RPC2");
             }
 
             protected void tearDown() throws Exception
@@ -78,14 +86,18 @@ public class TestXmlRpcInvoker extends TestCase
         };
     }
 
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testInvalidHandlerName()
     {
-        final XmlRpcInvoker handler = new XmlRpcInvoker( client, "invalid" );
+        final XmlRpcInvoker handler = new XmlRpcInvoker(client, "invalid");
         final Echo echo = ( Echo ) new CglibProxyFactory()
-                .createInvokerProxy( handler, new Class[]{ Echo.class } );
+                .createInvokerProxy(handler, new Class[] {Echo.class});
         try
         {
-            echo.echoBack( "Hello" );
+            echo.echoBack("Hello");
             fail();
         }
         catch( InvokerException e )
@@ -95,10 +107,9 @@ public class TestXmlRpcInvoker extends TestCase
 
     public void testValidInvocation() throws Exception
     {
-        final XmlRpcInvoker handler = new XmlRpcInvoker( client, "echo" );
+        final XmlRpcInvoker handler = new XmlRpcInvoker(client, "echo");
         final Echo echo = ( Echo ) new CglibProxyFactory()
-                .createInvokerProxy( handler, new Class[]{ Echo.class } );
-        assertEquals( "Hello", echo.echoBack( "Hello" ) );
-
+                .createInvokerProxy(handler, new Class[] {Echo.class});
+        assertEquals("Hello", echo.echoBack("Hello"));
     }
 }

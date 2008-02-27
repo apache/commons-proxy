@@ -21,32 +21,34 @@ import com.caucho.burlap.client.BurlapProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 
 /**
  * Provides a burlap service object.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Burlap version 2.1.7 or greater</li>
+ * <li>Burlap version 2.1.7 or greater</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
-public class BurlapProvider implements ObjectProvider
+public class BurlapProvider implements ObjectProvider, Serializable
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Class serviceInterface;
     private String url;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public BurlapProvider()
     {
@@ -58,25 +60,25 @@ public class BurlapProvider implements ObjectProvider
         this.url = url;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
         try
         {
-            return new BurlapProxyFactory().create( serviceInterface, url );
+            return new BurlapProxyFactory().create(serviceInterface, url);
         }
         catch( MalformedURLException e )
         {
-            throw new ObjectProviderException( "Invalid url given.", e );
+            throw new ObjectProviderException("Invalid url given.", e);
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public void setServiceInterface( Class serviceInterface )
     {

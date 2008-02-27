@@ -17,41 +17,49 @@
 
 package org.apache.commons.proxy.interceptor;
 
+import EDU.oswego.cs.dl.util.concurrent.CountDown;
+import EDU.oswego.cs.dl.util.concurrent.Executor;
 import junit.framework.TestCase;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
-import EDU.oswego.cs.dl.util.concurrent.Executor;
-import EDU.oswego.cs.dl.util.concurrent.CountDown;
 
 public class TestExecutorInterceptor extends TestCase
 {
-    public void testVoidMethod() throws Exception
-    {
-        final ExecutedEcho impl = new ExecutedEcho();
-        final OneShotExecutor executor = new OneShotExecutor();
-        final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorInterceptor( executor ), new Class[] { Echo.class } );
-        proxy.echo();
-        executor.getLatch().acquire();
-        assertEquals( executor.getThread(), impl.getExecutionThread() );
-    }
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     public void testNonVoidMethod() throws Exception
     {
         final ExecutedEcho impl = new ExecutedEcho();
         final OneShotExecutor executor = new OneShotExecutor();
         final Echo proxy = ( Echo ) new CglibProxyFactory()
-                .createInterceptorProxy( impl, new ExecutorInterceptor( executor ), new Class[] { Echo.class } );
+                .createInterceptorProxy(impl, new ExecutorInterceptor(executor), new Class[] {Echo.class});
         try
         {
-            proxy.echoBack( "hello" );
+            proxy.echoBack("hello");
             fail();
         }
         catch( IllegalArgumentException e )
         {
         }
     }
+
+    public void testVoidMethod() throws Exception
+    {
+        final ExecutedEcho impl = new ExecutedEcho();
+        final OneShotExecutor executor = new OneShotExecutor();
+        final Echo proxy = ( Echo ) new CglibProxyFactory()
+                .createInterceptorProxy(impl, new ExecutorInterceptor(executor), new Class[] {Echo.class});
+        proxy.echo();
+        executor.getLatch().acquire();
+        assertEquals(executor.getThread(), impl.getExecutionThread());
+    }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     public static class ExecutedEcho extends EchoImpl
     {
@@ -71,11 +79,11 @@ public class TestExecutorInterceptor extends TestCase
     private static class OneShotExecutor implements Executor
     {
         private Thread thread;
-        private CountDown latch = new CountDown( 1 );
+        private CountDown latch = new CountDown(1);
 
         public void execute( final Runnable command )
         {
-            thread = new Thread( new Runnable()
+            thread = new Thread(new Runnable()
             {
                 public void run()
                 {
@@ -88,7 +96,7 @@ public class TestExecutorInterceptor extends TestCase
                         latch.release();
                     }
                 }
-            } );
+            });
             thread.start();
         }
 

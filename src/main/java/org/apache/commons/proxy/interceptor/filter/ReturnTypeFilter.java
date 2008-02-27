@@ -27,25 +27,39 @@ import java.util.Set;
 
 /**
  * Filters methods based on their return type.
+ *
  * @author James Carman
  * @since 1.0
  */
 public class ReturnTypeFilter implements MethodFilter
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final Set validReturnTypes = new HashSet();
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public ReturnTypeFilter( Class[] validReturnTypes )
     {
-        this( Arrays.asList( validReturnTypes ) );
+        this(Arrays.asList(validReturnTypes));
     }
 
     public ReturnTypeFilter( Collection validReturnTypes )
     {
-        this.validReturnTypes.addAll( validReturnTypes );
+        this.validReturnTypes.addAll(validReturnTypes);
     }
+
+//**********************************************************************************************************************
+// MethodFilter Implementation
+//**********************************************************************************************************************
+
 
     public boolean accepts( Method method )
     {
-        return validReturnTypes.contains( method.getReturnType() );
+        return validReturnTypes.contains(method.getReturnType());
     }
 }

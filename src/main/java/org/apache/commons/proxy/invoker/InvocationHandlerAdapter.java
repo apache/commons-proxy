@@ -19,8 +19,8 @@ package org.apache.commons.proxy.invoker;
 
 import org.apache.commons.proxy.Invoker;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * An adapter class to adapt the JDK's {@link InvocationHandler} interface to Commons Proxy's
@@ -31,15 +31,28 @@ import java.lang.reflect.InvocationHandler;
  */
 public class InvocationHandlerAdapter implements Invoker
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final InvocationHandler invocationHandler;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public InvocationHandlerAdapter( InvocationHandler invocationHandler )
     {
         this.invocationHandler = invocationHandler;
     }
 
+//**********************************************************************************************************************
+// Invoker Implementation
+//**********************************************************************************************************************
+
+
     public Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable
     {
-        return invocationHandler.invoke( proxy, method, arguments );
+        return invocationHandler.invoke(proxy, method, arguments);
     }
 }

@@ -52,24 +52,24 @@ import java.lang.reflect.Method;
  */
 public class DuckTypingInvoker implements Invoker
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private final ObjectProvider targetProvider;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public DuckTypingInvoker( final ObjectProvider targetProvider )
     {
         this.targetProvider = targetProvider;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Interface Invoker
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+// Invoker Implementation
+//**********************************************************************************************************************
 
     public Object invoke( final Object proxy, final Method method, final Object[] arguments ) throws Throwable
     {
@@ -77,18 +77,18 @@ public class DuckTypingInvoker implements Invoker
         final Class targetClass = target.getClass();
         try
         {
-            final Method targetMethod = targetClass.getMethod( method.getName(), method.getParameterTypes() );
-            if ( method.getReturnType().isAssignableFrom( targetMethod.getReturnType() ) )
+            final Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
+            if( method.getReturnType().isAssignableFrom(targetMethod.getReturnType()) )
             {
-                return targetMethod.invoke( target, arguments );
+                return targetMethod.invoke(target, arguments);
             }
             throw new UnsupportedOperationException(
-                    "Target type " + targetClass.getName() + " method has incompatible return type." );
+                    "Target type " + targetClass.getName() + " method has incompatible return type.");
         }
-        catch ( NoSuchMethodException e )
+        catch( NoSuchMethodException e )
         {
             throw new UnsupportedOperationException(
-                    "Target type " + targetClass.getName() + " does not have a method matching " + method + "." );
+                    "Target type " + targetClass.getName() + " does not have a method matching " + method + ".");
         }
     }
 }

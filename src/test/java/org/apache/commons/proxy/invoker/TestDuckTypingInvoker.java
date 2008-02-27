@@ -29,46 +29,63 @@ import java.io.Serializable;
  */
 public class TestDuckTypingInvoker extends TestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public void testExactSignatureMatch()
     {
-        final ObjectProvider targetProvider = new ConstantProvider( new LegacyDuck() );
-        final DuckTypingInvoker invoker = new DuckTypingInvoker( targetProvider );
-        final Duck duck = ( Duck ) new ProxyFactory().createInvokerProxy( invoker, new Class[]{ Duck.class } );
-        assertEquals( "Quack!", duck.sayQuack() );
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        final Duck duck = ( Duck ) new ProxyFactory().createInvokerProxy(invoker, new Class[] {Duck.class});
+        assertEquals("Quack!", duck.sayQuack());
     }
 
-    public void testNoMatchingMethod()
+    public void testMismatchingParameterType()
     {
-        final ObjectProvider targetProvider = new ConstantProvider( new LegacyDuck() );
-        final DuckTypingInvoker invoker = new DuckTypingInvoker( targetProvider );
-        final Goose goose = ( Goose ) new ProxyFactory().createInvokerProxy( invoker, new Class[]{ Goose.class } );
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        final ParameterizedDuck parameterizedDuck = ( ParameterizedDuck ) new ProxyFactory()
+                .createInvokerProxy(invoker, new Class[] {ParameterizedDuck.class});
         try
         {
-            goose.sayHonk();
-            fail( "No matching method should be found." );
+            parameterizedDuck.sayQuack("Elmer");
+            fail("No matching method should be found.");
         }
-        catch ( UnsupportedOperationException e )
+        catch( UnsupportedOperationException e )
         {
             // Do nothing, expected behavior!
         }
     }
 
-    public void testMismatchingParameterType()
+    public void testMismatchingReturnType()
     {
-        final ObjectProvider targetProvider = new ConstantProvider( new LegacyDuck() );
-        final DuckTypingInvoker invoker = new DuckTypingInvoker( targetProvider );
-        final ParameterizedDuck parameterizedDuck = ( ParameterizedDuck ) new ProxyFactory()
-                .createInvokerProxy( invoker, new Class[]{ ParameterizedDuck.class } );
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        final VoidReturnDuck voidDuck = ( VoidReturnDuck ) new ProxyFactory().createInvokerProxy(invoker, new Class[] {
+                VoidReturnDuck.class});
         try
         {
-            parameterizedDuck.sayQuack("Elmer");
-            fail( "No matching method should be found." );
+            voidDuck.sayQuack();
+            fail("No matching method should be found.");
         }
-        catch ( UnsupportedOperationException e )
+        catch( UnsupportedOperationException e )
+        {
+            // Do nothing, expected behavior!
+        }
+    }
+
+    public void testNoMatchingMethod()
+    {
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        final Goose goose = ( Goose ) new ProxyFactory().createInvokerProxy(invoker, new Class[] {Goose.class});
+        try
+        {
+            goose.sayHonk();
+            fail("No matching method should be found.");
+        }
+        catch( UnsupportedOperationException e )
         {
             // Do nothing, expected behavior!
         }
@@ -76,34 +93,26 @@ public class TestDuckTypingInvoker extends TestCase
 
     public void testTargetHasCompatibleReturnType()
     {
-        final ObjectProvider targetProvider = new ConstantProvider( new LegacyDuck() );
-        final DuckTypingInvoker invoker = new DuckTypingInvoker( targetProvider );
-        final SerializableDuck duck = ( SerializableDuck ) new ProxyFactory().createInvokerProxy( invoker, new Class[]{
-                SerializableDuck.class } );
-        assertEquals("Quack!", duck.sayQuack() );
-
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        final SerializableDuck duck = ( SerializableDuck ) new ProxyFactory().createInvokerProxy(invoker, new Class[] {
+                SerializableDuck.class});
+        assertEquals("Quack!", duck.sayQuack());
     }
 
-    public void testMismatchingReturnType()
-    {
-        final ObjectProvider targetProvider = new ConstantProvider( new LegacyDuck() );
-        final DuckTypingInvoker invoker = new DuckTypingInvoker( targetProvider );
-        final VoidReturnDuck voidDuck = ( VoidReturnDuck ) new ProxyFactory().createInvokerProxy( invoker, new Class[]{
-                VoidReturnDuck.class } );
-        try
-        {
-            voidDuck.sayQuack();
-            fail( "No matching method should be found." );
-        }
-        catch ( UnsupportedOperationException e )
-        {
-            // Do nothing, expected behavior!
-        }
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+
+    public interface Duck
+    {
+        public String sayQuack();
+    }
+
+    public interface Goose
+    {
+        public void sayHonk();
+    }
 
     public static class LegacyDuck
     {
@@ -113,28 +122,18 @@ public class TestDuckTypingInvoker extends TestCase
         }
     }
 
-    public interface Duck
+    public interface ParameterizedDuck
     {
-        public String sayQuack();
+        public String sayQuack( String recipient );
     }
 
     public interface SerializableDuck
     {
         public Serializable sayQuack();
     }
-    
-    public interface ParameterizedDuck
-    {
-        public String sayQuack( String recipient );
-    }
 
     public interface VoidReturnDuck
     {
         public void sayQuack();
-    }
-
-    public interface Goose
-    {
-        public void sayHonk();
     }
 }

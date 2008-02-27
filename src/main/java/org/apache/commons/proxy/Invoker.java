@@ -17,21 +17,27 @@
 
 package org.apache.commons.proxy;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
  * An invoker is responsible for handling a method invocation.
- * 
+ *
  * @author James Carman
  * @since 1.0
  */
-public interface Invoker
+public interface Invoker extends Serializable
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     /**
      * "Invokes" the method.  Implementation should throw a {@link org.apache.commons.proxy.exception.InvokerException}
      * if problems arise while trying to invoke the method.
-     * @param proxy the proxy object
-     * @param method the method being invoked
+     *
+     * @param proxy     the proxy object
+     * @param method    the method being invoked
      * @param arguments the arguments
      * @return the return value
      * @throws Throwable thrown by the implementation

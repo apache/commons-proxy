@@ -19,8 +19,12 @@ package org.apache.commons.proxy.exception;
 
 public class TestDelegateProviderException extends AbstractExceptionClassTestCase
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public TestDelegateProviderException()
     {
-        super( ObjectProviderException.class );
+        super(ObjectProviderException.class);
     }
 }

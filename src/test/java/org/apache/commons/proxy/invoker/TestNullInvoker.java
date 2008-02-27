@@ -16,36 +16,58 @@
  */
 
 package org.apache.commons.proxy.invoker;
-import junit.framework.TestCase;
+
 import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
-public class TestNullInvoker extends TestCase
+public class TestNullInvoker extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testReturnValues()
     {
-        final Tester tester = ( Tester )ProxyUtils.createNullObject( new CglibProxyFactory(), new Class[] { Tester.class } );
-        assertEquals( 0, tester.intMethod() );
-        assertEquals( 0L, tester.longMethod() );
-        assertEquals( ( short )0, tester.shortMethod() );
-        assertEquals( ( byte )0, tester.byteMethod() );
-        assertEquals( ( char )0, tester.charMethod() );
-        assertEquals( 0.0f, tester.floatMethod(), 0.0f );
-        assertEquals( 0.0, tester.doubleMethod(), 0.0f );
-        assertFalse( tester.booleanMethod() );
-        assertNull( tester.stringMethod() );
+        final Tester tester = ( Tester ) ProxyUtils.createNullObject(new CglibProxyFactory(), new Class[] {Tester.class});
+        assertEquals(0, tester.intMethod());
+        assertEquals(0L, tester.longMethod());
+        assertEquals(( short ) 0, tester.shortMethod());
+        assertEquals(( byte ) 0, tester.byteMethod());
+        assertEquals(( char ) 0, tester.charMethod());
+        assertEquals(0.0f, tester.floatMethod(), 0.0f);
+        assertEquals(0.0, tester.doubleMethod(), 0.0f);
+        assertFalse(tester.booleanMethod());
+        assertNull(tester.stringMethod());
     }
+
+    public void testSerialization()
+    {
+        assertSerializable(new NullInvoker());
+    }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     public static interface Tester
     {
         public int intMethod();
+
         public long longMethod();
+
         public short shortMethod();
+
         public byte byteMethod();
+
         public char charMethod();
+
         public double doubleMethod();
+
         public float floatMethod();
+
         public String stringMethod();
+
         public boolean booleanMethod();
     }
 }

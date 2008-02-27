@@ -26,9 +26,9 @@ package org.apache.commons.proxy.exception;
  */
 public class ProxyFactoryException extends RuntimeException
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public ProxyFactoryException()
     {
@@ -36,17 +36,17 @@ public class ProxyFactoryException extends RuntimeException
 
     public ProxyFactoryException( String message )
     {
-        super( message );
+        super(message);
     }
 
     public ProxyFactoryException( Throwable cause )
     {
-        super( cause );
+        super(cause);
     }
 
     public ProxyFactoryException( String message, Throwable cause )
     {
-        super( message, cause );
+        super(message, cause);
     }
 }
 

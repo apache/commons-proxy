@@ -29,56 +29,64 @@ import java.util.Properties;
 
 public class TestProxyUtils extends TestCase
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private Properties prevProperties;
+
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     protected void setUp() throws Exception
     {
         prevProperties = System.getProperties();
-        System.setProperties( new Properties() );
+        System.setProperties(new Properties());
     }
 
     protected void tearDown() throws Exception
     {
-        System.setProperties( prevProperties );
+        System.setProperties(prevProperties);
     }
 
     public void testCreateNullObject() throws Exception
     {
         final Echo nullEcho = ( Echo ) ProxyUtils
-                .createNullObject( new JavassistProxyFactory(), new Class[]{ Echo.class } );
-        assertNull( nullEcho.echoBack( "hello" ) );
-        assertNull( nullEcho.echoBack( "hello", "world" ) );
-        assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
+                .createNullObject(new JavassistProxyFactory(), new Class[] {Echo.class});
+        assertNull(nullEcho.echoBack("hello"));
+        assertNull(nullEcho.echoBack("hello", "world"));
+        assertEquals(( int ) 0, nullEcho.echoBack(12345));
     }
 
     public void testCreateNullObjectWithClassLoader() throws Exception
     {
-        final Echo nullEcho = ( Echo ) ProxyUtils.createNullObject( new JavassistProxyFactory(),
-                                                                    Echo.class.getClassLoader(),
-                                                                    new Class[]{ Echo.class } );
-        assertNull( nullEcho.echoBack( "hello" ) );
-        assertNull( nullEcho.echoBack( "hello", "world" ) );
-        assertEquals( ( int ) 0, nullEcho.echoBack( 12345 ) );
+        final Echo nullEcho = ( Echo ) ProxyUtils.createNullObject(new JavassistProxyFactory(),
+                Echo.class.getClassLoader(),
+                new Class[] {Echo.class});
+        assertNull(nullEcho.echoBack("hello"));
+        assertNull(nullEcho.echoBack("hello", "world"));
+        assertEquals(( int ) 0, nullEcho.echoBack(12345));
     }
 
     public void testGetAllInterfaces()
     {
-        assertNull( ProxyUtils.getAllInterfaces( null ) );
-        assertEquals( Arrays.asList( new Class[] { DuplicateEcho.class, Serializable.class, Echo.class } ), Arrays.asList( ProxyUtils.getAllInterfaces( EchoImpl.class ) ) );
+        assertNull(ProxyUtils.getAllInterfaces(null));
+        assertEquals(Arrays.asList(new Class[] {DuplicateEcho.class, Serializable.class, Echo.class}), Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
     }
 
     public void testGetJavaClassName() throws Exception
     {
-        assertEquals( "java.lang.Object[]", ProxyUtils.getJavaClassName( Object[].class ) );
-        assertEquals( "java.lang.Object[][]", ProxyUtils.getJavaClassName( Object[][].class ) );
-        assertEquals( "java.lang.String[][][]", ProxyUtils.getJavaClassName( String[][][].class ) );
-        assertEquals( "int", ProxyUtils.getJavaClassName( Integer.TYPE ) );
-        assertEquals( "float", ProxyUtils.getJavaClassName( Float.TYPE ) );
-        assertEquals( "long", ProxyUtils.getJavaClassName( Long.TYPE ) );
-        assertEquals( "double", ProxyUtils.getJavaClassName( Double.TYPE ) );
-        assertEquals( "short", ProxyUtils.getJavaClassName( Short.TYPE ) );
-        assertEquals( "byte", ProxyUtils.getJavaClassName( Byte.TYPE ) );
-        assertEquals( "char", ProxyUtils.getJavaClassName( Character.TYPE ) );
-        assertEquals( "boolean", ProxyUtils.getJavaClassName( Boolean.TYPE ) );
+        assertEquals("java.lang.Object[]", ProxyUtils.getJavaClassName(Object[].class));
+        assertEquals("java.lang.Object[][]", ProxyUtils.getJavaClassName(Object[][].class));
+        assertEquals("java.lang.String[][][]", ProxyUtils.getJavaClassName(String[][][].class));
+        assertEquals("int", ProxyUtils.getJavaClassName(Integer.TYPE));
+        assertEquals("float", ProxyUtils.getJavaClassName(Float.TYPE));
+        assertEquals("long", ProxyUtils.getJavaClassName(Long.TYPE));
+        assertEquals("double", ProxyUtils.getJavaClassName(Double.TYPE));
+        assertEquals("short", ProxyUtils.getJavaClassName(Short.TYPE));
+        assertEquals("byte", ProxyUtils.getJavaClassName(Byte.TYPE));
+        assertEquals("char", ProxyUtils.getJavaClassName(Character.TYPE));
+        assertEquals("boolean", ProxyUtils.getJavaClassName(Boolean.TYPE));
     }
 }

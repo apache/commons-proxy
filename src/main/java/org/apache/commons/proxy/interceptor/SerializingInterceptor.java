@@ -25,26 +25,36 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * An interceptor which makes a serialized copy of all parameters and return values.  This
  * is useful when testing remote services to ensure that all parameter/return types
  * are in fact serializable/deserializable.
+ *
  * @since 1.0
  */
-public class SerializingInterceptor implements Interceptor
+public class SerializingInterceptor implements Interceptor, Serializable
 {
-    public Object intercept(Invocation invocation) throws Throwable
+//**********************************************************************************************************************
+// Interceptor Implementation
+//**********************************************************************************************************************
+
+    public Object intercept( Invocation invocation ) throws Throwable
     {
         Object[] arguments = invocation.getArguments();
-        for (int i = 0; i < arguments.length; i++)
+        for( int i = 0; i < arguments.length; i++ )
         {
             arguments[i] = serializedCopy(arguments[i]);
         }
         return serializedCopy(invocation.proceed());
     }
 
-    private Object serializedCopy(Object original)
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    private Object serializedCopy( Object original )
     {
         try
         {
@@ -60,15 +70,15 @@ public class SerializingInterceptor implements Interceptor
             bin.close();
             return copy;
         }
-        catch (IOException e)
+        catch( IOException e )
         {
-            throw new RuntimeException( "Unable to make serialized copy of " +
-                    original.getClass().getName() + " object.", e );
+            throw new RuntimeException("Unable to make serialized copy of " +
+                    original.getClass().getName() + " object.", e);
         }
-        catch (ClassNotFoundException e)
+        catch( ClassNotFoundException e )
         {
-            throw new RuntimeException( "Unable to make serialized copy of " +
-                    original.getClass().getName() + " object.", e );
+            throw new RuntimeException("Unable to make serialized copy of " +
+                    original.getClass().getName() + " object.", e);
         }
     }
 }

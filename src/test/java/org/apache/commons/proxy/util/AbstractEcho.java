@@ -25,6 +25,10 @@ import java.io.Serializable;
  */
 public abstract class AbstractEcho implements Echo, Serializable
 {
+//**********************************************************************************************************************
+// Echo Implementation
+//**********************************************************************************************************************
+
     public String echoBack( String message )
     {
         return message;

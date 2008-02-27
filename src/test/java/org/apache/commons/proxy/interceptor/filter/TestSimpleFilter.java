@@ -27,11 +27,14 @@ import org.apache.commons.proxy.util.EchoImpl;
  */
 public class TestSimpleFilter extends TestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testAccepts() throws Exception
     {
-        final SimpleFilter filter = new SimpleFilter( new String[] { "echoBack" } );
-        assertTrue( filter.accepts( Echo.class.getMethod( "echoBack", new Class[] { String.class } ) ) );
-        assertFalse( filter.accepts( EchoImpl.class.getMethod( "hashCode",  new Class[] {} ) ) );
+        final SimpleFilter filter = new SimpleFilter(new String[] {"echoBack"});
+        assertTrue(filter.accepts(Echo.class.getMethod("echoBack", new Class[] {String.class})));
+        assertFalse(filter.accepts(EchoImpl.class.getMethod("hashCode", new Class[] {})));
     }
-
 }

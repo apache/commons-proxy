@@ -20,23 +20,25 @@ package org.apache.commons.proxy.provider;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
+import java.io.Serializable;
+
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
  *
  * @author James Carman
  * @since 1.0
  */
-public class BeanProvider implements ObjectProvider
+public class BeanProvider implements ObjectProvider, Serializable
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Class beanClass;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public BeanProvider()
     {
@@ -44,6 +46,7 @@ public class BeanProvider implements ObjectProvider
 
     /**
      * Constructs a provider which instantiates objects of the specified bean class.
+     *
      * @param beanClass the bean class
      */
     public BeanProvider( Class beanClass )
@@ -51,9 +54,9 @@ public class BeanProvider implements ObjectProvider
         this.beanClass = beanClass;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
@@ -61,24 +64,24 @@ public class BeanProvider implements ObjectProvider
         {
             if( beanClass == null )
             {
-                throw new ObjectProviderException( "No bean class provided." );
+                throw new ObjectProviderException("No bean class provided.");
             }
             return beanClass.newInstance();
         }
         catch( InstantiationException e )
         {
-            throw new ObjectProviderException( "Class " + beanClass.getName() + " is not concrete.", e );
+            throw new ObjectProviderException("Class " + beanClass.getName() + " is not concrete.", e);
         }
         catch( IllegalAccessException e )
         {
-            throw new ObjectProviderException( "Constructor for class " + beanClass.getName() + " is not accessible.",
-                                               e );
+            throw new ObjectProviderException("Constructor for class " + beanClass.getName() + " is not accessible.",
+                    e);
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public void setBeanClass( Class beanClass )
     {

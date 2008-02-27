@@ -17,8 +17,8 @@
 
 package org.apache.commons.proxy.util;
 
-import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
 
 /**
  * @author James Carman
@@ -26,12 +26,25 @@ import org.apache.commons.proxy.Interceptor;
  */
 public class SuffixInterceptor implements Interceptor
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final String suffix;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public SuffixInterceptor( String suffix )
     {
         this.suffix = suffix;
     }
+
+//**********************************************************************************************************************
+// Interceptor Implementation
+//**********************************************************************************************************************
+
 
     public Object intercept( Invocation methodInvocation ) throws Throwable
     {

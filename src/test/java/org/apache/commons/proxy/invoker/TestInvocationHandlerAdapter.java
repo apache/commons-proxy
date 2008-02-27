@@ -16,6 +16,7 @@
  */
 
 package org.apache.commons.proxy.invoker;
+
 import junit.framework.TestCase;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.util.Echo;
@@ -25,17 +26,25 @@ import java.lang.reflect.Method;
 
 public class TestInvocationHandlerAdapter extends TestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testMethodInvocation() throws Exception
     {
         InvocationHandlerTester tester = new InvocationHandlerTester();
-        final Echo echo = ( Echo ) new JavassistProxyFactory().createInvokerProxy( new InvocationHandlerAdapter( tester ), new Class[] { Echo.class } );
-        echo.echoBack( "hello" );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
-        assertSame( echo, tester.proxy );
-        assertNotNull( tester.arguments );
-        assertEquals( 1, tester.arguments.length );
-        assertEquals( "hello", tester.arguments[0] );
+        final Echo echo = ( Echo ) new JavassistProxyFactory().createInvokerProxy(new InvocationHandlerAdapter(tester), new Class[] {Echo.class});
+        echo.echoBack("hello");
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.method);
+        assertSame(echo, tester.proxy);
+        assertNotNull(tester.arguments);
+        assertEquals(1, tester.arguments.length);
+        assertEquals("hello", tester.arguments[0]);
     }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     private class InvocationHandlerTester implements InvocationHandler
     {

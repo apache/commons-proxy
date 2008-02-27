@@ -34,9 +34,9 @@ import java.util.Set;
  */
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Static Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     /**
      * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
@@ -56,14 +56,14 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
             final Method[] methods = proxyInterface.getMethods();
             for( int j = 0; j < methods.length; j++ )
             {
-                final MethodSignature signature = new MethodSignature( methods[j] );
-                if( Modifier.isFinal( methods[j].getModifiers() ) )
+                final MethodSignature signature = new MethodSignature(methods[j]);
+                if( Modifier.isFinal(methods[j].getModifiers()) )
                 {
-                    finalizedSignatures.add( signature );
+                    finalizedSignatures.add(signature);
                 }
-                else if( !signatureMethodMap.containsKey( signature ) )
+                else if( !signatureMethodMap.containsKey(signature) )
                 {
-                    signatureMethodMap.put( signature, methods[j] );
+                    signatureMethodMap.put(signature, methods[j]);
                 }
             }
         }
@@ -71,9 +71,9 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
         for( Iterator i = finalizedSignatures.iterator(); i.hasNext(); )
         {
             MethodSignature signature = ( MethodSignature ) i.next();
-            resultingMethods.remove( signatureMethodMap.get( signature ) );
+            resultingMethods.remove(signatureMethodMap.get(signature));
         }
-        return ( Method[] ) resultingMethods.toArray( new Method[resultingMethods.size()] );
+        return ( Method[] ) resultingMethods.toArray(new Method[resultingMethods.size()]);
     }
 }
 

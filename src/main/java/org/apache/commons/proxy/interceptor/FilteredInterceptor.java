@@ -17,8 +17,8 @@
 
 package org.apache.commons.proxy.interceptor;
 
-import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
 
 /**
  * Decorates another <code>MethodInterceptor</code> by only calling it if the method is accepted by the supplied
@@ -29,16 +29,16 @@ import org.apache.commons.proxy.Interceptor;
  */
 public class FilteredInterceptor implements Interceptor
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private final Interceptor inner;
     private final MethodFilter filter;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public FilteredInterceptor( Interceptor inner, MethodFilter filter )
     {
@@ -46,15 +46,15 @@ public class FilteredInterceptor implements Interceptor
         this.filter = filter;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// MethodInterceptor Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+// Interceptor Implementation
+//**********************************************************************************************************************
 
     public Object intercept( Invocation invocation ) throws Throwable
     {
-        if( filter.accepts( invocation.getMethod() ) )
+        if( filter.accepts(invocation.getMethod()) )
         {
-            return inner.intercept( invocation );
+            return inner.intercept(invocation);
         }
         else
         {

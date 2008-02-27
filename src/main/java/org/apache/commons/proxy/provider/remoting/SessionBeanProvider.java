@@ -37,16 +37,17 @@ import java.util.Properties;
  */
 public class SessionBeanProvider implements ObjectProvider
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+
     private final String jndiName;
     private final Class homeInterface;
     private final Properties properties;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public SessionBeanProvider( String jndiName, Class homeInterface )
     {
@@ -62,39 +63,39 @@ public class SessionBeanProvider implements ObjectProvider
         this.properties = properties;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
         try
         {
             final InitialContext initialContext = properties == null ? new InitialContext() :
-                                                  new InitialContext( properties );
-            Object homeObject = PortableRemoteObject.narrow( initialContext.lookup( jndiName ), homeInterface );
-            final Method createMethod = homeObject.getClass().getMethod( "create", ProxyUtils.EMPTY_ARGUMENT_TYPES );
-            return createMethod.invoke( homeObject, ProxyUtils.EMPTY_ARGUMENTS );
+                    new InitialContext(properties);
+            Object homeObject = PortableRemoteObject.narrow(initialContext.lookup(jndiName), homeInterface);
+            final Method createMethod = homeObject.getClass().getMethod("create", ProxyUtils.EMPTY_ARGUMENT_TYPES);
+            return createMethod.invoke(homeObject, ProxyUtils.EMPTY_ARGUMENTS);
         }
         catch( NoSuchMethodException e )
         {
             throw new ObjectProviderException(
-                    "Unable to find no-arg create() method on home interface " + homeInterface.getName() + ".", e );
+                    "Unable to find no-arg create() method on home interface " + homeInterface.getName() + ".", e);
         }
         catch( IllegalAccessException e )
         {
             throw new ObjectProviderException(
                     "No-arg create() method on home interface " + homeInterface.getName() + " is not accessible.",
-                    e ); // Should never happen!
+                    e); // Should never happen!
         }
         catch( NamingException e )
         {
-            throw new ObjectProviderException( "Unable to lookup EJB home object in JNDI.", e );
+            throw new ObjectProviderException("Unable to lookup EJB home object in JNDI.", e);
         }
         catch( InvocationTargetException e )
         {
             throw new ObjectProviderException(
-                    "No-arg create() method on home interface " + homeInterface.getName() + " threw an exception.", e );
+                    "No-arg create() method on home interface " + homeInterface.getName() + " threw an exception.", e);
         }
     }
 }

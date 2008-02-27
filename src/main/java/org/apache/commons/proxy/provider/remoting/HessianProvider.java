@@ -21,32 +21,34 @@ import com.caucho.hessian.client.HessianProxyFactory;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 
 /**
  * Provides a hessian service object.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Hessian version 3.0.1 or greater</li>
+ * <li>Hessian version 3.0.1 or greater</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
-public class HessianProvider implements ObjectProvider
+public class HessianProvider implements ObjectProvider, Serializable
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Class serviceInterface;
     private String url;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public HessianProvider()
     {
@@ -58,25 +60,25 @@ public class HessianProvider implements ObjectProvider
         this.url = url;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
         try
         {
-            return new HessianProxyFactory().create( serviceInterface, url );
+            return new HessianProxyFactory().create(serviceInterface, url);
         }
         catch( MalformedURLException e )
         {
-            throw new ObjectProviderException( "Invalid url given.", e );
+            throw new ObjectProviderException("Invalid url given.", e);
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public void setServiceInterface( Class serviceInterface )
     {

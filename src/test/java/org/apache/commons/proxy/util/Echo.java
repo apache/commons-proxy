@@ -25,13 +25,23 @@ import java.io.IOException;
  */
 public interface Echo
 {
-    public String echoBack( String message );
-    public String echoBack( String message1, String message2 );
-    public String echoBack( String[] messages );
-    public int echoBack( int i );
-    public boolean echoBack( boolean b );
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void echo();
 
-    public void ioException() throws IOException;
+    public String echoBack( String message );
+
+    public String echoBack( String[] messages );
+
+    public int echoBack( int i );
+
+    public boolean echoBack( boolean b );
+
+    public String echoBack( String message1, String message2 );
+
     public void illegalArgument();
+
+    public void ioException() throws IOException;
 }

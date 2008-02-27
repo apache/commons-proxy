@@ -17,7 +17,6 @@
 
 package org.apache.commons.proxy.factory;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
@@ -26,12 +25,14 @@ import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.provider.BeanProvider;
 import org.apache.commons.proxy.provider.ConstantProvider;
 import org.apache.commons.proxy.provider.SingletonProvider;
+import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.DuplicateEcho;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixInterceptor;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -43,145 +44,216 @@ import java.util.TreeSet;
  * @author James Carman
  * @since 1.0
  */
-public abstract class AbstractProxyFactoryTestCase extends TestCase
+public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
+    private static final Class[] ECHO_ONLY = new Class[] {Echo.class};
     protected final ProxyFactory factory;
-    private static final Class[] ECHO_ONLY = new Class[] { Echo.class };
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     protected AbstractProxyFactoryTestCase( ProxyFactory factory )
     {
         this.factory = factory;
     }
 
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    private ObjectProvider createSingletonEcho()
+    {
+        return new SingletonProvider(new BeanProvider(EchoImpl.class));
+    }
+
+    public void testBooleanInterceptorParameter()
+    {
+        final Echo echo = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new InterceptorTester(), ECHO_ONLY);
+        assertFalse(echo.echoBack(false));
+        assertTrue(echo.echoBack(true));
+    }
+
     public void testCanProxy()
     {
-        assertTrue( factory.canProxy( ECHO_ONLY ) );
-        assertFalse( factory.canProxy( new Class[] { EchoImpl.class } ) );
+        assertTrue(factory.canProxy(ECHO_ONLY));
+        assertFalse(factory.canProxy(new Class[] {EchoImpl.class}));
+    }
+
+    public void testChangingArguments()
+    {
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new ChangeArgumentInterceptor(), ECHO_ONLY);
+        assertEquals("something different", proxy.echoBack("whatever"));
+    }
+
+    public void testCreateDelegatingProxy()
+    {
+        final Echo echo = ( Echo ) factory.createDelegatorProxy(createSingletonEcho(), ECHO_ONLY);
+        echo.echo();
+        assertEquals("message", echo.echoBack("message"));
+        assertEquals("ab", echo.echoBack("a", "b"));
+    }
+
+    public void testCreateInterceptorProxy()
+    {
+        final Echo target = ( Echo ) factory.createDelegatorProxy(createSingletonEcho(), ECHO_ONLY);
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(target, new SuffixInterceptor(" suffix"), ECHO_ONLY);
+        proxy.echo();
+        assertEquals("message suffix", proxy.echoBack("message"));
+    }
+
+    public void testDelegatingProxyClassCaching() throws Exception
+    {
+        final Echo proxy1 = ( Echo ) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), ECHO_ONLY);
+        final Echo proxy2 = ( Echo ) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), ECHO_ONLY);
+        assertNotSame(proxy1, proxy2);
+        assertSame(proxy1.getClass(), proxy2.getClass());
+    }
+
+    public void testDelegatingProxyInterfaceOrder()
+    {
+        final Echo echo = ( Echo ) factory.createDelegatorProxy(createSingletonEcho(), new Class[] {Echo.class, DuplicateEcho.class});
+        final List expected = new LinkedList(Arrays.asList(new Class[] {Echo.class, DuplicateEcho.class}));
+        final List actual = new LinkedList(Arrays.asList(echo.getClass().getInterfaces()));
+        actual.retainAll(expected);  // Doesn't alter order!
+        assertEquals(expected, actual);
+    }
+
+    public void testDelegatingProxySerializable() throws Exception
+    {
+        final Echo proxy = ( Echo ) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), ECHO_ONLY);
+        assertSerializable(proxy);
+    }
+
+    public void testInterceptingProxyClassCaching() throws Exception
+    {
+        final Echo proxy1 = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
+        final Echo proxy2 = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
+        assertNotSame(proxy1, proxy2);
+        assertSame(proxy1.getClass(), proxy2.getClass());
+    }
+
+    public void testInterceptingProxySerializable() throws Exception
+    {
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
+        assertSerializable(proxy);
+    }
+
+    public void testInterceptorProxyWithCheckedException() throws Exception
+    {
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
+        try
+        {
+            proxy.ioException();
+            fail();
+        }
+        catch( IOException e )
+        {
+        }
+    }
+
+    public void testInterceptorProxyWithUncheckedException() throws Exception
+    {
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
+        try
+        {
+            proxy.illegalArgument();
+            fail();
+        }
+        catch( IllegalArgumentException e )
+        {
+        }
     }
 
     public void testInterfaceHierarchies()
     {
-        final SortedSet set = ( SortedSet ) factory.createDelegatorProxy( new ConstantProvider( new TreeSet() ), new Class[] { SortedSet.class } );
-        set.add( "Hello" );
+        final SortedSet set = ( SortedSet ) factory.createDelegatorProxy(new ConstantProvider(new TreeSet()), new Class[] {SortedSet.class});
+        set.add("Hello");
     }
 
     public void testInvokerProxy() throws Exception
     {
         final InvokerTester tester = new InvokerTester();
-        final Echo echo = ( Echo )factory.createInvokerProxy( tester, ECHO_ONLY );
-        echo.echoBack( "hello" );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
-        assertSame( echo, tester.proxy );
-        assertNotNull( tester.args );
-        assertEquals( 1, tester.args.length );
-        assertEquals( "hello", tester.args[0] );
+        final Echo echo = ( Echo ) factory.createInvokerProxy(tester, ECHO_ONLY);
+        echo.echoBack("hello");
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.method);
+        assertSame(echo, tester.proxy);
+        assertNotNull(tester.args);
+        assertEquals(1, tester.args.length);
+        assertEquals("hello", tester.args[0]);
     }
 
-    public void testDelegatingProxyInterfaceOrder()
+    public void testInvokerProxyClassCaching() throws Exception
     {
-        final Echo echo = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), new Class[] { Echo.class, DuplicateEcho.class } );
-        final List expected = new LinkedList( Arrays.asList( new Class[] { Echo.class, DuplicateEcho.class } ) );
-        final List actual = new LinkedList( Arrays.asList( echo.getClass().getInterfaces() ) );
-        actual.retainAll( expected );  // Doesn't alter order!
-        assertEquals( expected, actual );
+        final Echo proxy1 = ( Echo ) factory.createInvokerProxy(new InvokerTester(), ECHO_ONLY);
+        final Echo proxy2 = ( Echo ) factory.createInvokerProxy(new InvokerTester(), ECHO_ONLY);
+        assertNotSame(proxy1, proxy2);
+        assertSame(proxy1.getClass(), proxy2.getClass());
     }
 
-    public void testCreateDelegatingProxy()
+    public void testInvokerProxySerializable() throws Exception
     {
-        final Echo echo = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), ECHO_ONLY );
-        echo.echo();
-        assertEquals( "message", echo.echoBack( "message" ) );
-        assertEquals( "ab", echo.echoBack( "a", "b" ) );
+        final Echo proxy = ( Echo ) factory.createInvokerProxy(new InvokerTester(), ECHO_ONLY);
+        assertTrue(proxy instanceof Serializable);
     }
 
-    public void testBooleanInterceptorParameter()
-    {
-        final Echo echo = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new  InterceptorTester(), ECHO_ONLY );
-        assertFalse( echo.echoBack( false ) );
-        assertTrue( echo.echoBack( true ) );
-
-    }
-    public void testPrimitiveParameter()
-    {
-        final Echo echo = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), ECHO_ONLY );
-        assertEquals( 1, echo.echoBack( 1 ) );
-    }
-
-    public void testCreateInterceptorProxy()
-    {
-        final Echo target = ( Echo ) factory.createDelegatorProxy( createSingletonEcho(), ECHO_ONLY );
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, new SuffixInterceptor( " suffix" ), ECHO_ONLY );
-        proxy.echo();
-        assertEquals( "message suffix", proxy.echoBack( "message" ) );
-    }
-
-    private ObjectProvider createSingletonEcho()
-    {
-        return new SingletonProvider( new BeanProvider( EchoImpl.class ) );
-    }
-
-    public void testMethodInvocationImplementation() throws Exception
+    public void testMethodInvocationClassCaching() throws Exception
     {
         final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, ECHO_ONLY );
-        proxy.echo();
-        assertNotNull( tester.arguments );
-        assertEquals( 0, tester.arguments.length );
-        assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.method );
-        assertEquals( target, tester.proxy );
-        proxy.echoBack( "Hello" );
-        assertNotNull( tester.arguments );
-        assertEquals( 1, tester.arguments.length );
-        assertEquals( "Hello", tester.arguments[0] );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
-        proxy.echoBack( "Hello", "World" );
-        assertNotNull( tester.arguments );
-        assertEquals( 2, tester.arguments.length );
-        assertEquals( "Hello", tester.arguments[0] );
-        assertEquals( "World", tester.arguments[1] );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class, String.class } ), tester.method );
+        final Echo proxy1 = ( Echo ) factory.createInterceptorProxy(target, tester, ECHO_ONLY);
+        final Echo proxy2 = ( Echo ) factory.createInterceptorProxy(target, tester, new Class[] {Echo.class, DuplicateEcho.class});
+        proxy1.echoBack("hello1");
+        final Class invocationClass1 = tester.invocationClass;
+        proxy2.echoBack("hello2");
+        assertSame(invocationClass1, tester.invocationClass);
     }
 
     public void testMethodInvocationDuplicateMethods() throws Exception
     {
         final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( target, tester, new Class[] { Echo.class, DuplicateEcho.class } );
-        proxy.echoBack( "hello" );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.method );
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(target, tester, new Class[] {Echo.class, DuplicateEcho.class});
+        proxy.echoBack("hello");
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.method);
     }
 
-
-    public void testMethodInvocationClassCaching() throws Exception
+    public void testMethodInvocationImplementation() throws Exception
     {
         final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy1 = ( Echo ) factory.createInterceptorProxy( target, tester, ECHO_ONLY );
-        final Echo proxy2 = ( Echo ) factory.createInterceptorProxy( target, tester, new Class[] { Echo.class, DuplicateEcho.class } );
-        proxy1.echoBack( "hello1" );
-        final Class invocationClass1 = tester.invocationClass;
-        proxy2.echoBack( "hello2" );
-        assertEquals( invocationClass1, tester.invocationClass );
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(target, tester, ECHO_ONLY);
+        proxy.echo();
+        assertNotNull(tester.arguments);
+        assertEquals(0, tester.arguments.length);
+        assertEquals(Echo.class.getMethod("echo", new Class[] {}), tester.method);
+        assertEquals(target, tester.proxy);
+        proxy.echoBack("Hello");
+        assertNotNull(tester.arguments);
+        assertEquals(1, tester.arguments.length);
+        assertEquals("Hello", tester.arguments[0]);
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.method);
+        proxy.echoBack("Hello", "World");
+        assertNotNull(tester.arguments);
+        assertEquals(2, tester.arguments.length);
+        assertEquals("Hello", tester.arguments[0]);
+        assertEquals("World", tester.arguments[1]);
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class, String.class}), tester.method);
     }
 
-    public void testDelegatingProxyClassCaching() throws Exception
+    public void testPrimitiveParameter()
     {
-        final Echo proxy1 = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
-        final Echo proxy2 = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
-        assertEquals( proxy1.getClass(), proxy2.getClass() );
-    }
-
-    public void testInterceptingProxyClassCaching() throws Exception
-    {
-        final Echo proxy1 = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY );
-        final Echo proxy2 = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY );
-        assertEquals( proxy1.getClass(), proxy2.getClass() );
+        final Echo echo = ( Echo ) factory.createDelegatorProxy(createSingletonEcho(), ECHO_ONLY);
+        assertEquals(1, echo.echoBack(1));
     }
 
     public void testProxyWithCheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), ECHO_ONLY);
         try
         {
             proxy.ioException();
@@ -194,59 +266,26 @@ public abstract class AbstractProxyFactoryTestCase extends TestCase
 
     public void testProxyWithUncheckedException() throws Exception
     {
-        final Echo proxy = ( Echo ) factory.createDelegatorProxy( new ConstantProvider( new EchoImpl() ), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), ECHO_ONLY);
         try
         {
             proxy.illegalArgument();
             fail();
         }
         catch( IllegalArgumentException e )
-        {
-        }
-    }
-
-    public void testInterceptorProxyWithUncheckedException() throws Exception
-    {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(),  ECHO_ONLY );
-        try
-        {
-            proxy.illegalArgument();
-            fail();
-        }
-        catch( IllegalArgumentException e )
-        {
-        }
-    }
-
-    public void testInterceptorProxyWithCheckedException() throws Exception
-    {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY );
-        try
-        {
-            proxy.ioException();
-            fail();
-        }
-        catch( IOException e )
         {
         }
     }
 
     public void testWithNonAccessibleTargetType()
     {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new PrivateEcho(), new NoOpMethodInterceptor(), ECHO_ONLY );
+        final Echo proxy = ( Echo ) factory.createInterceptorProxy(new PrivateEcho(), new NoOpMethodInterceptor(), ECHO_ONLY);
         proxy.echo();
-
     }
 
-    public void testChangingArguments()
-    {
-        final Echo proxy = ( Echo ) factory.createInterceptorProxy( new EchoImpl(), new ChangeArgumentInterceptor(), ECHO_ONLY );
-        assertEquals( "something different", proxy.echoBack( "whatever" ) );
-    }
-
-    private static class PrivateEcho extends EchoImpl
-    {
-    }
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     private static class ChangeArgumentInterceptor implements Interceptor
     {
@@ -257,10 +296,19 @@ public abstract class AbstractProxyFactoryTestCase extends TestCase
         }
     }
 
-    protected static class NoOpMethodInterceptor implements Interceptor
+    private static class InterceptorTester implements Interceptor
     {
+        private Object[] arguments;
+        private Method method;
+        private Object proxy;
+        private Class invocationClass;
+
         public Object intercept( Invocation methodInvocation ) throws Throwable
         {
+            arguments = methodInvocation.getArguments();
+            method = methodInvocation.getMethod();
+            proxy = methodInvocation.getProxy();
+            invocationClass = methodInvocation.getClass();
             return methodInvocation.proceed();
         }
     }
@@ -280,20 +328,15 @@ public abstract class AbstractProxyFactoryTestCase extends TestCase
         }
     }
 
-    private static class InterceptorTester implements Interceptor
+    protected static class NoOpMethodInterceptor implements Interceptor, Serializable
     {
-        private Object[] arguments;
-        private Method method;
-        private Object proxy;
-        private Class invocationClass;
-
         public Object intercept( Invocation methodInvocation ) throws Throwable
         {
-            arguments = methodInvocation.getArguments();
-            method = methodInvocation.getMethod();
-            proxy = methodInvocation.getProxy();
-            invocationClass = methodInvocation.getClass();
             return methodInvocation.proceed();
         }
+    }
+
+    private static class PrivateEcho extends EchoImpl
+    {
     }
 }

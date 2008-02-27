@@ -21,6 +21,7 @@ import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.exception.ObjectProviderException;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -30,14 +31,23 @@ import java.lang.reflect.Method;
  * @author James Carman
  * @since 1.0
  */
-public class CloningProvider implements ObjectProvider
+public class CloningProvider implements ObjectProvider, Serializable
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final Cloneable cloneable;
     private Method cloneMethod;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     /**
      * Constructs a provider which returns clone copies of the specified {@link Cloneable}
      * object.
+     *
      * @param cloneable the object to clone
      */
     public CloningProvider( Cloneable cloneable )
@@ -45,39 +55,47 @@ public class CloningProvider implements ObjectProvider
         this.cloneable = cloneable;
     }
 
+//**********************************************************************************************************************
+// ObjectProvider Implementation
+//**********************************************************************************************************************
+
+
+    public Object getObject()
+    {
+        try
+        {
+            return getCloneMethod().invoke(cloneable, ProxyUtils.EMPTY_ARGUMENTS);
+        }
+        catch( IllegalAccessException e )
+        {
+            throw new ObjectProviderException(
+                    "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e);
+        }
+        catch( InvocationTargetException e )
+        {
+            throw new ObjectProviderException(
+                    "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e);
+        }
+    }
+
+//**********************************************************************************************************************
+// Getter/Setter Methods
+//**********************************************************************************************************************
+
     private synchronized Method getCloneMethod()
     {
         if( cloneMethod == null )
         {
             try
             {
-                cloneMethod = cloneable.getClass().getMethod( "clone", ProxyUtils.EMPTY_ARGUMENT_TYPES );
+                cloneMethod = cloneable.getClass().getMethod("clone", ProxyUtils.EMPTY_ARGUMENT_TYPES);
             }
             catch( NoSuchMethodException e )
             {
                 throw new ObjectProviderException(
-                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method." );
+                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method.");
             }
         }
         return cloneMethod;
     }
-
-    public Object getObject()
-    {
-        try
-        {
-            return getCloneMethod().invoke( cloneable, ProxyUtils.EMPTY_ARGUMENTS );
-        }
-        catch( IllegalAccessException e )
-        {
-            throw new ObjectProviderException(
-                    "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e );
-        }
-        catch( InvocationTargetException e )
-        {
-            throw new ObjectProviderException(
-                    "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e );
-        }
-    }
-
 }

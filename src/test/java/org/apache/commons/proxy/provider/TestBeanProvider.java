@@ -17,11 +17,46 @@
 
 package org.apache.commons.proxy.provider;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
-public class TestBeanProvider extends TestCase
+public class TestBeanProvider extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    public void testAbstractBeanClass()
+    {
+        try
+        {
+            final BeanProvider p = new BeanProvider();
+            p.setBeanClass(Number.class);
+            p.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testNonAccessibleConstructor()
+    {
+        try
+        {
+            new BeanProvider(MyBean.class).getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testSerialization()
+    {
+        assertSerializable(new BeanProvider(MyBean.class));
+    }
+
     public void testWithNullBeanClass()
     {
         try
@@ -34,33 +69,10 @@ public class TestBeanProvider extends TestCase
         {
         }
     }
-    public void testAbstractBeanClass()
-    {
-        try
-        {
-            final BeanProvider p = new BeanProvider();
-            p.setBeanClass( Number.class );
-            p.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
 
-        }
-    }
-
-    public void testNonAccessibleConstructor()
-    {
-        try
-        {
-            new BeanProvider( MyBean.class ).getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-
-        }
-    }
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     public static class MyBean
     {

@@ -19,42 +19,43 @@ package org.apache.commons.proxy;
 
 import org.apache.commons.proxy.invoker.NullInvoker;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Provides some helpful proxy utility methods.
- * 
+ *
  * @author James Carman
  * @since 1.0
  */
 public class ProxyUtils
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
     private static final Map wrapperClassMap = new HashMap();
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Static Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     static
     {
-        wrapperClassMap.put( Integer.TYPE, Integer.class );
-        wrapperClassMap.put( Character.TYPE, Character.class );
-        wrapperClassMap.put( Boolean.TYPE, Boolean.class );
-        wrapperClassMap.put( Short.TYPE, Short.class );
-        wrapperClassMap.put( Long.TYPE, Long.class );
-        wrapperClassMap.put( Float.TYPE, Float.class );
-        wrapperClassMap.put( Double.TYPE, Double.class );
-        wrapperClassMap.put( Byte.TYPE, Byte.class );
+        wrapperClassMap.put(Integer.TYPE, Integer.class);
+        wrapperClassMap.put(Character.TYPE, Character.class);
+        wrapperClassMap.put(Boolean.TYPE, Boolean.class);
+        wrapperClassMap.put(Short.TYPE, Short.class);
+        wrapperClassMap.put(Long.TYPE, Long.class);
+        wrapperClassMap.put(Float.TYPE, Float.class);
+        wrapperClassMap.put(Double.TYPE, Double.class);
+        wrapperClassMap.put(Byte.TYPE, Byte.class);
     }
+
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      *
@@ -64,7 +65,7 @@ public class ProxyUtils
      */
     public static Object createNullObject( ProxyFactory proxyFactory, Class[] proxyClasses )
     {
-        return proxyFactory.createInvokerProxy( new NullInvoker(), proxyClasses );
+        return proxyFactory.createInvokerProxy(new NullInvoker(), proxyClasses);
     }
 
     /**
@@ -77,7 +78,7 @@ public class ProxyUtils
      */
     public static Object createNullObject( ProxyFactory proxyFactory, ClassLoader classLoader, Class[] proxyClasses )
     {
-        return proxyFactory.createInvokerProxy( classLoader, new NullInvoker(), proxyClasses );
+        return proxyFactory.createInvokerProxy(classLoader, new NullInvoker(), proxyClasses);
     }
 
     /**
@@ -97,8 +98,8 @@ public class ProxyUtils
      */
     public static Class[] getAllInterfaces( Class cls )
     {
-        final List interfaces = getAllInterfacesImpl( cls, new LinkedList() );
-        return interfaces == null ? null : ( Class[] ) interfaces.toArray( new Class[interfaces.size()] );
+        final List interfaces = getAllInterfacesImpl(cls, new LinkedList());
+        return interfaces == null ? null : ( Class[] ) interfaces.toArray(new Class[interfaces.size()]);
     }
 
     private static List getAllInterfacesImpl( Class cls, List list )
@@ -112,11 +113,11 @@ public class ProxyUtils
             Class[] interfaces = cls.getInterfaces();
             for( int i = 0; i < interfaces.length; i++ )
             {
-                if( !list.contains( interfaces[i] ) )
+                if( !list.contains(interfaces[i]) )
                 {
-                    list.add( interfaces[i] );
+                    list.add(interfaces[i]);
                 }
-                getAllInterfacesImpl( interfaces[i], list );
+                getAllInterfacesImpl(interfaces[i], list);
             }
             cls = cls.getSuperclass();
         }
@@ -136,19 +137,20 @@ public class ProxyUtils
     {
         if( clazz.isArray() )
         {
-            return getJavaClassName( clazz.getComponentType() ) + "[]";
+            return getJavaClassName(clazz.getComponentType()) + "[]";
         }
         return clazz.getName();
     }
 
     /**
      * Returns the wrapper class for the given primitive type.
+     *
      * @param primitiveType the primitive type
      * @return the wrapper class
      */
     public static Class getWrapperClass( Class primitiveType )
     {
-        return ( Class )wrapperClassMap.get( primitiveType );
+        return ( Class ) wrapperClassMap.get(primitiveType);
     }
 }
 

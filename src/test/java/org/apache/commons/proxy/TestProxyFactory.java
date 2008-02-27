@@ -16,12 +16,17 @@
  */
 
 package org.apache.commons.proxy;
+
 import org.apache.commons.proxy.factory.AbstractProxyFactoryTestCase;
 
 public class TestProxyFactory extends AbstractProxyFactoryTestCase
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public TestProxyFactory()
     {
-        super( new ProxyFactory() );
+        super(new ProxyFactory());
     }
 }

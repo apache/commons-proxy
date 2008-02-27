@@ -30,16 +30,20 @@ import org.apache.commons.proxy.util.SuffixInterceptor;
  */
 public class TestInterceptorChain extends TestCase
 {
-    public void testWithSingleInterceptor()
-    {
-        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new SuffixInterceptor( "a" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
-        assertEquals( "messagea", echo.echoBack( "message" ) );
-    }
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     public void testWithMultipleInterceptors()
     {
-        Echo echo = ( Echo ) new InterceptorChain( new Interceptor[] { new SuffixInterceptor( "a" ), new SuffixInterceptor( "b" ) } ).createProxyProvider( new CglibProxyFactory(), new EchoImpl(),  new Class[] { Echo.class } ).getObject();
-        assertEquals( "messageba", echo.echoBack( "message" ) );
+        Echo echo = ( Echo ) new InterceptorChain(new Interceptor[] {new SuffixInterceptor("a"), new SuffixInterceptor("b")}).createProxyProvider(new CglibProxyFactory(), new EchoImpl(), new Class[] {Echo.class}).getObject();
+        assertEquals("messageba", echo.echoBack("message"));
+    }
+
+    public void testWithSingleInterceptor()
+    {
+        Echo echo = ( Echo ) new InterceptorChain(new Interceptor[] {new SuffixInterceptor("a")}).createProxyProvider(new CglibProxyFactory(), new EchoImpl(), new Class[] {Echo.class}).getObject();
+        assertEquals("messagea", echo.echoBack("message"));
     }
 }
 

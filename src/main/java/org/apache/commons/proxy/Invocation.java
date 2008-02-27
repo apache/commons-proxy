@@ -21,34 +21,41 @@ import java.lang.reflect.Method;
 
 /**
  * Represents a method invocation.
- * 
+ *
  * @author James Carman
  * @since 1.0
  */
 public interface Invocation
 {
-    /**
-     * Returns the method being called.
-     * @return the method being called
-     */
-    public Method getMethod();
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     /**
      * Returns the arguments being passed to this method invocation.  Changes in the elements of this array will be
      * propagated to the recipient of this invocation.
-     * 
+     *
      * @return the arguments being passed to this method invocation
      */
     public Object[] getArguments();
 
     /**
+     * Returns the method being called.
+     *
+     * @return the method being called
+     */
+    public Method getMethod();
+
+    /**
      * Returns the proxy object on which this invocation was invoked.
+     *
      * @return the proxy object on which this invocation was invoked
      */
     public Object getProxy();
 
     /**
      * Called in order to let the invocation proceed.
+     *
      * @return the return value of the invocation
      * @throws Throwable any exception or error that was thrown as a result of this invocation
      */

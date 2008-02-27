@@ -16,18 +16,30 @@
  */
 
 package org.apache.commons.proxy.provider.remoting;
-import junit.framework.TestCase;
-import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.exception.ObjectProviderException;
-import org.apache.commons.proxy.provider.remoting.BurlapProvider;
 
-public class TestBurlapProvider extends TestCase
+import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.util.AbstractTestCase;
+import org.apache.commons.proxy.util.Echo;
+
+public class TestBurlapProvider extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    public void testSerialization()
+    {
+        final BurlapProvider p = new BurlapProvider();
+        p.setServiceInterface(Echo.class);
+        p.setUrl("a malformed URL");
+        assertSerializable(p);
+    }
+
     public void testWithMalformedUrl()
     {
         try
         {
-            final BurlapProvider p = new BurlapProvider( Echo.class, "a malformed URL" );
+            final BurlapProvider p = new BurlapProvider(Echo.class, "a malformed URL");
             p.getObject();
             fail();
         }
@@ -41,8 +53,8 @@ public class TestBurlapProvider extends TestCase
         try
         {
             final BurlapProvider p = new BurlapProvider();
-            p.setServiceInterface( Echo.class );
-            p.setUrl( "a malformed URL" );
+            p.setServiceInterface(Echo.class);
+            p.setUrl("a malformed URL");
             p.getObject();
             fail();
         }

@@ -17,24 +17,29 @@
 
 package org.apache.commons.proxy.provider.remoting;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
-import org.apache.commons.proxy.provider.remoting.HessianProvider;
 
-public class TestHessianProvider extends TestCase
+public class TestHessianProvider extends AbstractTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
-    public void testWithMalformedUrlBean()
+    public void testSerialization()
+    {
+        final HessianProvider p = new HessianProvider();
+        p.setServiceInterface(Echo.class);
+        p.setUrl("a malformed URL");
+        assertSerializable(p);
+    }
+
+    public void testWithMalformedUrl()
     {
         try
         {
-            final HessianProvider p = new HessianProvider();
-            p.setServiceInterface( Echo.class );
-            p.setUrl( "a malformed URL" );
+            final HessianProvider p = new HessianProvider(Echo.class, "a malformed URL");
             p.getObject();
             fail();
         }
@@ -43,11 +48,13 @@ public class TestHessianProvider extends TestCase
         }
     }
 
-    public void testWithMalformedUrl()
+    public void testWithMalformedUrlBean()
     {
         try
         {
-            final HessianProvider p = new HessianProvider( Echo.class, "a malformed URL" );
+            final HessianProvider p = new HessianProvider();
+            p.setServiceInterface(Echo.class);
+            p.setUrl("a malformed URL");
             p.getObject();
             fail();
         }

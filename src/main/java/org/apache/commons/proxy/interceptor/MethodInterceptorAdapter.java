@@ -28,29 +28,47 @@ import java.lang.reflect.Method;
 /**
  * An adapter class to adapt AOP Alliance's {@link MethodInterceptor} interface to Commons Proxy's
  * {@link Interceptor} interface.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>AOP Alliance API version 1.0 or greater</li>
+ * <li>AOP Alliance API version 1.0 or greater</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
 public class MethodInterceptorAdapter implements Interceptor
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final MethodInterceptor methodInterceptor;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public MethodInterceptorAdapter( MethodInterceptor methodInterceptor )
     {
         this.methodInterceptor = methodInterceptor;
     }
 
+//**********************************************************************************************************************
+// Interceptor Implementation
+//**********************************************************************************************************************
+
+
     public Object intercept( Invocation invocation ) throws Throwable
     {
-        return methodInterceptor.invoke( new MethodInvocationAdapter( invocation ) );
+        return methodInterceptor.invoke(new MethodInvocationAdapter(invocation));
     }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
 
     private static class MethodInvocationAdapter implements MethodInvocation
     {

@@ -16,17 +16,20 @@
  */
 
 package org.apache.commons.proxy.interceptor.filter;
+
 import junit.framework.TestCase;
 
 public class TestReturnTypeFilter extends TestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testAcceptsMethod() throws Exception
     {
-        final ReturnTypeFilter filter = new ReturnTypeFilter(  new Class[] { String.class, Integer.TYPE } );
-        assertTrue( filter.accepts( Object.class.getMethod( "toString",  new Class[] {} ) ) );
-        assertTrue( filter.accepts( Object.class.getMethod( "hashCode",  new Class[] {} ) ) );
-        assertFalse( filter.accepts( Object.class.getMethod( "equals",  new Class[] { Object.class } ) ) );
+        final ReturnTypeFilter filter = new ReturnTypeFilter(new Class[] {String.class, Integer.TYPE});
+        assertTrue(filter.accepts(Object.class.getMethod("toString", new Class[] {})));
+        assertTrue(filter.accepts(Object.class.getMethod("hashCode", new Class[] {})));
+        assertFalse(filter.accepts(Object.class.getMethod("equals", new Class[] {Object.class})));
     }
-
-
 }

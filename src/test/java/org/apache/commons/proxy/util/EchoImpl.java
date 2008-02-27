@@ -26,16 +26,24 @@ import java.io.Serializable;
  */
 public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializable
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private static final long serialVersionUID = -4844873352607521103L;
+
+//**********************************************************************************************************************
+// Echo Implementation
+//**********************************************************************************************************************
+
+
+    public void echo()
+    {
+    }
 
     public boolean echoBack( boolean b )
     {
         return b;
-    }
-
-    public String echoBack( String message1, String message2 )
-    {
-        return message1 + message2;
     }
 
     public String echoBack( String[] messages )
@@ -44,7 +52,7 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         for( int i = 0; i < messages.length; i++ )
         {
             String message = messages[i];
-            sb.append( message );
+            sb.append(message);
         }
         return sb.toString();
     }
@@ -54,17 +62,18 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         return i;
     }
 
-    public void echo()
+    public String echoBack( String message1, String message2 )
     {
-    }
-
-    public void ioException() throws IOException
-    {
-        throw new IOException( "dummy message" );
+        return message1 + message2;
     }
 
     public void illegalArgument()
     {
-        throw new IllegalArgumentException( "dummy message" );
+        throw new IllegalArgumentException("dummy message");
+    }
+
+    public void ioException() throws IOException
+    {
+        throw new IOException("dummy message");
     }
 }

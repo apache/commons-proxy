@@ -25,42 +25,54 @@ import junit.framework.TestCase;
  */
 public abstract class AbstractExceptionClassTestCase extends TestCase
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final Class exceptionClass;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public AbstractExceptionClassTestCase( Class exceptionClass )
     {
         this.exceptionClass = exceptionClass;
     }
 
-    public void testNoArgConstructor() throws Exception
-    {
-        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] {} ).newInstance( new Object[] {} );
-        assertNull( e.getMessage() );
-        assertNull( e.getCause() );
-    }
-
-    public void testMessageOnlyConstructor() throws Exception
-    {
-        final String message = "message";
-        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { String.class } ).newInstance( new Object[] { message } );
-        assertEquals( message, e.getMessage() );
-        assertNull( e.getCause() );
-    }
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     public void testCauseOnlyConstructor() throws Exception
     {
         final Exception cause = new Exception();
-        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { Throwable.class } ).newInstance( new Object[] { cause } );
-        assertEquals( cause.toString(), e.getMessage() );
-        assertEquals( cause, e.getCause() );
+        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {Throwable.class}).newInstance(new Object[] {cause});
+        assertEquals(cause.toString(), e.getMessage());
+        assertEquals(cause, e.getCause());
     }
 
     public void testMessageAndCauseConstructor() throws Exception
     {
         final Exception cause = new Exception();
         final String message = "message";
-        Exception e = ( Exception )exceptionClass.getConstructor( new Class[] { String.class, Throwable.class } ).newInstance( new Object[] { message, cause } );
-        assertEquals( message, e.getMessage() );
-        assertEquals( cause, e.getCause() );
+        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(new Object[] {message, cause});
+        assertEquals(message, e.getMessage());
+        assertEquals(cause, e.getCause());
+    }
+
+    public void testMessageOnlyConstructor() throws Exception
+    {
+        final String message = "message";
+        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {String.class}).newInstance(new Object[] {message});
+        assertEquals(message, e.getMessage());
+        assertNull(e.getCause());
+    }
+
+    public void testNoArgConstructor() throws Exception
+    {
+        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {}).newInstance(new Object[] {});
+        assertNull(e.getMessage());
+        assertNull(e.getCause());
     }
 }

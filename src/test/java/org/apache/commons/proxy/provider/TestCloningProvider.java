@@ -17,55 +17,38 @@
 
 package org.apache.commons.proxy.provider;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.exception.ObjectProviderException;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
 import java.util.Date;
 
-public class TestCloningProvider extends TestCase
+public class TestCloningProvider extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    public void testSerialization()
+    {
+        assertSerializable(new CloningProvider(new Date()));
+    }
+
     public void testValidCloneable()
     {
         final Date now = new Date();
-        final CloningProvider provider = new CloningProvider( now );
+        final CloningProvider provider = new CloningProvider(now);
         final Date clone1 = ( Date ) provider.getObject();
-        assertEquals( now, clone1 );
-        assertNotSame( now, clone1 );
-        final Date clone2 = ( Date )provider.getObject();
-        assertEquals( now, clone2 );
-        assertNotSame( now, clone2 );
-        assertNotSame( clone2, clone1 );
-    }
-
-    public void testWithPrivateCloneMethod()
-    {
-        final CloningProvider provider = new CloningProvider( new PrivateCloneable() );
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
-    }
-    
-    public void testWithInvalidCloneable()
-    {
-        final CloningProvider provider = new CloningProvider( new InvalidCloneable() );
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        assertEquals(now, clone1);
+        assertNotSame(now, clone1);
+        final Date clone2 = ( Date ) provider.getObject();
+        assertEquals(now, clone2);
+        assertNotSame(now, clone2);
+        assertNotSame(clone2, clone1);
     }
 
     public void testWithExceptionThrown()
     {
-        final CloningProvider provider = new CloningProvider( new ExceptionCloneable() );
+        final CloningProvider provider = new CloningProvider(new ExceptionCloneable());
         try
         {
             provider.getObject();
@@ -73,6 +56,44 @@ public class TestCloningProvider extends TestCase
         }
         catch( ObjectProviderException e )
         {
+        }
+    }
+
+    public void testWithInvalidCloneable()
+    {
+        final CloningProvider provider = new CloningProvider(new InvalidCloneable());
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+    public void testWithPrivateCloneMethod()
+    {
+        final CloningProvider provider = new CloningProvider(new PrivateCloneable());
+        try
+        {
+            provider.getObject();
+            fail();
+        }
+        catch( ObjectProviderException e )
+        {
+        }
+    }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
+
+    public static class ExceptionCloneable implements Cloneable
+    {
+        public Object clone()
+        {
+            throw new RuntimeException("No clone for you!");
         }
     }
 
@@ -85,14 +106,6 @@ public class TestCloningProvider extends TestCase
         protected Object clone()
         {
             return this;
-        }
-    }
-    
-    public static class ExceptionCloneable implements Cloneable
-    {
-        public Object clone()
-        {
-            throw new RuntimeException( "No clone for you!" );
         }
     }
 }

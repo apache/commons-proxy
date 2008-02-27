@@ -29,21 +29,22 @@ import java.net.URL;
 
 /**
  * Returns a proxy for a JAX-RPC-based service.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>A JAX-RPC implementation</li>
+ * <li>A JAX-RPC implementation</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
 public class JaxRpcProvider implements ObjectProvider
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Class serviceInterface;
     private String wsdlUrl;
@@ -54,9 +55,9 @@ public class JaxRpcProvider implements ObjectProvider
     private String portLocalPart;
     private String portPrefix;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public JaxRpcProvider()
     {
@@ -67,34 +68,34 @@ public class JaxRpcProvider implements ObjectProvider
         this.serviceInterface = serviceInterface;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
         try
         {
             final Service service = ( wsdlUrl == null ?
-                                      ServiceFactory.newInstance().createService( getServiceQName() ) : ServiceFactory
-                    .newInstance().createService( new URL( wsdlUrl ), getServiceQName() ) );
+                    ServiceFactory.newInstance().createService(getServiceQName()) : ServiceFactory
+                    .newInstance().createService(new URL(wsdlUrl), getServiceQName()) );
             final QName portQName = getPortQName();
-            return portQName == null ? service.getPort( serviceInterface ) :
-                   service.getPort( portQName, serviceInterface );
+            return portQName == null ? service.getPort(serviceInterface) :
+                    service.getPort(portQName, serviceInterface);
         }
         catch( ServiceException e )
         {
-            throw new ObjectProviderException( "Unable to create JAX-RPC service proxy.", e );
+            throw new ObjectProviderException("Unable to create JAX-RPC service proxy.", e);
         }
         catch( MalformedURLException e )
         {
-            throw new ObjectProviderException( "Invalid URL given.", e );
+            throw new ObjectProviderException("Invalid URL given.", e);
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public void setPortLocalPart( String portLocalPart )
     {
@@ -136,35 +137,35 @@ public class JaxRpcProvider implements ObjectProvider
         this.wsdlUrl = wsdlUrl;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private QName getPortQName()
     {
-        return getQName( portNamespaceUri, portLocalPart, portPrefix );
+        return getQName(portNamespaceUri, portLocalPart, portPrefix);
     }
 
     private QName getQName( String namespaceUri, String localPart, String prefix )
     {
         if( namespaceUri != null && localPart != null && prefix != null )
         {
-            return new QName( namespaceUri, localPart, prefix );
+            return new QName(namespaceUri, localPart, prefix);
         }
         else if( namespaceUri != null && localPart != null )
         {
-            return new QName( namespaceUri, localPart );
+            return new QName(namespaceUri, localPart);
         }
         else if( localPart != null )
         {
-            return new QName( localPart );
+            return new QName(localPart);
         }
         return null;
     }
 
     private QName getServiceQName()
     {
-        return getQName( serviceNamespaceUri, serviceLocalPart, servicePrefix );
+        return getQName(serviceNamespaceUri, serviceLocalPart, servicePrefix);
     }
 }
 

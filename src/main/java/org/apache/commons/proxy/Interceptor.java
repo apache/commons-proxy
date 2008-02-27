@@ -19,11 +19,15 @@ package org.apache.commons.proxy;
 
 /**
  * "Intercepts" a method invocation.
- * 
+ *
  * @author James Carman
  * @since 1.0
  */
 public interface Interceptor
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public Object intercept( Invocation invocation ) throws Throwable;
 }

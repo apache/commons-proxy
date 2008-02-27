@@ -25,22 +25,26 @@ package org.apache.commons.proxy.exception;
  */
 public class InvokerException extends RuntimeException
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public InvokerException()
     {
     }
 
     public InvokerException( String message )
     {
-        super( message );
+        super(message);
     }
 
     public InvokerException( Throwable cause )
     {
-        super( cause );
+        super(cause);
     }
 
     public InvokerException( String message, Throwable cause )
     {
-        super( message, cause );
+        super(message, cause);
     }
 }

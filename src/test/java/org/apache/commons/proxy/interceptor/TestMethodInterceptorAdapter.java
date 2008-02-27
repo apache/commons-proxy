@@ -20,47 +20,55 @@ package org.apache.commons.proxy.interceptor;
 import junit.framework.TestCase;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
 public class TestMethodInterceptorAdapter extends TestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testMethodInterception()
     {
-        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy( new EchoImpl(),
-                                                                                         new MethodInterceptorAdapter( new SuffixMethodInterceptor(
-                                                                                                 " suffix" ) ),
-                                                                                         new Class[]{ Echo.class } );
-        assertEquals( "message suffix", proxy.echoBack( "message" ) );
+        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy(new EchoImpl(),
+                new MethodInterceptorAdapter(new SuffixMethodInterceptor(
+                        " suffix")),
+                new Class[] {Echo.class});
+        assertEquals("message suffix", proxy.echoBack("message"));
     }
 
     public void testMethodInvocationImplementation() throws Exception
     {
         final InterceptorTester tester = new InterceptorTester();
         final EchoImpl target = new EchoImpl();
-        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy( target, new MethodInterceptorAdapter( tester ), new Class[] { Echo.class } );
+        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy(target, new MethodInterceptorAdapter(tester), new Class[] {Echo.class});
         proxy.echo();
-        assertNotNull( tester.invocation.getArguments() );
-        assertEquals( 0, tester.invocation.getArguments().length );
-        assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.invocation.getMethod() );
-        assertEquals( Echo.class.getMethod( "echo", new Class[] {} ), tester.invocation.getStaticPart() );
-        assertEquals( target, tester.invocation.getThis() );
-        proxy.echoBack( "Hello" );
-        assertNotNull( tester.invocation.getArguments() );
-        assertEquals( 1, tester.invocation.getArguments().length );
-        assertEquals( "Hello", tester.invocation.getArguments()[0] );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.invocation.getMethod() );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class } ), tester.invocation.getStaticPart() );
-        proxy.echoBack( "Hello", "World" );
-        assertNotNull( tester.invocation.getArguments() );
-        assertEquals( 2, tester.invocation.getArguments().length );
-        assertEquals( "Hello", tester.invocation.getArguments()[0] );
-        assertEquals( "World", tester.invocation.getArguments()[1] );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class, String.class } ), tester.invocation.getMethod() );
-        assertEquals( Echo.class.getMethod( "echoBack", new Class[] { String.class, String.class } ), tester.invocation.getStaticPart() );
+        assertNotNull(tester.invocation.getArguments());
+        assertEquals(0, tester.invocation.getArguments().length);
+        assertEquals(Echo.class.getMethod("echo", new Class[] {}), tester.invocation.getMethod());
+        assertEquals(Echo.class.getMethod("echo", new Class[] {}), tester.invocation.getStaticPart());
+        assertEquals(target, tester.invocation.getThis());
+        proxy.echoBack("Hello");
+        assertNotNull(tester.invocation.getArguments());
+        assertEquals(1, tester.invocation.getArguments().length);
+        assertEquals("Hello", tester.invocation.getArguments()[0]);
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.invocation.getMethod());
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class}), tester.invocation.getStaticPart());
+        proxy.echoBack("Hello", "World");
+        assertNotNull(tester.invocation.getArguments());
+        assertEquals(2, tester.invocation.getArguments().length);
+        assertEquals("Hello", tester.invocation.getArguments()[0]);
+        assertEquals("World", tester.invocation.getArguments()[1]);
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class, String.class}), tester.invocation.getMethod());
+        assertEquals(Echo.class.getMethod("echoBack", new Class[] {String.class, String.class}), tester.invocation.getStaticPart());
     }
+
+//**********************************************************************************************************************
+// Inner Classes
+//**********************************************************************************************************************
+
     private static class InterceptorTester implements MethodInterceptor
     {
         private MethodInvocation invocation;
@@ -71,6 +79,7 @@ public class TestMethodInterceptorAdapter extends TestCase
             return methodInvocation.proceed();
         }
     }
+
     private class SuffixMethodInterceptor implements MethodInterceptor
     {
         private final String suffix;

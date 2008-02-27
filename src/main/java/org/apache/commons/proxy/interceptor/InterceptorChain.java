@@ -17,15 +17,15 @@
 
 package org.apache.commons.proxy.interceptor;
 
+import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.ProxyUtils;
-import org.apache.commons.proxy.Interceptor;
 
 /**
  * An <code>InterceptorChain</code> assists with creating proxies which go through a series of
  * {@link Interceptor interceptors}.
- *
+ * <p/>
  * <pre>
  *   MyServiceInterface serviceImpl = ...;
  *   ProxyFactory factory = ...;
@@ -33,7 +33,7 @@ import org.apache.commons.proxy.Interceptor;
  *   InterceptorChain chain = new InterceptorChain(interceptors);
  *   ObjectProvider provider = chain.createProxyProvider(factory, serviceImpl);
  *   MyServiceInterface serviceProxy = ( MyServiceInterface )provider.getObject();
- *   serviceProxy.someServiceMethod(...); // This will go through the interceptors! 
+ *   serviceProxy.someServiceMethod(...); // This will go through the interceptors!
  * </pre>
  *
  * @author James Carman
@@ -41,23 +41,24 @@ import org.apache.commons.proxy.Interceptor;
  */
 public class InterceptorChain
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+
     private final Interceptor[] interceptors;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public InterceptorChain( Interceptor[] interceptors )
     {
         this.interceptors = interceptors;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Object createProxy( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                 Class[] proxyClasses )
@@ -66,7 +67,7 @@ public class InterceptorChain
         for( int i = interceptors.length - 1; i >= 0; --i )
         {
             currentTarget = proxyFactory
-                    .createInterceptorProxy( classLoader, currentTarget, interceptors[i], proxyClasses );
+                    .createInterceptorProxy(classLoader, currentTarget, interceptors[i], proxyClasses);
         }
         return currentTarget;
     }
@@ -76,15 +77,15 @@ public class InterceptorChain
      * chain of interceptors and ultimately arrive at the supplied terminus object.  The proxy will support all
      * interfaces implemented by the terminus object.  The thread context classloader will be used to generate the
      * proxy class.
-     * 
+     *
      * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
-     * @param terminus the terminus
+     * @param terminus     the terminus
      * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
-     * chain of interceptors and ultimately arrive at the supplied terminus object
+     *         chain of interceptors and ultimately arrive at the supplied terminus object
      */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus )
     {
-        return createProxyProvider( proxyFactory, terminus, null );
+        return createProxyProvider(proxyFactory, terminus, null);
     }
 
     /**
@@ -94,15 +95,15 @@ public class InterceptorChain
      * proxy class.
      *
      * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
-     * @param terminus the terminus
+     * @param terminus     the terminus
      * @param proxyClasses the interfaces to support
      * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
-     * chain of interceptors and ultimately arrive at the supplied terminus object
+     *         chain of interceptors and ultimately arrive at the supplied terminus object
      */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, Object terminus, Class[] proxyClasses )
     {
-        return createProxyProvider( proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
-                                    proxyClasses );
+        return createProxyProvider(proxyFactory, Thread.currentThread().getContextClassLoader(), terminus,
+                proxyClasses);
     }
 
     /**
@@ -112,25 +113,25 @@ public class InterceptorChain
      * proxy class.
      *
      * @param proxyFactory the {@link ProxyFactory} to use to create the proxy
-     * @param classLoader the classloader to be used to generate the proxy class
-     * @param terminus the terminus
+     * @param classLoader  the classloader to be used to generate the proxy class
+     * @param terminus     the terminus
      * @param proxyClasses the interfaces to support
      * @return an {@link ObjectProvider} which will return a proxy that sends method invocations through this
-     * chain of interceptors and ultimately arrive at the supplied terminus object
+     *         chain of interceptors and ultimately arrive at the supplied terminus object
      */
     public ObjectProvider createProxyProvider( ProxyFactory proxyFactory, ClassLoader classLoader, Object terminus,
                                                Class[] proxyClasses )
     {
         if( proxyClasses == null || proxyClasses.length == 0 )
         {
-            proxyClasses = ProxyUtils.getAllInterfaces( terminus.getClass() );
+            proxyClasses = ProxyUtils.getAllInterfaces(terminus.getClass());
         }
-        return new ProxyObjectProvider( proxyFactory, classLoader, terminus, proxyClasses );
+        return new ProxyObjectProvider(proxyFactory, classLoader, terminus, proxyClasses);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private class ProxyObjectProvider implements ObjectProvider
     {
@@ -150,7 +151,7 @@ public class InterceptorChain
 
         public Object getObject()
         {
-            return createProxy( proxyFactory, classLoader, terminus, proxyClasses );
+            return createProxy(proxyFactory, classLoader, terminus, proxyClasses);
         }
     }
 }

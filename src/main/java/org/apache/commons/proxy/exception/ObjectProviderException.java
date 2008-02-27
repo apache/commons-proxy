@@ -26,9 +26,9 @@ package org.apache.commons.proxy.exception;
  */
 public class ObjectProviderException extends RuntimeException
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public ObjectProviderException()
     {
@@ -36,17 +36,17 @@ public class ObjectProviderException extends RuntimeException
 
     public ObjectProviderException( String message )
     {
-        super( message );
+        super(message);
     }
 
     public ObjectProviderException( Throwable cause )
     {
-        super( cause );
+        super(cause);
     }
 
     public ObjectProviderException( String message, Throwable cause )
     {
-        super( message, cause );
+        super(message, cause);
     }
 }
 

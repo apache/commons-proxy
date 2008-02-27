@@ -27,20 +27,29 @@ import java.util.Vector;
 
 /**
  * Uses <a href="http://ws.apache.org/xmlrpc/">Apache XML-RPC</a> to invoke methods on an XML-RPC service.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Apache XML-RPC version 2.0 or greater</li>
+ * <li>Apache XML-RPC version 2.0 or greater</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
 public class XmlRpcInvoker implements Invoker
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final XmlRpcHandler handler;
     private final String handlerName;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public XmlRpcInvoker( XmlRpcHandler handler, String handlerName )
     {
@@ -48,16 +57,24 @@ public class XmlRpcInvoker implements Invoker
         this.handlerName = handlerName;
     }
 
+//**********************************************************************************************************************
+// Invoker Implementation
+//**********************************************************************************************************************
+
+
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        final Object returnValue = handler.execute( handlerName + "." + method.getName(), toArgumentVector( args ) );
+        final Object returnValue = handler.execute(handlerName + "." + method.getName(), toArgumentVector(args));
         if( returnValue instanceof XmlRpcException )
         {
-            throw new InvokerException( "Unable to execute XML-RPC call.", ( XmlRpcException )returnValue );
-
+            throw new InvokerException("Unable to execute XML-RPC call.", ( XmlRpcException ) returnValue);
         }
         return returnValue;
     }
+
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     private Vector toArgumentVector( Object[] args )
     {
@@ -65,7 +82,7 @@ public class XmlRpcInvoker implements Invoker
         for( int i = 0; i < args.length; i++ )
         {
             Object arg = args[i];
-            v.addElement( arg );
+            v.addElement(arg);
         }
         return v;
     }

@@ -18,8 +18,8 @@
 package org.apache.commons.proxy.interceptor;
 
 import EDU.oswego.cs.dl.util.concurrent.Executor;
-import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Interceptor;
+import org.apache.commons.proxy.Invocation;
 
 /**
  * A method interceptor that uses an {@link Executor} to execute the method invocation.
@@ -28,34 +28,48 @@ import org.apache.commons.proxy.Interceptor;
  * methods will result in an {@link IllegalArgumentException}.  If the proxy interfaces include non-void methods, try
  * using a {@link FilteredInterceptor} along with a
  * {@link org.apache.commons.proxy.interceptor.filter.ReturnTypeFilter} to wrap an instance of this class.
- *
+ * <p/>
  * <p>
  * <b>Dependencies</b>:
  * <ul>
- *   <li>Concurrent API version 1.3.4 or greater</li>
+ * <li>Concurrent API version 1.3.4 or greater</li>
  * </ul>
  * </p>
+ *
  * @author James Carman
  * @since 1.0
  */
 public class ExecutorInterceptor implements Interceptor
 {
+//**********************************************************************************************************************
+// Fields
+//**********************************************************************************************************************
+
     private final Executor executor;
+
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     public ExecutorInterceptor( Executor executor )
     {
         this.executor = executor;
     }
 
+//**********************************************************************************************************************
+// Interceptor Implementation
+//**********************************************************************************************************************
+
+
     public Object intercept( final Invocation invocation ) throws Throwable
     {
-        if( Void.TYPE.equals( invocation.getMethod().getReturnType() ) )
+        if( Void.TYPE.equals(invocation.getMethod().getReturnType()) )
         {
             // Special case for finalize() method (should not be run in a different thread)...
-            if( !( invocation.getMethod().getName().equals( "finalize" ) &&
-                   invocation.getMethod().getParameterTypes().length == 0 ) )
+            if( !( invocation.getMethod().getName().equals("finalize") &&
+                    invocation.getMethod().getParameterTypes().length == 0 ) )
             {
-                executor.execute( new Runnable()
+                executor.execute(new Runnable()
                 {
                     public void run()
                     {
@@ -68,7 +82,7 @@ public class ExecutorInterceptor implements Interceptor
                             // What to do here?  I can't convey the failure back to the caller.
                         }
                     }
-                } );
+                });
                 return null;
             }
             else
@@ -78,7 +92,7 @@ public class ExecutorInterceptor implements Interceptor
         }
         else
         {
-            throw new IllegalArgumentException( "Only void methods can be executed in a different thread." );
+            throw new IllegalArgumentException("Only void methods can be executed in a different thread.");
         }
     }
 }

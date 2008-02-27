@@ -23,8 +23,12 @@ package org.apache.commons.proxy.exception;
  */
 public class TestProxyFactoryException extends AbstractExceptionClassTestCase
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public TestProxyFactoryException()
     {
-        super( ProxyFactoryException.class );
+        super(ProxyFactoryException.class);
     }
 }

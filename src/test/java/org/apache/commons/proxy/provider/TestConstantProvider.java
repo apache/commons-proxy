@@ -17,17 +17,26 @@
 
 package org.apache.commons.proxy.provider;
 
-import junit.framework.TestCase;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
 /**
  * @since 1.0
  */
-public class TestConstantProvider extends TestCase
+public class TestConstantProvider extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testGetObject() throws Exception
     {
         final String s = "Hello, World!";
-        final ConstantProvider provider = new ConstantProvider( s );
-        assertSame( s, provider.getObject() );
+        final ConstantProvider provider = new ConstantProvider(s);
+        assertSame(s, provider.getObject());
+    }
+
+    public void testSerialization()
+    {
+        assertSerializable(new ConstantProvider("Hello, World!"));
     }
 }

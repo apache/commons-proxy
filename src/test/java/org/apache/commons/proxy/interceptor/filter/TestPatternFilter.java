@@ -18,10 +18,9 @@
 package org.apache.commons.proxy.interceptor.filter;
 
 import junit.framework.TestCase;
+import org.apache.commons.proxy.interceptor.MethodFilter;
 
 import java.util.Date;
-
-import org.apache.commons.proxy.interceptor.MethodFilter;
 
 /**
  * @author James Carman
@@ -29,16 +28,18 @@ import org.apache.commons.proxy.interceptor.MethodFilter;
  */
 public class TestPatternFilter extends TestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testAccepts() throws Exception
     {
         final MethodFilter filter = PatternFilter.getterSetterFilter();
-        assertTrue( filter.accepts( Date.class.getMethod( "getSeconds", new Class[] {} ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "getMinutes",  new Class[] {} ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "setSeconds",  new Class[] { Integer.TYPE } ) ) );
-        assertTrue( filter.accepts( Date.class.getMethod( "setMinutes",  new Class[] { Integer.TYPE } ) ) );
-        assertFalse( filter.accepts( Date.class.getMethod( "toString",  new Class[] {} ) ) );
-        assertFalse( filter.accepts( Date.class.getMethod( "hashCode",  new Class[] {} ) ) );
+        assertTrue(filter.accepts(Date.class.getMethod("getSeconds", new Class[] {})));
+        assertTrue(filter.accepts(Date.class.getMethod("getMinutes", new Class[] {})));
+        assertTrue(filter.accepts(Date.class.getMethod("setSeconds", new Class[] {Integer.TYPE})));
+        assertTrue(filter.accepts(Date.class.getMethod("setMinutes", new Class[] {Integer.TYPE})));
+        assertFalse(filter.accepts(Date.class.getMethod("toString", new Class[] {})));
+        assertFalse(filter.accepts(Date.class.getMethod("hashCode", new Class[] {})));
     }
-
-
 }

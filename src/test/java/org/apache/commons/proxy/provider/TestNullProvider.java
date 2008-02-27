@@ -17,17 +17,26 @@
 
 package org.apache.commons.proxy.provider;
 
-import junit.framework.TestCase;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
 /**
  * @author James Carman
  * @since 1.0
  */
-public class TestNullProvider extends TestCase
+public class TestNullProvider extends AbstractTestCase
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public void testGetObject()
     {
         final NullProvider provider = new NullProvider();
-        assertNull( provider.getObject() );
+        assertNull(provider.getObject());
+    }
+
+    public void testSerialization()
+    {
+        assertSerializable(new NullProvider());
     }
 }

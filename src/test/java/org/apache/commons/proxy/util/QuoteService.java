@@ -26,5 +26,9 @@ import java.rmi.RemoteException;
  */
 public interface QuoteService extends Remote
 {
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
     public float getQuote( String symbol ) throws RemoteException;
 }

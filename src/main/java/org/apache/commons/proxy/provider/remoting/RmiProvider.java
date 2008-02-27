@@ -34,18 +34,18 @@ import java.rmi.server.RMIClientSocketFactory;
  */
 public class RmiProvider implements ObjectProvider
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private String host = "localhost";
     private int port = Registry.REGISTRY_PORT;
     private RMIClientSocketFactory clientSocketFactory;
     private String name;
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Constructors
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public RmiProvider()
     {
@@ -53,33 +53,33 @@ public class RmiProvider implements ObjectProvider
 
     public RmiProvider( String name )
     {
-        setName( name );
+        setName(name);
     }
 
     public RmiProvider( String host, String name )
     {
-        setHost( host );
-        setName( name );
+        setHost(host);
+        setName(name);
     }
 
     public RmiProvider( String host, int port, String name )
     {
-        setHost( host );
-        setName( name );
-        setPort( port );
+        setHost(host);
+        setName(name);
+        setPort(port);
     }
 
     public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name )
     {
-        setHost( host );
-        setPort( port );
-        setClientSocketFactory( clientSocketFactory );
-        setName( name );
+        setHost(host);
+        setPort(port);
+        setClientSocketFactory(clientSocketFactory);
+        setName(name);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     public Object getObject()
     {
@@ -87,28 +87,23 @@ public class RmiProvider implements ObjectProvider
         try
         {
             reg = getRegistry();
-            return reg.lookup( name );
+            return reg.lookup(name);
         }
         catch( NotBoundException e )
         {
-            throw new ObjectProviderException( "Name " + name + " not found in registry at " + host + ":" + port + ".",
-                                               e );
+            throw new ObjectProviderException("Name " + name + " not found in registry at " + host + ":" + port + ".",
+                    e);
         }
         catch( RemoteException e )
         {
             throw new ObjectProviderException(
-                    "Unable to lookup service named " + name + " in registry at " + host + ":" + port + ".", e );
+                    "Unable to lookup service named " + name + " in registry at " + host + ":" + port + ".", e);
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
+//**********************************************************************************************************************
 
     public void setClientSocketFactory( RMIClientSocketFactory clientSocketFactory )
     {
@@ -120,14 +115,19 @@ public class RmiProvider implements ObjectProvider
         this.host = host;
     }
 
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
     public void setPort( int port )
     {
         this.port = port;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private Registry getRegistry()
     {
@@ -135,16 +135,16 @@ public class RmiProvider implements ObjectProvider
         {
             if( clientSocketFactory != null )
             {
-                return LocateRegistry.getRegistry( host, port, clientSocketFactory );
+                return LocateRegistry.getRegistry(host, port, clientSocketFactory);
             }
             else
             {
-                return LocateRegistry.getRegistry( host, port );
+                return LocateRegistry.getRegistry(host, port);
             }
         }
         catch( RemoteException e )
         {
-            throw new ObjectProviderException( "Unable to locate registry at " + host + ":" + port + ".", e );
+            throw new ObjectProviderException("Unable to locate registry at " + host + ":" + port + ".", e);
         }
     }
 }

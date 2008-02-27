@@ -22,13 +22,13 @@ import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodProxy;
-import net.sf.cglib.proxy.NoOp;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.factory.util.AbstractSubclassingProxyFactory;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -44,80 +44,66 @@ import java.lang.reflect.Modifier;
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Fields
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
     private static CallbackFilter callbackFilter = new PublicCallbackFilter();
 
-//----------------------------------------------------------------------------------------------------------------------
-// ProxyFactory Implementation
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
 
     public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
                                         Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
-        enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
-        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallbackFilter( callbackFilter );
-        enhancer.setCallbacks( new Callback[]{ new ObjectProviderDispatcher( targetProvider ), NoOp.INSTANCE } );
-        return enhancer.create();
+        enhancer.setClassLoader(classLoader);
+        enhancer.setInterfaces(toInterfaces(proxyClasses));
+        enhancer.setSuperclass(getSuperclass(proxyClasses));
+        enhancer.setCallbackFilter(callbackFilter);
+        final ProxyObjectDispatcher proxyObjectDispatcher = new ProxyObjectDispatcher();
+        enhancer.setCallbacks(new Callback[] {new ObjectProviderDispatcher(targetProvider), proxyObjectDispatcher});
+        final Object proxy = enhancer.create();
+        proxyObjectDispatcher.setProxyObject(proxy);
+        return proxy;
     }
 
     public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
-        enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
-        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallbackFilter( callbackFilter );
-        enhancer.setCallbacks( new Callback[]{ new InterceptorBridge( target, interceptor ), NoOp.INSTANCE } );
-        return enhancer.create();
+        enhancer.setClassLoader(classLoader);
+        enhancer.setInterfaces(toInterfaces(proxyClasses));
+        enhancer.setSuperclass(getSuperclass(proxyClasses));
+        enhancer.setCallbackFilter(callbackFilter);
+        final ProxyObjectDispatcher proxyObjectDispatcher = new ProxyObjectDispatcher();
+        enhancer.setCallbacks(new Callback[] {new InterceptorBridge(target, interceptor), proxyObjectDispatcher});
+        final Object proxy = enhancer.create();
+        proxyObjectDispatcher.setProxyObject(proxy);
+        return proxy;
     }
 
     public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
                                       Class[] proxyClasses )
     {
         final Enhancer enhancer = new Enhancer();
-        enhancer.setClassLoader( classLoader );
-        enhancer.setInterfaces( toInterfaces( proxyClasses ) );
-        enhancer.setSuperclass( getSuperclass( proxyClasses ) );
-        enhancer.setCallbackFilter( callbackFilter );
-        enhancer.setCallbacks( new Callback[]{ new InvokerBridge( invoker ), NoOp.INSTANCE } );
-        return enhancer.create();
+        enhancer.setClassLoader(classLoader);
+        enhancer.setInterfaces(toInterfaces(proxyClasses));
+        enhancer.setSuperclass(getSuperclass(proxyClasses));
+        enhancer.setCallbackFilter(callbackFilter);
+        final ProxyObjectDispatcher proxyObjectDispatcher = new ProxyObjectDispatcher();
+        enhancer.setCallbacks(new Callback[] {new InvokerBridge(invoker), proxyObjectDispatcher });
+        final Object proxy = enhancer.create();
+        proxyObjectDispatcher.setProxyObject(proxy);
+        return proxy;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 // Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************
 
-    private static class PublicCallbackFilter implements CallbackFilter
-    {
-        public int accept( Method method )
-        {
-            return Modifier.isPublic( method.getModifiers() ) ? 0 : 1;
-        }
-    }
-
-    private class InvokerBridge implements net.sf.cglib.proxy.InvocationHandler
-    {
-        private final Invoker original;
-
-        public InvokerBridge( Invoker original )
-        {
-            this.original = original;
-        }
-
-        public Object invoke( Object object, Method method, Object[] objects ) throws Throwable
-        {
-            return original.invoke( object, method, objects );
-        }
-    }
-
-    private class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor
+    private static class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor, Serializable
     {
         private final Interceptor inner;
         private final Object target;
@@ -130,11 +116,26 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
         public Object intercept( Object object, Method method, Object[] args, MethodProxy methodProxy ) throws Throwable
         {
-            return inner.intercept( new MethodProxyInvocation( target, method, args, methodProxy ) );
+            return inner.intercept(new MethodProxyInvocation(target, method, args, methodProxy));
         }
     }
 
-    private class MethodProxyInvocation implements Invocation
+    private static class InvokerBridge implements net.sf.cglib.proxy.InvocationHandler, Serializable
+    {
+        private final Invoker original;
+
+        public InvokerBridge( Invoker original )
+        {
+            this.original = original;
+        }
+
+        public Object invoke( Object object, Method method, Object[] objects ) throws Throwable
+        {
+            return original.invoke(object, method, objects);
+        }
+    }
+
+    private static class MethodProxyInvocation implements Invocation, Serializable
     {
         private final MethodProxy methodProxy;
         private final Method method;
@@ -161,7 +162,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
         public Object proceed() throws Throwable
         {
-            return methodProxy.invoke( target, args );
+            return methodProxy.invoke(target, args);
         }
 
         public Object getProxy()
@@ -170,7 +171,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    private class ObjectProviderDispatcher implements Dispatcher
+    private static class ObjectProviderDispatcher implements Dispatcher, Serializable
     {
         private final ObjectProvider delegateProvider;
 
@@ -182,6 +183,29 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         public Object loadObject()
         {
             return delegateProvider.getObject();
+        }
+    }
+
+    private static class ProxyObjectDispatcher implements Dispatcher, Serializable
+    {
+        private Object proxyObject;
+
+        public void setProxyObject( Object thisObject )
+        {
+            this.proxyObject = thisObject;
+        }
+
+        public Object loadObject() throws Exception
+        {
+            return proxyObject;
+        }
+    }
+
+    private static class PublicCallbackFilter implements CallbackFilter
+    {
+        public int accept( Method method )
+        {
+            return Modifier.isPublic(method.getModifiers()) ? 0 : 1;
         }
     }
 }

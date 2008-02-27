@@ -16,10 +16,15 @@
  */
 
 package org.apache.commons.proxy.exception;
+
 public class TestInvocationHandlerException extends AbstractExceptionClassTestCase
 {
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
+
     public TestInvocationHandlerException()
     {
-        super( InvokerException.class );
+        super(InvokerException.class);
     }
 }
