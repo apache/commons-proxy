@@ -36,6 +36,7 @@ import org.apache.commons.proxy.ProxyUtils;
  *
  * @author James Carman
  * @since 1.0
+ * @deprecated please use {@link org.apache.commons.proxy.interceptor.logging.CommonsLoggingInterceptor} instead
  */
 public class LoggingInterceptor implements Interceptor
 {
