@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * An interceptor which logs method invocations using <a href="http://www.slf4j.org/">SLF4J</a> using the
- * trace logging level.
+ * An interceptor which logs method invocations using an <a href="http://www.slf4j.org/">SLF4J</a> {@link Logger} at the
+ * "trace" logging level.
  * 
  * @auothor James Carman
  * @since 1.1
