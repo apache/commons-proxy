@@ -17,19 +17,25 @@
 
 package org.apache.commons.proxy.invoker;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
+import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class TestInvocationHandlerAdapter extends TestCase
+public class TestInvocationHandlerAdapter extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    public void testSerialization()
+    {
+        assertSerializable( new InvocationHandlerAdapter( new InvocationHandlerTester() ) );
+    }
+    
     public void testMethodInvocation() throws Exception
     {
         InvocationHandlerTester tester = new InvocationHandlerTester();
@@ -46,7 +52,7 @@ public class TestInvocationHandlerAdapter extends TestCase
 // Inner Classes
 //**********************************************************************************************************************
 
-    private class InvocationHandlerTester implements InvocationHandler
+    private static class InvocationHandlerTester implements InvocationHandler, Serializable
     {
         private Object proxy;
         private Method method;

@@ -101,28 +101,6 @@ public abstract class AbstractSubclassingProxyFactory extends ProxyFactory
     }
 
     /**
-     * Helper method for instantiating a proxy object from its proxy class.  Uses the default constructor.
-     *
-     * @param proxyClass the proxy class
-     * @return a proxy object
-     */
-    protected static Object instantiate( Class proxyClass )
-    {
-        try
-        {
-            return proxyClass.newInstance();
-        }
-        catch( InstantiationException e )
-        {
-            throw new ProxyFactoryException("Unable to instantiate proxy object from proxy class.", e);
-        }
-        catch( IllegalAccessException e )
-        {
-            throw new ProxyFactoryException("Unable to instantiate proxy object from proxy class.", e);
-        }
-    }
-
-    /**
      * Returns the <code>proxyClasses</code> transformed into an array of only the interface classes.
      * <p/>
      * <b>Note</b>: This class will append {@link Serializable} to the end of the list if it's

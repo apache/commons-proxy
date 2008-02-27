@@ -17,17 +17,17 @@
 
 package org.apache.commons.proxy.invoker;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
 import org.apache.commons.proxy.provider.ConstantProvider;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
 import java.io.Serializable;
 
 /**
  *
  */
-public class TestDuckTypingInvoker extends TestCase
+public class TestDuckTypingInvoker extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
@@ -91,6 +91,13 @@ public class TestDuckTypingInvoker extends TestCase
         }
     }
 
+    public void testSerialization()
+    {
+        final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
+        final DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
+        assertSerializable(invoker);
+    }
+
     public void testTargetHasCompatibleReturnType()
     {
         final ObjectProvider targetProvider = new ConstantProvider(new LegacyDuck());
@@ -114,7 +121,7 @@ public class TestDuckTypingInvoker extends TestCase
         public void sayHonk();
     }
 
-    public static class LegacyDuck
+    public static class LegacyDuck implements Serializable
     {
         public String sayQuack()
         {

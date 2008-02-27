@@ -18,6 +18,7 @@
 package org.apache.commons.proxy.interceptor;
 
 import java.lang.reflect.Method;
+import java.io.Serializable;
 
 /**
  * A <code>MethodFilter</code> determines whether or not a method is accepted.
@@ -25,7 +26,7 @@ import java.lang.reflect.Method;
  * @author James Carman
  * @since 1.0
  */
-public interface MethodFilter
+public interface MethodFilter extends Serializable
 {
 //**********************************************************************************************************************
 // Other Methods

@@ -17,10 +17,10 @@
 
 package org.apache.commons.proxy.interceptor;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.interceptor.filter.SimpleFilter;
+import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixInterceptor;
@@ -29,12 +29,17 @@ import org.apache.commons.proxy.util.SuffixInterceptor;
  * @author James Carman
  * @since 1.0
  */
-public class TestFilteredInterceptor extends TestCase
+public class TestFilteredInterceptor extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    public void testSerialization()
+    {
+        assertSerializable(new FilteredInterceptor(new SuffixInterceptor("a"), new SimpleFilter(new String[] {"echoBack"})));
+    }
+    
     public void testFilterAccepts()
     {
         Echo echo = ( Echo ) new InterceptorChain(new Interceptor[] {new FilteredInterceptor(new SuffixInterceptor("a"), new SimpleFilter(new String[] {"echoBack"}))}).createProxyProvider(new CglibProxyFactory(), new EchoImpl()).getObject();

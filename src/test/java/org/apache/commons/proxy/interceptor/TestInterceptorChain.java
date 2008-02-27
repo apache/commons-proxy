@@ -17,23 +17,29 @@
 
 package org.apache.commons.proxy.interceptor;
 
-import junit.framework.TestCase;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.factory.cglib.CglibProxyFactory;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 import org.apache.commons.proxy.util.SuffixInterceptor;
+import org.apache.commons.proxy.util.AbstractTestCase;
 
 /**
  * @author James Carman
  * @since 1.0
  */
-public class TestInterceptorChain extends TestCase
+public class TestInterceptorChain extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    public void testSerializable()
+    {
+        Echo echo = ( Echo ) new InterceptorChain(new Interceptor[] {new SuffixInterceptor("a"), new SuffixInterceptor("b")}).createProxyProvider(new CglibProxyFactory(), new EchoImpl(), new Class[] {Echo.class}).getObject();
+        assertSerializable(echo);
+    }
+    
     public void testWithMultipleInterceptors()
     {
         Echo echo = ( Echo ) new InterceptorChain(new Interceptor[] {new SuffixInterceptor("a"), new SuffixInterceptor("b")}).createProxyProvider(new CglibProxyFactory(), new EchoImpl(), new Class[] {Echo.class}).getObject();

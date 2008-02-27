@@ -17,19 +17,30 @@
 
 package org.apache.commons.proxy.interceptor;
 
-import junit.framework.TestCase;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.proxy.factory.javassist.JavassistProxyFactory;
+import org.apache.commons.proxy.util.AbstractTestCase;
 import org.apache.commons.proxy.util.Echo;
 import org.apache.commons.proxy.util.EchoImpl;
 
-public class TestMethodInterceptorAdapter extends TestCase
+import java.io.Serializable;
+
+public class TestMethodInterceptorAdapter extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    public void testSerialization()
+    {
+        final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy(new EchoImpl(),
+                new MethodInterceptorAdapter(new SuffixMethodInterceptor(
+                        " suffix")),
+                new Class[] {Echo.class});
+        assertSerializable(proxy);
+    }
+    
     public void testMethodInterception()
     {
         final Echo proxy = ( Echo ) new JavassistProxyFactory().createInterceptorProxy(new EchoImpl(),
@@ -80,7 +91,7 @@ public class TestMethodInterceptorAdapter extends TestCase
         }
     }
 
-    private class SuffixMethodInterceptor implements MethodInterceptor
+    private static class SuffixMethodInterceptor implements MethodInterceptor, Serializable
     {
         private final String suffix;
 

@@ -30,6 +30,15 @@ public class TestExecutorInterceptor extends TestCase
 // Other Methods
 //**********************************************************************************************************************
 
+    public void testMethodThrowsException()
+    {
+        final ExceptionEcho impl = new ExceptionEcho();
+        final OneShotExecutor executor = new OneShotExecutor();
+        final Echo proxy = ( Echo ) new CglibProxyFactory()
+                .createInterceptorProxy(impl, new ExecutorInterceptor(executor), new Class[] {Echo.class});
+        proxy.echo();
+    }
+
     public void testNonVoidMethod() throws Exception
     {
         final ExecutedEcho impl = new ExecutedEcho();
@@ -60,6 +69,17 @@ public class TestExecutorInterceptor extends TestCase
 //**********************************************************************************************************************
 // Inner Classes
 //**********************************************************************************************************************
+
+//
+// Inner Classes
+//
+    public static class ExceptionEcho extends EchoImpl
+    {
+        public void echo()
+        {
+            throw new RuntimeException("Oops!");
+        }
+    }
 
     public static class ExecutedEcho extends EchoImpl
     {

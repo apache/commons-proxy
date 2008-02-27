@@ -17,13 +17,15 @@
 
 package org.apache.commons.proxy;
 
+import java.io.Serializable;
+
 /**
  * "Intercepts" a method invocation.
  *
  * @author James Carman
  * @since 1.0
  */
-public interface Interceptor
+public interface Interceptor extends Serializable
 {
 //**********************************************************************************************************************
 // Other Methods
