@@ -59,10 +59,10 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 // Static Methods
 //**********************************************************************************************************************
 
-    private static void addGetMethodMethod( CtClass proxyClass ) throws CannotCompileException
+    private static void addGetMethodMethod(CtClass proxyClass) throws CannotCompileException
     {
         final CtMethod method = new CtMethod(JavassistUtils.resolve(Method.class), GET_METHOD_METHOD_NAME,
-                JavassistUtils.resolve(new Class[] {String.class, String.class, Class[].class}), proxyClass);
+                JavassistUtils.resolve(new Class[]{String.class, String.class, Class[].class}), proxyClass);
         final String body = "try { return Class.forName($1).getMethod($2, $3); } catch( Exception e ) " +
                 "{ throw new RuntimeException(\"Unable to look up method.\", e); }";
         method.setBody(body);
@@ -73,48 +73,46 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 // Other Methods
 //**********************************************************************************************************************
 
-    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider targetProvider,
-                                        Class[] proxyClasses )
+    public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider targetProvider,
+                                       Class[] proxyClasses)
     {
         try
         {
             final Class clazz = delegatingProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            return clazz.getConstructor(new Class[] {ObjectProvider.class})
-                    .newInstance(new Object[] {targetProvider});
+            return clazz.getConstructor(new Class[]{ObjectProvider.class})
+                    .newInstance(new Object[]{targetProvider});
         }
-        catch( Exception e )
+        catch (Exception e)
         {
             throw new ProxyFactoryException("Unable to instantiate proxy from generated proxy class.", e);
         }
     }
 
-    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
-                                          Class[] proxyClasses )
+    public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+                                         Class[] proxyClasses)
     {
         try
         {
             final Class clazz = interceptorProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods(proxyClasses);
-            return clazz.getConstructor(new Class[] {Method[].class, Object.class, Interceptor.class})
-                    .newInstance(new Object[] {methods, target, interceptor});
+            return clazz.getConstructor(new Class[]{Object.class, Interceptor.class})
+                    .newInstance(new Object[]{target, interceptor});
         }
-        catch( Exception e )
+        catch (Exception e)
         {
             throw new ProxyFactoryException("Unable to instantiate proxy class instance.", e);
         }
     }
 
-    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
-                                      Class[] proxyClasses )
+    public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
+                                     Class[] proxyClasses)
     {
         try
         {
             final Class clazz = invocationHandlerProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            final Method[] methods = AbstractProxyClassGenerator.getImplementationMethods(proxyClasses);
-            return clazz.getConstructor(new Class[] {Method[].class, Invoker.class})
-                    .newInstance(new Object[] {methods, invoker});
+            return clazz.getConstructor(new Class[]{Invoker.class})
+                    .newInstance(new Object[]{invoker});
         }
-        catch( Exception e )
+        catch (Exception e)
         {
             throw new ProxyFactoryException("Unable to instantiate proxy from generated proxy class.", e);
         }
@@ -126,35 +124,40 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class DelegatingProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses )
+        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
         {
             try
             {
                 final CtClass proxyClass = JavassistUtils.createClass(getSuperclass(proxyClasses));
                 JavassistUtils.addField(ObjectProvider.class, "provider", proxyClass);
                 final CtConstructor proxyConstructor = new CtConstructor(
-                        JavassistUtils.resolve(new Class[] {ObjectProvider.class}),
+                        JavassistUtils.resolve(new Class[]{ObjectProvider.class}),
                         proxyClass);
                 proxyConstructor.setBody("{ this.provider = $1; }");
                 proxyClass.addConstructor(proxyConstructor);
                 JavassistUtils.addInterfaces(proxyClass, toInterfaces(proxyClasses));
+                addHashCodeMethod(proxyClass);
+                addEqualsMethod(proxyClass);
                 final Method[] methods = getImplementationMethods(proxyClasses);
-                for( int i = 0; i < methods.length; ++i )
+                for (int i = 0; i < methods.length; ++i)
                 {
-                    final Method method = methods[i];
-                    final CtMethod ctMethod = new CtMethod(JavassistUtils.resolve(method.getReturnType()),
-                            method.getName(),
-                            JavassistUtils.resolve(method.getParameterTypes()),
-                            proxyClass);
-                    final String body = "{ return ( $r ) ( ( " + method.getDeclaringClass().getName() +
-                            " )provider.getObject() )." +
-                            method.getName() + "($$); }";
-                    ctMethod.setBody(body);
-                    proxyClass.addMethod(ctMethod);
+                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    {
+                        final Method method = methods[i];
+                        final CtMethod ctMethod = new CtMethod(JavassistUtils.resolve(method.getReturnType()),
+                                method.getName(),
+                                JavassistUtils.resolve(method.getParameterTypes()),
+                                proxyClass);
+                        final String body = "{ return ( $r ) ( ( " + method.getDeclaringClass().getName() +
+                                " )provider.getObject() )." +
+                                method.getName() + "($$); }";
+                        ctMethod.setBody(body);
+                        proxyClass.addMethod(ctMethod);
+                    }
                 }
                 return proxyClass.toClass(classLoader);
             }
-            catch( CannotCompileException e )
+            catch (CannotCompileException e)
             {
                 throw new ProxyFactoryException("Could not compile class.", e);
             }
@@ -163,7 +166,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InterceptorProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses )
+        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
         {
             try
             {
@@ -173,70 +176,103 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 JavassistUtils.addField(Object.class, "target", proxyClass);
                 JavassistUtils.addField(Interceptor.class, "interceptor", proxyClass);
                 addGetMethodMethod(proxyClass);
+                addHashCodeMethod(proxyClass);
+                addEqualsMethod(proxyClass);
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[] {Method[].class, Object.class, Interceptor.class}),
+                                new Class[]{Object.class, Interceptor.class}),
                         proxyClass);
                 proxyConstructor
                         .setBody(
-                                "{\n\tthis.target = $2;\n\tthis.interceptor = $3; }");
+                                "{\n\tthis.target = $1;\n\tthis.interceptor = $2; }");
                 proxyClass.addConstructor(proxyConstructor);
-                for( int i = 0; i < methods.length; ++i )
+                for (int i = 0; i < methods.length; ++i)
                 {
-                    final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
-                            methods[i].getName(),
-                            JavassistUtils.resolve(methods[i].getParameterTypes()),
-                            proxyClass);
-                    final Class invocationClass = JavassistInvocation
-                            .getMethodInvocationClass(classLoader, methods[i]);
+                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    {
+                        final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
+                                methods[i].getName(),
+                                JavassistUtils.resolve(methods[i].getParameterTypes()),
+                                proxyClass);
+                        final Class invocationClass = JavassistInvocation
+                                .getMethodInvocationClass(classLoader, methods[i]);
 
-                    final String body = "{\n\t return ( $r ) interceptor.intercept( new " + invocationClass.getName() +
-                            "( " + GET_METHOD_METHOD_NAME + "(\"" + methods[i].getDeclaringClass().getName() +
-                            "\", \"" + methods[i].getName() + "\", $sig), target, $args ) );\n }";
-                    method.setBody(body);
-                    proxyClass.addMethod(method);
+                        final String body = "{\n\t return ( $r ) interceptor.intercept( new " + invocationClass.getName() +
+                                "( " + GET_METHOD_METHOD_NAME + "(\"" + methods[i].getDeclaringClass().getName() +
+                                "\", \"" + methods[i].getName() + "\", $sig), target, $args ) );\n }";
+                        method.setBody(body);
+                        proxyClass.addMethod(method);
+                    }
+
                 }
                 return proxyClass.toClass(classLoader);
             }
-            catch( CannotCompileException e )
+            catch (CannotCompileException e)
             {
                 throw new ProxyFactoryException("Could not compile class.", e);
             }
         }
+
+
+    }
+
+    private static void addEqualsMethod(CtClass proxyClass)
+            throws CannotCompileException
+    {
+        final CtMethod equalsMethod = new CtMethod(JavassistUtils.resolve(Boolean.TYPE), "equals",
+                JavassistUtils.resolve(new Class[]{Object.class}), proxyClass);
+        final String body = "{\n\treturn this == $1;\n}";
+        equalsMethod.setBody(body);
+        proxyClass.addMethod(equalsMethod);
+    }
+
+    private static void addHashCodeMethod(CtClass proxyClass)
+            throws CannotCompileException
+    {
+        final CtMethod hashCodeMethod = new CtMethod(JavassistUtils.resolve(Integer.TYPE), "hashCode",
+                new CtClass[0], proxyClass);
+        hashCodeMethod.setBody("{\n\treturn System.identityHashCode(this);\n}");
+        proxyClass.addMethod(hashCodeMethod);
     }
 
     private static class InvokerProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses )
+        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
         {
             try
             {
                 final CtClass proxyClass = JavassistUtils.createClass(getSuperclass(proxyClasses));
                 final Method[] methods = getImplementationMethods(proxyClasses);
                 JavassistUtils.addInterfaces(proxyClass, toInterfaces(proxyClasses));
-                JavassistUtils.addField(Method[].class, "methods", proxyClass);
                 JavassistUtils.addField(Invoker.class, "invoker", proxyClass);
                 final CtConstructor proxyConstructor = new CtConstructor(
                         JavassistUtils.resolve(
-                                new Class[] {Method[].class, Invoker.class}),
+                                new Class[]{Invoker.class}),
                         proxyClass);
                 proxyConstructor
-                        .setBody("{\n\tthis.methods = $1;\n\tthis.invoker = $2; }");
+                        .setBody("{\n\tthis.invoker = $1; }");
                 proxyClass.addConstructor(proxyConstructor);
-                for( int i = 0; i < methods.length; ++i )
+                addGetMethodMethod(proxyClass);
+                addHashCodeMethod(proxyClass);
+                addEqualsMethod(proxyClass);
+                for (int i = 0; i < methods.length; ++i)
                 {
-                    final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
-                            methods[i].getName(),
-                            JavassistUtils.resolve(methods[i].getParameterTypes()),
-                            proxyClass);
-                    final String body = "{\n\t return ( $r ) invoker.invoke( this, methods[" + i +
-                            "], $args );\n }";
-                    method.setBody(body);
-                    proxyClass.addMethod(method);
+                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    {
+                        final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
+                                methods[i].getName(),
+                                JavassistUtils.resolve(methods[i].getParameterTypes()),
+                                proxyClass);
+                        final String body = "{\n\t return ( $r ) invoker.invoke( this, " + GET_METHOD_METHOD_NAME + "(\"" +
+                                methods[i].getDeclaringClass().getName() +
+                                "\", \"" + methods[i].getName() + "\", $sig), $args );\n }";
+                        method.setBody(body);
+                        proxyClass.addMethod(method);
+                    }
                 }
                 return proxyClass.toClass(classLoader);
             }
-            catch( CannotCompileException e )
+            catch (CannotCompileException e)
             {
                 throw new ProxyFactoryException("Could not compile class.", e);
             }
