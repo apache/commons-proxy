@@ -23,7 +23,7 @@ package org.apache.commons.proxy;
  * @author James Carman
  * @since 1.0
  */
-public interface ObjectProvider
+public interface ObjectProvider<T>
 {
 //**********************************************************************************************************************
 // Other Methods
@@ -36,6 +36,6 @@ public interface ObjectProvider
      *
      * @return the object on which the method should be called
      */
-    public Object getObject();
+    public T getObject();
 }
 

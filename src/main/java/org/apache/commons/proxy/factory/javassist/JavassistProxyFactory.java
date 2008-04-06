@@ -74,13 +74,13 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 //**********************************************************************************************************************
 
     public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider targetProvider,
-                                       Class[] proxyClasses)
+                                       Class... proxyClasses)
     {
         try
         {
             final Class clazz = delegatingProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            return clazz.getConstructor(new Class[]{ObjectProvider.class})
-                    .newInstance(new Object[]{targetProvider});
+            return clazz.getConstructor(ObjectProvider.class)
+                    .newInstance(targetProvider);
         }
         catch (Exception e)
         {
@@ -89,13 +89,13 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class[] proxyClasses)
+                                         Class... proxyClasses)
     {
         try
         {
             final Class clazz = interceptorProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            return clazz.getConstructor(new Class[]{Object.class, Interceptor.class})
-                    .newInstance(new Object[]{target, interceptor});
+            return clazz.getConstructor(Object.class, Interceptor.class)
+                    .newInstance(target, interceptor);
         }
         catch (Exception e)
         {
@@ -104,13 +104,13 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class[] proxyClasses)
+                                     Class... proxyClasses)
     {
         try
         {
             final Class clazz = invocationHandlerProxyClassCache.getProxyClass(classLoader, proxyClasses);
-            return clazz.getConstructor(new Class[]{Invoker.class})
-                    .newInstance(new Object[]{invoker});
+            return clazz.getConstructor(Invoker.class)
+                    .newInstance(invoker);
         }
         catch (Exception e)
         {

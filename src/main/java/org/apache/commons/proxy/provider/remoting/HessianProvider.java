@@ -37,13 +37,13 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @since 1.0
  */
-public class HessianProvider implements ObjectProvider, Serializable
+public class HessianProvider<T> implements ObjectProvider<T>, Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Class serviceInterface;
+    private Class<T> serviceInterface;
     private String url;
 
 //**********************************************************************************************************************
@@ -54,7 +54,7 @@ public class HessianProvider implements ObjectProvider, Serializable
     {
     }
 
-    public HessianProvider( Class serviceInterface, String url )
+    public HessianProvider( Class<T> serviceInterface, String url )
     {
         this.serviceInterface = serviceInterface;
         this.url = url;
@@ -64,11 +64,12 @@ public class HessianProvider implements ObjectProvider, Serializable
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    @SuppressWarnings("unchecked")
+    public T getObject()
     {
         try
         {
-            return new HessianProxyFactory().create(serviceInterface, url);
+            return (T)new HessianProxyFactory().create(serviceInterface, url);
         }
         catch( MalformedURLException e )
         {
@@ -80,7 +81,7 @@ public class HessianProvider implements ObjectProvider, Serializable
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setServiceInterface( Class serviceInterface )
+    public void setServiceInterface( Class<T> serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }

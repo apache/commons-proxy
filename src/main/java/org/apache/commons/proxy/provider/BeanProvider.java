@@ -28,13 +28,13 @@ import java.io.Serializable;
  * @author James Carman
  * @since 1.0
  */
-public class BeanProvider implements ObjectProvider, Serializable
+public class BeanProvider<T> implements ObjectProvider<T>, Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Class beanClass;
+    private Class<T> beanClass;
 
 //**********************************************************************************************************************
 // Constructors
@@ -49,7 +49,7 @@ public class BeanProvider implements ObjectProvider, Serializable
      *
      * @param beanClass the bean class
      */
-    public BeanProvider( Class beanClass )
+    public BeanProvider( Class<T> beanClass )
     {
         this.beanClass = beanClass;
     }
@@ -58,7 +58,7 @@ public class BeanProvider implements ObjectProvider, Serializable
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    public T getObject()
     {
         try
         {
@@ -83,7 +83,7 @@ public class BeanProvider implements ObjectProvider, Serializable
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setBeanClass( Class beanClass )
+    public void setBeanClass( Class<T> beanClass )
     {
         this.beanClass = beanClass;
     }

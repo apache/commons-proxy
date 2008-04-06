@@ -26,19 +26,19 @@ import org.apache.commons.proxy.ObjectProvider;
  * @author James Carman
  * @since 1.0
  */
-public class SingletonProvider extends ProviderDecorator
+public class SingletonProvider<T> extends ProviderDecorator<T>
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Object instance;
+    private T instance;
 
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public SingletonProvider( ObjectProvider inner )
+    public SingletonProvider( ObjectProvider<T> inner )
     {
         super(inner);
     }
@@ -47,7 +47,7 @@ public class SingletonProvider extends ProviderDecorator
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    public T getObject()
     {
         synchronized( this )
         {

@@ -35,7 +35,7 @@ import java.util.Properties;
  * @author James Carman
  * @since 1.0
  */
-public class SessionBeanProvider implements ObjectProvider
+public class SessionBeanProvider<T> implements ObjectProvider<T>
 {
 //**********************************************************************************************************************
 // Fields
@@ -67,7 +67,8 @@ public class SessionBeanProvider implements ObjectProvider
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    @SuppressWarnings("unchecked")
+    public T getObject()
     {
         try
         {
@@ -75,7 +76,7 @@ public class SessionBeanProvider implements ObjectProvider
                     new InitialContext(properties);
             Object homeObject = PortableRemoteObject.narrow(initialContext.lookup(jndiName), homeInterface);
             final Method createMethod = homeObject.getClass().getMethod("create", ProxyUtils.EMPTY_ARGUMENT_TYPES);
-            return createMethod.invoke(homeObject, ProxyUtils.EMPTY_ARGUMENTS);
+            return (T)createMethod.invoke(homeObject, ProxyUtils.EMPTY_ARGUMENTS);
         }
         catch( NoSuchMethodException e )
         {

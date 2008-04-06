@@ -27,19 +27,19 @@ import org.apache.commons.proxy.ObjectProvider;
  * @author James Carman
  * @since 1.0
  */
-public class ProviderDecorator implements ObjectProvider
+public class ProviderDecorator<T> implements ObjectProvider<T>
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    protected ObjectProvider inner;
+    protected ObjectProvider<T> inner;
 
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public ProviderDecorator( ObjectProvider inner )
+    public ProviderDecorator( ObjectProvider<T> inner )
     {
         this.inner = inner;
     }
@@ -48,7 +48,7 @@ public class ProviderDecorator implements ObjectProvider
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    public T getObject()
     {
         return inner.getObject();
     }

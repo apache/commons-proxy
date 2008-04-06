@@ -40,13 +40,13 @@ import java.net.URL;
  * @author James Carman
  * @since 1.0
  */
-public class JaxRpcProvider implements ObjectProvider
+public class JaxRpcProvider<T> implements ObjectProvider<T>
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Class serviceInterface;
+    private Class<T> serviceInterface;
     private String wsdlUrl;
     private String serviceNamespaceUri;
     private String serviceLocalPart;
@@ -63,7 +63,7 @@ public class JaxRpcProvider implements ObjectProvider
     {
     }
 
-    public JaxRpcProvider( Class serviceInterface )
+    public JaxRpcProvider( Class<T> serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }
@@ -72,7 +72,7 @@ public class JaxRpcProvider implements ObjectProvider
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    public T getObject()
     {
         try
         {
@@ -80,8 +80,8 @@ public class JaxRpcProvider implements ObjectProvider
                     ServiceFactory.newInstance().createService(getServiceQName()) : ServiceFactory
                     .newInstance().createService(new URL(wsdlUrl), getServiceQName()) );
             final QName portQName = getPortQName();
-            return portQName == null ? service.getPort(serviceInterface) :
-                    service.getPort(portQName, serviceInterface);
+            return serviceInterface.cast(portQName == null ? service.getPort(serviceInterface) :
+                    service.getPort(portQName, serviceInterface));
         }
         catch( ServiceException e )
         {
@@ -112,7 +112,7 @@ public class JaxRpcProvider implements ObjectProvider
         this.portPrefix = portPrefix;
     }
 
-    public void setServiceInterface( Class serviceInterface )
+    public void setServiceInterface( Class<T> serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }

@@ -23,7 +23,7 @@ package org.apache.commons.proxy.provider;
  * @author James Carman
  * @since 1.0
  */
-public class NullProvider extends ConstantProvider
+public class NullProvider<T> extends ConstantProvider<T>
 {
 //**********************************************************************************************************************
 // Constructors

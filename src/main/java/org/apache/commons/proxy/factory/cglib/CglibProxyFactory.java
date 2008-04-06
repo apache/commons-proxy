@@ -55,7 +55,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 //**********************************************************************************************************************
 
     public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider targetProvider,
-                                       Class[] proxyClasses)
+                                       Class... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -67,7 +67,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class[] proxyClasses)
+                                         Class... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -79,7 +79,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class[] proxyClasses)
+                                     Class... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -115,7 +115,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     {
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
-            return new Integer(System.identityHashCode(o));
+            return System.identityHashCode(o);
         }
     }
 
@@ -123,7 +123,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     {
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
-            return Boolean.valueOf(o == objects[0]);
+            return o == objects[0];
         }
     }
 

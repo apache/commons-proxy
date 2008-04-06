@@ -31,13 +31,13 @@ import java.lang.reflect.Method;
  * @author James Carman
  * @since 1.0
  */
-public class CloningProvider implements ObjectProvider, Serializable
+public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private final Cloneable cloneable;
+    private final T cloneable;
     private Method cloneMethod;
 
 //**********************************************************************************************************************
@@ -50,7 +50,7 @@ public class CloningProvider implements ObjectProvider, Serializable
      *
      * @param cloneable the object to clone
      */
-    public CloningProvider( Cloneable cloneable )
+    public CloningProvider( T cloneable )
     {
         this.cloneable = cloneable;
     }
@@ -59,12 +59,12 @@ public class CloningProvider implements ObjectProvider, Serializable
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-
-    public Object getObject()
+    @SuppressWarnings("unchecked")
+    public T getObject()
     {
         try
         {
-            return getCloneMethod().invoke(cloneable, ProxyUtils.EMPTY_ARGUMENTS);
+            return (T)getCloneMethod().invoke(cloneable, ProxyUtils.EMPTY_ARGUMENTS);
         }
         catch( IllegalAccessException e )
         {

@@ -37,13 +37,13 @@ import java.net.MalformedURLException;
  * @author James Carman
  * @since 1.0
  */
-public class BurlapProvider implements ObjectProvider, Serializable
+public class BurlapProvider<T> implements ObjectProvider<T>, Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Class serviceInterface;
+    private Class<T> serviceInterface;
     private String url;
 
 //**********************************************************************************************************************
@@ -54,7 +54,7 @@ public class BurlapProvider implements ObjectProvider, Serializable
     {
     }
 
-    public BurlapProvider( Class serviceInterface, String url )
+    public BurlapProvider( Class<T> serviceInterface, String url )
     {
         this.serviceInterface = serviceInterface;
         this.url = url;
@@ -64,11 +64,12 @@ public class BurlapProvider implements ObjectProvider, Serializable
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    @SuppressWarnings("unchecked")
+    public T getObject()
     {
         try
         {
-            return new BurlapProxyFactory().create(serviceInterface, url);
+            return (T)new BurlapProxyFactory().create(serviceInterface, url);
         }
         catch( MalformedURLException e )
         {
@@ -80,7 +81,7 @@ public class BurlapProvider implements ObjectProvider, Serializable
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setServiceInterface( Class serviceInterface )
+    public void setServiceInterface( Class<T> serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }

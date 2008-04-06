@@ -32,7 +32,7 @@ import java.rmi.server.RMIClientSocketFactory;
  * @author James Carman
  * @since 1.0
  */
-public class RmiProvider implements ObjectProvider
+public class RmiProvider<T> implements ObjectProvider<T>
 {
 //**********************************************************************************************************************
 // Fields
@@ -81,13 +81,14 @@ public class RmiProvider implements ObjectProvider
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    @SuppressWarnings("unchecked")
+    public T getObject()
     {
-        Registry reg = null;
+        Registry reg;
         try
         {
             reg = getRegistry();
-            return reg.lookup(name);
+            return (T)reg.lookup(name);
         }
         catch( NotBoundException e )
         {

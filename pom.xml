@@ -26,7 +26,7 @@
         <version>9</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
     <url>http://commons.apache.org/proxy/</url>
@@ -241,8 +241,8 @@
     </distributionManagement>
 
     <properties>
-        <maven.compile.source>1.4</maven.compile.source>
-        <maven.compile.target>1.4</maven.compile.target>
+        <maven.compile.source>1.5</maven.compile.source>
+        <maven.compile.target>1.5</maven.compile.target>
         <commons.componentid>proxy</commons.componentid>
         <commons.release.version>1.0</commons.release.version>
         <commons.binary.suffix></commons.binary.suffix>

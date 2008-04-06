@@ -27,19 +27,19 @@ import java.io.Serializable;
  * @author James Carman
  * @since 1.0
  */
-public class ConstantProvider implements ObjectProvider, Serializable
+public class ConstantProvider<T> implements ObjectProvider<T>, Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private final Object constant;
+    private final T constant;
 
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public ConstantProvider( Object constant )
+    public ConstantProvider( T constant )
     {
         this.constant = constant;
     }
@@ -48,7 +48,7 @@ public class ConstantProvider implements ObjectProvider, Serializable
 // ObjectProvider Implementation
 //**********************************************************************************************************************
 
-    public Object getObject()
+    public T getObject()
     {
         return constant;
     }

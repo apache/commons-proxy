@@ -58,12 +58,11 @@ public class ProxyFactory
      * @param proxyClasses the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
-    public boolean canProxy(Class[] proxyClasses)
+    public boolean canProxy( Class... proxyClasses )
     {
-        for (int i = 0; i < proxyClasses.length; i++)
+        for( Class proxyClass : proxyClasses )
         {
-            Class proxyClass = proxyClasses[i];
-            if (!proxyClass.isInterface())
+            if( !proxyClass.isInterface() )
             {
                 return false;
             }
@@ -79,9 +78,23 @@ public class ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatorProxy(ObjectProvider delegateProvider, Class[] proxyClasses)
+    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyClasses )
     {
         return createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
+    }
+
+    /**
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
+     * generated using the current thread's "context class loader."
+     *
+     * @param delegateProvider the delegate provider
+     * @param proxyClass     the class/interface that the proxy should implement
+     * @return a proxy which delegates to the object provided by the target object provider
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createDelegatorProxy( ObjectProvider<T> delegateProvider, Class<T> proxyClass )
+    {
+        return (T)createDelegatorProxy(delegateProvider, new Class[] {proxyClass});
     }
 
     /**
@@ -92,11 +105,26 @@ public class ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
-    public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider delegateProvider,
-                                       Class[] proxyClasses)
+    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
+                                        Class... proxyClasses )
     {
         return Proxy.newProxyInstance(classLoader, proxyClasses,
-                new DelegatorInvocationHandler(delegateProvider));
+                                      new DelegatorInvocationHandler(delegateProvider));
+    }
+
+    /**
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
+     *
+     * @param classLoader      the class loader to use when generating the proxy
+     * @param delegateProvider the delegate provider
+     * @param proxyClass     the class/interface that the proxy should implement
+     * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<T> delegateProvider,
+                                       Class<T> proxyClass )
+    {
+        return ( T ) createDelegatorProxy(classLoader, delegateProvider, new Class[] {proxyClass});
     }
 
     /**
@@ -109,11 +137,28 @@ public class ProxyFactory
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public Object createInterceptorProxy(Object target, Interceptor interceptor,
-                                         Class[] proxyClasses)
+    public Object createInterceptorProxy( Object target, Interceptor interceptor,
+                                          Class... proxyClasses )
     {
         return createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
-                proxyClasses);
+                                      proxyClasses);
+    }
+
+    /**
+     * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * <code>target</code> object.  The proxy will be generated using the current thread's "context class loader."
+     *
+     * @param target       the target object
+     * @param interceptor  the method interceptor
+     * @param proxyClass the class/interface that the proxy should implement
+     * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     *         <code>target</code> object.
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
+                                         Class<T> proxyClass )
+    {
+        return ( T ) createInterceptorProxy(target, interceptor, new Class[] {proxyClass});
     }
 
     /**
@@ -127,11 +172,31 @@ public class ProxyFactory
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class[] proxyClasses)
+    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
+                                          Class... proxyClasses )
     {
         return Proxy
                 .newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target, interceptor));
+    }
+
+    /**
+     * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * <code>target</code> object.
+     *
+     * @param classLoader  the class loader to use when generating the proxy
+     * @param target       the target object
+     * @param interceptor  the method interceptor
+     * @param proxyClass the class/interface that the proxy should implement.
+     * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     *         <code>target</code> object.
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T createInterceptorProxy( ClassLoader classLoader,
+                                         Object target,
+                                         Interceptor interceptor,
+                                         Class<T> proxyClass )
+    {
+        return ( T ) createInterceptorProxy(classLoader, target, interceptor, new Class[] {proxyClass});
     }
 
     /**
@@ -142,10 +207,24 @@ public class ProxyFactory
      * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public Object createInvokerProxy(Invoker invoker, Class[] proxyClasses)
+    public Object createInvokerProxy( Invoker invoker, Class... proxyClasses )
     {
         return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker,
-                proxyClasses);
+                                  proxyClasses);
+    }
+
+    /**
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.  The proxy will be
+     * generated using the current thread's "context class loader."
+     *
+     * @param invoker      the invoker
+     * @param proxyClass the class/interface that the proxy should implement
+     * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T createInvokerProxy( Invoker invoker, Class<T> proxyClass )
+    {
+        return ( T ) createInvokerProxy(invoker, new Class[] {proxyClass});
     }
 
     /**
@@ -156,10 +235,25 @@ public class ProxyFactory
      * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class[] proxyClasses)
+    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
+                                      Class... proxyClasses )
     {
         return Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
+    }
+
+    /**
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.
+     *
+     * @param classLoader  the class loader to use when generating the proxy
+     * @param invoker      the invoker
+     * @param proxyClass the class/interface that the proxy should implement
+     * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
+     */
+    @SuppressWarnings( "unchecked" )
+    public <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
+                                     Class<T> proxyClass )
+    {
+        return ( T ) createInvokerProxy(classLoader, invoker, new Class[] {proxyClass});
     }
 
 //**********************************************************************************************************************
@@ -170,18 +264,18 @@ public class ProxyFactory
     {
         private final ObjectProvider delegateProvider;
 
-        protected DelegatorInvocationHandler(ObjectProvider delegateProvider)
+        protected DelegatorInvocationHandler( ObjectProvider delegateProvider )
         {
             this.delegateProvider = delegateProvider;
         }
 
-        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
+        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
         {
             try
             {
                 return method.invoke(delegateProvider.getObject(), args);
             }
-            catch (InvocationTargetException e)
+            catch( InvocationTargetException e )
             {
                 throw e.getTargetException();
             }
@@ -193,13 +287,13 @@ public class ProxyFactory
         private final Object target;
         private final Interceptor methodInterceptor;
 
-        public InterceptorInvocationHandler(Object target, Interceptor methodInterceptor)
+        public InterceptorInvocationHandler( Object target, Interceptor methodInterceptor )
         {
             this.target = target;
             this.methodInterceptor = methodInterceptor;
         }
 
-        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
+        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
         {
             final ReflectionInvocation invocation = new ReflectionInvocation(target, method, args);
             return methodInterceptor.intercept(invocation);
@@ -208,15 +302,15 @@ public class ProxyFactory
 
     private abstract static class AbstractInvocationHandler implements InvocationHandler, Serializable
     {
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+        public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
         {
-            if (isHashCode(method))
+            if( isHashCode(method) )
             {
-                return new Integer(System.identityHashCode(proxy));
+                return System.identityHashCode(proxy);
             }
-            else if (isEqualsMethod(method))
+            else if( isEqualsMethod(method) )
             {
-                return Boolean.valueOf(proxy == args[0]);
+                return proxy == args[0];
             }
             else
             {
@@ -224,32 +318,32 @@ public class ProxyFactory
             }
         }
 
-        protected abstract Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable;
+        protected abstract Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable;
     }
 
     private static class InvokerInvocationHandler extends AbstractInvocationHandler
     {
         private final Invoker invoker;
 
-        public InvokerInvocationHandler(Invoker invoker)
+        public InvokerInvocationHandler( Invoker invoker )
         {
             this.invoker = invoker;
         }
 
-        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
+        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
         {
             return invoker.invoke(proxy, method, args);
         }
     }
 
-    protected static boolean isHashCode(Method method)
+    protected static boolean isHashCode( Method method )
     {
         return "hashCode".equals(method.getName()) &&
                 Integer.TYPE.equals(method.getReturnType()) &&
                 method.getParameterTypes().length == 0;
     }
 
-    protected static boolean isEqualsMethod(Method method)
+    protected static boolean isEqualsMethod( Method method )
     {
         return "equals".equals(method.getName()) &&
                 Boolean.TYPE.equals(method.getReturnType()) &&
@@ -263,10 +357,10 @@ public class ProxyFactory
         private final Object[] arguments;
         private final Object target;
 
-        public ReflectionInvocation(Object target, Method method, Object[] arguments)
+        public ReflectionInvocation( Object target, Method method, Object[] arguments )
         {
             this.method = method;
-            this.arguments = (arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments);
+            this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
             this.target = target;
         }
 
@@ -291,7 +385,7 @@ public class ProxyFactory
             {
                 return method.invoke(target, arguments);
             }
-            catch (InvocationTargetException e)
+            catch( InvocationTargetException e )
             {
                 throw e.getTargetException();
             }
