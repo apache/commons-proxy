@@ -18,6 +18,7 @@
 package org.apache.commons.proxy.invoker;
 
 import org.apache.commons.proxy.Invoker;
+import org.apache.commons.proxy.ProxyUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -32,29 +33,7 @@ import java.util.Map;
  * @since 1.0
  */
 public class NullInvoker implements Invoker, Serializable
-{
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
-
-    private static Map primitiveValueMap = new HashMap();
-
-//**********************************************************************************************************************
-// Static Methods
-//**********************************************************************************************************************
-
-    static
-    {
-        primitiveValueMap.put(Integer.TYPE, new Integer(0));
-        primitiveValueMap.put(Long.TYPE, new Long(0));
-        primitiveValueMap.put(Short.TYPE, new Short(( short ) 0));
-        primitiveValueMap.put(Byte.TYPE, new Byte(( byte ) 0));
-        primitiveValueMap.put(Float.TYPE, new Float(0.0f));
-        primitiveValueMap.put(Double.TYPE, new Double(0.0));
-        primitiveValueMap.put(Character.TYPE, new Character(( char ) 0));
-        primitiveValueMap.put(Boolean.TYPE, Boolean.FALSE);
-    }
-
+{   
 //**********************************************************************************************************************
 // Invoker Implementation
 //**********************************************************************************************************************
@@ -62,14 +41,7 @@ public class NullInvoker implements Invoker, Serializable
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
         final Class returnType = method.getReturnType();
-        if( returnType.isPrimitive() )
-        {
-            return primitiveValueMap.get(returnType);
-        }
-        else
-        {
-            return null;
-        }
+        return ProxyUtils.nullValue(returnType);
     }
 }
 

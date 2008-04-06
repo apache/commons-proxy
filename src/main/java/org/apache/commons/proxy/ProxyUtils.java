@@ -38,7 +38,8 @@ public class ProxyUtils
 
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
-    private static final Map wrapperClassMap = new HashMap();
+    private static final Map<Class,Class> wrapperClassMap = new HashMap<Class,Class>();
+    private static Map<Class,Object> nullValueMap = new HashMap<Class,Object>();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -56,6 +57,18 @@ public class ProxyUtils
         wrapperClassMap.put(Byte.TYPE, Byte.class);
     }
 
+    static
+    {
+        nullValueMap.put(Integer.TYPE, 0);
+        nullValueMap.put(Long.TYPE, ( long ) 0);
+        nullValueMap.put(Short.TYPE, ( short ) 0);
+        nullValueMap.put(Byte.TYPE, ( byte ) 0);
+        nullValueMap.put(Float.TYPE, 0.0f);
+        nullValueMap.put(Double.TYPE, 0.0);
+        nullValueMap.put(Character.TYPE, ( char ) 0);
+        nullValueMap.put(Boolean.TYPE, Boolean.FALSE);
+    }
+    
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      *
@@ -150,7 +163,17 @@ public class ProxyUtils
      */
     public static Class getWrapperClass( Class primitiveType )
     {
-        return ( Class ) wrapperClassMap.get(primitiveType);
+        return wrapperClassMap.get(primitiveType);
+    }
+
+    /**
+     * Returns the proper "null value" as specified by the Java language.
+     * @param type the type
+     * @return the null value
+     */
+    public static <T> T nullValue(Class<T> type)
+    {
+        return (T)nullValueMap.get(type);
     }
 }
 

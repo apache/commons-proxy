@@ -50,6 +50,24 @@ public class TestProxyUtils extends TestCase
         System.setProperties(prevProperties);
     }
 
+    public void testNullValue()
+    {
+        assertNullValue(null, String.class);
+        assertNullValue(( char ) 0, Character.TYPE);
+        assertNullValue(0, Integer.TYPE);
+        assertNullValue(( long ) 0, Long.TYPE);
+        assertNullValue(( short ) 0, Short.TYPE);
+        assertNullValue(( double ) 0, Double.TYPE);
+        assertNullValue(( float ) 0, Float.TYPE);
+        assertNullValue(false, Boolean.TYPE);
+        assertNullValue(( byte ) 0, Byte.TYPE);
+    }
+
+    private void assertNullValue( Object expected, Class type )
+    {
+        assertEquals(expected, ProxyUtils.nullValue(type));
+    }
+
     public void testCreateNullObject() throws Exception
     {
         final Echo nullEcho = ( Echo ) ProxyUtils
@@ -62,8 +80,8 @@ public class TestProxyUtils extends TestCase
     public void testCreateNullObjectWithClassLoader() throws Exception
     {
         final Echo nullEcho = ( Echo ) ProxyUtils.createNullObject(new JavassistProxyFactory(),
-                Echo.class.getClassLoader(),
-                new Class[] {Echo.class});
+                                                                   Echo.class.getClassLoader(),
+                                                                   new Class[] {Echo.class});
         assertNull(nullEcho.echoBack("hello"));
         assertNull(nullEcho.echoBack("hello", "world"));
         assertEquals(( int ) 0, nullEcho.echoBack(12345));
@@ -72,7 +90,8 @@ public class TestProxyUtils extends TestCase
     public void testGetAllInterfaces()
     {
         assertNull(ProxyUtils.getAllInterfaces(null));
-        assertEquals(Arrays.asList(new Class[] {DuplicateEcho.class, Serializable.class, Echo.class}), Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
+        assertEquals(Arrays.asList(new Class[] {DuplicateEcho.class, Serializable.class, Echo.class}),
+                     Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
     }
 
     public void testGetJavaClassName() throws Exception
