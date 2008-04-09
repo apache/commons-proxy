@@ -60,4 +60,9 @@ public class InvocationRecorder
             return proxy(method.getReturnType());
         }
     }
+
+    public void reset()
+    {
+        recordedInvocations.clear();
+    }
 }
