@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class TestInvocationRecorder extends AbstractTestCase
 {
-    public void testRecording() throws Exception
+    public void testNestedMethodRecording() throws Exception
     {
         InvocationRecorder recorder = new InvocationRecorder(new CglibProxyFactory());
         Person personProxy = recorder.proxy(Person.class);
@@ -38,6 +38,25 @@ public class TestInvocationRecorder extends AbstractTestCase
         final RecordedInvocation getAddressInvocation = recordedInvocations.get(0);
         assertEquals(Person.class.getMethod("getAddress"), getAddressInvocation.getInvokedMethod());
         assertEquals(0, getAddressInvocation.getArguments().length);
+    }
+
+    public void testNestedGenericMethodRecording() throws Exception
+    {
+        InvocationRecorder recorder = new InvocationRecorder(new CglibProxyFactory());
+        Person personProxy = recorder.proxy(Person.class);
+        assertEquals(null, personProxy.getNicknames().get(0));
+        List<RecordedInvocation> recordedInvocations = recorder.getRecordedInvocations();
+
+        assertEquals(2, recordedInvocations.size());
+        
+        RecordedInvocation invocation = recordedInvocations.get(0);
+        assertEquals(Person.class.getMethod("getNicknames"), invocation.getInvokedMethod());
+        assertEquals(0, invocation.getArguments().length);
+
+        invocation = recordedInvocations.get(1);
+        assertEquals(List.class.getMethod("get", int.class), invocation.getInvokedMethod());
+        assertEquals(1, invocation.getArguments().length);
+        assertEquals(0, invocation.getArguments()[0] );
     }
 
     public void testProxyNonProxyableType()
@@ -70,6 +89,8 @@ public class TestInvocationRecorder extends AbstractTestCase
     public static interface Person
     {
         public Address getAddress();
+
+        public List<String> getNicknames();
     }
 
     public static interface Address
