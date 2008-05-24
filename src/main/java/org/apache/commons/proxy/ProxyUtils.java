@@ -39,6 +39,7 @@ public class ProxyUtils
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
     private static final Map wrapperClassMap = new HashMap();
+    public static Map defaultValueMap = new HashMap();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -54,6 +55,18 @@ public class ProxyUtils
         wrapperClassMap.put(Float.TYPE, Float.class);
         wrapperClassMap.put(Double.TYPE, Double.class);
         wrapperClassMap.put(Byte.TYPE, Byte.class);
+    }
+
+    static
+    {
+        defaultValueMap.put(Integer.TYPE, new Integer(0));
+        defaultValueMap.put(Long.TYPE, new Long(0));
+        defaultValueMap.put(Short.TYPE, new Short(( short ) 0));
+        defaultValueMap.put(Byte.TYPE, new Byte(( byte ) 0));
+        defaultValueMap.put(Float.TYPE, new Float(0.0f));
+        defaultValueMap.put(Double.TYPE, new Double(0.0));
+        defaultValueMap.put(Character.TYPE, new Character(( char ) 0));
+        defaultValueMap.put(Boolean.TYPE, Boolean.FALSE);
     }
 
     /**
@@ -151,6 +164,23 @@ public class ProxyUtils
     public static Class getWrapperClass( Class primitiveType )
     {
         return ( Class ) wrapperClassMap.get(primitiveType);
+    }
+
+    /**
+     * Returns the default value (null, zero, false) for a specified type.
+     * @param type the type
+     * @return the default value
+     */
+    public static Object getDefaultValue(Class type)
+    {
+        if( type.isPrimitive() )
+        {
+            return defaultValueMap.get(type);
+        }
+        else
+        {
+            return null;
+        }
     }
 }
 
