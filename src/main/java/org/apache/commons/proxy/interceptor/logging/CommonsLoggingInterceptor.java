@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
  * An interceptor which logs method invocations using an <a href="http://commons.apache.org/logging">Apache Commons
  * Logging</a> {@link Log} object at the "trace" level.
  * 
- * @auothor James Carman
+ * @author James Carman
  * @since 1.1
  */
 public class CommonsLoggingInterceptor extends AbstractLoggingInterceptor

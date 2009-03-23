@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 /**
  * An interceptor which logs method invocations using a {@link Logger JDK logger} using the "finer" logging level.
  * 
- * @auothor James Carman
+ * @author James Carman
  * @since 1.1
  */
 public class JdkLoggingInterceptor extends AbstractLoggingInterceptor

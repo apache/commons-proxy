@@ -24,7 +24,7 @@ import org.apache.commons.proxy.ProxyUtils;
 import java.lang.reflect.Method;
 
 /**
- * @auothor James Carman
+ * @author James Carman
  * @since 1.1
  */
 public abstract class AbstractLoggingInterceptor implements Interceptor
