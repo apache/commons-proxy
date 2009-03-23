@@ -19,6 +19,8 @@ package org.apache.commons.proxy.provider;
 
 import org.apache.commons.proxy.ObjectProvider;
 
+import java.io.Serializable;
+
 /**
  * Wraps another object provider, making sure to only call it once, returning the value returned from the wrapped
  * provider on all subsequent invocations.
@@ -26,13 +28,13 @@ import org.apache.commons.proxy.ObjectProvider;
  * @author James Carman
  * @since 1.0
  */
-public class SingletonProvider extends ProviderDecorator
+public class SingletonProvider extends ProviderDecorator implements Serializable
 {
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Object instance;
+    private transient Object instance;
 
 //**********************************************************************************************************************
 // Constructors
@@ -54,7 +56,6 @@ public class SingletonProvider extends ProviderDecorator
             if( instance == null )
             {
                 instance = super.getObject();
-                inner = null; // Garbage collection
             }
         }
         return instance;
