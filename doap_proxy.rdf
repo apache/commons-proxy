@@ -7,7 +7,7 @@
     <category rdf:resource="http://projects.apache.org/category/library"/>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20"/>
     <bug-database rdf:resource="http://issues.apache.org/jira/browse/POOL"/>
-    <download-page rdf:resource="http://jakarta.apache.org/site/downloads/downloads_commons-proxy.cgi"/>
+    <download-page rdf:resource="http://commons.apache.org/proxy/download_proxy.cgi"/>
     <asfext:pmc rdf:resource="http://commons.apache.org/"/>
     <shortdesc xml:lang="en">Commons Dynamic Proxy Library</shortdesc>
     <description xml:lang="en">Commons Dynamic Proxy Library</description>
