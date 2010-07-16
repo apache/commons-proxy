@@ -18,18 +18,15 @@
 package org.apache.commons.proxy.impl;
 
 import org.apache.commons.proxy.Interceptor;
-import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
 import org.apache.commons.proxy.ProxyFactory;
-import org.apache.commons.proxy.ProxyUtils;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
+/**
+ * Base abstract {@link ProxyFactory} implementation, primarily providing
+ * implementations of the interface methods that are typically convenience
+ * constructs over the other methods.
+ */
 public abstract class AbstractProxyFactory implements ProxyFactory
 {
     /**
@@ -38,9 +35,9 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      * @param proxyClasses the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
-    public boolean canProxy( Class... proxyClasses )
+    public boolean canProxy( Class<?>... proxyClasses )
     {
-        for( Class proxyClass : proxyClasses )
+        for( Class<?> proxyClass : proxyClasses )
         {
             if( !proxyClass.isInterface() )
             {
@@ -58,7 +55,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public Object createDelegatorProxy( ObjectProvider delegateProvider, Class... proxyClasses )
+    public Object createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses )
     {
         return createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
     }
@@ -103,7 +100,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      *         <code>target</code> object.
      */
     public Object createInterceptorProxy( Object target, Interceptor interceptor,
-                                          Class... proxyClasses )
+                                          Class<?>... proxyClasses )
     {
         return createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
                                       proxyClasses);
@@ -154,7 +151,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public Object createInvokerProxy( Invoker invoker, Class... proxyClasses )
+    public Object createInvokerProxy( Invoker invoker, Class<?>... proxyClasses )
     {
         return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker,
                                   proxyClasses);
@@ -189,139 +186,4 @@ public abstract class AbstractProxyFactory implements ProxyFactory
         return ( T ) createInvokerProxy(classLoader, invoker, new Class[] {proxyClass});
     }
 
-//**********************************************************************************************************************
-// Inner Classes
-//**********************************************************************************************************************
-
-    private static class DelegatorInvocationHandler extends AbstractInvocationHandler
-    {
-        private final ObjectProvider delegateProvider;
-
-        protected DelegatorInvocationHandler( ObjectProvider delegateProvider )
-        {
-            this.delegateProvider = delegateProvider;
-        }
-
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
-        {
-            try
-            {
-                return method.invoke(delegateProvider.getObject(), args);
-            }
-            catch( InvocationTargetException e )
-            {
-                throw e.getTargetException();
-            }
-        }
-    }
-
-    private static class InterceptorInvocationHandler extends AbstractInvocationHandler
-    {
-        private final Object target;
-        private final Interceptor methodInterceptor;
-
-        public InterceptorInvocationHandler( Object target, Interceptor methodInterceptor )
-        {
-            this.target = target;
-            this.methodInterceptor = methodInterceptor;
-        }
-
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
-        {
-            final ReflectionInvocation invocation = new ReflectionInvocation(target, method, args);
-            return methodInterceptor.intercept(invocation);
-        }
-    }
-
-    private abstract static class AbstractInvocationHandler implements InvocationHandler, Serializable
-    {
-        public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
-        {
-            if( isHashCode(method) )
-            {
-                return System.identityHashCode(proxy);
-            }
-            else if( isEqualsMethod(method) )
-            {
-                return proxy == args[0];
-            }
-            else
-            {
-                return invokeImpl(proxy, method, args);
-            }
-        }
-
-        protected abstract Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable;
-    }
-
-    private static class InvokerInvocationHandler extends AbstractInvocationHandler
-    {
-        private final Invoker invoker;
-
-        public InvokerInvocationHandler( Invoker invoker )
-        {
-            this.invoker = invoker;
-        }
-
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
-        {
-            return invoker.invoke(proxy, method, args);
-        }
-    }
-
-    protected static boolean isHashCode( Method method )
-    {
-        return "hashCode".equals(method.getName()) &&
-                Integer.TYPE.equals(method.getReturnType()) &&
-                method.getParameterTypes().length == 0;
-    }
-
-    protected static boolean isEqualsMethod( Method method )
-    {
-        return "equals".equals(method.getName()) &&
-                Boolean.TYPE.equals(method.getReturnType()) &&
-                method.getParameterTypes().length == 1 &&
-                Object.class.equals(method.getParameterTypes()[0]);
-    }
-
-    private static class ReflectionInvocation implements Invocation, Serializable
-    {
-        private final Method method;
-        private final Object[] arguments;
-        private final Object target;
-
-        public ReflectionInvocation( Object target, Method method, Object[] arguments )
-        {
-            this.method = method;
-            this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
-            this.target = target;
-        }
-
-        public Object[] getArguments()
-        {
-            return arguments;
-        }
-
-        public Method getMethod()
-        {
-            return method;
-        }
-
-        public Object getProxy()
-        {
-            return target;
-        }
-
-        public Object proceed() throws Throwable
-        {
-            try
-            {
-                return method.invoke(target, arguments);
-            }
-            catch( InvocationTargetException e )
-            {
-                throw e.getTargetException();
-            }
-        }
-    }
 }

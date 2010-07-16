@@ -26,24 +26,43 @@ package org.apache.commons.proxy.exception;
  */
 public class ProxyFactoryException extends RuntimeException
 {
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    /** Serialization version */
+    private static final long serialVersionUID = -1L;
 
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
+
+    /**
+     * Create a new ProxyFactoryException instance.
+     */
     public ProxyFactoryException()
     {
     }
 
+    /**
+     * Create a new ProxyFactoryException instance.
+     * @param message
+     */
     public ProxyFactoryException( String message )
     {
         super(message);
     }
 
+    /**
+     * Create a new ProxyFactoryException instance.
+     * @param cause
+     */
     public ProxyFactoryException( Throwable cause )
     {
         super(cause);
     }
 
+    /**
+     * Create a new ProxyFactoryException instance.
+     * @param message
+     * @param cause
+     */
     public ProxyFactoryException( String message, Throwable cause )
     {
         super(message, cause);

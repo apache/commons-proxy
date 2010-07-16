@@ -76,6 +76,13 @@
             </roles>
             <url></url>
         </developer>
+        <developer>
+            <name>Matt Benson</name>
+            <email>mbenson@apache.org</email>
+            <roles>
+                <role>Claim-jumper</role>
+            </roles>
+        </developer>
     </developers>
 
     <contributors>

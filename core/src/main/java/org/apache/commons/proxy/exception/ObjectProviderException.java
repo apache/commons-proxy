@@ -26,24 +26,43 @@ package org.apache.commons.proxy.exception;
  */
 public class ObjectProviderException extends RuntimeException
 {
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    /** Serialization version */
+    private static final long serialVersionUID = -1L;
 
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
+
+    /**
+     * Create a new ObjectProviderException instance.
+     */
     public ObjectProviderException()
     {
     }
 
+    /**
+     * Create a new ObjectProviderException instance.
+     * @param message
+     */
     public ObjectProviderException( String message )
     {
         super(message);
     }
 
+    /**
+     * Create a new ObjectProviderException instance.
+     * @param cause
+     */
     public ObjectProviderException( Throwable cause )
     {
         super(cause);
     }
 
+    /**
+     * Create a new ObjectProviderException instance.
+     * @param message
+     * @param cause
+     */
     public ObjectProviderException( String message, Throwable cause )
     {
         super(message, cause);

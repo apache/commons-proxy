@@ -36,5 +36,5 @@ public interface ProxyClassGenerator
      * @param proxyClasses the proxy classes
      * @return the dynamically generated proxy class
      */
-    public Class generateProxyClass( ClassLoader classLoader, Class[] proxyClasses );
+    public Class<?> generateProxyClass( ClassLoader classLoader, Class<?>[] proxyClasses );
 }

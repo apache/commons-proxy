@@ -22,7 +22,6 @@ import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,13 +45,13 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
      * @param proxyClasses the interfaces the proxy class must implement
      * @return all methods that the proxy class must implement
      */
-    public static Method[] getImplementationMethods( Class[] proxyClasses )
+    public static Method[] getImplementationMethods( Class<?>[] proxyClasses )
     {
-        final Map signatureMethodMap = new HashMap();
-        final Set finalizedSignatures = new HashSet();
+        final Map<MethodSignature, Method> signatureMethodMap = new HashMap<MethodSignature, Method>();
+        final Set<MethodSignature> finalizedSignatures = new HashSet<MethodSignature>();
         for( int i = 0; i < proxyClasses.length; i++ )
         {
-            Class proxyInterface = proxyClasses[i];
+            Class<?> proxyInterface = proxyClasses[i];
             final Method[] methods = proxyInterface.getMethods();
             for( int j = 0; j < methods.length; j++ )
             {
@@ -67,12 +66,10 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
                 }
             }
         }
-        final Collection resultingMethods = signatureMethodMap.values();
-        for( Iterator i = finalizedSignatures.iterator(); i.hasNext(); )
-        {
-            MethodSignature signature = ( MethodSignature ) i.next();
+        final Collection<Method> resultingMethods = signatureMethodMap.values();
+        for (MethodSignature signature : finalizedSignatures) {
             resultingMethods.remove(signatureMethodMap.get(signature));
         }
-        return ( Method[] ) resultingMethods.toArray(new Method[resultingMethods.size()]);
+        return resultingMethods.toArray(new Method[resultingMethods.size()]);
     }
 }

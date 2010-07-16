@@ -6,7 +6,7 @@ import org.apache.commons.lang.SerializationUtils;
 import java.io.Serializable;
 
 /**
- * @auothor James Carman
+ * @author James Carman
  * @since 1.1
  */
 public abstract class AbstractTestCase extends TestCase

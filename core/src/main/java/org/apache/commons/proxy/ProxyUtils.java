@@ -38,9 +38,9 @@ public class ProxyUtils
 //**********************************************************************************************************************
 
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
-    public static final Class[] EMPTY_ARGUMENT_TYPES = new Class[0];
-    private static final Map<Class, Class> wrapperClassMap = new HashMap<Class, Class>();
-    private static Map<Class, Object> nullValueMap = new HashMap<Class, Object>();
+    public static final Class<?>[] EMPTY_ARGUMENT_TYPES = new Class[0];
+    private static final Map<Class<?>, Class<?>> wrapperClassMap = new HashMap<Class<?>, Class<?>>();
+    private static Map<Class<?>, Object> nullValueMap = new HashMap<Class<?>, Object>();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -77,7 +77,7 @@ public class ProxyUtils
      * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject(ProxyFactory proxyFactory, Class[] proxyClasses)
+    public static Object createNullObject(ProxyFactory proxyFactory, Class<?>[] proxyClasses)
     {
         return proxyFactory.createInvokerProxy(new NullInvoker(), proxyClasses);
     }
@@ -90,7 +90,7 @@ public class ProxyUtils
      * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
-    public static Object createNullObject(ProxyFactory proxyFactory, ClassLoader classLoader, Class[] proxyClasses)
+    public static Object createNullObject(ProxyFactory proxyFactory, ClassLoader classLoader, Class<?>[] proxyClasses)
     {
         return proxyFactory.createInvokerProxy(classLoader, new NullInvoker(), proxyClasses);
     }
@@ -110,13 +110,13 @@ public class ProxyUtils
      * @return an array of {@link Class} objects representing all interfaces implemented by the given class and its
      *         superclasses or <code>null</code> if input class is null.
      */
-    public static Class[] getAllInterfaces(Class cls)
+    public static Class<?>[] getAllInterfaces(Class<?> cls)
     {
-        final List interfaces = getAllInterfacesImpl(cls, new LinkedList());
+        final List<Class<?>> interfaces = getAllInterfacesImpl(cls, new LinkedList<Class<?>>());
         return interfaces == null ? null : (Class[]) interfaces.toArray(new Class[interfaces.size()]);
     }
 
-    private static List getAllInterfacesImpl(Class cls, List list)
+    private static List<Class<?>> getAllInterfacesImpl(Class<?> cls, List<Class<?>> list)
     {
         if (cls == null)
         {
@@ -124,7 +124,7 @@ public class ProxyUtils
         }
         while (cls != null)
         {
-            Class[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = cls.getInterfaces();
             for (int i = 0; i < interfaces.length; i++)
             {
                 if (!list.contains(interfaces[i]))
@@ -147,7 +147,7 @@ public class ProxyUtils
      * @param clazz the class
      * @return the class' name as you would expect to see it in Java code
      */
-    public static String getJavaClassName(Class clazz)
+    public static String getJavaClassName(Class<?> clazz)
     {
         if (clazz.isArray())
         {
@@ -162,7 +162,7 @@ public class ProxyUtils
      * @param primitiveType the primitive type
      * @return the wrapper class
      */
-    public static Class getWrapperClass(Class primitiveType)
+    public static Class<?> getWrapperClass(Class<?> primitiveType)
     {
         return wrapperClassMap.get(primitiveType);
     }
@@ -173,11 +173,17 @@ public class ProxyUtils
      * @param type the type
      * @return the null value
      */
+    @SuppressWarnings("unchecked")
     public static <T> T nullValue(Class<T> type)
     {
         return (T) nullValueMap.get(type);
     }
 
+    /**
+     * Learn whether the specified method is/overrides {@link Object#equals(Object)}.
+     * @param method to compare
+     * @return <code>true</code> for a method with signature <code>boolean equals(Object)</code>
+     */
     public static boolean isEqualsMethod(Method method)
     {
         return "equals".equals(method.getName()) &&
@@ -186,6 +192,11 @@ public class ProxyUtils
                 Object.class.equals(method.getParameterTypes()[0]);
     }
 
+    /**
+     * Learn whether the specified method is/overrides {@link Object#hashCode()}.
+     * @param method to compare
+     * @return true for a method with signature <code>int hashCode()</code>
+     */
     public static boolean isHashCode(Method method)
     {
         return "hashCode".equals(method.getName()) &&

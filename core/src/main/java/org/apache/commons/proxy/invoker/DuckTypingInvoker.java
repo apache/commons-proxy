@@ -52,29 +52,39 @@ import java.lang.reflect.Method;
  */
 public class DuckTypingInvoker implements Invoker
 {
+    /** Serialization version */
+    private static final long serialVersionUID = 1L;
+
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private final ObjectProvider targetProvider;
+    private final ObjectProvider<?> targetProvider;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
-    public DuckTypingInvoker( final ObjectProvider targetProvider )
+    /**
+     * Create a new DuckTypingInvoker instance.
+     * @param targetProvider
+     */
+    public DuckTypingInvoker( final ObjectProvider<?> targetProvider )
     {
         this.targetProvider = targetProvider;
     }
 
-//**********************************************************************************************************************
-// Invoker Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Invoker Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     public Object invoke( final Object proxy, final Method method, final Object[] arguments ) throws Throwable
     {
         final Object target = targetProvider.getObject();
-        final Class targetClass = target.getClass();
+        final Class<?> targetClass = target.getClass();
         try
         {
             final Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());

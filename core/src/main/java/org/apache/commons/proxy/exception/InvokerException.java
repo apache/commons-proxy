@@ -25,24 +25,43 @@ package org.apache.commons.proxy.exception;
  */
 public class InvokerException extends RuntimeException
 {
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    /** Serialization version */
+    private static final long serialVersionUID = -1L;
 
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
+
+    /**
+     * Create a new InvokerException instance.
+     */
     public InvokerException()
     {
     }
 
+    /**
+     * Create a new InvokerException instance.
+     * @param message
+     */
     public InvokerException( String message )
     {
         super(message);
     }
 
+    /**
+     * Create a new InvokerException instance.
+     * @param cause
+     */
     public InvokerException( Throwable cause )
     {
         super(cause);
     }
 
+    /**
+     * Create a new InvokerException instance.
+     * @param message
+     * @param cause
+     */
     public InvokerException( String message, Throwable cause )
     {
         super(message, cause);

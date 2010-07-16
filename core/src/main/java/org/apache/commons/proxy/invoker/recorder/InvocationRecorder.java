@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @auothor James Carman
+ * @author James Carman
  */
 public class InvocationRecorder
 {

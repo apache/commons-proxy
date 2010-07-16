@@ -32,13 +32,19 @@ import java.lang.reflect.Method;
  */
 public class NullInvoker implements Invoker, Serializable
 {
-//**********************************************************************************************************************
-// Invoker Implementation
-//**********************************************************************************************************************
+    /** Serialization version */
+    private static final long serialVersionUID = 1L;
 
+  //**********************************************************************************************************************
+ // Invoker Implementation
+ //**********************************************************************************************************************
+
+    /**
+     * {@inheritDoc}
+     */
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        final Class returnType = method.getReturnType();
+        final Class<?> returnType = method.getReturnType();
         return ProxyUtils.nullValue(returnType);
     }
 }

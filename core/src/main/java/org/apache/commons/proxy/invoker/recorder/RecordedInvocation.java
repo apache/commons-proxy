@@ -22,7 +22,7 @@ import org.apache.commons.proxy.ProxyUtils;
 import java.lang.reflect.Method;
 
 /**
- * @auothor James Carman
+ * @author James Carman
  */
 public class RecordedInvocation
 {

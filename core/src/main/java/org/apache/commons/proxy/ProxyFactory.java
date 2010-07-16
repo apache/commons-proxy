@@ -97,11 +97,12 @@ public interface ProxyFactory
      * @return a proxy which delegates to the object provided by the target object provider
      */
     public <T> T createDelegatorProxy( ObjectProvider<T> delegateProvider, Class<T> proxyClass );
+
     /**
-     * Returns true if all <code>proxyClasses</code> are interfaces.
+     * Learn whether this {@link ProxyFactory} is capable of creating a proxy for the specified set of classes.
      *
      * @param proxyClasses the proxy classes
-     * @return true if all <code>proxyClasses</code> are interfaces
+     * @return boolean
      */
     public boolean canProxy( Class<?>... proxyClasses );
 

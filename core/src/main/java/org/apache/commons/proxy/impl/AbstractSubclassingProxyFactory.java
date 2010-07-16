@@ -5,10 +5,13 @@ import org.apache.commons.proxy.exception.ProxyFactoryException;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+/**
+ * Parent {@link AbstractProxyFactory} for implementations that permit the generation of
+ * proxies with a specific inheritance hierarchy.
+ */
 public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFactory
 {
 //**********************************************************************************************************************
@@ -21,7 +24,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @param proxyClasses the proxy classes
      * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
      */
-    public boolean canProxy( Class... proxyClasses )
+    public boolean canProxy( Class<?>... proxyClasses )
     {
         try
         {
@@ -38,12 +41,12 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
 // Other Methods
 //**********************************************************************************************************************
 
-    private static boolean hasSuitableDefaultConstructor( Class superclass )
+    private static boolean hasSuitableDefaultConstructor( Class<?> superclass )
     {
-        final Constructor[] declaredConstructors = superclass.getDeclaredConstructors();
+        final Constructor<?>[] declaredConstructors = superclass.getDeclaredConstructors();
         for( int i = 0; i < declaredConstructors.length; i++ )
         {
-            Constructor constructor = declaredConstructors[i];
+            Constructor<?> constructor = declaredConstructors[i];
             if( constructor.getParameterTypes().length == 0 && ( Modifier.isPublic(constructor.getModifiers()) ||
                     Modifier.isProtected(constructor.getModifiers()) ) )
             {
@@ -53,18 +56,17 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
         return false;
     }
 
-    private static Class[] toNonInterfaces( Class[] proxyClasses )
+    private static Class<?>[] toNonInterfaces( Class<?>[] proxyClasses )
     {
-        final List superclasses = new LinkedList();
-        for( int i = 0; i < proxyClasses.length; i++ )
+        final Set<Class<?>> superclasses = new LinkedHashSet<Class<?>>();
+        for (Class<?> proxyClass : proxyClasses)
         {
-            Class proxyClass = proxyClasses[i];
-            if( !proxyClass.isInterface() )
+            if( !proxyClass.isInterface())
             {
                 superclasses.add(proxyClass);
             }
         }
-        return ( Class[] ) superclasses.toArray(new Class[superclasses.size()]);
+        return superclasses.toArray(new Class[superclasses.size()]);
     }
 
     /**
@@ -76,18 +78,17 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @param proxyClasses the proxy classes
      * @return the <code>proxyClasses</code> transformed into an array of only the interface classes
      */
-    protected static Class[] toInterfaces( Class[] proxyClasses )
+    protected static Class<?>[] toInterfaces( Class<?>[] proxyClasses )
     {
-        final Collection interfaces = new LinkedList();
+        final Set<Class<?>> interfaces = new LinkedHashSet<Class<?>>();
         boolean serializableFound = false;
-        for( int i = 0; i < proxyClasses.length; i++ )
+        for (Class<?> proxyClass : proxyClasses)
         {
-            Class proxyInterface = proxyClasses[i];
-            if( proxyInterface.isInterface() )
+            if( proxyClass.isInterface() )
             {
-                interfaces.add(proxyInterface);
+                interfaces.add(proxyClass);
             }
-            serializableFound |= ( Serializable.class.equals(proxyInterface) );
+            serializableFound |= ( Serializable.class.equals(proxyClass) );
         }
         if( !serializableFound )
         {
@@ -106,15 +107,15 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * @throws ProxyFactoryException if multiple non-interface classes are contained in <code>proxyClasses</code> or any
      *                               of the non-interface classes are final
      */
-    public static Class getSuperclass( Class[] proxyClasses )
+    public static Class<?> getSuperclass( Class<?>[] proxyClasses )
     {
-        final Class[] superclasses = toNonInterfaces(proxyClasses);
+        final Class<?>[] superclasses = toNonInterfaces(proxyClasses);
         switch( superclasses.length )
         {
             case 0:
                 return Object.class;
             case 1:
-                final Class superclass = superclasses[0];
+                final Class<?> superclass = superclasses[0];
                 if( Modifier.isFinal(superclass.getModifiers()) )
                 {
                     throw new ProxyFactoryException(
@@ -130,7 +131,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
                 final StringBuffer errorMessage = new StringBuffer("Proxy class cannot extend ");
                 for( int i = 0; i < superclasses.length; i++ )
                 {
-                    Class c = superclasses[i];
+                    Class<?> c = superclasses[i];
                     errorMessage.append(c.getName());
                     if( i != superclasses.length - 1 )
                     {

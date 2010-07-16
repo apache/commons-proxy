@@ -23,6 +23,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.XmlRpcHandler;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Vector;
 
 /**
@@ -40,6 +41,9 @@ import java.util.Vector;
  */
 public class XmlRpcInvoker implements Invoker
 {
+    /** Serialization version */
+    private static final long serialVersionUID = 1L;
+
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
@@ -47,24 +51,31 @@ public class XmlRpcInvoker implements Invoker
     private final XmlRpcHandler handler;
     private final String handlerName;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
+    /**
+     * Create a new XmlRpcInvoker instance.
+     * @param handler
+     * @param handlerName
+     */
     public XmlRpcInvoker( XmlRpcHandler handler, String handlerName )
     {
         this.handler = handler;
         this.handlerName = handlerName;
     }
 
-//**********************************************************************************************************************
-// Invoker Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Invoker Implementation
+ //**********************************************************************************************************************
 
-
+    /**
+     * {@inheritDoc}
+     */
     public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
     {
-        final Object returnValue = handler.execute(handlerName + "." + method.getName(), toArgumentVector(args));
+        final Object returnValue = handler.execute(handlerName + "." + method.getName(), new Vector<Object>(Arrays.asList(args)));
         if( returnValue instanceof XmlRpcException )
         {
             throw new InvokerException("Unable to execute XML-RPC call.", ( XmlRpcException ) returnValue);
@@ -72,18 +83,4 @@ public class XmlRpcInvoker implements Invoker
         return returnValue;
     }
 
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
-
-    private Vector toArgumentVector( Object[] args )
-    {
-        final Vector v = new Vector();
-        for( int i = 0; i < args.length; i++ )
-        {
-            Object arg = args[i];
-            v.addElement(arg);
-        }
-        return v;
-    }
 }
