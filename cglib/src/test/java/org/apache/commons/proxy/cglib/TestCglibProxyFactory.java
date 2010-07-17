@@ -27,6 +27,5 @@ public class TestCglibProxyFactory extends AbstractSubclassingProxyFactoryTestCa
 
     public TestCglibProxyFactory()
     {
-        super(new CglibProxyFactory());
     }
 }
