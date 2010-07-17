@@ -18,6 +18,8 @@
 package org.apache.commons.proxy.impl;
 
 import junit.framework.TestCase;
+import org.apache.commons.proxy.util.DuplicateEcho;
+import org.apache.commons.proxy.util.Echo;
 
 public class TestMethodSignature extends TestCase
 {

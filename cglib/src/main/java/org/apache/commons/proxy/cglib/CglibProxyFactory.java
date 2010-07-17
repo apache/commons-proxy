@@ -27,10 +27,13 @@ import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.Invocation;
 import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyFactory;
+import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.impl.AbstractSubclassingProxyFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.ServiceLoader;
 
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
@@ -88,11 +91,11 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     {
         public int accept(Method method)
         {
-            if (isEqualsMethod(method))
+            if (ProxyUtils.isEqualsMethod(method))
             {
                 return 1;
             }
-            else if (isHashCode(method))
+            else if (ProxyUtils.isHashCode(method))
             {
                 return 2;
             }
@@ -200,5 +203,10 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         {
             return delegateProvider.getObject();
         }
+    }
+
+    public static void main(String[] args)
+    {
+        ServiceLoader.load(ProxyFactory.class);
     }
 }

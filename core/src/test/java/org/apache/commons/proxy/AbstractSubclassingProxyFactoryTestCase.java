@@ -37,11 +37,6 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 // Constructors
 //**********************************************************************************************************************
 
-    protected AbstractSubclassingProxyFactoryTestCase(ProxyFactory factory)
-    {
-        super(factory);
-    }
-
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************

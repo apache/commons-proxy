@@ -8,9 +8,4 @@ public class TestJavassistProxyFactory extends AbstractSubclassingProxyFactoryTe
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
-
-    public TestJavassistProxyFactory()
-    {
-        super(new JavassistProxyFactory());
-    }
 }

@@ -24,6 +24,7 @@ import javassist.CtMethod;
 import org.apache.commons.proxy.Interceptor;
 import org.apache.commons.proxy.Invoker;
 import org.apache.commons.proxy.ObjectProvider;
+import org.apache.commons.proxy.ProxyUtils;
 import org.apache.commons.proxy.exception.ProxyFactoryException;
 import org.apache.commons.proxy.impl.AbstractProxyClassGenerator;
 import org.apache.commons.proxy.impl.AbstractSubclassingProxyFactory;
@@ -132,7 +133,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 final Method[] methods = getImplementationMethods(proxyClasses);
                 for (int i = 0; i < methods.length; ++i)
                 {
-                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    if (!ProxyUtils.isEqualsMethod(methods[i]) && !ProxyUtils.isHashCode(methods[i]))
                     {
                         final Method method = methods[i];
                         final CtMethod ctMethod = new CtMethod(JavassistUtils.resolve(method.getReturnType()),
@@ -179,7 +180,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 proxyClass.addConstructor(proxyConstructor);
                 for (int i = 0; i < methods.length; ++i)
                 {
-                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    if (!ProxyUtils.isEqualsMethod(methods[i]) && !ProxyUtils.isHashCode(methods[i]))
                     {
                         final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
                                 methods[i].getName(),
@@ -248,7 +249,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                 addEqualsMethod(proxyClass);
                 for (int i = 0; i < methods.length; ++i)
                 {
-                    if (!isEqualsMethod(methods[i]) && !isHashCode(methods[i]))
+                    if (!ProxyUtils.isEqualsMethod(methods[i]) && !ProxyUtils.isHashCode(methods[i]))
                     {
                         final CtMethod method = new CtMethod(JavassistUtils.resolve(methods[i].getReturnType()),
                                 methods[i].getName(),

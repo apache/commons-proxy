@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -54,9 +55,9 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 // Constructors
 //**********************************************************************************************************************
 
-    protected AbstractProxyFactoryTestCase(ProxyFactory factory)
+    protected AbstractProxyFactoryTestCase()
     {
-        this.factory = factory;
+        this.factory = ServiceLoader.load(ProxyFactory.class).iterator().next();
     }
 
 //**********************************************************************************************************************

@@ -5,8 +5,4 @@ import org.apache.commons.proxy.AbstractSubclassingProxyFactoryTestCase;
 
 public class TestJdkProxyFactory extends AbstractProxyFactoryTestCase
 {
-    public TestJdkProxyFactory()
-    {
-        super(new JdkProxyFactory());
-    }
 }

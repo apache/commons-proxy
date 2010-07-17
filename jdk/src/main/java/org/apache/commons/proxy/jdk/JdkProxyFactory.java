@@ -92,11 +92,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
     {
         public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
         {
-            if( isHashCode(method) )
+            if( ProxyUtils.isHashCode(method) )
             {
                 return System.identityHashCode(proxy);
             }
-            else if( isEqualsMethod(method) )
+            else if( ProxyUtils.isEqualsMethod(method) )
             {
                 return proxy == args[0];
             }
