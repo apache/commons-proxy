@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -57,7 +58,17 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     protected AbstractProxyFactoryTestCase()
     {
-        this.factory = ServiceLoader.load(ProxyFactory.class).iterator().next();
+        final ServiceLoader<ProxyFactory> serviceLoader = ServiceLoader.load(ProxyFactory.class);
+        Iterator<ProxyFactory> iter = serviceLoader.iterator();
+        if(iter.hasNext())
+        {
+            this.factory= iter.next();
+        }
+        else
+        {
+            throw new RuntimeException("Unable to find proxy factory implementation."); 
+        }
+
     }
 
 //**********************************************************************************************************************

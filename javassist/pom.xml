@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>commons-proxy-javassist</artifactId>
-
+    <name>Commons Proxy Javassist Proxies Module</name>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
