@@ -204,9 +204,4 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             return delegateProvider.getObject();
         }
     }
-
-    public static void main(String[] args)
-    {
-        ServiceLoader.load(ProxyFactory.class);
-    }
 }
