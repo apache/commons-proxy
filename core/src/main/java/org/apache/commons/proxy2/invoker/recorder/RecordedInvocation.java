@@ -22,6 +22,7 @@ import org.apache.commons.proxy2.ProxyUtils;
 import java.lang.reflect.Method;
 
 /**
+ * Detached representation of a method invocation.
  * @author James Carman
  */
 public class RecordedInvocation
@@ -33,30 +34,44 @@ public class RecordedInvocation
     private final Method invokedMethod;
     private final Object[] arguments;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
+    /**
+     * Create a new RecordedInvocation instance.
+     * @param invokedMethod
+     * @param arguments
+     */
     public RecordedInvocation( Method invokedMethod, Object[] arguments )
     {
         this.invokedMethod = invokedMethod;
         this.arguments = arguments;
     }
 
-//**********************************************************************************************************************
-// Canonical Methods
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Canonical Methods
+ //**********************************************************************************************************************
 
-    public Method getInvokedMethod()
-    {
+    /**
+     * Get the invokedMethod.
+     * @return Method
+     */
+    public Method getInvokedMethod() {
         return invokedMethod;
     }
 
-    public Object[] getArguments()
-    {
+    /**
+     * Get the arguments.
+     * @return Object[]
+     */
+    public Object[] getArguments() {
         return arguments;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String toString()
     {
         StringBuffer buffer = new StringBuffer();
@@ -78,6 +93,11 @@ public class RecordedInvocation
         return buffer.toString();
     }
 
+    /**
+     * Add a string representation of <code>input</code> to <code>buffer</code>.
+     * @param buffer
+     * @param input
+     */
     protected void convert( StringBuffer buffer, Object input )
     {
         if( input == null )

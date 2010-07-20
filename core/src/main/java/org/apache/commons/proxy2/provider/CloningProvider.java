@@ -33,6 +33,9 @@ import java.lang.reflect.Method;
  */
 public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, Serializable
 {
+    /** Serialization version */
+    private static final long serialVersionUID = 1L;
+
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
@@ -55,10 +58,13 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
         this.cloneable = cloneable;
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ObjectProvider Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public T getObject()
     {

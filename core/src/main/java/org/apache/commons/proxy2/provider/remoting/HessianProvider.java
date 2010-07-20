@@ -39,31 +39,45 @@ import java.net.MalformedURLException;
  */
 public class HessianProvider<T> implements ObjectProvider<T>, Serializable
 {
+    /** Serialization version */
+    private static final long serialVersionUID = 1L;
+
 //**********************************************************************************************************************
 // Fields
 //**********************************************************************************************************************
 
-    private Class<T> serviceInterface;
+    private Class<? extends T> serviceInterface;
     private String url;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
+    /**
+     * Create a new HessianProvider instance.
+     */
     public HessianProvider()
     {
     }
 
-    public HessianProvider( Class<T> serviceInterface, String url )
+    /**
+     * Create a new HessianProvider instance.
+     * @param serviceInterface
+     * @param url
+     */
+    public HessianProvider( Class<? extends T> serviceInterface, String url )
     {
         this.serviceInterface = serviceInterface;
         this.url = url;
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ObjectProvider Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public T getObject()
     {
@@ -81,13 +95,19 @@ public class HessianProvider<T> implements ObjectProvider<T>, Serializable
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setServiceInterface( Class<T> serviceInterface )
-    {
+    /**
+     * Set the serviceInterface.
+     * @param serviceInterface the Class to set
+     */
+    public void setServiceInterface(Class<? extends T> serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
-    public void setUrl( String url )
-    {
+    /**
+     * Set the url.
+     * @param url the String to set
+     */
+    public void setUrl(String url) {
         this.url = url;
     }
 }

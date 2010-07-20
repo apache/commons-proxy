@@ -23,7 +23,7 @@ import org.apache.commons.proxy2.ObjectProvider;
  * @author James Carman
  * @since 1.0
  */
-public class CountingProvider extends ProviderDecorator
+public class CountingProvider<T> extends ProviderDecorator<T>
 {
 //**********************************************************************************************************************
 // Fields
@@ -35,7 +35,7 @@ public class CountingProvider extends ProviderDecorator
 // Constructors
 //**********************************************************************************************************************
 
-    public CountingProvider( ObjectProvider inner )
+    public CountingProvider( ObjectProvider<? extends T> inner )
     {
         super(inner);
     }
@@ -45,7 +45,7 @@ public class CountingProvider extends ProviderDecorator
 //**********************************************************************************************************************
 
 
-    public synchronized Object getObject()
+    public synchronized T getObject()
     {
         count++;
         return super.getObject();

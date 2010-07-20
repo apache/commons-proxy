@@ -31,12 +31,12 @@ public class TestConstantProvider extends AbstractTestCase
     public void testGetObject() throws Exception
     {
         final String s = "Hello, World!";
-        final ConstantProvider provider = new ConstantProvider(s);
+        final ConstantProvider<String> provider = new ConstantProvider<String>(s);
         assertSame(s, provider.getObject());
     }
 
     public void testSerialization()
     {
-        assertSerializable(new ConstantProvider("Hello, World!"));
+        assertSerializable(new ConstantProvider<String>("Hello, World!"));
     }
 }

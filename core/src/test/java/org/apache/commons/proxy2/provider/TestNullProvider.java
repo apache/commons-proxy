@@ -31,12 +31,12 @@ public class TestNullProvider extends AbstractTestCase
 
     public void testGetObject()
     {
-        final NullProvider provider = new NullProvider();
+        final NullProvider<Object> provider = new NullProvider<Object>();
         assertNull(provider.getObject());
     }
 
     public void testSerialization()
     {
-        assertSerializable(new NullProvider());
+        assertSerializable(new NullProvider<Object>());
     }
 }

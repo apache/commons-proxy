@@ -29,7 +29,7 @@ public class TestHessianProvider extends AbstractTestCase
 
     public void testSerialization()
     {
-        final HessianProvider p = new HessianProvider();
+        final HessianProvider<Echo> p = new HessianProvider<Echo>();
         p.setServiceInterface(Echo.class);
         p.setUrl("a malformed URL");
         assertSerializable(p);
@@ -39,7 +39,7 @@ public class TestHessianProvider extends AbstractTestCase
     {
         try
         {
-            final HessianProvider p = new HessianProvider(Echo.class, "a malformed URL");
+            final HessianProvider<Echo> p = new HessianProvider<Echo>(Echo.class, "a malformed URL");
             p.getObject();
             fail();
         }
@@ -52,7 +52,7 @@ public class TestHessianProvider extends AbstractTestCase
     {
         try
         {
-            final HessianProvider p = new HessianProvider();
+            final HessianProvider<Echo> p = new HessianProvider<Echo>();
             p.setServiceInterface(Echo.class);
             p.setUrl("a malformed URL");
             p.getObject();

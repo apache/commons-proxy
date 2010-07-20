@@ -29,13 +29,13 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
 // Fields
 //**********************************************************************************************************************
 
-    private final Class exceptionClass;
+    private final Class<?> exceptionClass;
 
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public AbstractExceptionClassTestCase( Class exceptionClass )
+    public AbstractExceptionClassTestCase( Class<?> exceptionClass )
     {
         this.exceptionClass = exceptionClass;
     }

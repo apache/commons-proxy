@@ -30,7 +30,7 @@ public class TestBeanProvider extends AbstractTestCase
     {
         try
         {
-            final BeanProvider p = new BeanProvider();
+            final BeanProvider<Number> p = new BeanProvider<Number>();
             p.setBeanClass(Number.class);
             p.getObject();
             fail();
@@ -44,7 +44,7 @@ public class TestBeanProvider extends AbstractTestCase
     {
         try
         {
-            new BeanProvider(MyBean.class).getObject();
+            new BeanProvider<MyBean>(MyBean.class).getObject();
             fail();
         }
         catch( ObjectProviderException e )
@@ -54,14 +54,14 @@ public class TestBeanProvider extends AbstractTestCase
 
     public void testSerialization()
     {
-        assertSerializable(new BeanProvider(MyBean.class));
+        assertSerializable(new BeanProvider<MyBean>(MyBean.class));
     }
 
     public void testWithNullBeanClass()
     {
         try
         {
-            final BeanProvider p = new BeanProvider();
+            final BeanProvider<Object> p = new BeanProvider<Object>();
             p.getObject();
             fail();
         }

@@ -30,13 +30,13 @@ public class TestCloningProvider extends AbstractTestCase
 
     public void testSerialization()
     {
-        assertSerializable(new CloningProvider(new Date()));
+        assertSerializable(new CloningProvider<Date>(new Date()));
     }
 
     public void testValidCloneable()
     {
         final Date now = new Date();
-        final CloningProvider provider = new CloningProvider(now);
+        final CloningProvider<Date> provider = new CloningProvider<Date>(now);
         final Date clone1 = ( Date ) provider.getObject();
         assertEquals(now, clone1);
         assertNotSame(now, clone1);
@@ -48,7 +48,7 @@ public class TestCloningProvider extends AbstractTestCase
 
     public void testWithExceptionThrown()
     {
-        final CloningProvider provider = new CloningProvider(new ExceptionCloneable());
+        final CloningProvider<ExceptionCloneable> provider = new CloningProvider<ExceptionCloneable>(new ExceptionCloneable());
         try
         {
             provider.getObject();
@@ -61,7 +61,7 @@ public class TestCloningProvider extends AbstractTestCase
 
     public void testWithInvalidCloneable()
     {
-        final CloningProvider provider = new CloningProvider(new InvalidCloneable());
+        final CloningProvider<InvalidCloneable> provider = new CloningProvider<InvalidCloneable>(new InvalidCloneable());
         try
         {
             provider.getObject();
@@ -74,7 +74,7 @@ public class TestCloningProvider extends AbstractTestCase
 
     public void testWithPrivateCloneMethod()
     {
-        final CloningProvider provider = new CloningProvider(new PrivateCloneable());
+        final CloningProvider<PrivateCloneable> provider = new CloningProvider<PrivateCloneable>(new PrivateCloneable());
         try
         {
             provider.getObject();

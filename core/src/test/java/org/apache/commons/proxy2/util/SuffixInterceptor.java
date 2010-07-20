@@ -24,6 +24,7 @@ import org.apache.commons.proxy2.Invocation;
  * @author James Carman
  * @since 1.0
  */
+@SuppressWarnings("serial")
 public class SuffixInterceptor implements Interceptor
 {
 //**********************************************************************************************************************

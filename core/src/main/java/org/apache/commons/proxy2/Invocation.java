@@ -20,7 +20,7 @@ package org.apache.commons.proxy2;
 import java.lang.reflect.Method;
 
 /**
- * Represents a method invocation.
+ * Method invocation for use by an {@link Interceptor}.
  *
  * @author James Carman
  * @since 1.0

@@ -46,7 +46,7 @@ public class JaxRpcProvider<T> implements ObjectProvider<T>
 // Fields
 //**********************************************************************************************************************
 
-    private Class<T> serviceInterface;
+    private Class<? extends T> serviceInterface;
     private String wsdlUrl;
     private String serviceNamespaceUri;
     private String serviceLocalPart;
@@ -55,23 +55,33 @@ public class JaxRpcProvider<T> implements ObjectProvider<T>
     private String portLocalPart;
     private String portPrefix;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
+    /**
+     * Create a new JaxRpcProvider instance.
+     */
     public JaxRpcProvider()
     {
     }
 
-    public JaxRpcProvider( Class<T> serviceInterface )
+    /**
+     * Create a new JaxRpcProvider instance.
+     * @param serviceInterface
+     */
+    public JaxRpcProvider( Class<? extends T> serviceInterface )
     {
         this.serviceInterface = serviceInterface;
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ObjectProvider Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     public T getObject()
     {
         try
@@ -97,43 +107,67 @@ public class JaxRpcProvider<T> implements ObjectProvider<T>
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setPortLocalPart( String portLocalPart )
-    {
+    /**
+     * Set the portLocalPart.
+     * @param portLocalPart the String to set
+     */
+    public void setPortLocalPart(String portLocalPart) {
         this.portLocalPart = portLocalPart;
     }
 
-    public void setPortNamespaceUri( String portNamespaceUri )
-    {
+    /**
+     * Set the portNamespaceUri.
+     * @param portNamespaceUri the String to set
+     */
+    public void setPortNamespaceUri(String portNamespaceUri) {
         this.portNamespaceUri = portNamespaceUri;
     }
 
-    public void setPortPrefix( String portPrefix )
-    {
+    /**
+     * Set the portPrefix.
+     * @param portPrefix the String to set
+     */
+    public void setPortPrefix(String portPrefix) {
         this.portPrefix = portPrefix;
     }
 
-    public void setServiceInterface( Class<T> serviceInterface )
-    {
+    /**
+     * Set the serviceInterface.
+     * @param serviceInterface the Class to set
+     */
+    public void setServiceInterface(Class<? extends T> serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
-    public void setServiceLocalPart( String serviceLocalPart )
-    {
+    /**
+     * Set the serviceLocalPart.
+     * @param serviceLocalPart the String to set
+     */
+    public void setServiceLocalPart(String serviceLocalPart) {
         this.serviceLocalPart = serviceLocalPart;
     }
 
-    public void setServiceNamespaceUri( String serviceNamespaceUri )
-    {
+    /**
+     * Set the serviceNamespaceUri.
+     * @param serviceNamespaceUri the String to set
+     */
+    public void setServiceNamespaceUri(String serviceNamespaceUri) {
         this.serviceNamespaceUri = serviceNamespaceUri;
     }
 
-    public void setServicePrefix( String servicePrefix )
-    {
+    /**
+     * Set the servicePrefix.
+     * @param servicePrefix the String to set
+     */
+    public void setServicePrefix(String servicePrefix) {
         this.servicePrefix = servicePrefix;
     }
 
-    public void setWsdlUrl( String wsdlUrl )
-    {
+    /**
+     * Set the wsdlUrl.
+     * @param wsdlUrl the String to set
+     */
+    public void setWsdlUrl(String wsdlUrl) {
         this.wsdlUrl = wsdlUrl;
     }
 

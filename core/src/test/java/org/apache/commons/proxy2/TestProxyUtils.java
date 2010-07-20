@@ -62,7 +62,7 @@ public class TestProxyUtils extends TestCase
         assertNullValue(( byte ) 0, Byte.TYPE);
     }
 
-    private void assertNullValue( Object expected, Class type )
+    private void assertNullValue( Object expected, Class<?> type )
     {
         assertEquals(expected, ProxyUtils.nullValue(type));
     }

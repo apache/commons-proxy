@@ -29,7 +29,7 @@ public class TestBurlapProvider extends AbstractTestCase
 
     public void testSerialization()
     {
-        final BurlapProvider p = new BurlapProvider();
+        final BurlapProvider<Echo> p = new BurlapProvider<Echo>();
         p.setServiceInterface(Echo.class);
         p.setUrl("a malformed URL");
         assertSerializable(p);
@@ -39,7 +39,7 @@ public class TestBurlapProvider extends AbstractTestCase
     {
         try
         {
-            final BurlapProvider p = new BurlapProvider(Echo.class, "a malformed URL");
+            final BurlapProvider<Echo> p = new BurlapProvider<Echo>(Echo.class, "a malformed URL");
             p.getObject();
             fail();
         }
@@ -52,7 +52,7 @@ public class TestBurlapProvider extends AbstractTestCase
     {
         try
         {
-            final BurlapProvider p = new BurlapProvider();
+            final BurlapProvider<Echo> p = new BurlapProvider<Echo>();
             p.setServiceInterface(Echo.class);
             p.setUrl("a malformed URL");
             p.getObject();

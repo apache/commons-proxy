@@ -23,6 +23,7 @@ import java.io.Serializable;
  * @author James Carman
  * @since 1.0
  */
+@SuppressWarnings("serial")
 public abstract class AbstractEcho implements Echo, Serializable
 {
 //**********************************************************************************************************************

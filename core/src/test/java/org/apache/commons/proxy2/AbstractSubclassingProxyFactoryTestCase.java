@@ -30,9 +30,10 @@ import java.util.Date;
  * @author James Carman
  * @since 1.0
  */
+@SuppressWarnings("serial")
 public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractProxyFactoryTestCase
 {
-    private static final Class[] DATE_ONLY = new Class[]{Date.class};
+    private static final Class<?>[] DATE_ONLY = new Class[]{Date.class};
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
@@ -57,7 +58,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     {
         try
         {
-            factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()),
+            factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()),
                     new Class[]{EchoImpl.class, String.class});
             fail();
         }
@@ -69,7 +70,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     public void testDelegatorWithSuperclass()
     {
         final Echo echo = (Echo) factory
-                .createDelegatorProxy(new ConstantProvider(new EchoImpl()), new Class[]{Echo.class, EchoImpl.class});
+                .createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{Echo.class, EchoImpl.class});
         assertTrue(echo instanceof EchoImpl);
     }
 
@@ -115,8 +116,8 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public void testProxiesWithClashingFinalMethodInSuperclass()
     {
-        final Class[] proxyClasses = new Class[]{Echo.class, FinalMethodEcho.class};
-        Echo proxy = (Echo) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), proxyClasses);
+        final Class<?>[] proxyClasses = new Class[]{Echo.class, FinalMethodEcho.class};
+        Echo proxy = (Echo) factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), proxyClasses);
         assertEquals("final", proxy.echoBack("echo"));
 
         proxy = (Echo) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), proxyClasses);
@@ -128,7 +129,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public void testWithAbstractSuperclass()
     {
-        final Echo echo = (Echo) factory.createDelegatorProxy(new ConstantProvider(new EchoImpl()), new Class[]{AbstractEcho.class});
+        final Echo echo = (Echo) factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{AbstractEcho.class});
         assertEquals("hello", echo.echoBack("hello"));
         assertEquals("helloworld", echo.echoBack("hello", "world"));
     }
@@ -157,9 +158,9 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     public void testDelegatorEquals() throws Exception
     {
         final EqualsEcho echo = new EqualsEcho("text");
-        final Echo proxy1 = (Echo) factory.createDelegatorProxy(new ConstantProvider(echo),
+        final Echo proxy1 = (Echo) factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
                 new Class[] { EqualsEcho.class });
-        final Echo proxy2 = (Echo) factory.createDelegatorProxy(new ConstantProvider(echo),
+        final Echo proxy2 = (Echo) factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
                 new Class[] { EqualsEcho.class });
         assertEquals(proxy1, proxy1);
         assertFalse(proxy1.equals(proxy2));
@@ -184,6 +185,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public static class EqualsEcho extends EchoImpl
     {
+        @SuppressWarnings("unused")
         private final String text;
 
         public EqualsEcho()

@@ -31,5 +31,11 @@ public interface Interceptor extends Serializable
 // Other Methods
 //**********************************************************************************************************************
 
+    /**
+     * Intercept the specified {@link Invocation}.
+     * @param invocation
+     * @return return value of the method
+     * @throws Throwable
+     */
     public Object intercept( Invocation invocation ) throws Throwable;
 }

@@ -43,25 +43,43 @@ public class RmiProvider<T> implements ObjectProvider<T>
     private RMIClientSocketFactory clientSocketFactory;
     private String name;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
+    /**
+     * Create a new RmiProvider instance.
+     */
     public RmiProvider()
     {
     }
 
+    /**
+     * Create a new RmiProvider instance.
+     * @param name
+     */
     public RmiProvider( String name )
     {
         setName(name);
     }
 
+    /**
+     * Create a new RmiProvider instance.
+     * @param host
+     * @param name
+     */
     public RmiProvider( String host, String name )
     {
         setHost(host);
         setName(name);
     }
 
+    /**
+     * Create a new RmiProvider instance.
+     * @param host
+     * @param port
+     * @param name
+     */
     public RmiProvider( String host, int port, String name )
     {
         setHost(host);
@@ -69,6 +87,13 @@ public class RmiProvider<T> implements ObjectProvider<T>
         setPort(port);
     }
 
+    /**
+     * Create a new RmiProvider instance.
+     * @param host
+     * @param port
+     * @param clientSocketFactory
+     * @param name
+     */
     public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name )
     {
         setHost(host);
@@ -77,10 +102,13 @@ public class RmiProvider<T> implements ObjectProvider<T>
         setName(name);
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ObjectProvider Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public T getObject()
     {
@@ -106,23 +134,36 @@ public class RmiProvider<T> implements ObjectProvider<T>
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    public void setClientSocketFactory( RMIClientSocketFactory clientSocketFactory )
-    {
+    /**
+     * Set the clientSocketFactory.
+     * @param clientSocketFactory the RMIClientSocketFactory to set
+     */
+    public void setClientSocketFactory(
+            RMIClientSocketFactory clientSocketFactory) {
         this.clientSocketFactory = clientSocketFactory;
     }
 
-    public void setHost( String host )
-    {
+    /**
+     * Set the host.
+     * @param host the String to set
+     */
+    public void setHost(String host) {
         this.host = host;
     }
 
-    public void setName( String name )
-    {
+    /**
+     * Set the name.
+     * @param name the String to set
+     */
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setPort( int port )
-    {
+    /**
+     * Set the port.
+     * @param port the int to set
+     */
+    public void setPort(int port) {
         this.port = port;
     }
 

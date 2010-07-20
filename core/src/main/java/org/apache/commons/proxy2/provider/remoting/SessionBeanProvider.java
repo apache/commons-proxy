@@ -42,31 +42,45 @@ public class SessionBeanProvider<T> implements ObjectProvider<T>
 //**********************************************************************************************************************
 
     private final String jndiName;
-    private final Class homeInterface;
+    private final Class<?> homeInterface;
     private final Properties properties;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // Constructors
+ //**********************************************************************************************************************
 
-    public SessionBeanProvider( String jndiName, Class homeInterface )
+    /**
+     * Create a new SessionBeanProvider instance.
+     * @param jndiName
+     * @param homeInterface
+     */
+    public SessionBeanProvider( String jndiName, Class<?> homeInterface )
     {
         this.jndiName = jndiName;
         this.homeInterface = homeInterface;
         this.properties = null;
     }
 
-    public SessionBeanProvider( String jndiName, Class homeInterface, Properties properties )
+    /**
+     * Create a new SessionBeanProvider instance.
+     * @param jndiName
+     * @param homeInterface
+     * @param properties
+     */
+    public SessionBeanProvider( String jndiName, Class<?> homeInterface, Properties properties )
     {
         this.jndiName = jndiName;
         this.homeInterface = homeInterface;
         this.properties = properties;
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ObjectProvider Implementation
+ //**********************************************************************************************************************
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public T getObject()
     {
