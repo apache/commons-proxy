@@ -35,6 +35,11 @@ public class NullInvoker implements Invoker, Serializable
     /** Serialization version */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Statically available instance.
+     */
+    public static final NullInvoker INSTANCE = new NullInvoker();
+
   //**********************************************************************************************************************
  // Invoker Implementation
  //**********************************************************************************************************************
