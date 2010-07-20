@@ -45,7 +45,7 @@ class JavassistUtils
     private static int classNumber = 0;
     private static final ClassPool classPool = new ClassPool();
 
-    private static final Set classLoaders = new HashSet();
+    private static final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -64,7 +64,7 @@ class JavassistUtils
      * @param enclosingClass the class receiving the new field
      * @throws CannotCompileException if a compilation problem occurs
      */
-    public static void addField( Class fieldType, String fieldName, CtClass enclosingClass )
+    public static void addField( Class<?> fieldType, String fieldName, CtClass enclosingClass )
             throws CannotCompileException
     {
         enclosingClass.addField(new CtField(resolve(fieldType), fieldName, enclosingClass));
@@ -76,11 +76,11 @@ class JavassistUtils
      * @param ctClass      the {@link CtClass}
      * @param proxyClasses the interfaces
      */
-    public static void addInterfaces( CtClass ctClass, Class[] proxyClasses )
+    public static void addInterfaces( CtClass ctClass, Class<?>[] proxyClasses )
     {
         for( int i = 0; i < proxyClasses.length; i++ )
         {
-            Class proxyInterface = proxyClasses[i];
+            Class<?> proxyInterface = proxyClasses[i];
             ctClass.addInterface(resolve(proxyInterface));
         }
     }
@@ -91,7 +91,7 @@ class JavassistUtils
      * @param superclass the superclass
      * @return the new derived {@link CtClass}
      */
-    public static CtClass createClass( Class superclass )
+    public static CtClass createClass( Class<?> superclass )
     {
         return createClass(DEFAULT_BASE_NAME, superclass);
     }
@@ -103,7 +103,7 @@ class JavassistUtils
      * @param superclass the superclass
      * @return the new derived {@link CtClass}
      */
-    public synchronized static CtClass createClass( String baseName, Class superclass )
+    public synchronized static CtClass createClass( String baseName, Class<?> superclass )
     {
         return classPool.makeClass(baseName + "_" + classNumber++, resolve(superclass));
     }
@@ -114,7 +114,7 @@ class JavassistUtils
      * @param clazz the Java {@link Class}
      * @return the {@link CtClass}
      */
-    public static CtClass resolve( Class clazz )
+    public static CtClass resolve( Class<?> clazz )
     {
         synchronized( classLoaders )
         {
@@ -142,7 +142,7 @@ class JavassistUtils
      * @param classes the Java {@link Class}es
      * @return the corresponding {@link CtClass}es
      */
-    public static CtClass[] resolve( Class[] classes )
+    public static CtClass[] resolve( Class<?>[] classes )
     {
         final CtClass[] ctClasses = new CtClass[classes.length];
         for( int i = 0; i < ctClasses.length; ++i )

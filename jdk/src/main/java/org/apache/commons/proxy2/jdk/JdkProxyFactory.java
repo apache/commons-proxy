@@ -21,6 +21,7 @@ import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
+import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.impl.AbstractProxyFactory;
 
@@ -30,12 +31,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * {@link ProxyFactory} implementation that uses {@link java.lang.reflect.Proxy} proxies.
+ */
 public class JdkProxyFactory extends AbstractProxyFactory
 {
 //**********************************************************************************************************************
 // ProxyFactory Implementation
 //**********************************************************************************************************************
-
 
     /**
      * Creates a proxy2 which delegates to the object provided by <code>delegateProvider</code>.
@@ -45,10 +48,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @param proxyClasses     the interfaces that the proxy2 should implement
      * @return a proxy2 which delegates to the object provided by the target <code>delegateProvider>
      */
-    public Object createDelegatorProxy( ClassLoader classLoader, ObjectProvider delegateProvider,
-                                        Class... proxyClasses )
+    @SuppressWarnings("unchecked")
+    public <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<?> delegateProvider,
+                                        Class<?>... proxyClasses )
     {
-        return Proxy.newProxyInstance(classLoader, proxyClasses,
+        return (T) Proxy.newProxyInstance(classLoader, proxyClasses,
                                       new DelegatorInvocationHandler(delegateProvider));
     }
 
@@ -63,10 +67,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public Object createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
-                                          Class... proxyClasses )
+    @SuppressWarnings("unchecked")
+    public <T> T createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
+                                          Class<?>... proxyClasses )
     {
-        return Proxy
+        return (T) Proxy
                 .newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target, interceptor));
     }
 
@@ -78,10 +83,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @param proxyClasses the interfaces that the proxy2 should implement
      * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
      */
-    public Object createInvokerProxy( ClassLoader classLoader, Invoker invoker,
-                                      Class... proxyClasses )
+    @SuppressWarnings("unchecked")
+    public <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
+                                      Class<?>... proxyClasses )
     {
-        return Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
+        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
     }
 
 //**********************************************************************************************************************
@@ -90,6 +96,9 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
     private abstract static class AbstractInvocationHandler implements InvocationHandler, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
         {
             if( ProxyUtils.isHashCode(method) )
@@ -111,9 +120,12 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
     private static class DelegatorInvocationHandler extends AbstractInvocationHandler
     {
-        private final ObjectProvider delegateProvider;
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
 
-        protected DelegatorInvocationHandler( ObjectProvider delegateProvider )
+        private final ObjectProvider<?> delegateProvider;
+
+        protected DelegatorInvocationHandler( ObjectProvider<?> delegateProvider )
         {
             this.delegateProvider = delegateProvider;
         }
@@ -133,6 +145,9 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
     private static class InterceptorInvocationHandler extends AbstractInvocationHandler
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final Object target;
         private final Interceptor methodInterceptor;
 
@@ -151,6 +166,9 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
     private static class InvokerInvocationHandler extends AbstractInvocationHandler
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final Invoker invoker;
 
         public InvokerInvocationHandler( Invoker invoker )
@@ -166,6 +184,9 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
     private static class ReflectionInvocation implements Invocation, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final Method method;
         private final Object[] arguments;
         private final Object target;

@@ -33,8 +33,10 @@ import org.apache.commons.proxy2.impl.AbstractSubclassingProxyFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ServiceLoader;
 
+/**
+ * Cglib-based {@link ProxyFactory} implementation.
+ */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
 //**********************************************************************************************************************
@@ -43,12 +45,16 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static CallbackFilter callbackFilter = new CglibProxyFactoryCallbackFilter();
 
-//**********************************************************************************************************************
-// ProxyFactory Implementation
-//**********************************************************************************************************************
+  //**********************************************************************************************************************
+ // ProxyFactory Implementation
+ //**********************************************************************************************************************
 
-    public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider targetProvider,
-                                       Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
+                                       Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -56,11 +62,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
         enhancer.setCallbacks(new Callback[]{new ObjectProviderDispatcher(targetProvider), new EqualsHandler(), new HashCodeHandler()});
-        return enhancer.create();
+        return (T) enhancer.create();
     }
 
-    public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+                                         Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -68,11 +78,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
         enhancer.setCallbacks(new Callback[]{new InterceptorBridge(target, interceptor), new EqualsHandler(), new HashCodeHandler()});
-        return enhancer.create();
+        return (T) enhancer.create();
     }
 
-    public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
+                                     Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
@@ -80,7 +94,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
         enhancer.setCallbacks(new Callback[]{new InvokerBridge(invoker), new EqualsHandler(), new HashCodeHandler()});
-        return enhancer.create();
+        return (T) enhancer.create();
     }
 
 //**********************************************************************************************************************
@@ -108,6 +122,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class EqualsHandler implements MethodInterceptor, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
             return o == objects[0];
@@ -116,6 +133,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class HashCodeHandler implements MethodInterceptor, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
             return System.identityHashCode(o);
@@ -124,6 +144,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final Interceptor inner;
         private final Object target;
 
@@ -141,6 +164,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InvokerBridge implements net.sf.cglib.proxy.InvocationHandler, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final Invoker original;
 
         public InvokerBridge(Invoker original)
@@ -156,6 +182,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class MethodProxyInvocation implements Invocation, Serializable
     {
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
         private final MethodProxy methodProxy;
         private final Method method;
         private final Object[] args;
@@ -192,9 +221,12 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class ObjectProviderDispatcher implements Dispatcher, Serializable
     {
-        private final ObjectProvider delegateProvider;
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
 
-        public ObjectProviderDispatcher(ObjectProvider delegateProvider)
+        private final ObjectProvider<?> delegateProvider;
+
+        public ObjectProviderDispatcher(ObjectProvider<?> delegateProvider)
         {
             this.delegateProvider = delegateProvider;
         }

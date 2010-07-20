@@ -44,16 +44,22 @@ public abstract class JavassistInvocation implements Invocation
 // Fields
 //**********************************************************************************************************************
 
-    private static WeakHashMap loaderToClassCache = new WeakHashMap();
+    private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class<?>>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String,WeakReference<Class<?>>>>();
+
+    /** The invoked method */
     protected final Method method;
+
+    /** The target object */
     protected final Object target;
+
+    /** The method arguments */
     protected final Object[] arguments;
 
 //**********************************************************************************************************************
 // Static Methods
 //**********************************************************************************************************************
 
-    private static String createCastExpression( Class type, String objectToCast )
+    private static String createCastExpression( Class<?> type, String objectToCast )
     {
         if( !type.isPrimitive() )
         {
@@ -66,10 +72,10 @@ public abstract class JavassistInvocation implements Invocation
         }
     }
 
-    private static Class createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
+    private static Class<?> createInvocationClass( ClassLoader classLoader, Method interfaceMethod )
             throws CannotCompileException
     {
-        Class invocationClass;
+        Class<?> invocationClass;
         final CtClass ctClass = JavassistUtils.createClass(
                 getSimpleName(interfaceMethod.getDeclaringClass()) + "_" + interfaceMethod.getName() +
                         "_invocation",
@@ -81,7 +87,7 @@ public abstract class JavassistInvocation implements Invocation
         ctClass.addConstructor(constructor);
         final CtMethod proceedMethod = new CtMethod(JavassistUtils.resolve(Object.class), "proceed",
                 JavassistUtils.resolve(new Class[0]), ctClass);
-        final Class[] argumentTypes = interfaceMethod.getParameterTypes();
+        final Class<?>[] argumentTypes = interfaceMethod.getParameterTypes();
         final StringBuffer proceedBody = new StringBuffer("{\n");
         if( !Void.TYPE.equals(interfaceMethod.getReturnType()) )
         {
@@ -104,7 +110,7 @@ public abstract class JavassistInvocation implements Invocation
         proceedBody.append("(");
         for( int i = 0; i < argumentTypes.length; ++i )
         {
-            final Class argumentType = argumentTypes[i];
+            final Class<?> argumentType = argumentTypes[i];
             proceedBody.append(createCastExpression(argumentType, "arguments[" + i + "]"));
             if( i != argumentTypes.length - 1 )
             {
@@ -131,12 +137,12 @@ public abstract class JavassistInvocation implements Invocation
         return invocationClass;
     }
 
-    private static Map getClassCache( ClassLoader classLoader )
+    private static Map<String, WeakReference<Class<?>>> getClassCache( ClassLoader classLoader )
     {
-        Map cache = ( Map ) loaderToClassCache.get(classLoader);
+        Map<String, WeakReference<Class<?>>> cache = loaderToClassCache.get(classLoader);
         if( cache == null )
         {
-            cache = new HashMap();
+            cache = new HashMap<String, WeakReference<Class<?>>>();
             loaderToClassCache.put(classLoader, cache);
         }
         return cache;
@@ -150,35 +156,35 @@ public abstract class JavassistInvocation implements Invocation
      * @return a method invocation class specifically coded to invoke the supplied interface method
      * @throws CannotCompileException if a compilation error occurs
      */
-    synchronized static Class getMethodInvocationClass( ClassLoader classLoader,
+    synchronized static Class<?> getMethodInvocationClass( ClassLoader classLoader,
                                                         Method interfaceMethod )
             throws CannotCompileException
     {
-        final Map classCache = getClassCache(classLoader);
+        final Map<String, WeakReference<Class<?>>> classCache = getClassCache(classLoader);
         final String key = toClassCacheKey(interfaceMethod);
-        final WeakReference invocationClassRef = ( WeakReference ) classCache.get(key);
-        Class invocationClass;
+        final WeakReference<Class<?>> invocationClassRef = classCache.get(key);
+        Class<?> invocationClass;
         if( invocationClassRef == null )
         {
             invocationClass = createInvocationClass(classLoader, interfaceMethod);
-            classCache.put(key, new WeakReference(invocationClass));
+            classCache.put(key, new WeakReference<Class<?>>(invocationClass));
         }
         else
         {
             synchronized( invocationClassRef )
             {
-                invocationClass = ( Class ) invocationClassRef.get();
+                invocationClass = invocationClassRef.get();
                 if( invocationClass == null )
                 {
                     invocationClass = createInvocationClass(classLoader, interfaceMethod);
-                    classCache.put(key, new WeakReference(invocationClass));
+                    classCache.put(key, new WeakReference<Class<?>>(invocationClass));
                 }
             }
         }
         return invocationClass;
     }
 
-    private static String getSimpleName( Class c )
+    private static String getSimpleName( Class<?> c )
     {
         final String name = c.getName();
         final int ndx = name.lastIndexOf('.');

@@ -61,16 +61,20 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         proxyClass.addMethod(method);
     }
 
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // ProxyFactory Implementation
+    //**********************************************************************************************************************
 
-    public Object createDelegatorProxy(ClassLoader classLoader, ObjectProvider targetProvider,
-                                       Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
+                                       Class<?>... proxyClasses)
     {
         try
         {
-            final Class clazz = delegatingProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) delegatingProxyClassCache.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(ObjectProvider.class)
                     .newInstance(targetProvider);
         }
@@ -80,12 +84,16 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    public Object createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+                                         Class<?>... proxyClasses)
     {
         try
         {
-            final Class clazz = interceptorProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) interceptorProxyClassCache.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(Object.class, Interceptor.class)
                     .newInstance(target, interceptor);
         }
@@ -95,12 +103,16 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    public Object createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class... proxyClasses)
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
+                                     Class<?>... proxyClasses)
     {
         try
         {
-            final Class clazz = invocationHandlerProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) invocationHandlerProxyClassCache.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(Invoker.class)
                     .newInstance(invoker);
         }
@@ -116,7 +128,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class DelegatingProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
         {
             try
             {
@@ -158,7 +170,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InterceptorProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
         {
             try
             {
@@ -186,7 +198,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                 methods[i].getName(),
                                 JavassistUtils.resolve(methods[i].getParameterTypes()),
                                 proxyClass);
-                        final Class invocationClass = JavassistInvocation
+                        final Class<?> invocationClass = JavassistInvocation
                                 .getMethodInvocationClass(classLoader, methods[i]);
 
                         final String body = "{\n\t return ( $r ) interceptor.intercept( new " + invocationClass.getName() +
@@ -229,7 +241,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InvokerProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class generateProxyClass(ClassLoader classLoader, Class[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
         {
             try
             {
