@@ -20,6 +20,7 @@ package org.apache.commons.proxy2.invoker.recorder;
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.ProxyUtils;
+import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
