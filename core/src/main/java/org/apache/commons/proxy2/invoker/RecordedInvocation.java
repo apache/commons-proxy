@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.invoker.recorder;
+package org.apache.commons.proxy2.invoker;
 
 import org.apache.commons.proxy2.ProxyUtils;
 
