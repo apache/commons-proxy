@@ -128,7 +128,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class DelegatingProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try
             {
@@ -170,7 +170,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InterceptorProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try
             {
@@ -241,7 +241,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InvokerProxyClassGenerator extends AbstractProxyClassGenerator
     {
-        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>[] proxyClasses)
+        public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try
             {

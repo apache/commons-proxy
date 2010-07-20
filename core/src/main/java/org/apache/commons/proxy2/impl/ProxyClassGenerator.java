@@ -17,8 +17,13 @@
 
 package org.apache.commons.proxy2.impl;
 
+import org.apache.commons.proxy2.ProxyFactory;
+
 /**
- * A proxy2 class generator generates specific type of proxies (interceptor, invoker, etc.).
+ * A proxy class generator generates Class instances for a given combination of interfaces
+ * in a given classloader.  Typically, in the context of a {@link ProxyFactory} implementation,
+ * an instance will generate proxy class instances for a specific type of proxies (interceptor,
+ * invoker, etc.) and will be associated with a corresponding {@link ProxyClassCache}.
  *
  * @author James Carman
  * @since 1.0
@@ -30,11 +35,11 @@ public interface ProxyClassGenerator
 //**********************************************************************************************************************
 
     /**
-     * Generates a proxy2 class for the supplied {@link ClassLoader} and proxy2 classes.
+     * Generates a proxy class for the supplied {@link ClassLoader} and proxy classes.
      *
      * @param classLoader  the classloader
-     * @param proxyClasses the proxy2 classes
-     * @return the dynamically generated proxy2 class
+     * @param proxyClasses the proxy classes
+     * @return the dynamically generated proxy class
      */
-    public Class<?> generateProxyClass( ClassLoader classLoader, Class<?>[] proxyClasses );
+    public Class<?> generateProxyClass( ClassLoader classLoader, Class<?>... proxyClasses );
 }
