@@ -1,4 +1,4 @@
-package org.apache.commons.proxy;
+package org.apache.commons.proxy2;
 
 import static org.junit.Assert.*;
 
