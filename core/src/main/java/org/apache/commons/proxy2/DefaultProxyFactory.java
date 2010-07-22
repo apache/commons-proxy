@@ -49,9 +49,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider,
             Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createDelegatorProxy(
+        return (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
                 delegateProvider, proxyClasses);
     }
 
@@ -59,9 +60,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader,
             ObjectProvider<?> delegateProvider, Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createDelegatorProxy(
+        return (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
                 classLoader, delegateProvider, proxyClasses);
     }
 
@@ -69,9 +71,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(Object target, Interceptor interceptor,
             Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createInterceptorProxy(
+        return (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
                 target, interceptor, proxyClasses);
     }
 
@@ -79,9 +82,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target,
             Interceptor interceptor, Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createInterceptorProxy(
+        return (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
                 classLoader, target, interceptor, proxyClasses);
     }
 
@@ -89,18 +93,20 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createInvokerProxy(invoker,
-                proxyClasses);
+        return (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
+                invoker, proxyClasses);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
             Class<?>... proxyClasses) {
-        return getCapableProxyFactory(proxyClasses).createInvokerProxy(
+        return (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
                 classLoader, invoker, proxyClasses);
     }
 
