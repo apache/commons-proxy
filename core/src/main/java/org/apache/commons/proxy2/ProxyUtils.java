@@ -79,7 +79,7 @@ public class ProxyUtils
      */
     public static Object createNullObject(ProxyFactory proxyFactory, Class<?>[] proxyClasses)
     {
-        return proxyFactory.createInvokerProxy(new NullInvoker(), proxyClasses);
+        return proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, proxyClasses);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ProxyUtils
      */
     public static Object createNullObject(ProxyFactory proxyFactory, ClassLoader classLoader, Class<?>[] proxyClasses)
     {
-        return proxyFactory.createInvokerProxy(classLoader, new NullInvoker(), proxyClasses);
+        return proxyFactory.createInvokerProxy(classLoader, NullInvoker.INSTANCE, proxyClasses);
     }
 
     /**
@@ -204,4 +204,11 @@ public class ProxyUtils
                 method.getParameterTypes().length == 0;
     }
 
+    /**
+     * Get a {@link ProxyFactory} that delegates to discoverable {@link ProxyFactory} service providers.
+     * @return {@link ProxyFactory}
+     */
+    public static ProxyFactory proxyFactory() {
+        return DefaultProxyFactory.INSTANCE;
+    }
 }
