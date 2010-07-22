@@ -49,65 +49,71 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider,
             Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
                 delegateProvider, proxyClasses);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader,
             ObjectProvider<?> delegateProvider, Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
                 classLoader, delegateProvider, proxyClasses);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(Object target, Interceptor interceptor,
             Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
                 target, interceptor, proxyClasses);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target,
             Interceptor interceptor, Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
                 classLoader, target, interceptor, proxyClasses);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
                 invoker, proxyClasses);
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
             Class<?>... proxyClasses) {
-        return (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
+        @SuppressWarnings("unchecked")
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
                 classLoader, invoker, proxyClasses);
+        return result;
     }
 
     private ProxyFactory getCapableProxyFactory(Class<?>... proxyClasses) {

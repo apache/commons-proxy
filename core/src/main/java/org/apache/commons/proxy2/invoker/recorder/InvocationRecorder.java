@@ -78,7 +78,9 @@ public class InvocationRecorder
     {
         if( proxyFactory.canProxy(type) )
         {
-            return proxyFactory.createInvokerProxy(new InvocationRecorderInvoker(genericType), type);
+            @SuppressWarnings("unchecked")
+            final T result = (T) proxyFactory.createInvokerProxy(new InvocationRecorderInvoker(genericType), type);
+            return result;
         }
         return ProxyUtils.nullValue(type);
     }
@@ -98,11 +100,10 @@ public class InvocationRecorder
         /**
          * {@inheritDoc}
          */
-        @SuppressWarnings("unchecked")
         public Object invoke( Object o, Method method, Object[] args ) throws Throwable
         {
             recordedInvocations.add(new RecordedInvocation(method, args));
-            final Class returnType = getReturnType(targetType, method);
+            final Class<?> returnType = getReturnType(targetType, method);
             return proxy(method.getGenericReturnType(), returnType);
         }
     }
