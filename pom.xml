@@ -26,6 +26,7 @@
         <module>jdk</module>
         <module>javassist</module>
         <module>cglib</module>
+        <module>stub</module>
         <module>test</module>
     </modules>
     <parent>
