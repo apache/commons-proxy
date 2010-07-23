@@ -155,6 +155,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
                     <configLocation>org/apache/commons/proxy2/checkstyle.xml</configLocation>
+                    <headerLocation>org/apache/commons/proxy2/license-header.txt</headerLocation>
                 </configuration>
             </plugin>
             <plugin>

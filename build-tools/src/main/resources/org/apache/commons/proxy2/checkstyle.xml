@@ -25,7 +25,7 @@
   <property name="localeLanguage" value="en"/>
 
   <module name="Header">
-    <property name="headerFile" value="license-header.txt"/>
+    <property name="headerFile" value="${checkstyle.header.file}"/>
   </module>
 
   <!-- no tabs allowed in files -->
