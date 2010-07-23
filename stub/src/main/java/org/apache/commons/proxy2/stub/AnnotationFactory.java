@@ -51,6 +51,13 @@ public class AnnotationFactory {
 
     /**
      * Create a new AnnotationFactory instance.
+     */
+    public AnnotationFactory() {
+        this(ProxyUtils.proxyFactory());
+    }
+
+    /**
+     * Create a new AnnotationFactory instance.
      * @param proxyFactory
      */
     public AnnotationFactory(ProxyFactory proxyFactory) {
