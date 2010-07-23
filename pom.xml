@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        
+        <module>build-tools</module>
         <module>core</module>
         <module>jdk</module>
         <module>javassist</module>
@@ -134,6 +134,17 @@
                     <tarLongFileMode>gnu</tarLongFileMode>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>commons-proxy-build-tools</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 
@@ -143,7 +154,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
-                    <configLocation>${basedir}/checkstyle.xml</configLocation>
+                    <configLocation>org/apache/commons/proxy2/checkstyle.xml</configLocation>
                 </configuration>
             </plugin>
             <plugin>
