@@ -38,12 +38,12 @@ public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 //**********************************************************************************************************************
 
     /**
-     * Returns all methods that a proxy2 class must implement from the proxy2 interfaces.  This method makes sure there
+     * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
      * are no method signature clashes. For methods with the same signature (name and parameter types), the one
      * encountered first will be returned in the result. Final methods are also excluded from the result.
      *
-     * @param proxyClasses the interfaces the proxy2 class must implement
-     * @return all methods that the proxy2 class must implement
+     * @param proxyClasses the interfaces the proxy class must implement
+     * @return all methods that the proxy class must implement
      */
     public static Method[] getImplementationMethods( Class<?>[] proxyClasses )
     {

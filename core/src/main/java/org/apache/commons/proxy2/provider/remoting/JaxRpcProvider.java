@@ -28,7 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Returns a proxy2 for a JAX-RPC-based service.
+ * Returns a proxy for a JAX-RPC-based service.
  * <p/>
  * <p>
  * <b>Dependencies</b>:
@@ -95,7 +95,7 @@ public class JaxRpcProvider<T> implements ObjectProvider<T>
         }
         catch( ServiceException e )
         {
-            throw new ObjectProviderException("Unable to create JAX-RPC service proxy2.", e);
+            throw new ObjectProviderException("Unable to create JAX-RPC service proxy.", e);
         }
         catch( MalformedURLException e )
         {

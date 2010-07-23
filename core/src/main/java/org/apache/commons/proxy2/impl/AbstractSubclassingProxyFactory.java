@@ -21,7 +21,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
     /**
      * Returns true if a suitable superclass can be found, given the desired <code>proxyClasses</code>.
      *
-     * @param proxyClasses the proxy2 classes
+     * @param proxyClasses the proxy classes
      * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
      */
     public boolean canProxy( Class<?>... proxyClasses )
@@ -75,7 +75,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * <b>Note</b>: This class will append {@link Serializable} to the end of the list if it's
      * not found!
      *
-     * @param proxyClasses the proxy2 classes
+     * @param proxyClasses the proxy classes
      * @return the <code>proxyClasses</code> transformed into an array of only the interface classes
      */
     protected static Class<?>[] toInterfaces( Class<?>[] proxyClasses )
@@ -101,7 +101,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      * Returns either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
      * class from <code>proxyClasses</code>.
      *
-     * @param proxyClasses the proxy2 classes
+     * @param proxyClasses the proxy classes
      * @return either {@link Object} if all of the <code>proxyClasses</code> are interfaces or the single non-interface
      *         class from <code>proxyClasses</code>
      * @throws ProxyFactoryException if multiple non-interface classes are contained in <code>proxyClasses</code> or any

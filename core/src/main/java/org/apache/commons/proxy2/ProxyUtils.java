@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides some helpful proxy2 utility methods.
+ * Provides some helpful proxy utility methods.
  *
  * @author James Carman
  * @since 1.0
@@ -73,8 +73,8 @@ public class ProxyUtils
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      *
-     * @param proxyFactory the proxy2 factory to be used to create the proxy2 object
-     * @param proxyClasses the proxy2 interfaces
+     * @param proxyFactory the proxy factory to be used to create the proxy object
+     * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
     public static Object createNullObject(ProxyFactory proxyFactory, Class<?>[] proxyClasses)
@@ -85,9 +85,9 @@ public class ProxyUtils
     /**
      * Creates a "null object" which implements the <code>proxyClasses</code>.
      *
-     * @param proxyFactory the proxy2 factory to be used to create the proxy2 object
-     * @param classLoader  the class loader to be used by the proxy2 factory to create the proxy2 object
-     * @param proxyClasses the proxy2 interfaces
+     * @param proxyFactory the proxy factory to be used to create the proxy object
+     * @param classLoader  the class loader to be used by the proxy factory to create the proxy object
+     * @param proxyClasses the proxy interfaces
      * @return a "null object" which implements the <code>proxyClasses</code>.
      */
     public static Object createNullObject(ProxyFactory proxyFactory, ClassLoader classLoader, Class<?>[] proxyClasses)

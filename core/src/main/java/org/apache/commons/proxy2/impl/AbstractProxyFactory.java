@@ -32,7 +32,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     /**
      * Returns true if all <code>proxyClasses</code> are interfaces.
      *
-     * @param proxyClasses the proxy2 classes
+     * @param proxyClasses the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
     public boolean canProxy( Class<?>... proxyClasses )
@@ -48,12 +48,12 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     }
 
     /**
-     * Creates a proxy2 which delegates to the object provided by <code>delegateProvider</code>.  The proxy2 will be
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
      * generated using the current thread's "context class loader."
      *
      * @param delegateProvider the delegate provider
-     * @param proxyClasses     the interfaces that the proxy2 should implement
-     * @return a proxy2 which delegates to the object provided by the target object provider
+     * @param proxyClasses     the interfaces that the proxy should implement
+     * @return a proxy which delegates to the object provided by the target object provider
      */
     public <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses )
     {
@@ -63,13 +63,13 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     }
 
     /**
-     * Creates a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
-     * <code>target</code> object.  The proxy2 will be generated using the current thread's "context class loader."
+     * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * <code>target</code> object.  The proxy will be generated using the current thread's "context class loader."
      *
      * @param target       the target object
      * @param interceptor  the method interceptor
-     * @param proxyClasses the interfaces that the proxy2 should implement
-     * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * @param proxyClasses the interfaces that the proxy should implement
+     * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
     public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
@@ -82,12 +82,12 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     }
 
     /**
-     * Creates a proxy2 which uses the provided {@link Invoker} to handle all method invocations.  The proxy2 will be
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.  The proxy will be
      * generated using the current thread's "context class loader."
      *
      * @param invoker      the invoker
-     * @param proxyClasses the interfaces that the proxy2 should implement
-     * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
+     * @param proxyClasses the interfaces that the proxy should implement
+     * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
     public <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses )
     {

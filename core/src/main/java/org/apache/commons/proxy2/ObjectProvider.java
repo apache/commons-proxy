@@ -18,7 +18,7 @@
 package org.apache.commons.proxy2;
 
 /**
- * Provides an object to a delegating proxy2.
+ * Provides an object to a delegating proxy.
  *
  * @author James Carman
  * @since 1.0

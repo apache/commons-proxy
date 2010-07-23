@@ -28,7 +28,7 @@ public interface ProxyFactory
 //**********************************************************************************************************************
 
     /**
-     * Learn whether this {@link ProxyFactory} is capable of creating a proxy2 for the specified set of classes.
+     * Learn whether this {@link ProxyFactory} is capable of creating a proxy for the specified set of classes.
      *
      * @param proxyClasses the proxy2 classes
      * @return boolean
@@ -36,70 +36,70 @@ public interface ProxyFactory
     public boolean canProxy( Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which delegates to the object provided by <code>delegateProvider</code>.  The proxy2 will be
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
      * generated using the current thread's "context class loader."
      *
      * @param delegateProvider the delegate provider
-     * @param proxyClasses     the interfaces that the proxy2 should implement
-     * @return a proxy2 which delegates to the object provided by the target object provider
+     * @param proxyClasses     the interfaces that the proxy should implement
+     * @return a proxy which delegates to the object provided by the target object provider
      */
     public <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which delegates to the object provided by <code>delegateProvider</code>.
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
      *
-     * @param classLoader      the class loader to use when generating the proxy2
+     * @param classLoader      the class loader to use when generating the proxy
      * @param delegateProvider the delegate provider
-     * @param proxyClasses     the interfaces that the proxy2 should implement
-     * @return a proxy2 which delegates to the object provided by the target <code>delegateProvider>
+     * @param proxyClasses     the interfaces that the proxy should implement
+     * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
     public <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<?> delegateProvider,
                                         Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
-     * <code>target</code> object.  The proxy2 will be generated using the current thread's "context class loader."
+     * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * <code>target</code> object.  The proxy will be generated using the current thread's "context class loader."
      *
      * @param target       the target object
      * @param interceptor  the method interceptor
-     * @param proxyClasses the interfaces that the proxy2 should implement
-     * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * @param proxyClasses the interfaces that the proxy should implement
+     * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
     public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
                                           Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      * <code>target</code> object.
      *
-     * @param classLoader  the class loader to use when generating the proxy2
+     * @param classLoader  the class loader to use when generating the proxy
      * @param target       the target object
      * @param interceptor  the method interceptor
-     * @param proxyClasses the interfaces that the proxy2 should implement.
-     * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
+     * @param proxyClasses the interfaces that the proxy should implement.
+     * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
     public <T> T createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which uses the provided {@link Invoker} to handle all method invocations.  The proxy2 will be
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.  The proxy will be
      * generated using the current thread's "context class loader."
      *
      * @param invoker      the invoker
-     * @param proxyClasses the interfaces that the proxy2 should implement
-     * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
+     * @param proxyClasses the interfaces that the proxy should implement
+     * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
     public <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses );
 
     /**
-     * Creates a proxy2 which uses the provided {@link Invoker} to handle all method invocations.
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.
      *
-     * @param classLoader  the class loader to use when generating the proxy2
+     * @param classLoader  the class loader to use when generating the proxy
      * @param invoker      the invoker
-     * @param proxyClasses the interfaces that the proxy2 should implement
-     * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
+     * @param proxyClasses the interfaces that the proxy should implement
+     * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
     public <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
                                       Class<?>... proxyClasses );
