@@ -47,6 +47,31 @@ public class AnnotationFactory {
         }
     };
 
+    private static final ThreadLocal<Object> CONFIGURER = new ThreadLocal<Object>();
+
+    private static final AnnotationStubConfigurer<Annotation> SHARED_CONFIGURER = new AnnotationStubConfigurer<Annotation>() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class<? extends Annotation> getStubType() {
+            return AnnotationFactory.getStubType();
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void configureAnnotation(Annotation stub) {
+            Object o = CONFIGURER.get();
+            if (o instanceof AnnotationStubConfigurer<?>) {
+                @SuppressWarnings("unchecked")
+                final AnnotationStubConfigurer<Annotation> configurer = (AnnotationStubConfigurer<Annotation>) o;
+                configurer.configure(requireStubInterceptor(), stub);
+            }
+        }
+    };
+
     private ProxyFactory proxyFactory;
 
     /**
@@ -62,7 +87,8 @@ public class AnnotationFactory {
      */
     public AnnotationFactory(ProxyFactory proxyFactory) {
         super();
-        this.proxyFactory = proxyFactory;
+        this.proxyFactory = new StubProxyFactory(proxyFactory,
+                SHARED_CONFIGURER);
     }
 
     /**
@@ -73,7 +99,7 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(
             AnnotationStubConfigurer<A> configurer) {
-        return create(Thread.currentThread().getContextClassLoader(),
+        return createInternal(Thread.currentThread().getContextClassLoader(),
                 configurer);
     }
 
@@ -86,7 +112,7 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(ClassLoader classLoader,
             AnnotationStubConfigurer<A> configurer) {
-        return create(classLoader, configurer.getStubType(), configurer);
+        return createInternal(classLoader, configurer);
     }
 
     /**
@@ -97,8 +123,8 @@ public class AnnotationFactory {
      * @return stubbed annotation proxy
      */
     public <A extends Annotation> A create(Class<A> annotationType) {
-        return create(Thread.currentThread().getContextClassLoader(),
-                annotationType, new AnnotationStubConfigurer<A>(annotationType));
+        return createInternal(Thread.currentThread().getContextClassLoader(),
+                annotationType);
     }
 
     /**
@@ -110,17 +136,29 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(ClassLoader classLoader,
             Class<A> annotationType) {
-        return create(classLoader, annotationType,
-                new AnnotationStubConfigurer<A>(annotationType));
+        return createInternal(classLoader, annotationType);
     }
 
-    private <A extends Annotation> A create(ClassLoader classLoader,
-            Class<A> annotationType, AnnotationStubConfigurer<A> configurer) {
-        StubProxyFactory stubFactory = new StubProxyFactory(proxyFactory,
-                configurer);
+    private <A extends Annotation> A createInternal(ClassLoader classLoader, Object configurer) {
+        try {
+            CONFIGURER.set(configurer);
+            @SuppressWarnings("unchecked")
+            final A result = (A) proxyFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER, getStubType());
+            return result;
+        } finally {
+            CONFIGURER.remove();
+        }
+    }
+
+    private static <A extends Annotation> Class<? extends A> getStubType() {
+        Object o = CONFIGURER.get();
+        if (o instanceof Class<?>) {
+            @SuppressWarnings("unchecked")
+            final Class<? extends A> result = (Class<? extends A>) o;
+            return result;
+        }
         @SuppressWarnings("unchecked")
-        final A result = (A) stubFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER,
-                annotationType);
-        return result;
+        final AnnotationStubConfigurer<A> configurer = (AnnotationStubConfigurer<A>) o;
+        return configurer.getStubType();
     }
 }

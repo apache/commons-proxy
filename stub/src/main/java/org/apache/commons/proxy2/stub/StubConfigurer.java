@@ -85,7 +85,7 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
      * Get the stubType.
      * @return Class<T>
      */
-    public Class<T> getStubType() {
+    public Class<? extends T> getStubType() {
         return stubType;
     }
 
@@ -444,7 +444,7 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
      */
     protected abstract void configure(T stub);
 
-    private synchronized StubInterceptor requireStubInterceptor() {
+    synchronized StubInterceptor requireStubInterceptor() {
         if (stubInterceptor == null) {
             throw new IllegalStateException(
                     "no StubInterceptor currently in use");
