@@ -17,12 +17,7 @@
 
 package org.apache.commons.proxy2.stub;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.provider.ConstantProvider;
 
@@ -69,10 +64,9 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
             this.stubType = stubType;
             return;
         }
-        //TODO replace with lang3 TypeUtils calls
         @SuppressWarnings("unchecked")
-        final Class<T> resolvedVariable = (Class<T>) getRawType(getClass(),
-                StubConfigurer.class.getTypeParameters()[0]);
+        final Class<T> resolvedVariable = (Class<T>) TypeUtils.getRawType(
+                StubConfigurer.class.getTypeParameters()[0], getClass());
         if (resolvedVariable == null) {
             throw new IllegalArgumentException(
                     "stubType was not specified and could not be calculated for "
@@ -450,104 +444,6 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                     "no StubInterceptor currently in use");
         }
         return stubInterceptor;
-    }
-
-    /**
-     * Get the raw type of a Java type, given its context. Primarily for use
-     * with {@link TypeVariable}s and {@link GenericArrayType}s, or when you do
-     * not know the runtime type of <code>type</code>: if you know you have a
-     * {@link Class} instance, it is already raw; if you know you have a
-     * {@link ParameterizedType}, its raw type is only a method call away.
-     * @param enclosingType context
-     * @param type to read
-     * @return Class<?>
-     */
-    // adapted from unreleased commons-lang 3.0 trunk r924407
-    private static Class<?> getRawType(Type enclosingType, Type type) {
-        if (type instanceof Class<?>) {
-            // it is raw, no problem
-            return (Class<?>) type;
-        }
-        if (type instanceof ParameterizedType) {
-            // simple enough to get the raw type of a ParameterizedType
-            return (Class<?>) ((ParameterizedType) type).getRawType();
-        }
-        if (enclosingType != null) {
-            if (type instanceof TypeVariable<?>) {
-                // resolve the variable against the enclosing type, hope for the best (casting)
-                Type resolved = resolveVariable(enclosingType,
-                        (TypeVariable<?>) type);
-                //this is the only change from commons-lang r924407
-                return getRawType(enclosingType, resolved);
-            }
-            if (type instanceof GenericArrayType) {
-                validateNotNull(enclosingType,
-                        "Cannot get raw type of GenericArrayType without enclosing type");
-                // not included in original code, but not too difficult:  just have to get raw component type...
-                Class<?> rawComponentType = getRawType(enclosingType,
-                        ((GenericArrayType) type).getGenericComponentType());
-                // ...and know how to reflectively create array types, uncommon but not unheard of:
-                return Array.newInstance(rawComponentType, 0).getClass();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Handle recursion and falling back up the graph.
-     * @param enclosingType
-     * @param typeVar
-     * @return Type resolved
-     */
-    // adapted from unreleased commons-lang 3.0 trunk r924407
-    private static Type resolveVariable(Type enclosingType,
-            TypeVariable<?> typeVar) {
-        if (enclosingType instanceof ParameterizedType) {
-            ParameterizedType parameterizedEnclosingType = (ParameterizedType) enclosingType;
-            TypeVariable<?>[] typeVariables = getRawType(null,
-                    parameterizedEnclosingType.getRawType())
-                    .getTypeParameters();
-            //look for the matching variable:
-            for (int i = 0; i < typeVariables.length; i++) {
-                if (typeVariables[i].equals(typeVar)) {
-                    return parameterizedEnclosingType.getActualTypeArguments()[i];
-                }
-            }
-            //otherwise recurse to try against raw class
-            Type result = resolveVariable(parameterizedEnclosingType
-                    .getRawType(), typeVar);
-            //unroll variable if returned
-            if (result instanceof TypeVariable<?>) {
-                return resolveVariable(enclosingType, (TypeVariable<?>) result);
-            }
-            return result;
-        }
-        if (enclosingType instanceof Class<?>) {
-            Class<?> enclosingClass = (Class<?>) enclosingType;
-            Type result = null;
-            Type genericSuperclass = enclosingClass.getGenericSuperclass();
-            if (genericSuperclass != null
-                    && !Object.class.equals(genericSuperclass)) {
-                result = resolveVariable(genericSuperclass, typeVar);
-            }
-            if (result == null) {
-                for (Type genericInterface : enclosingClass
-                        .getGenericInterfaces()) {
-                    result = resolveVariable(genericInterface, typeVar);
-                    if (result != null) {
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-        return null;
-    }
-
-    private static void validateNotNull(Object o, String message) {
-        if (o == null) {
-            throw new IllegalArgumentException(message);
-        }
     }
 
 }
