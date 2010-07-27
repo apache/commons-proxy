@@ -17,12 +17,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>commons-proxy-parent</artifactId>
+        <artifactId>commons-proxy2-parent</artifactId>
         <groupId>org.apache.commons</groupId>
         <version>2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>commons-proxy-test</artifactId>
+    <artifactId>commons-proxy2-test</artifactId>
     <name>Commons Proxy Test</name>
     <description>Tests things that depend on multiple modules</description>
     <dependencies>
@@ -34,13 +34,13 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy-jdk</artifactId>
+            <artifactId>commons-proxy2-jdk</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy-cglib</artifactId>
+            <artifactId>commons-proxy2-cglib</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy-javassist</artifactId>
+            <artifactId>commons-proxy2-javassist</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
