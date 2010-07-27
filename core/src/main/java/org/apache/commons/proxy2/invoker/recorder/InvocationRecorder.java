@@ -17,15 +17,14 @@
 
 package org.apache.commons.proxy2.invoker.recorder;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,7 +102,8 @@ public class InvocationRecorder
         public Object invoke( Object o, Method method, Object[] args ) throws Throwable
         {
             recordedInvocations.add(new RecordedInvocation(method, args));
-            final Class<?> returnType = getReturnType(targetType, method);
+            final Class<?> returnType = TypeUtils.getRawType(method.getGenericReturnType(), targetType);
+            //what to do if returnType is null?
             return proxy(method.getGenericReturnType(), returnType);
         }
     }
@@ -116,58 +116,4 @@ public class InvocationRecorder
         recordedInvocations.clear();
     }
 
-    /**
-     * Get the raw return type of a method qualified with regard to a particular target type.
-     * @param enclosingType
-     * @param method
-     * @return {@link Class} instance
-     * @throws Exception
-     */
-    public static Class<?> getReturnType( Type enclosingType, Method method ) throws Exception
-    {
-        Type returnType = method.getGenericReturnType();
-        if( returnType instanceof Class<?> )
-        {
-            return ( Class<?> ) returnType;
-        }
-        else if( returnType instanceof TypeVariable<?> )
-        {
-            return resolveVariable(enclosingType, ( TypeVariable<?> ) returnType);
-        }
-        else if( returnType instanceof ParameterizedType )
-        {
-            return ( Class<?> ) ( ( ParameterizedType ) returnType ).getRawType();
-        }
-        return null;
-    }
-
-    /**
-     * Resolve the raw type of a type variable against a particular owning/inheriting type.
-     * @param enclosingType
-     * @param typeVar
-     * @return {@link Class} instance
-     * @throws Exception
-     */
-    public static Class<?> resolveVariable( Type enclosingType, TypeVariable<?> typeVar ) throws Exception
-    {
-        if( enclosingType instanceof ParameterizedType )
-        {
-            ParameterizedType pt = ( ParameterizedType ) enclosingType;
-            final Class<?> rawType = ( Class<?> ) pt.getRawType();
-            TypeVariable<?>[] typeParameters = rawType.getTypeParameters();
-            for( int i = 0; i < typeParameters.length; i++ )
-            {
-                TypeVariable<?> typeParameter = typeParameters[i];
-                if( typeParameter == typeVar )
-                {
-                    return ( Class<?> ) pt.getActualTypeArguments()[i];
-                }
-            }
-        }
-        else if( enclosingType instanceof Class<?> )
-        {
-            return resolveVariable(( ( Class<?> ) enclosingType ).getGenericSuperclass(), typeVar);
-        }
-        return null;
-    }
 }
