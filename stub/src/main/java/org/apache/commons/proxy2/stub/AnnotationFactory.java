@@ -99,8 +99,10 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(
             AnnotationStubConfigurer<A> configurer) {
-        return createInternal(Thread.currentThread().getContextClassLoader(),
-                configurer);
+        @SuppressWarnings("unchecked")
+        final A result = (A) createInternal(Thread.currentThread()
+                .getContextClassLoader(), configurer);
+        return result;
     }
 
     /**
@@ -112,7 +114,9 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(ClassLoader classLoader,
             AnnotationStubConfigurer<A> configurer) {
-        return createInternal(classLoader, configurer);
+        @SuppressWarnings("unchecked")
+        final A result = (A) createInternal(classLoader, configurer);
+        return result;
     }
 
     /**
@@ -123,8 +127,10 @@ public class AnnotationFactory {
      * @return stubbed annotation proxy
      */
     public <A extends Annotation> A create(Class<A> annotationType) {
-        return createInternal(Thread.currentThread().getContextClassLoader(),
+        @SuppressWarnings("unchecked")
+        final A result = (A) createInternal(Thread.currentThread().getContextClassLoader(),
                 annotationType);
+        return result;
     }
 
     /**
@@ -136,14 +142,18 @@ public class AnnotationFactory {
      */
     public <A extends Annotation> A create(ClassLoader classLoader,
             Class<A> annotationType) {
-        return createInternal(classLoader, annotationType);
+        @SuppressWarnings("unchecked")
+        final A result = (A) createInternal(classLoader, annotationType);
+        return result;
     }
 
-    private <A extends Annotation> A createInternal(ClassLoader classLoader, Object configurer) {
+    private <A extends Annotation> A createInternal(ClassLoader classLoader,
+            Object configurer) {
         try {
             CONFIGURER.set(configurer);
             @SuppressWarnings("unchecked")
-            final A result = (A) proxyFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER, getStubType());
+            final A result = (A) proxyFactory.createInvokerProxy(classLoader,
+                    ANNOTATION_INVOKER, getStubType());
             return result;
         } finally {
             CONFIGURER.remove();
