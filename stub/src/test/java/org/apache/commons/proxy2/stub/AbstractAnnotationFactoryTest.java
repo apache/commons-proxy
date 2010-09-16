@@ -40,8 +40,7 @@ public abstract class AbstractAnnotationFactoryTest {
 
     @Test
     public void testDefaultAnnotation() {
-        CustomAnnotation customAnnotation = annotationFactory
-                .create(CustomAnnotation.class);
+        CustomAnnotation customAnnotation = annotationFactory.create(CustomAnnotation.class);
         assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
         assertEquals("", customAnnotation.annString());
         assertEquals(0, customAnnotation.finiteValues().length);
@@ -51,21 +50,18 @@ public abstract class AbstractAnnotationFactoryTest {
 
     @Test
     public void testStubbedAnnotation() {
-        CustomAnnotation customAnnotation = annotationFactory
-                .create(new AnnotationStubConfigurer<CustomAnnotation>() {
+        CustomAnnotation customAnnotation = annotationFactory.create(new AnnotationStubConfigurer<CustomAnnotation>() {
 
-                    @Override
-                    protected void configureAnnotation(CustomAnnotation stub) {
-                        when(stub.someType()).thenReturn(Object.class)
-                        .when(stub.finiteValues()).thenReturn(FiniteValues.ONE, FiniteValues.THREE)
-                        .when(stub.annString()).thenReturn("hey");
-                    }
+            @Override
+            protected void configureAnnotation(CustomAnnotation stub) {
+                when(stub.someType()).thenReturn(Object.class).when(stub.finiteValues())
+                    .thenReturn(FiniteValues.ONE, FiniteValues.THREE).when(stub.annString()).thenReturn("hey");
+            }
 
-                });
+        });
         assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
         assertEquals("hey", customAnnotation.annString());
-        assertArrayEquals(new FiniteValues[] { FiniteValues.ONE,
-                FiniteValues.THREE }, customAnnotation.finiteValues());
+        assertArrayEquals(new FiniteValues[] { FiniteValues.ONE, FiniteValues.THREE }, customAnnotation.finiteValues());
         assertEquals(Object.class, customAnnotation.someType());
     }
 
