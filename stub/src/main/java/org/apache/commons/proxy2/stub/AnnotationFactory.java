@@ -26,9 +26,9 @@ import org.apache.commons.proxy2.ProxyUtils;
 
 /**
  * {@link AnnotationFactory} provides a simplified API over {@link StubProxyFactory}
- * to stub a Java {@link Annotation}.  Non-stubbed methods will return the values
- * that would have been returned from a "real" annotation whose methods' values
- * were unspecified.
+ * to stub a Java {@link Annotation}.  Non-stubbed methods including
+ * {@link Annotation#annotationType()} will return the values that would have been
+ * returned from a "real" annotation whose methods' values were unspecified.
  *
  * @author Matt Benson
  */
@@ -49,7 +49,8 @@ public class AnnotationFactory {
 
     private static final ThreadLocal<Object> CONFIGURER = new ThreadLocal<Object>();
 
-    private static final AnnotationStubConfigurer<Annotation> SHARED_CONFIGURER = new AnnotationStubConfigurer<Annotation>() {
+    private static final StubConfigurer<Annotation> SHARED_CONFIGURER = new StubConfigurer<Annotation>() {
+        
         /**
          * {@inheritDoc}
          */
@@ -62,11 +63,12 @@ public class AnnotationFactory {
          * {@inheritDoc}
          */
         @Override
-        protected void configureAnnotation(Annotation stub) {
+        protected void configure(Annotation stub) {
+            when(stub.annotationType()).thenReturn(getStubType());
             Object o = CONFIGURER.get();
-            if (o instanceof AnnotationStubConfigurer<?>) {
+            if (o instanceof StubConfigurer<?>) {
                 @SuppressWarnings("unchecked")
-                final AnnotationStubConfigurer<Annotation> configurer = (AnnotationStubConfigurer<Annotation>) o;
+                final StubConfigurer<Annotation> configurer = (StubConfigurer<Annotation>) o;
                 configurer.configure(requireStubInterceptor(), stub);
             }
         }
@@ -98,13 +100,13 @@ public class AnnotationFactory {
      * @return stubbed annotation proxy
      */
     public <A extends Annotation> A create(
-            AnnotationStubConfigurer<A> configurer) {
+        StubConfigurer<A> configurer) {
         @SuppressWarnings("unchecked")
         final A result = (A) createInternal(Thread.currentThread()
-                .getContextClassLoader(), configurer);
+            .getContextClassLoader(), configurer);
         return result;
     }
-
+    
     /**
      * Create an annotation of the type supported by <code>configurer</code> in the specified classpath.
      * @param <A>
@@ -113,12 +115,12 @@ public class AnnotationFactory {
      * @return stubbed annotation proxy
      */
     public <A extends Annotation> A create(ClassLoader classLoader,
-            AnnotationStubConfigurer<A> configurer) {
+        StubConfigurer<A> configurer) {
         @SuppressWarnings("unchecked")
         final A result = (A) createInternal(classLoader, configurer);
         return result;
     }
-
+    
     /**
      * Create an annotation of <code>annotationType</code> with fully default behavior.
      * @param <A>
@@ -149,6 +151,7 @@ public class AnnotationFactory {
 
     private <A extends Annotation> A createInternal(ClassLoader classLoader,
             Object configurer) {
+        final Object existingConfigurer = CONFIGURER.get();
         try {
             CONFIGURER.set(configurer);
             @SuppressWarnings("unchecked")
@@ -156,7 +159,11 @@ public class AnnotationFactory {
                     ANNOTATION_INVOKER, getStubType());
             return result;
         } finally {
-            CONFIGURER.remove();
+            if (existingConfigurer == null) {
+                CONFIGURER.remove();
+            } else {
+                CONFIGURER.set(existingConfigurer);
+            }
         }
     }
 
@@ -168,7 +175,7 @@ public class AnnotationFactory {
             return result;
         }
         @SuppressWarnings("unchecked")
-        final AnnotationStubConfigurer<A> configurer = (AnnotationStubConfigurer<A>) o;
+        final StubConfigurer<A> configurer = (StubConfigurer<A>) o;
         return configurer.getStubType();
     }
 }

@@ -20,8 +20,6 @@ package org.apache.commons.proxy2.stub;
 import static org.junit.Assert.*;
 
 import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.stub.AnnotationFactory;
-import org.apache.commons.proxy2.stub.AnnotationStubConfigurer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,10 +48,10 @@ public abstract class AbstractAnnotationFactoryTest {
 
     @Test
     public void testStubbedAnnotation() {
-        CustomAnnotation customAnnotation = annotationFactory.create(new AnnotationStubConfigurer<CustomAnnotation>() {
+        CustomAnnotation customAnnotation = annotationFactory.create(new StubConfigurer<CustomAnnotation>() {
 
             @Override
-            protected void configureAnnotation(CustomAnnotation stub) {
+            protected void configure(CustomAnnotation stub) {
                 when(stub.someType()).thenReturn(Object.class).when(stub.finiteValues())
                     .thenReturn(FiniteValues.ONE, FiniteValues.THREE).when(stub.annString()).thenReturn("hey");
             }
@@ -63,6 +61,28 @@ public abstract class AbstractAnnotationFactoryTest {
         assertEquals("hey", customAnnotation.annString());
         assertArrayEquals(new FiniteValues[] { FiniteValues.ONE, FiniteValues.THREE }, customAnnotation.finiteValues());
         assertEquals(Object.class, customAnnotation.someType());
+    }
+
+    @Test
+    public void testNestedStubbedAnnotation() {
+        NestingAnnotation nestingAnnotation =
+            annotationFactory.create(new StubConfigurer<NestingAnnotation>() {
+                @Override
+                protected void configure(NestingAnnotation stub) {
+                    when(stub.child()).thenReturn(annotationFactory.create(CustomAnnotation.class))
+                        .when(stub.somethingElse()).thenReturn("somethingElse");
+                }
+            });
+        assertEquals("", nestingAnnotation.child().annString());
+        assertEquals(0, nestingAnnotation.child().finiteValues().length);
+        assertEquals(null, nestingAnnotation.child().someType());
+        assertEquals("somethingElse", nestingAnnotation.somethingElse());
+    }
+
+    public @interface NestingAnnotation {
+        CustomAnnotation child();
+
+        String somethingElse();
     }
 
     public @interface CustomAnnotation {
