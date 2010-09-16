@@ -53,4 +53,14 @@ public class AnnotationStubConfigurer<T extends Annotation> extends
      */
     protected void configureAnnotation(T stub) {
     }
+
+    /**
+     * Factory method.
+     * @param <T>
+     * @param type
+     * @return {@link AnnotationStubConfigurer} for type
+     */
+    public static <T extends Annotation> AnnotationStubConfigurer<T> forType(Class<T> type) {
+        return new AnnotationStubConfigurer<T>(type);
+    }
 }
