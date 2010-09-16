@@ -174,8 +174,16 @@
                         <link>http://commons.apache.org/logging/apidocs/</link>
                         <link>http://www.slf4j.org/api/</link>
                     </links>
+                    <aggregate>true</aggregate>
                 </configuration>
 
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
