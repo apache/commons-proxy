@@ -305,7 +305,7 @@ public interface StubConfiguration {
          * @param objectProvider
          * @return the original {@link StubConfiguration} for chaining
          */
-        StubConfiguration thenAnswer(ObjectProvider<Object[]> objectProvider);
+        StubConfiguration thenAnswer(ObjectProvider<C[]> objectProvider);
     }
 
     /**

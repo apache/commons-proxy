@@ -366,7 +366,7 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
             }
 
             public StubConfiguration thenAnswer(
-                    ObjectProvider<Object[]> objectProvider) {
+                    ObjectProvider<C[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
