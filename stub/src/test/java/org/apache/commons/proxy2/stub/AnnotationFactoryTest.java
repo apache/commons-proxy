@@ -19,22 +19,19 @@ package org.apache.commons.proxy2.stub;
 
 import static org.junit.Assert.*;
 
-import org.apache.commons.proxy2.ProxyFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test {@link AnnotationFactory}.
  */
-public abstract class AbstractAnnotationFactoryTest {
+public class AnnotationFactoryTest {
     private AnnotationFactory annotationFactory;
 
     @Before
     public void setUp() {
-        annotationFactory = new AnnotationFactory(createProxyFactory());
+        annotationFactory = new AnnotationFactory();
     }
-
-    protected abstract ProxyFactory createProxyFactory();
 
     @Test
     public void testDefaultAnnotation() {
