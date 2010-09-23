@@ -18,14 +18,14 @@ package org.apache.commons.proxy2.stub;
 
 import java.lang.annotation.Annotation;
 
+import org.apache.commons.lang3.Pair;
+
 /**
  * Special {@link StubConfigurer} subclass that makes creating nested annotations (somewhat more) convenient.
  *
  * @param <A>
  */
 public abstract class AnnotationConfigurer<A extends Annotation> extends StubConfigurer<A> {
-    AnnotationFactory annotationFactory;
-
     /**
      * Create a child annotation of the specified type using a StubConfigurer.
      * @param <T>
@@ -38,7 +38,8 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
         if (configurer == this) {
             throw new IllegalArgumentException("An AnnotationConfigurer cannot configure its own child annotation");
         }
-        return requireAnnotationFactory().create(configurer);
+        Pair<AnnotationFactory, ClassLoader> context = requireContext();
+        return context.left.create(context.right, configurer);
     }
 
     /**
@@ -49,18 +50,21 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
      * @throws IllegalStateException if called other than when an {@link AnnotationFactory} is executing {@link #configure(Object)}
      */
     protected final <T extends Annotation> T child(Class<T> annotationType) {
-        return requireAnnotationFactory().create(annotationType);
+        Pair<AnnotationFactory, ClassLoader> context = requireContext();
+        return context.left.create(context.right, annotationType);
     }
 
     /**
-     * Get the registered annotationFactory.
-     * @return AnnotationFactory
+     * Get the registered {@link AnnotationFactory}/{@link ClassLoader}.
+     * @return a {@link Pair}
      * @throws IllegalStateException if no ongoing annotation stubbing could be detected
      */
-    synchronized AnnotationFactory requireAnnotationFactory() throws IllegalStateException {
-        if (annotationFactory == null) {
+    synchronized Pair<AnnotationFactory, ClassLoader> requireContext() throws IllegalStateException {
+        Pair<AnnotationFactory, ClassLoader> result = AnnotationFactory.CONTEXT.get();
+        if (result == null) {
             throw new IllegalStateException("Could not detect ongoing annotation stubbing");
         }
-        return annotationFactory;
+        return result;
     }
+
 }

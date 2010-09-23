@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import org.apache.commons.lang3.AnnotationUtils;
+import org.apache.commons.lang3.Pair;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -46,6 +47,12 @@ import org.apache.commons.proxy2.impl.AbstractProxyFactory;
 public class AnnotationFactory {
     /** Statically available instance */
     public static final AnnotationFactory INSTANCE;
+
+    /**
+     * Record the context of a call for possible use by nested annotation creations.
+     */
+    static final ThreadLocal<Pair<AnnotationFactory, ClassLoader>> CONTEXT =
+        new ThreadLocal<Pair<AnnotationFactory, ClassLoader>>();
 
     private static final ProxyFactory PROXY_FACTORY;
 
@@ -175,21 +182,7 @@ public class AnnotationFactory {
             if (o instanceof StubConfigurer<?>) {
                 @SuppressWarnings("unchecked")
                 final StubConfigurer<Annotation> configurer = (StubConfigurer<Annotation>) o;
-                boolean deregisterFactory = false;
-                synchronized (configurer) {
-                    try {
-                        if (configurer instanceof AnnotationConfigurer<?>) {
-                            AnnotationConfigurer<?> annotationConfigurer = (AnnotationConfigurer<?>) configurer;
-                            deregisterFactory = true;
-                            annotationConfigurer.annotationFactory = AnnotationFactory.this;
-                        }
-                        configurer.configure(requireStubInterceptor(), stub);
-                    } finally {
-                        if (deregisterFactory) {
-                            ((AnnotationConfigurer<?>) configurer).annotationFactory = null;
-                        }
-                    }
-                }
+                configurer.configure(requireStubInterceptor(), stub);
             }
         }
     };
@@ -256,8 +249,12 @@ public class AnnotationFactory {
 
     private <A extends Annotation> A createInternal(ClassLoader classLoader, Object configurer) {
         final Object existingConfigurer = CONFIGURER.get();
+        final boolean outerContext = CONTEXT.get() == null;
         try {
             CONFIGURER.set(configurer);
+            if (outerContext) {
+                CONTEXT.set(Pair.of(this, classLoader));
+            }
             @SuppressWarnings("unchecked")
             final A result = (A) proxyFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER, getStubType());
             return result;
@@ -266,6 +263,9 @@ public class AnnotationFactory {
                 CONFIGURER.remove();
             } else {
                 CONFIGURER.set(existingConfigurer);
+            }
+            if (outerContext) {
+                CONTEXT.remove();
             }
         }
     }
