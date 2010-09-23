@@ -155,7 +155,7 @@ public class AnnotationFactory {
 
     private static final ThreadLocal<Object> CONFIGURER = new ThreadLocal<Object>();
 
-    private static final StubConfigurer<Annotation> SHARED_CONFIGURER = new StubConfigurer<Annotation>() {
+    private final StubConfigurer<Annotation> sharedConfigurer = new StubConfigurer<Annotation>() {
 
         /**
          * {@inheritDoc}
@@ -175,7 +175,21 @@ public class AnnotationFactory {
             if (o instanceof StubConfigurer<?>) {
                 @SuppressWarnings("unchecked")
                 final StubConfigurer<Annotation> configurer = (StubConfigurer<Annotation>) o;
-                configurer.configure(requireStubInterceptor(), stub);
+                boolean deregisterFactory = false;
+                synchronized (configurer) {
+                    try {
+                        if (configurer instanceof AnnotationConfigurer<?>) {
+                            AnnotationConfigurer<?> annotationConfigurer = (AnnotationConfigurer<?>) configurer;
+                            deregisterFactory = true;
+                            annotationConfigurer.annotationFactory = AnnotationFactory.this;
+                        }
+                        configurer.configure(requireStubInterceptor(), stub);
+                    } finally {
+                        if (deregisterFactory) {
+                            ((AnnotationConfigurer<?>) configurer).annotationFactory = null;
+                        }
+                    }
+                }
             }
         }
     };
@@ -186,7 +200,7 @@ public class AnnotationFactory {
      * Create a new AnnotationFactory instance.
      */
     public AnnotationFactory() {
-        this.proxyFactory = new StubProxyFactory(PROXY_FACTORY, SHARED_CONFIGURER);
+        this.proxyFactory = new StubProxyFactory(PROXY_FACTORY, sharedConfigurer);
     }
 
     /**
