@@ -44,6 +44,9 @@ import org.apache.commons.proxy2.impl.AbstractProxyFactory;
  * @author Matt Benson
  */
 public class AnnotationFactory {
+    /** Statically available instance */
+    public static final AnnotationFactory INSTANCE = new AnnotationFactory();
+
     //underlying proxyfactory implementation based on org.apache.commons.proxy2.jdk.JdkProxyFactory
 
     private static class InterceptorInvocationHandler implements InvocationHandler, Serializable {
