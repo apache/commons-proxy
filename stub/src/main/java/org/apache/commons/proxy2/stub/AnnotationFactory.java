@@ -40,9 +40,6 @@ import org.apache.commons.proxy2.impl.AbstractProxyFactory;
  * {@link Annotation#annotationType()} will return methods' default values and
  * {@link Annotation#equals(Object)}/{@link Annotation#hashCode()}/{@link Annotation#toString()}
  * return values consistent with those methods' documented expectations.
- *  
- *  that would have been
- * returned from a "real" annotation whose methods' values were unspecified.
  *
  * @author Matt Benson
  */
