@@ -17,10 +17,13 @@
 
 package org.apache.commons.proxy2.stub;
 
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ObjectProvider;
@@ -133,7 +136,7 @@ abstract class StubInterceptor implements Interceptor {
     }
 
     void addAnswer(Object o) {
-        resultStack.push(new Answer(currentMatcher(), o));
+        resultStack.push(validAnswer(o));
     }
 
     void addThrow(ObjectProvider<? extends Throwable> throwableProvider) {
@@ -164,6 +167,26 @@ abstract class StubInterceptor implements Interceptor {
         } finally {
             currentInvocation = null;
         }
+    }
+
+    /**
+     * Validate and return the requested answer to the current invocation.
+     * @param o
+     * @return Answer
+     */
+    synchronized Answer validAnswer(Object o) {
+        if (currentInvocation == null) {
+            //fall through and let currentMatcher() throw the exception
+        } else if (o instanceof ObjectProvider<?>) {
+            // give ObjectProviders the benefit of the doubt?
+        } else {
+            Method m = currentInvocation.getInvokedMethod();
+            if (!TypeUtils.isInstance(o, m.getReturnType())) {
+                throw new IllegalArgumentException(String.format("%s does not specify a valid return value for %s", o,
+                    m));
+            }
+        }
+        return new Answer(currentMatcher(), o);
     }
 
     void complete() {

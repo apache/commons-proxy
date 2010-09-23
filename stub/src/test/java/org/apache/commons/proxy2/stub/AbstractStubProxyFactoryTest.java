@@ -281,6 +281,34 @@ public abstract class AbstractStubProxyFactoryTest {
         assertIterator(strings.iterator(), "foo", "bar", "baz");
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testBadReturnValue() {
+        StubProxyFactory factory = new StubProxyFactory(createParent(), new StubConfigurer<AcceptArguments>() {
+
+            @Override
+            protected void configure(AcceptArguments stub) {
+                when((Object) stub.respondTo("x")).thenReturn(100);
+            }
+
+        });
+
+        factory.createInvokerProxy(NullInvoker.INSTANCE, AcceptArguments.class);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBadPrimitiveReturnValue() {
+        StubProxyFactory factory = new StubProxyFactory(createParent(), new StubConfigurer<Foo>() {
+            
+            @Override
+            protected void configure(Foo stub) {
+                when(stub.fooInt()).thenReturn(null);
+            }
+
+        });
+
+        factory.createInvokerProxy(NullInvoker.INSTANCE, Foo.class);
+    }
+
     private <T> void assertIterator(Iterator<T> iter, T... expected) {
         for (T t : expected) {
             assertTrue(iter.hasNext());
