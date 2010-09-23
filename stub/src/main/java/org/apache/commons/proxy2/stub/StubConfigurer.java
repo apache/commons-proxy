@@ -438,10 +438,14 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
      */
     protected abstract void configure(T stub);
 
+    /**
+     * Get the registered {@link StubInterceptor}.
+     * @return {@link StubInterceptor}
+     * @throws IllegalStateException if no ongoing stubbing operation could be detected
+     */
     synchronized StubInterceptor requireStubInterceptor() {
         if (stubInterceptor == null) {
-            throw new IllegalStateException(
-                    "no StubInterceptor currently in use");
+            throw new IllegalStateException("Could not detect ongoing stubbing");
         }
         return stubInterceptor;
     }
