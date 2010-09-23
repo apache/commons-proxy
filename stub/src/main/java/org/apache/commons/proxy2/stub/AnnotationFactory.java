@@ -45,9 +45,34 @@ import org.apache.commons.proxy2.impl.AbstractProxyFactory;
  */
 public class AnnotationFactory {
     /** Statically available instance */
-    public static final AnnotationFactory INSTANCE = new AnnotationFactory();
+    public static final AnnotationFactory INSTANCE;
 
-    //underlying proxyfactory implementation based on org.apache.commons.proxy2.jdk.JdkProxyFactory
+    private static final ProxyFactory PROXY_FACTORY;
+
+    static {
+
+        //underlying proxyfactory implementation based on org.apache.commons.proxy2.jdk.JdkProxyFactory
+        PROXY_FACTORY = new AbstractProxyFactory() {
+
+            public <T> T createInvokerProxy(ClassLoader classLoader, final Invoker invoker, Class<?>... proxyClasses) {
+                throw new UnsupportedOperationException();
+            }
+
+            @SuppressWarnings("unchecked")
+            public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+                Class<?>... proxyClasses) {
+                return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target,
+                    interceptor));
+            }
+
+            public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
+                Class<?>... proxyClasses) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        INSTANCE = new AnnotationFactory();
+    }
 
     private static class InterceptorInvocationHandler implements InvocationHandler, Serializable {
         /** Serialization version */
@@ -115,25 +140,6 @@ public class AnnotationFactory {
             }
         }
     }
-
-    private static final ProxyFactory PROXY_FACTORY = new AbstractProxyFactory() {
-
-        public <T> T createInvokerProxy(ClassLoader classLoader, final Invoker invoker, Class<?>... proxyClasses) {
-            throw new UnsupportedOperationException();
-        }
-
-        @SuppressWarnings("unchecked")
-        public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-            Class<?>... proxyClasses) {
-            return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target,
-                interceptor));
-        }
-
-        public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
-            Class<?>... proxyClasses) {
-            throw new UnsupportedOperationException();
-        }
-    };
 
     private static final Invoker ANNOTATION_INVOKER = new Invoker() {
 
