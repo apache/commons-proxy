@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 import org.apache.commons.lang3.AnnotationUtils;
 import org.apache.commons.lang3.Pair;
@@ -148,6 +149,41 @@ public class AnnotationFactory {
         }
     }
 
+    private static class MapBasedAnnotationConfigurer<A extends Annotation> extends StubConfigurer<A> {
+        final Map<String, Object> attributes;
+
+        /**
+         * Create a new {@link MapBasedAnnotationConfigurer} instance.
+         * @param stubType
+         * @param attributes
+         */
+        public MapBasedAnnotationConfigurer(Class<A> stubType, Map<String, Object> attributes) {
+            super(stubType);
+            this.attributes = attributes;
+        }
+
+        @Override
+        protected void configure(A stub) {
+            When<Object> bud;
+            StubConfiguration dy = this;
+            for (Map.Entry<String, Object> attr : attributes.entrySet()) {
+                Method m;
+                try {
+                    m = getStubType().getDeclaredMethod(attr.getKey());
+                } catch (Exception e1) {
+                    throw new IllegalArgumentException(String.format("Could not detect annotation attribute %1$s", attr.getKey()));
+                }
+                try {
+                    bud = dy.when(m.invoke(stub));
+                } catch (Exception e) {
+                    //it must have happened on the invoke, so we didn't call when... it shouldn't happen, but we'll simply skip:
+                    continue;
+                }
+                dy = bud.thenReturn(attr.getValue());
+            }
+        }
+    }
+
     private static final Invoker ANNOTATION_INVOKER = new Invoker() {
 
         /** Serialization version */
@@ -245,6 +281,32 @@ public class AnnotationFactory {
         @SuppressWarnings("unchecked")
         final A result = (A) createInternal(classLoader, annotationType);
         return result;
+    }
+
+    /**
+     * Create an annotation of <code>annotationType</code> with behavior specified by a {@link String}-keyed {@link Map}.
+     * @param <A>
+     * @param classLoader
+     * @param annotationType
+     * @param attributes
+     * @return stubbed annotation proxy
+     */
+    public <A extends Annotation> A create(Class<A> annotationType, Map<String, Object> attributes) {
+        return attributes == null || attributes.isEmpty() ? create(annotationType)
+            : create(new MapBasedAnnotationConfigurer<A>(annotationType, attributes));
+    }
+
+    /**
+     * Create an annotation of <code>annotationType</code> with behavior specified by a {@link String}-keyed {@link Map}.
+     * @param <A>
+     * @param classLoader
+     * @param annotationType
+     * @param attributes
+     * @return stubbed annotation proxy
+     */
+    public <A extends Annotation> A create(ClassLoader classLoader, Class<A> annotationType, Map<String, Object> attributes) {
+        return attributes == null || attributes.isEmpty() ? create(classLoader, annotationType) : create(classLoader,
+            new MapBasedAnnotationConfigurer<A>(annotationType, attributes));
     }
 
     private <A extends Annotation> A createInternal(ClassLoader classLoader, Object configurer) {

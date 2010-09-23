@@ -20,6 +20,8 @@ package org.apache.commons.proxy2.stub;
 import static org.junit.Assert.*;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -161,6 +163,26 @@ public class AnnotationFactoryTest {
         };
     }
 
+    @Test
+    public void testAttributes() {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("annString", "foo");
+        attributes.put("finiteValues", FiniteValues.values());
+        attributes.put("someType", Object.class);
+        CustomAnnotation customAnnotation = annotationFactory.create(CustomAnnotation.class, attributes);
+        assertNotNull(customAnnotation);
+        assertEquals("foo", customAnnotation.annString());
+        assertEquals(3, customAnnotation.finiteValues().length);
+        assertEquals(Object.class, customAnnotation.someType());
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBadAttributes() {
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put("annString", 100);
+        annotationFactory.create(CustomAnnotation.class, attributes);
+    }
+    
     public @interface NestingAnnotation {
         CustomAnnotation child();
 
