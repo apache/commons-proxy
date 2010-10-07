@@ -22,7 +22,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
