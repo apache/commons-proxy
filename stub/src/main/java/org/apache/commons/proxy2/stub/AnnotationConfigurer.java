@@ -27,6 +27,21 @@ import org.apache.commons.lang3.Pair;
  */
 public abstract class AnnotationConfigurer<A extends Annotation> extends StubConfigurer<A> {
     /**
+     * Create a new {@link AnnotationConfigurer} instance.
+     */
+    protected AnnotationConfigurer() {
+        super();
+    }
+
+    /**
+     * Create a new {@link AnnotationConfigurer} instance.
+     * @param type
+     */
+    protected AnnotationConfigurer(Class<A> type) {
+        super(type);
+    }
+
+    /**
      * Create a child annotation of the specified type using a StubConfigurer.
      * @param <T>
      * @param configurer, should not be <code>this</code>
