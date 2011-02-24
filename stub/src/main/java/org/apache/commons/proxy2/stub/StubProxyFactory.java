@@ -17,6 +17,8 @@
 
 package org.apache.commons.proxy2.stub;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -166,13 +168,46 @@ public class StubProxyFactory implements ProxyFactory {
 
     }
 
-    private static class DelegatorInterceptor extends StubInterceptor {
+    /**
+     * Centralize validation of method/return value.  Noop in this implementation.
+     * @param m
+     * @param o
+     * @return <code>true</code>
+     */
+    protected boolean acceptsValue(Method m, Object o) {
+        return true;
+    }    
+
+    private abstract class CentralizedAnswerValidatingStubInterceptor extends StubInterceptor {
+
+        /** Serialization version */
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected boolean acceptsValue(Method m, Object o) {
+            return super.acceptsValue(m, o) && StubProxyFactory.this.acceptsValue(m, o);
+        }    
+    }
+
+    /**
+     * {@link StubInterceptor} that wraps an {@link ObjectProvider}.
+     */
+    private class DelegatorInterceptor extends CentralizedAnswerValidatingStubInterceptor {
+
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
         private ObjectProvider<?> delegateProvider;
 
-        private DelegatorInterceptor(ObjectProvider<?> delegateProvider) {
+        /**
+         * Create a new DelegatorInterceptor instance.
+         *
+         * @param delegateProvider
+         */
+        protected DelegatorInterceptor(ObjectProvider<?> delegateProvider) {
             super();
             this.delegateProvider = delegateProvider;
         }
@@ -185,13 +220,22 @@ public class StubProxyFactory implements ProxyFactory {
         }
     }
 
-    private static class InterceptorInterceptor extends StubInterceptor {
+    /**
+     * {@link StubInterceptor} that wraps an {@link Interceptor}.
+     */
+    private class InterceptorInterceptor extends CentralizedAnswerValidatingStubInterceptor {
+
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
         private Interceptor interceptor;
 
-        private InterceptorInterceptor(Interceptor interceptor) {
+        /**
+         * Create a new InterceptorInterceptor instance.
+         *
+         * @param interceptor
+         */
+        protected InterceptorInterceptor(Interceptor interceptor) {
             super();
             this.interceptor = interceptor;
         }
@@ -203,13 +247,22 @@ public class StubProxyFactory implements ProxyFactory {
         }
     }
 
-    private static class InvokerInterceptor extends StubInterceptor {
+    /**
+     * {@link StubInterceptor} that wraps an {@link Invoker}.
+     */
+    private class InvokerInterceptor extends CentralizedAnswerValidatingStubInterceptor {
+
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
         private Invoker invoker;
 
-        private InvokerInterceptor(Invoker invoker) {
+        /**
+         * Create a new InvokerInterceptor instance.
+         *
+         * @param invoker
+         */
+        protected InvokerInterceptor(Invoker invoker) {
             super();
             this.invoker = invoker;
         }

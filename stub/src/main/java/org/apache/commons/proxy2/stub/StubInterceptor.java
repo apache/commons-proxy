@@ -69,9 +69,7 @@ abstract class StubInterceptor implements Interceptor {
          * @return Object
          */
         public Object getResult() throws Throwable {
-            return answer instanceof ObjectProvider<?> ? ((ObjectProvider<?>) answer)
-                    .getObject()
-                    : answer;
+            return answer instanceof ObjectProvider<?> ? ((ObjectProvider<?>) answer).getObject() : answer;
         }
     }
 
@@ -82,8 +80,7 @@ abstract class StubInterceptor implements Interceptor {
          * Create a new Throw instance.
          * @param invocationMatcher
          */
-        Throw(InvocationMatcher invocationMatcher,
-                ObjectProvider<? extends Throwable> throwableProvider) {
+        Throw(InvocationMatcher invocationMatcher, ObjectProvider<? extends Throwable> throwableProvider) {
             super(invocationMatcher);
             this.throwableProvider = throwableProvider;
         }
@@ -120,46 +117,48 @@ abstract class StubInterceptor implements Interceptor {
             }
             return interceptFallback(invocation);
         }
-        RecordedInvocation incoming = new RecordedInvocation(invocation
-                .getMethod(), invocation.getArguments());
+        RecordedInvocation incoming = new RecordedInvocation(invocation.getMethod(), invocation.getArguments());
         synchronized (this) {
             if (currentInvocation == null) {
                 currentInvocation = incoming;
             } else {
-                throw new IllegalStateException("Called " + incoming
-                        + " while stubbing of " + currentInvocation
-                        + " is incomplete.");
+                throw new IllegalStateException("Called " + incoming + " while stubbing of " + currentInvocation
+                    + " is incomplete.");
             }
         }
         return ProxyUtils.nullValue(invocation.getMethod().getReturnType());
     }
 
+    /**
+     * Provide a return value to the currently stubbed method.
+     * @param o {@link ObjectProvider} or hard value
+     */
     void addAnswer(Object o) {
         resultStack.push(validAnswer(o));
     }
 
+    /**
+     * Respond to the currently stubbed method with a thrown exception. 
+     * @param throwableProvider
+     */
     void addThrow(ObjectProvider<? extends Throwable> throwableProvider) {
         resultStack.push(new Throw(currentMatcher(), throwableProvider));
     }
 
     private synchronized InvocationMatcher currentMatcher() {
         if (complete) {
-            throw new IllegalStateException(
-                    "Answers not permitted; stubbing already marked as complete.");
+            throw new IllegalStateException("Answers not permitted; stubbing already marked as complete.");
         }
         if (currentInvocation == null) {
-            throw new IllegalStateException(
-                    "No ongoing stubbing found for any method");
+            throw new IllegalStateException("No ongoing stubbing found for any method");
         }
         try {
             final RecordedInvocation recordedInvocation = currentInvocation;
             return new InvocationMatcher() {
 
                 public boolean matches(Invocation invocation) {
-                    return invocation.getMethod().getName().equals(
-                            recordedInvocation.getInvokedMethod().getName())
-                            && Arrays.equals(invocation.getArguments(),
-                                    recordedInvocation.getArguments());
+                    return invocation.getMethod().getName().equals(recordedInvocation.getInvokedMethod().getName())
+                        && Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
                 }
 
             };
@@ -176,11 +175,16 @@ abstract class StubInterceptor implements Interceptor {
     synchronized Answer validAnswer(Object o) {
         if (currentInvocation == null) {
             //fall through and let currentMatcher() throw the exception
-        } else if (o instanceof ObjectProvider<?>) {
-            // give ObjectProviders the benefit of the doubt?
         } else {
             Method m = currentInvocation.getInvokedMethod();
-            if (!TypeUtils.isInstance(o, m.getReturnType())) {
+            boolean valid;
+            if (o instanceof ObjectProvider<?>) {
+                //compiler checked:
+                valid = true;
+            } else {
+                valid = acceptsValue(m, o);
+            }
+            if (!valid) {
                 throw new IllegalArgumentException(String.format("%s does not specify a valid return value for %s", o,
                     m));
             }
@@ -188,6 +192,9 @@ abstract class StubInterceptor implements Interceptor {
         return new Answer(currentMatcher(), o);
     }
 
+    /**
+     * Mark stubbing as complete.
+     */
     void complete() {
         this.complete = true;
     }
@@ -198,6 +205,16 @@ abstract class StubInterceptor implements Interceptor {
      * @return result
      * @throws Throwable
      */
-    protected abstract Object interceptFallback(Invocation invocation)
-            throws Throwable;
+    protected abstract Object interceptFallback(Invocation invocation) throws Throwable;
+
+    /**
+     * Learn whether the specified method accepts the specified return value.
+     * Default implementation defers to {@link TypeUtils#isInstance(Object, java.lang.reflect.Type)}.
+     * @param m
+     * @param o
+     * @return result of compatibility comparison
+     */
+    protected boolean acceptsValue(Method m, Object o) {
+        return TypeUtils.isInstance(o, m.getReturnType());
+    }
 }

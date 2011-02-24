@@ -17,7 +17,9 @@
 
 package org.apache.commons.proxy2.stub;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -37,14 +39,9 @@ public class AnnotationFactoryTest {
         annotationFactory = new AnnotationFactory();
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void testDefaultAnnotation() {
-        CustomAnnotation customAnnotation = annotationFactory.create(CustomAnnotation.class);
-        assertNotNull(customAnnotation);
-        assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
-        assertEquals("", customAnnotation.annString());
-        assertEquals(0, customAnnotation.finiteValues().length);
-        assertNull(customAnnotation.someType());
+        annotationFactory.create(CustomAnnotation.class);
     }
 
     @Test
@@ -66,24 +63,6 @@ public class AnnotationFactoryTest {
     }
 
     @Test
-    public void testStubbedAnnotationWithDefaultChild() {
-        NestingAnnotation nestingAnnotation =
-            annotationFactory.create(new AnnotationConfigurer<NestingAnnotation>() {
-                @Override
-                protected void configure(NestingAnnotation stub) {
-                    when(stub.child()).thenReturn(child(CustomAnnotation.class))
-                        .when(stub.somethingElse()).thenReturn("somethingElse");
-                }
-            });
-        assertNotNull(nestingAnnotation);
-        assertNotNull(nestingAnnotation.child());
-        assertEquals("", nestingAnnotation.child().annString());
-        assertEquals(0, nestingAnnotation.child().finiteValues().length);
-        assertEquals(null, nestingAnnotation.child().someType());
-        assertEquals("somethingElse", nestingAnnotation.somethingElse());
-    }
-
-    @Test
     public void testStubbedAnnotationWithConfiguredChild() {
         NestingAnnotation nestingAnnotation = annotationFactory.create(new AnnotationConfigurer<NestingAnnotation>() {
             @Override
@@ -99,7 +78,9 @@ public class AnnotationFactoryTest {
             }
         });
         assertNotNull(nestingAnnotation);
+        assertEquals(NestingAnnotation.class, nestingAnnotation.annotationType());
         assertNotNull(nestingAnnotation.child());
+        assertEquals(CustomAnnotation.class, nestingAnnotation.child().annotationType());
         assertEquals("wow", nestingAnnotation.child().annString());
         assertEquals(3, nestingAnnotation.child().finiteValues().length);
         assertEquals(Class.class, nestingAnnotation.child().someType());
@@ -121,7 +102,7 @@ public class AnnotationFactoryTest {
                             @Override
                             protected void configure(CustomAnnotation stub) {
                                 when(stub.annString()).thenReturn("wow").when(stub.finiteValues())
-                                .thenReturn(FiniteValues.values()).when(stub.someType()).thenReturn(Class.class);
+                                    .thenReturn(FiniteValues.values()).when(stub.someType()).thenReturn(Class.class);
                             }
 
                         })).when(stub.somethingElse()).thenReturn("somethingElse");
@@ -132,14 +113,16 @@ public class AnnotationFactoryTest {
         assertNotNull(outerContainer);
         NestingAnnotation nestingAnnotation = outerContainer.nest();
         assertNotNull(nestingAnnotation);
+        assertEquals(NestingAnnotation.class, nestingAnnotation.annotationType());
         assertNotNull(nestingAnnotation.child());
+        assertEquals(CustomAnnotation.class, nestingAnnotation.child().annotationType());
         assertEquals("wow", nestingAnnotation.child().annString());
         assertEquals(3, nestingAnnotation.child().finiteValues().length);
         assertEquals(Class.class, nestingAnnotation.child().someType());
         assertEquals("somethingElse", nestingAnnotation.somethingElse());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCannotConfigureOwnChild() {
         annotationFactory.create(new AnnotationConfigurer<NestingAnnotation>() {
 
@@ -150,7 +133,7 @@ public class AnnotationFactoryTest {
         });
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void testChildRequiresOngoingStubbing() {
         new AnnotationConfigurer<Annotation>() {
             {
@@ -171,18 +154,19 @@ public class AnnotationFactoryTest {
         attributes.put("someType", Object.class);
         CustomAnnotation customAnnotation = annotationFactory.create(CustomAnnotation.class, attributes);
         assertNotNull(customAnnotation);
+        assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
         assertEquals("foo", customAnnotation.annString());
         assertEquals(3, customAnnotation.finiteValues().length);
         assertEquals(Object.class, customAnnotation.someType());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testBadAttributes() {
         Map<String, Object> attributes = new HashMap<String, Object>();
         attributes.put("annString", 100);
         annotationFactory.create(CustomAnnotation.class, attributes);
     }
-    
+
     public @interface NestingAnnotation {
         CustomAnnotation child();
 

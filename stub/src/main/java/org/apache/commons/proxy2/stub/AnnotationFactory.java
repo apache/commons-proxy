@@ -171,7 +171,8 @@ public class AnnotationFactory {
                 try {
                     m = getStubType().getDeclaredMethod(attr.getKey());
                 } catch (Exception e1) {
-                    throw new IllegalArgumentException(String.format("Could not detect annotation attribute %1$s", attr.getKey()));
+                    throw new IllegalArgumentException(String.format("Could not detect annotation attribute %1$s",
+                        attr.getKey()));
                 }
                 try {
                     bud = dy.when(m.invoke(stub));
@@ -191,8 +192,12 @@ public class AnnotationFactory {
 
         public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
             Object result = method.getDefaultValue();
-            return result == null && method.getReturnType().isPrimitive() ? ProxyUtils
-                .nullValue(method.getReturnType()) : result;
+            if (result == null) {
+                if (method.getReturnType().isPrimitive()) {
+                    return ProxyUtils.nullValue(method.getReturnType());
+                }
+            }
+            return result;
         }
     };
 
@@ -229,7 +234,14 @@ public class AnnotationFactory {
      * Create a new AnnotationFactory instance.
      */
     public AnnotationFactory() {
-        this.proxyFactory = new StubProxyFactory(PROXY_FACTORY, sharedConfigurer);
+        this.proxyFactory = new StubProxyFactory(PROXY_FACTORY, sharedConfigurer) {
+            /**
+             * {@inheritDoc}
+             */
+            protected boolean acceptsValue(Method m, Object o) {
+                return !(m.getDeclaringClass().isAnnotation() && o == null);
+            }
+        };
     }
 
     /**
@@ -304,7 +316,8 @@ public class AnnotationFactory {
      * @param attributes
      * @return stubbed annotation proxy
      */
-    public <A extends Annotation> A create(ClassLoader classLoader, Class<A> annotationType, Map<String, Object> attributes) {
+    public <A extends Annotation> A create(ClassLoader classLoader, Class<A> annotationType,
+        Map<String, Object> attributes) {
         return attributes == null || attributes.isEmpty() ? create(classLoader, annotationType) : create(classLoader,
             new MapBasedAnnotationConfigurer<A>(annotationType, attributes));
     }
@@ -319,7 +332,7 @@ public class AnnotationFactory {
             }
             @SuppressWarnings("unchecked")
             final A result = (A) proxyFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER, getStubType());
-            return result;
+            return validate(result);
         } finally {
             if (existingConfigurer == null) {
                 CONFIGURER.remove();
@@ -330,6 +343,24 @@ public class AnnotationFactory {
                 CONTEXT.remove();
             }
         }
+    }
+
+    private <A extends Annotation> A validate(A annotation) {
+        Class<?> annotationType = annotation.annotationType();
+        for (Method m : annotationType.getDeclaredMethods()) {
+            Object value = null;
+            Exception caught = null;
+            try {
+                value = m.invoke(annotation);
+            } catch (Exception e) {
+                caught = e;
+            }
+            if (value == null) {
+                throw new IllegalStateException(String.format("annotation %s is missing %s", annotationType,
+                    m.getName()), caught);
+            }
+        }
+        return annotation;
     }
 
     private static <A extends Annotation> Class<? extends A> getStubType() {

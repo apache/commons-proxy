@@ -31,6 +31,7 @@ import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.provider.BeanProvider;
+import org.apache.commons.proxy2.provider.ConstantProvider;
 import org.apache.commons.proxy2.stub.StubConfigurer;
 import org.apache.commons.proxy2.stub.StubProxyFactory;
 import org.junit.Before;
@@ -274,6 +275,22 @@ public abstract class AbstractStubProxyFactoryTest {
             @Override
             protected void configure(Iterable<String> stub) {
                 when(stub.iterator()).thenReturn(Arrays.asList("foo", "bar", "baz").iterator());
+            }
+
+        });
+        Iterable<String> strings = iterableStubFactory.createInvokerProxy(NullInvoker.INSTANCE, Iterable.class);
+        assertIterator(strings.iterator(), "foo", "bar", "baz");
+    }
+
+    @Test
+    public void testDeferredGenericResult() {
+        final ObjectProvider<Iterator<String>> provider =
+            new ConstantProvider<Iterator<String>>(Arrays.asList("foo", "bar", "baz").iterator());
+        ProxyFactory iterableStubFactory = new StubProxyFactory(createParent(), new StubConfigurer<Iterable<String>>() {
+
+            @Override
+            protected void configure(Iterable<String> stub) {
+                when(stub.iterator()).thenAnswer(provider);
             }
 
         });
