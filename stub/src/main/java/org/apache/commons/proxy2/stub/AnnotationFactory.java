@@ -26,7 +26,7 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import org.apache.commons.lang3.AnnotationUtils;
-import org.apache.commons.lang3.Pair;
+import org.apache.commons.lang3.ImmutablePair;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -52,8 +52,8 @@ public class AnnotationFactory {
     /**
      * Record the context of a call for possible use by nested annotation creations.
      */
-    static final ThreadLocal<Pair<AnnotationFactory, ClassLoader>> CONTEXT =
-        new ThreadLocal<Pair<AnnotationFactory, ClassLoader>>();
+    static final ThreadLocal<ImmutablePair<AnnotationFactory, ClassLoader>> CONTEXT =
+        new ThreadLocal<ImmutablePair<AnnotationFactory, ClassLoader>>();
 
     private static final ProxyFactory PROXY_FACTORY;
 
@@ -328,7 +328,7 @@ public class AnnotationFactory {
         try {
             CONFIGURER.set(configurer);
             if (outerContext) {
-                CONTEXT.set(Pair.of(this, classLoader));
+                CONTEXT.set(ImmutablePair.of(this, classLoader));
             }
             @SuppressWarnings("unchecked")
             final A result = (A) proxyFactory.createInvokerProxy(classLoader, ANNOTATION_INVOKER, getStubType());

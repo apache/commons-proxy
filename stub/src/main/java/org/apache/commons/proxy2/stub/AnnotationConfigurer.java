@@ -18,6 +18,7 @@ package org.apache.commons.proxy2.stub;
 
 import java.lang.annotation.Annotation;
 
+import org.apache.commons.lang3.ImmutablePair;
 import org.apache.commons.lang3.Pair;
 
 /**
@@ -53,7 +54,7 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
         if (configurer == this) {
             throw new IllegalArgumentException("An AnnotationConfigurer cannot configure its own child annotation");
         }
-        Pair<AnnotationFactory, ClassLoader> context = requireContext();
+        ImmutablePair<AnnotationFactory, ClassLoader> context = requireContext();
         return context.left.create(context.right, configurer);
     }
 
@@ -65,7 +66,7 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
      * @throws IllegalStateException if called other than when an {@link AnnotationFactory} is executing {@link #configure(Object)}
      */
     protected final <T extends Annotation> T child(Class<T> annotationType) {
-        Pair<AnnotationFactory, ClassLoader> context = requireContext();
+        ImmutablePair<AnnotationFactory, ClassLoader> context = requireContext();
         return context.left.create(context.right, annotationType);
     }
 
@@ -74,8 +75,8 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
      * @return a {@link Pair}
      * @throws IllegalStateException if no ongoing annotation stubbing could be detected
      */
-    synchronized Pair<AnnotationFactory, ClassLoader> requireContext() throws IllegalStateException {
-        Pair<AnnotationFactory, ClassLoader> result = AnnotationFactory.CONTEXT.get();
+    synchronized ImmutablePair<AnnotationFactory, ClassLoader> requireContext() throws IllegalStateException {
+        ImmutablePair<AnnotationFactory, ClassLoader> result = AnnotationFactory.CONTEXT.get();
         if (result == null) {
             throw new IllegalStateException("Could not detect ongoing annotation stubbing");
         }
