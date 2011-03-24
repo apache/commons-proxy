@@ -18,10 +18,14 @@
 package org.apache.commons.proxy2.stub;
 
 import java.lang.reflect.Method;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.Pair;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
@@ -41,26 +45,21 @@ abstract class StubInterceptor implements Interceptor {
     /** Serialization version */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * This is an interface because we plan to add more sophisticated stub matching in the future.
+     */
     private interface InvocationMatcher {
         boolean matches(Invocation invocation);
     }
 
-    private static abstract class Result {
-        InvocationMatcher invocationMatcher;
-
-        Result(InvocationMatcher invocationMatcher) {
-            super();
-            this.invocationMatcher = invocationMatcher;
-        }
-
-        abstract Object getResult() throws Throwable;
+    private interface Result {
+        Object getResult() throws Throwable;
     }
 
-    private static class Answer extends Result {
+    private static class Answer implements Result {
         private Object answer;
 
-        Answer(InvocationMatcher invocationMatcher, Object answer) {
-            super(invocationMatcher);
+        Answer(Object answer) {
             this.answer = answer;
         }
 
@@ -73,30 +72,32 @@ abstract class StubInterceptor implements Interceptor {
         }
     }
 
-    private static class Throw extends Result {
+    private static class Throw implements Result {
         private ObjectProvider<? extends Throwable> throwableProvider;
 
         /**
          * Create a new Throw instance.
          * @param invocationMatcher
          */
-        Throw(InvocationMatcher invocationMatcher, ObjectProvider<? extends Throwable> throwableProvider) {
-            super(invocationMatcher);
+        Throw(ObjectProvider<? extends Throwable> throwableProvider) {
             this.throwableProvider = throwableProvider;
         }
 
         /**
          * {@inheritDoc}
          */
-        @Override
-        Object getResult() throws Throwable {
+        public Object getResult() throws Throwable {
             throw throwableProvider.getObject();
         }
     }
 
     private boolean complete;
     private RecordedInvocation currentInvocation;
-    private Deque<Result> resultStack = new ArrayDeque<Result>();
+    private Map<String, Result> noArgResults = new HashMap<String, Result>();
+
+    // we generalize to the List interface here so that we can replace an empty set of results with a shared immutable instance:
+    private List<Pair<InvocationMatcher, ? extends Result>> matchingResultStack =
+        new ArrayList<Pair<InvocationMatcher, ? extends Result>>();
 
     /**
      * Create a new StubInterceptor instance.
@@ -110,9 +111,16 @@ abstract class StubInterceptor implements Interceptor {
      */
     public Object intercept(Invocation invocation) throws Throwable {
         if (complete) {
-            for (Result result : resultStack) {
-                if (result.invocationMatcher.matches(invocation)) {
+            if (invocation.getMethod().getParameterTypes().length == 0) {
+                Result result = noArgResults.get(invocation.getMethod().getName());
+                if (result != null) {
                     return result.getResult();
+                }
+            } else {
+                for (Pair<InvocationMatcher, ? extends Result> pair : matchingResultStack) {
+                    if (pair.getLeftElement().matches(invocation)) {
+                        return pair.getRightElement().getResult();
+                    }
                 }
             }
             return interceptFallback(invocation);
@@ -133,74 +141,81 @@ abstract class StubInterceptor implements Interceptor {
      * Provide a return value to the currently stubbed method.
      * @param o {@link ObjectProvider} or hard value
      */
-    void addAnswer(Object o) {
-        resultStack.push(validAnswer(o));
+    synchronized void addAnswer(Object o) {
+        assertCanAddResult();
+        Method m = currentInvocation.getInvokedMethod();
+        boolean valid;
+        if (o instanceof ObjectProvider<?>) {
+            //compiler checked:
+            valid = true;
+        } else {
+            valid = acceptsValue(m, o);
+        }
+        if (!valid) {
+            throw new IllegalArgumentException(String.format("%s does not specify a valid return value for %s", o,
+                m));
+        }
+        addResult(new Answer(o));
     }
 
     /**
      * Respond to the currently stubbed method with a thrown exception. 
      * @param throwableProvider
      */
-    void addThrow(ObjectProvider<? extends Throwable> throwableProvider) {
-        resultStack.push(new Throw(currentMatcher(), throwableProvider));
+    synchronized void addThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+        assertCanAddResult();
+        addResult(new Throw(throwableProvider));
     }
 
-    private synchronized InvocationMatcher currentMatcher() {
+    private void assertCanAddResult() {
         if (complete) {
             throw new IllegalStateException("Answers not permitted; stubbing already marked as complete.");
         }
         if (currentInvocation == null) {
             throw new IllegalStateException("No ongoing stubbing found for any method");
         }
+    }
+
+    private void addResult(Result result) {
         try {
-            final RecordedInvocation recordedInvocation = currentInvocation;
-            return new InvocationMatcher() {
+            if (currentInvocation.getInvokedMethod().getParameterTypes().length == 0) {
+                //match on method name only:
+                noArgResults.put(currentInvocation.getInvokedMethod().getName(), result);
+            } else {
+                InvocationMatcher invocationMatcher;
+                //TODO use an approach like that of Mockito wrt capturing arg matchers, falling back to force equality like so:
+                final RecordedInvocation recordedInvocation = currentInvocation;
+                invocationMatcher = new InvocationMatcher() {
 
-                public boolean matches(Invocation invocation) {
-                    return invocation.getMethod().getName().equals(recordedInvocation.getInvokedMethod().getName())
-                        && Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
-                }
+                    public boolean matches(Invocation invocation) {
+                        return invocation.getMethod().getName().equals(recordedInvocation.getInvokedMethod().getName())
+                            && Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
+                    }
 
-            };
+                };
+                //add to beginning, for priority, hence "stack" nomenclature:
+                matchingResultStack.add(0, Pair.of(invocationMatcher, result));
+            }
         } finally {
             currentInvocation = null;
         }
     }
 
     /**
-     * Validate and return the requested answer to the current invocation.
-     * @param o
-     * @return Answer
-     */
-    synchronized Answer validAnswer(Object o) {
-        if (currentInvocation == null) {
-            //fall through and let currentMatcher() throw the exception
-        } else {
-            Method m = currentInvocation.getInvokedMethod();
-            boolean valid;
-            if (o instanceof ObjectProvider<?>) {
-                //compiler checked:
-                valid = true;
-            } else {
-                valid = acceptsValue(m, o);
-            }
-            if (!valid) {
-                throw new IllegalArgumentException(String.format("%s does not specify a valid return value for %s", o,
-                    m));
-            }
-        }
-        return new Answer(currentMatcher(), o);
-    }
-
-    /**
      * Mark stubbing as complete.
      */
-    void complete() {
+    synchronized void complete() {
         this.complete = true;
+        if (noArgResults.isEmpty()) {
+            noArgResults = Collections.emptyMap();
+        }
+        if (matchingResultStack.isEmpty()) {
+            matchingResultStack = Collections.emptyList();
+        }
     }
 
     /**
-     * Fallback behavior
+     * Provide fallback behavior.
      * @param invocation
      * @return result
      * @throws Throwable
