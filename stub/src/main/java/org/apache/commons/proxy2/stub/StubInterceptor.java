@@ -118,8 +118,8 @@ abstract class StubInterceptor implements Interceptor {
                 }
             } else {
                 for (Pair<InvocationMatcher, ? extends Result> pair : matchingResultStack) {
-                    if (pair.getLeftElement().matches(invocation)) {
-                        return pair.getRightElement().getResult();
+                    if (pair.getLeft().matches(invocation)) {
+                        return pair.getRight().getResult();
                     }
                 }
             }
