@@ -26,7 +26,7 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import org.apache.commons.lang3.AnnotationUtils;
-import org.apache.commons.lang3.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
