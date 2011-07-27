@@ -31,78 +31,65 @@
         <dependency>
             <groupId>aopalliance</groupId>
             <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>axis</groupId>
             <artifactId>axis-jaxrpc</artifactId>
-            <version>1.2.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>hessian</groupId>
             <artifactId>hessian</artifactId>
-            <version>3.0.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>burlap</groupId>
             <artifactId>burlap</artifactId>
-            <version>2.1.7</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>xmlrpc</groupId>
             <artifactId>xmlrpc</artifactId>
-            <version>2.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.0.4</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>concurrent</groupId>
             <artifactId>concurrent</artifactId>
-            <version>1.3.4</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.4.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.3</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>jmock</groupId>
             <artifactId>jmock</artifactId>
-            <version>1.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
