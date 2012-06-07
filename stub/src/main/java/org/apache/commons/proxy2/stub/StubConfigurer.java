@@ -17,13 +17,11 @@
 
 package org.apache.commons.proxy2.stub;
 
-import org.apache.commons.functor.UnaryPredicate;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.provider.ConstantProvider;
 
 /**
- * <p>
  * Configuration mechanism for a stub.  Implements {@link StubConfiguration} for maximum fluency.
  * A {@link StubConfigurer} needs to know the type of stub object to which it applies.
  * Any useful runtime subclass should have the type variable non-generically
@@ -36,11 +34,7 @@ import org.apache.commons.proxy2.provider.ConstantProvider;
  *     }
  * }
  * </pre></code>
- * </p>
  *
- * <p>Note that when argument matching is used, all method parameters must be specified using matchers.
- * TODO add matching example
- * </p>
  * @param <T>
  * @author Matt Benson
  */
@@ -71,11 +65,12 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
             return;
         }
         @SuppressWarnings("unchecked")
-        final Class<T> resolvedVariable =
-            (Class<T>) TypeUtils.getRawType(StubConfigurer.class.getTypeParameters()[0], getClass());
+        final Class<T> resolvedVariable = (Class<T>) TypeUtils.getRawType(
+                StubConfigurer.class.getTypeParameters()[0], getClass());
         if (resolvedVariable == null) {
-            throw new IllegalArgumentException("stubType was not specified and could not be calculated for "
-                + getClass());
+            throw new IllegalArgumentException(
+                    "stubType was not specified and could not be calculated for "
+                            + getClass());
         }
         this.stubType = resolvedVariable;
     }
@@ -91,7 +86,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public <RT> org.apache.commons.proxy2.stub.StubConfiguration.When<RT> when(RT call) {
+    public <RT> org.apache.commons.proxy2.stub.StubConfiguration.When<RT> when(
+            RT call) {
         return new When<RT>() {
 
             public StubConfiguration thenReturn(RT result) {
@@ -99,7 +95,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<? extends RT> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<? extends RT> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -108,7 +105,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -118,7 +116,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenBooleanArray when(boolean[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenBooleanArray when(
+            boolean[] call) {
         return new WhenBooleanArray() {
 
             public StubConfiguration thenReturn(boolean... b) {
@@ -126,7 +125,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<boolean[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<boolean[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -135,7 +135,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -145,7 +146,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenByteArray when(byte[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenByteArray when(
+            byte[] call) {
         return new WhenByteArray() {
 
             public StubConfiguration thenReturn(byte... b) {
@@ -153,7 +155,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<byte[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<byte[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -162,7 +165,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -172,7 +176,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenShortArray when(short[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenShortArray when(
+            short[] call) {
         return new WhenShortArray() {
 
             public StubConfiguration thenReturn(short... s) {
@@ -180,7 +185,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<short[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<short[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -189,7 +195,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -199,7 +206,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenIntArray when(int[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenIntArray when(
+            int[] call) {
         return new WhenIntArray() {
 
             public StubConfiguration thenReturn(int... i) {
@@ -207,7 +215,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<int[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<int[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -216,7 +225,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -226,7 +236,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenCharArray when(char[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenCharArray when(
+            char[] call) {
         return new WhenCharArray() {
 
             public StubConfiguration thenReturn(char... c) {
@@ -234,7 +245,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<char[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<char[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -243,7 +255,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -253,7 +266,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenLongArray when(long[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenLongArray when(
+            long[] call) {
         return new WhenLongArray() {
 
             public StubConfiguration thenReturn(long... l) {
@@ -261,7 +275,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<long[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<long[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -270,7 +285,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -280,7 +296,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenFloatArray when(float[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenFloatArray when(
+            float[] call) {
         return new WhenFloatArray() {
 
             public StubConfiguration thenReturn(float... f) {
@@ -288,7 +305,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<float[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<float[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -297,7 +315,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -307,7 +326,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenDoubleArray when(double[] call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenDoubleArray when(
+            double[] call) {
         return new WhenDoubleArray() {
 
             public StubConfiguration thenReturn(double... d) {
@@ -315,7 +335,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<double[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<double[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -324,7 +345,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -334,7 +356,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public <C> org.apache.commons.proxy2.stub.StubConfiguration.WhenObjectArray<C> when(C[] call) {
+    public <C> org.apache.commons.proxy2.stub.StubConfiguration.WhenObjectArray<C> when(
+            C[] call) {
         return new WhenObjectArray<C>() {
 
             public StubConfiguration thenReturn(C... c) {
@@ -342,7 +365,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<C[]> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<C[]> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -351,7 +375,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
@@ -361,7 +386,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public org.apache.commons.proxy2.stub.StubConfiguration.WhenClass when(Class<?> call) {
+    public org.apache.commons.proxy2.stub.StubConfiguration.WhenClass when(
+            Class<?> call) {
         return new WhenClass() {
 
             public StubConfiguration thenReturn(Class<?> c) {
@@ -369,7 +395,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return StubConfigurer.this;
             }
 
-            public StubConfiguration thenAnswer(ObjectProvider<Class<?>> objectProvider) {
+            public StubConfiguration thenAnswer(
+                    ObjectProvider<Class<?>> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
@@ -378,101 +405,12 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
                 return thenThrow(new ConstantProvider<Throwable>(t));
             }
 
-            public StubConfiguration thenThrow(ObjectProvider<? extends Throwable> throwableProvider) {
+            public StubConfiguration thenThrow(
+                    ObjectProvider<? extends Throwable> throwableProvider) {
                 requireStubInterceptor().addThrow(throwableProvider);
                 return StubConfigurer.this;
             }
         };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean anyBoolean() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public byte anyByte() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public short anyShort() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int anyInt() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public char anyChar() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public long anyLong() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public float anyFloat() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double anyDouble() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <U> U any() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <U> U argThat(UnaryPredicate<U> test) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**
@@ -481,7 +419,8 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
      */
     final void configure(StubInterceptor stubInterceptor, T stub) {
         if (stubInterceptor == null) {
-            throw new IllegalArgumentException("Cannot configure null StubInterceptor");
+            throw new IllegalArgumentException(
+                    "Cannot configure null StubInterceptor");
         }
         synchronized (this) {
             this.stubInterceptor = stubInterceptor;

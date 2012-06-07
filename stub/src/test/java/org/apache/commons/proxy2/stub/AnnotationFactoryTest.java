@@ -22,13 +22,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +32,6 @@ import org.junit.Test;
  * Test {@link AnnotationFactory}.
  */
 public class AnnotationFactoryTest {
-    @CustomAnnotation(annString = "FOO", finiteValues = { FiniteValues.ONE, FiniteValues.TWO, FiniteValues.THREE }, someType = Object.class)
     private AnnotationFactory annotationFactory;
 
     @Before
@@ -172,65 +167,12 @@ public class AnnotationFactoryTest {
         annotationFactory.create(CustomAnnotation.class, attributes);
     }
 
-    @Test
-    public void testDelegator() {
-        final boolean forceAccess = true;
-        final CustomAnnotation sourceAnnotation =
-            FieldUtils.getDeclaredField(AnnotationFactoryTest.class, "annotationFactory", forceAccess).getAnnotation(
-                CustomAnnotation.class);
-        assertNotNull(sourceAnnotation);
-        CustomAnnotation stub =
-            annotationFactory.createDelegator(sourceAnnotation, new AnnotationConfigurer<CustomAnnotation>() {
-
-                @Override
-                protected void configure(CustomAnnotation stub) {
-                    when(stub.finiteValues()).thenReturn(FiniteValues.ONE);
-                }
-            });
-        assertEquals(CustomAnnotation.class, stub.annotationType());
-        assertEquals(Object.class, stub.someType());
-        assertEquals("FOO", stub.annString());
-        assertArrayEquals(new FiniteValues[] { FiniteValues.ONE }, stub.finiteValues());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDelegatorMissingTarget() {
-        annotationFactory.createDelegator(null, new StubConfigurer<CustomAnnotation>() {
-
-            @Override
-            protected void configure(CustomAnnotation stub) {
-            }
-        });
-    }
-
-    @Test
-    public void testDelegatorWithAttributes() {
-        final boolean forceAccess = true;
-        final CustomAnnotation sourceAnnotation =
-            FieldUtils.getDeclaredField(AnnotationFactoryTest.class, "annotationFactory", forceAccess).getAnnotation(
-                CustomAnnotation.class);
-        assertNotNull(sourceAnnotation);
-        Map<String, Object> attributes =
-            Collections.<String, Object> singletonMap("finiteValues", new FiniteValues[] { FiniteValues.ONE });
-        CustomAnnotation stub = annotationFactory.createDelegator(sourceAnnotation, attributes);
-        assertEquals(CustomAnnotation.class, stub.annotationType());
-        assertEquals(Object.class, stub.someType());
-        assertEquals("FOO", stub.annString());
-        assertArrayEquals(new FiniteValues[] { FiniteValues.ONE }, stub.finiteValues());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDelegatorWithAttributesMissingTarget() {
-        annotationFactory.createDelegator(null, Collections.<String, Object> emptyMap());
-    }
-
     public @interface NestingAnnotation {
         CustomAnnotation child();
 
         String somethingElse();
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
     public @interface CustomAnnotation {
         String annString() default "";
 

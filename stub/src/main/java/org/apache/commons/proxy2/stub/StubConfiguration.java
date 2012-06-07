@@ -17,16 +17,12 @@
 
 package org.apache.commons.proxy2.stub;
 
-import org.apache.commons.functor.UnaryPredicate;
 import org.apache.commons.proxy2.ObjectProvider;
 
 /**
  * Fluent stub configuration interface inspired by Mockito stubbing mechanisms.
- * This interface declares all the methods necessary to:
- * <ul>
- * <li>allow varargs to be used to specify return values for any array type</li>
- * <li>make interactive stub calls describe nonspecific argument matching situations</li>
- * </ul>
+ * This interface declares all the methods necessary to, in particular, allow
+ * varargs to be used to specify return values for any array type.
  */
 public interface StubConfiguration {
 
@@ -347,68 +343,5 @@ public interface StubConfiguration {
      * @return {@link WhenClass}
      */
     WhenClass when(Class<?> call);
-
-    /**
-     * Match any boolean.
-     * @return mock argument
-     */
-    boolean anyBoolean();
-
-    /**
-     * Match any byte.
-     * @return mock argument
-     */
-    byte anyByte();
-
-    /**
-     * Match any short.
-     * @return mock argument
-     */
-    short anyShort();
-
-    /**
-     * Match any int.
-     * @return mock argument
-     */
-    int anyInt();
-
-    /**
-     * Match any char.
-     * @return mock argument
-     */
-    char anyChar();
-
-    /**
-     * Match any long.
-     * @return mock argument
-     */
-    long anyLong();
-
-    /**
-     * Match any float.
-     * @return mock argument
-     */
-    float anyFloat();
-
-    /**
-     * Match any double.
-     * @return mock argument
-     */
-    double anyDouble();
-
-    /**
-     * Match any object.
-     * @param <T>
-     * @return mock argument
-     */
-    <T> T any();
-
-    /**
-     * Match an argument with a test.
-     * @param <T>
-     * @param test
-     * @return mock argument
-     */
-    <T> T argThat(UnaryPredicate<T> test);
 
 }
