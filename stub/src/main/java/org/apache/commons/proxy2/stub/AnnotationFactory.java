@@ -214,8 +214,9 @@ public class AnnotationFactory {
          * {@inheritDoc}
          */
         @Override
-        public Class<? extends Annotation> getStubType() {
-            return AnnotationFactory.getStubType();
+        @SuppressWarnings("unchecked")
+        public Class<Annotation> getStubType() {
+            return (Class<Annotation>) AnnotationFactory.getStubType();
         }
 
         /**

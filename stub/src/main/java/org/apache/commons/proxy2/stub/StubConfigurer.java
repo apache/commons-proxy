@@ -79,7 +79,7 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
      * Get the stubType.
      * @return Class<T>
      */
-    public Class<? extends T> getStubType() {
+    public Class<T> getStubType() {
         return stubType;
     }
 
