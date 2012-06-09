@@ -214,9 +214,17 @@ public class AnnotationFactory {
          * {@inheritDoc}
          */
         @Override
-        @SuppressWarnings("unchecked")
         public Class<Annotation> getStubType() {
-            return (Class<Annotation>) AnnotationFactory.getStubType();
+            /*
+             * Suppress the warning because we are using this shared object in
+             * a very special, albeit peculiar way, and effectively
+             * hijacking the only place where the generic type of the
+             * instance matters:  namely, providing the type of
+             * Annotation to be stubbed at any given time.
+             */
+            @SuppressWarnings("unchecked")
+            Class<Annotation> result = (Class<Annotation>) AnnotationFactory.getStubType();
+            return result;
         }
 
         /**
