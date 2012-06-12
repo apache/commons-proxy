@@ -35,7 +35,7 @@ import java.util.Set;
  * @author James Carman
  * @since 1.0
  */
-class JavassistUtils
+final class JavassistUtils
 {
 //**********************************************************************************************************************
 // Fields

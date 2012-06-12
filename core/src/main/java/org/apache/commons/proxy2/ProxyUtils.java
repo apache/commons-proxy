@@ -31,7 +31,7 @@ import java.util.Map;
  * @author James Carman
  * @since 1.0
  */
-public class ProxyUtils
+public final class ProxyUtils
 {
 //**********************************************************************************************************************
 // Fields
