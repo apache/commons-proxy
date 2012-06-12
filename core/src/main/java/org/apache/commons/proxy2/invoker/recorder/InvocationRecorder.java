@@ -84,7 +84,7 @@ public class InvocationRecorder
         return ProxyUtils.nullValue(type);
     }
 
-    private class InvocationRecorderInvoker implements Invoker
+    private final class InvocationRecorderInvoker implements Invoker
     {
         /** Serialization version */
         private static final long serialVersionUID = 1L;
