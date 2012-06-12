@@ -77,7 +77,7 @@ abstract class StubInterceptor implements Interceptor {
 
         /**
          * Create a new Throw instance.
-         * @param invocationMatcher
+         * @param throwableProvider the throwable provider
          */
         Throw(ObjectProvider<? extends Throwable> throwableProvider) {
             this.throwableProvider = throwableProvider;
