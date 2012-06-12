@@ -17,6 +17,7 @@
 
 package org.apache.commons.proxy2.invoker;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.proxy2.ProxyUtils;
 
 import java.lang.reflect.Method;
@@ -46,7 +47,7 @@ public class RecordedInvocation
     public RecordedInvocation( Method invokedMethod, Object[] arguments )
     {
         this.invokedMethod = invokedMethod;
-        this.arguments = arguments;
+        this.arguments = ArrayUtils.clone(arguments);
     }
 
   //**********************************************************************************************************************

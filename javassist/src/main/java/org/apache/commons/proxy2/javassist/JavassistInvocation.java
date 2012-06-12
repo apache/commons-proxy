@@ -21,6 +21,7 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ProxyUtils;
 
@@ -204,7 +205,7 @@ public abstract class JavassistInvocation implements Invocation
     {
         this.method = method;
         this.target = target;
-        this.arguments = arguments;
+        this.arguments = ArrayUtils.clone(arguments);
     }
 
 //**********************************************************************************************************************

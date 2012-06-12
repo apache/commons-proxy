@@ -23,6 +23,7 @@ import net.sf.cglib.proxy.Dispatcher;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -195,7 +196,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
-            this.args = args;
+            this.args = ArrayUtils.clone(args);
         }
 
         public Method getMethod()
