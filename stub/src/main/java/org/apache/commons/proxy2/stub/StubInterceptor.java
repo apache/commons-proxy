@@ -185,14 +185,7 @@ abstract class StubInterceptor implements Interceptor {
                 InvocationMatcher invocationMatcher;
                 //TODO use an approach like that of Mockito wrt capturing arg matchers, falling back to force equality like so:
                 final RecordedInvocation recordedInvocation = currentInvocation;
-                invocationMatcher = new InvocationMatcher() {
-
-                    public boolean matches(Invocation invocation) {
-                        return invocation.getMethod().getName().equals(recordedInvocation.getInvokedMethod().getName())
-                            && Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
-                    }
-
-                };
+                invocationMatcher = new RecordedInvocationMatcher(recordedInvocation);
                 //add to beginning, for priority, hence "stack" nomenclature:
                 matchingResultStack.add(0, Pair.of(invocationMatcher, result));
             }
@@ -231,5 +224,20 @@ abstract class StubInterceptor implements Interceptor {
      */
     protected boolean acceptsValue(Method m, Object o) {
         return TypeUtils.isInstance(o, m.getReturnType());
+    }
+
+    private static class RecordedInvocationMatcher implements InvocationMatcher {
+
+        private final RecordedInvocation recordedInvocation;
+
+        private RecordedInvocationMatcher(RecordedInvocation recordedInvocation) {
+            this.recordedInvocation = recordedInvocation;
+        }
+
+        public boolean matches(Invocation invocation) {
+            return invocation.getMethod().getName().equals(recordedInvocation.getInvokedMethod().getName())
+                && Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
+        }
+
     }
 }

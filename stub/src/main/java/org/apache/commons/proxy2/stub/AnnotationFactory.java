@@ -208,54 +208,13 @@ public class AnnotationFactory {
 
     private static final ThreadLocal<Object> CONFIGURER = new ThreadLocal<Object>();
 
-    private final StubConfigurer<Annotation> sharedConfigurer = new StubConfigurer<Annotation>() {
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Class<Annotation> getStubType() {
-            /*
-             * Suppress the warning because we are using this shared object in
-             * a very special, albeit peculiar, way, and effectively
-             * hijacking the only place where the generic type of the
-             * instance matters:  namely, providing the type of
-             * Annotation to be stubbed at any given time.
-             */
-            @SuppressWarnings("unchecked")
-            Class<Annotation> result = (Class<Annotation>) AnnotationFactory.getStubType();
-            return result;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void configure(Annotation stub) {
-            when(stub.annotationType()).thenReturn(getStubType());
-            Object o = CONFIGURER.get();
-            if (o instanceof StubConfigurer<?>) {
-                @SuppressWarnings("unchecked")
-                final StubConfigurer<Annotation> configurer = (StubConfigurer<Annotation>) o;
-                configurer.configure(requireStubInterceptor(), stub);
-            }
-        }
-    };
-
     private ProxyFactory proxyFactory;
 
     /**
      * Create a new AnnotationFactory instance.
      */
     public AnnotationFactory() {
-        this.proxyFactory = new StubProxyFactory(PROXY_FACTORY, sharedConfigurer) {
-            /**
-             * {@inheritDoc}
-             */
-            protected boolean acceptsValue(Method m, Object o) {
-                return !(m.getDeclaringClass().isAnnotation() && o == null);
-            }
-        };
+        this.proxyFactory = new AnnotationStubProxyFactory(AnnotationFactory.PROXY_FACTORY, new SharedConfigurer());
     }
 
     /**
@@ -452,5 +411,53 @@ public class AnnotationFactory {
         @SuppressWarnings("unchecked")
         final StubConfigurer<A> configurer = (StubConfigurer<A>) o;
         return configurer.getStubType();
+    }
+
+    private static class SharedConfigurer extends StubConfigurer<Annotation> {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Class<Annotation> getStubType() {
+            /*
+             * Suppress the warning because we are using this shared object in
+             * a very special, albeit peculiar, way, and effectively
+             * hijacking the only place where the generic type of the
+             * instance matters:  namely, providing the type of
+             * Annotation to be stubbed at any given time.
+             */
+            @SuppressWarnings("unchecked")
+            Class<Annotation> result = (Class<Annotation>) AnnotationFactory.getStubType();
+            return result;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        protected void configure(Annotation stub) {
+            when(stub.annotationType()).thenReturn(getStubType());
+            Object o = CONFIGURER.get();
+            if (o instanceof StubConfigurer<?>) {
+                @SuppressWarnings("unchecked")
+                final StubConfigurer<Annotation> configurer = (StubConfigurer<Annotation>) o;
+                configurer.configure(requireStubInterceptor(), stub);
+            }
+        }
+    }
+
+    private static class AnnotationStubProxyFactory extends StubProxyFactory {
+
+        private AnnotationStubProxyFactory(ProxyFactory proxyFactory, StubConfigurer<Annotation> sharedConfigurer) {
+            super(proxyFactory, sharedConfigurer);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        protected boolean acceptsValue(Method m, Object o) {
+            return !(m.getDeclaringClass().isAnnotation() && o == null);
+        }
     }
 }
