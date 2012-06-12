@@ -48,13 +48,13 @@ public abstract class JavassistInvocation implements Invocation
     private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class<?>>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String,WeakReference<Class<?>>>>();
 
     /** The invoked method */
-    protected final Method method;
+    private final Method method;
 
     /** The target object */
-    protected final Object target;
+    private final Object target;
 
     /** The method arguments */
-    protected final Object[] arguments;
+    private final Object[] arguments;
 
 //**********************************************************************************************************************
 // Static Methods
@@ -106,13 +106,13 @@ public abstract class JavassistInvocation implements Invocation
         }
         proceedBody.append("( (");
         proceedBody.append(ProxyUtils.getJavaClassName(interfaceMethod.getDeclaringClass()));
-        proceedBody.append(" )target ).");
+        proceedBody.append(" )getTarget() ).");
         proceedBody.append(interfaceMethod.getName());
         proceedBody.append("(");
         for( int i = 0; i < argumentTypes.length; ++i )
         {
             final Class<?> argumentType = argumentTypes[i];
-            proceedBody.append(createCastExpression(argumentType, "arguments[" + i + "]"));
+            proceedBody.append(createCastExpression(argumentType, "getArguments()[" + i + "]"));
             if( i != argumentTypes.length - 1 )
             {
                 proceedBody.append(", ");
@@ -211,6 +211,10 @@ public abstract class JavassistInvocation implements Invocation
 //**********************************************************************************************************************
 // Invocation Implementation
 //**********************************************************************************************************************
+    protected final Object getTarget()
+    {
+        return target;
+    }
 
     public Object[] getArguments()
     {
