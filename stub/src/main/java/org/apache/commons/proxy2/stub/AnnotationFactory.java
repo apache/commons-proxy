@@ -152,7 +152,7 @@ public class AnnotationFactory {
     }
 
     private static class MapBasedAnnotationConfigurer<A extends Annotation> extends StubConfigurer<A> {
-        final Map<String, Object> attributes;
+        private final Map<String, Object> attributes;
 
         /**
          * Create a new {@link MapBasedAnnotationConfigurer} instance.
