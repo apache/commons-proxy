@@ -211,4 +211,8 @@ public class ProxyUtils
     public static ProxyFactory proxyFactory() {
         return DefaultProxyFactory.INSTANCE;
     }
+
+    private ProxyUtils() {
+        // Hiding constructor in utility class!
+    }
 }

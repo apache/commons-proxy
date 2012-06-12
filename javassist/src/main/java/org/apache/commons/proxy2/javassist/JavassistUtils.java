@@ -151,4 +151,8 @@ class JavassistUtils
         }
         return ctClasses;
     }
+
+    private JavassistUtils() {
+        // Hiding constructor in utility class!
+    }
 }
