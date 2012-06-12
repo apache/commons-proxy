@@ -447,7 +447,7 @@ public class AnnotationFactory {
         }
     }
 
-    private static class AnnotationStubProxyFactory extends StubProxyFactory {
+    private static final class AnnotationStubProxyFactory extends StubProxyFactory {
 
         private AnnotationStubProxyFactory(ProxyFactory proxyFactory, StubConfigurer<Annotation> sharedConfigurer) {
             super(proxyFactory, sharedConfigurer);

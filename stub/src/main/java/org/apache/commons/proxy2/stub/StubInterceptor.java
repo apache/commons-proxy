@@ -226,7 +226,7 @@ abstract class StubInterceptor implements Interceptor {
         return TypeUtils.isInstance(o, m.getReturnType());
     }
 
-    private static class RecordedInvocationMatcher implements InvocationMatcher {
+    private static final class RecordedInvocationMatcher implements InvocationMatcher {
 
         private final RecordedInvocation recordedInvocation;
 
