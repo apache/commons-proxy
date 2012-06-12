@@ -60,7 +60,7 @@ public class RmiProvider<T> implements ObjectProvider<T>
      */
     public RmiProvider( String name )
     {
-        setName(name);
+        this.name = name;
     }
 
     /**
@@ -70,8 +70,8 @@ public class RmiProvider<T> implements ObjectProvider<T>
      */
     public RmiProvider( String host, String name )
     {
-        setHost(host);
-        setName(name);
+        this.host = host;
+        this.name = name;
     }
 
     /**
@@ -82,9 +82,9 @@ public class RmiProvider<T> implements ObjectProvider<T>
      */
     public RmiProvider( String host, int port, String name )
     {
-        setHost(host);
-        setName(name);
-        setPort(port);
+        this.host = host;
+        this.name = name;
+        this.port = port;
     }
 
     /**
@@ -96,10 +96,10 @@ public class RmiProvider<T> implements ObjectProvider<T>
      */
     public RmiProvider( String host, int port, RMIClientSocketFactory clientSocketFactory, String name )
     {
-        setHost(host);
-        setPort(port);
-        setClientSocketFactory(clientSocketFactory);
-        setName(name);
+        this.host = host;
+        this.port = port;
+        this.clientSocketFactory = clientSocketFactory;
+        this.name = name;
     }
 
   //**********************************************************************************************************************
