@@ -47,9 +47,9 @@ public interface Invocation
     public Method getMethod();
 
     /**
-     * Returns the proxy2 object on which this invocation was invoked.
+     * Returns the proxy object on which this invocation was invoked.
      *
-     * @return the proxy2 object on which this invocation was invoked
+     * @return the proxy object on which this invocation was invoked
      */
     public Object getProxy();
 
