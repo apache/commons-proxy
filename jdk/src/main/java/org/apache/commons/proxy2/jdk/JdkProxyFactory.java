@@ -159,7 +159,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
         public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
         {
-            final ReflectionInvocation invocation = new ReflectionInvocation(target, method, args);
+            final ReflectionInvocation invocation = new ReflectionInvocation(proxy, target, method, args);
             return methodInterceptor.intercept(invocation);
         }
     }
@@ -187,15 +187,17 @@ public class JdkProxyFactory extends AbstractProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
+        private final Object proxy;
+        private final Object target;
         private final Method method;
         private final Object[] arguments;
-        private final Object target;
 
-        public ReflectionInvocation( Object target, Method method, Object[] arguments )
+        public ReflectionInvocation( Object proxy, Object target, Method method, Object[] arguments )
         {
+            this.proxy = proxy;
+            this.target = target;
             this.method = method;
             this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
-            this.target = target;
         }
 
         public Object[] getArguments()
@@ -210,7 +212,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
         public Object getProxy()
         {
-            return target;
+            return proxy;
         }
 
         public Object proceed() throws Throwable

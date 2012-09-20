@@ -47,11 +47,14 @@ public abstract class JavassistInvocation implements Invocation
 
     private static WeakHashMap<ClassLoader, Map<String, WeakReference<Class<?>>>> loaderToClassCache = new WeakHashMap<ClassLoader, Map<String,WeakReference<Class<?>>>>();
 
-    /** The invoked method */
-    private final Method method;
+    /** The proxy object */
+    private final Object proxy;
 
     /** The target object */
     private final Object target;
+
+    /** The invoked method */
+    private final Method method;
 
     /** The method arguments */
     private final Object[] arguments;
@@ -82,14 +85,14 @@ public abstract class JavassistInvocation implements Invocation
                         "_invocation",
                 JavassistInvocation.class);
         final CtConstructor constructor = new CtConstructor(
-                JavassistUtils.resolve(new Class[] {Method.class, Object.class, Object[].class}),
+                JavassistUtils.resolve(new Class[] { Object.class, Object.class, Method.class, Object[].class }),
                 ctClass);
         constructor.setBody("{\n\tsuper($$);\n}");
         ctClass.addConstructor(constructor);
         final CtMethod proceedMethod = new CtMethod(JavassistUtils.resolve(Object.class), "proceed",
                 JavassistUtils.resolve(new Class[0]), ctClass);
         final Class<?>[] argumentTypes = interfaceMethod.getParameterTypes();
-        final StringBuffer proceedBody = new StringBuffer("{\n");
+        final StringBuilder proceedBody = new StringBuilder("{\n");
         if( !Void.TYPE.equals(interfaceMethod.getReturnType()) )
         {
             proceedBody.append("\treturn ");
@@ -201,10 +204,11 @@ public abstract class JavassistInvocation implements Invocation
 // Constructors
 //**********************************************************************************************************************
 
-    public JavassistInvocation( Method method, Object target, Object[] arguments )
+    public JavassistInvocation( Object proxy, Object target, Method method, Object[] arguments )
     {
-        this.method = method;
+        this.proxy = proxy;
         this.target = target;
+        this.method = method;
         this.arguments = ArrayUtils.clone(arguments);
     }
 
@@ -228,6 +232,6 @@ public abstract class JavassistInvocation implements Invocation
 
     public Object getProxy()
     {
-        return target;
+        return proxy;
     }
 }

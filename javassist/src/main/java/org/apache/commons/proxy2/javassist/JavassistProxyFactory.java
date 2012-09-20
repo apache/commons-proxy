@@ -202,8 +202,8 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
                                 .getMethodInvocationClass(classLoader, methods[i]);
 
                         final String body = "{\n\t return ( $r ) interceptor.intercept( new " + invocationClass.getName() +
-                                "( " + GET_METHOD_METHOD_NAME + "(\"" + methods[i].getDeclaringClass().getName() +
-                                "\", \"" + methods[i].getName() + "\", $sig), target, $args ) );\n }";
+                                "( this, target, " + GET_METHOD_METHOD_NAME + "(\"" + methods[i].getDeclaringClass().getName() +
+                                "\", \"" + methods[i].getName() + "\", $sig), $args ) );\n }";
                         method.setBody(body);
                         proxyClass.addMethod(method);
                     }

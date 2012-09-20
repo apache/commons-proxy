@@ -148,8 +148,8 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
-        private final Interceptor inner;
         private final Object target;
+        private final Interceptor inner;
 
         public InterceptorBridge(Object target, Interceptor inner)
         {
@@ -159,7 +159,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
         public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable
         {
-            return inner.intercept(new MethodProxyInvocation(target, method, args, methodProxy));
+            return inner.intercept(new MethodProxyInvocation(object, target, method, args, methodProxy));
         }
     }
 
@@ -186,13 +186,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
-        private final MethodProxy methodProxy;
+        private final Object proxy;
+        private final Object target;
         private final Method method;
         private final Object[] args;
-        private final Object target;
+        private final MethodProxy methodProxy;
 
-        public MethodProxyInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy)
+        public MethodProxyInvocation(Object proxy, Object target, Method method, Object[] args, MethodProxy methodProxy)
         {
+            this.proxy = proxy;
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
@@ -216,7 +218,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
         public Object getProxy()
         {
-            return target;
+            return proxy;
         }
     }
 

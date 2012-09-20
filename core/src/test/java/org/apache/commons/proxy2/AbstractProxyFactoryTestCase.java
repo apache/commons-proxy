@@ -294,7 +294,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertNotNull(tester.arguments);
         assertEquals(0, tester.arguments.length);
         assertEquals(Echo.class.getMethod("echo"), tester.method);
-        assertEquals(target, tester.proxy);
+        assertSame(proxy, tester.proxy);
         proxy.echoBack("Hello");
         assertNotNull(tester.arguments);
         assertEquals(1, tester.arguments.length);
