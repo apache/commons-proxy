@@ -141,7 +141,7 @@
                 <dependencies>
                     <dependency>
                         <groupId>${project.groupId}</groupId>
-                        <artifactId>commons-proxy-build-tools</artifactId>
+                        <artifactId>commons-proxy2-build-tools</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
