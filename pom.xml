@@ -29,7 +29,7 @@
     <version>1.1-SNAPSHOT</version>
     <name>Commons Proxy</name>
     <description>Java library for dynamic proxying</description>
-    <url>http://commons.apache.org/proxy/</url>
+    <url>http://commons.apache.org/proper/commons-proxy/</url>
     <inceptionYear>2005</inceptionYear>
 
     <issueManagement>
