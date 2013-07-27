@@ -99,7 +99,7 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
             catch( NoSuchMethodException e )
             {
                 throw new ObjectProviderException(
-                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method.");
+                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e);
             }
         }
         return cloneMethod;
