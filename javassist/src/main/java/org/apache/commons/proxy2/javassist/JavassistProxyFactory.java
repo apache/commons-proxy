@@ -40,11 +40,11 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static final String GET_METHOD_METHOD_NAME = "_javassistGetMethod";
 
-    private static final ProxyClassCache delegatingProxyClassCache = new ProxyClassCache(
+    private static final ProxyClassCache DELEGATING_PROXY_CACHE = new ProxyClassCache(
             new DelegatingProxyClassGenerator());
-    private static final ProxyClassCache interceptorProxyClassCache = new ProxyClassCache(
+    private static final ProxyClassCache INTERCEPTOR_PROXY_CACHE = new ProxyClassCache(
             new InterceptorProxyClassGenerator());
-    private static final ProxyClassCache invocationHandlerProxyClassCache = new ProxyClassCache(
+    private static final ProxyClassCache INVOKER_PROXY_CACHE = new ProxyClassCache(
             new InvokerProxyClassGenerator());
 
 //**********************************************************************************************************************
@@ -74,7 +74,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     {
         try
         {
-            final Class<? extends T> clazz = (Class<? extends T>) delegatingProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) DELEGATING_PROXY_CACHE.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(ObjectProvider.class)
                     .newInstance(targetProvider);
         }
@@ -93,7 +93,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     {
         try
         {
-            final Class<? extends T> clazz = (Class<? extends T>) interceptorProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) INTERCEPTOR_PROXY_CACHE.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(Object.class, Interceptor.class)
                     .newInstance(target, interceptor);
         }
@@ -112,7 +112,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     {
         try
         {
-            final Class<? extends T> clazz = (Class<? extends T>) invocationHandlerProxyClassCache.getProxyClass(classLoader, proxyClasses);
+            final Class<? extends T> clazz = (Class<? extends T>) INVOKER_PROXY_CACHE.getProxyClass(classLoader, proxyClasses);
             return clazz.getConstructor(Invoker.class)
                     .newInstance(invoker);
         }
