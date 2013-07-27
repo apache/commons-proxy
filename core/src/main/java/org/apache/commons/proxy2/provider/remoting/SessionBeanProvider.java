@@ -45,9 +45,9 @@ public class SessionBeanProvider<T> implements ObjectProvider<T>
     private final Class<?> homeInterface;
     private final Properties properties;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+//**********************************************************************************************************************
+// Constructors
+//**********************************************************************************************************************
 
     /**
      * Create a new SessionBeanProvider instance.
@@ -74,9 +74,9 @@ public class SessionBeanProvider<T> implements ObjectProvider<T>
         this.properties = properties;
     }
 
-  //**********************************************************************************************************************
- // ObjectProvider Implementation
- //**********************************************************************************************************************
+//**********************************************************************************************************************
+// ObjectProvider Implementation
+//**********************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -101,7 +101,7 @@ public class SessionBeanProvider<T> implements ObjectProvider<T>
         {
             throw new ObjectProviderException(
                     "No-arg create() method on home interface " + homeInterface.getName() + " is not accessible.",
-                    e); // Should never happen!
+                    e);
         }
         catch( NamingException e )
         {
