@@ -37,21 +37,21 @@ public interface Invocation
      *
      * @return the arguments being passed to this method invocation
      */
-    public Object[] getArguments();
+    Object[] getArguments();
 
     /**
      * Returns the method being called.
      *
      * @return the method being called
      */
-    public Method getMethod();
+    Method getMethod();
 
     /**
      * Returns the proxy object on which this invocation was invoked.
      *
      * @return the proxy object on which this invocation was invoked
      */
-    public Object getProxy();
+    Object getProxy();
 
     /**
      * Called in order to let the invocation proceed.
@@ -59,5 +59,5 @@ public interface Invocation
      * @return the return value of the invocation
      * @throws Throwable any exception or error that was thrown as a result of this invocation
      */
-    public Object proceed() throws Throwable;
+    Object proceed() throws Throwable;
 }

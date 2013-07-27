@@ -42,5 +42,5 @@ public interface Invoker extends Serializable
      * @return the return value
      * @throws Throwable thrown by the implementation
      */
-    public Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable;
+    Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable;
 }

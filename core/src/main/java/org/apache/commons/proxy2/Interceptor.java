@@ -37,5 +37,5 @@ public interface Interceptor extends Serializable
      * @return return value of the method
      * @throws Throwable
      */
-    public Object intercept( Invocation invocation ) throws Throwable;
+    Object intercept( Invocation invocation ) throws Throwable;
 }

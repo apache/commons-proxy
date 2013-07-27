@@ -36,5 +36,5 @@ public interface ObjectProvider<T>
      *
      * @return the object on which the method should be called
      */
-    public T getObject();
+    T getObject();
 }

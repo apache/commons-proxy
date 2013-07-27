@@ -33,7 +33,7 @@ public interface ProxyFactory
      * @param proxyClasses the proxy2 classes
      * @return boolean
      */
-    public boolean canProxy( Class<?>... proxyClasses );
+    boolean canProxy( Class<?>... proxyClasses );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
@@ -43,7 +43,7 @@ public interface ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses );
+    <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses );
 
     /**
      * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.
@@ -53,7 +53,7 @@ public interface ProxyFactory
      * @param proxyClasses     the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target <code>delegateProvider>
      */
-    public <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<?> delegateProvider,
+    <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<?> delegateProvider,
                                         Class<?>... proxyClasses );
 
     /**
@@ -66,7 +66,7 @@ public interface ProxyFactory
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
+    <T> T createInterceptorProxy( Object target, Interceptor interceptor,
                                           Class<?>... proxyClasses );
 
     /**
@@ -80,7 +80,7 @@ public interface ProxyFactory
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public <T> T createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
+    <T> T createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
                                           Class<?>... proxyClasses );
 
     /**
@@ -91,7 +91,7 @@ public interface ProxyFactory
      * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses );
+    <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses );
 
     /**
      * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.
@@ -101,6 +101,6 @@ public interface ProxyFactory
      * @param proxyClasses the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
+    <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
                                       Class<?>... proxyClasses );
 }
