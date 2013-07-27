@@ -194,10 +194,8 @@ public class AnnotationFactory {
 
         public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
             Object result = method.getDefaultValue();
-            if (result == null) {
-                if (method.getReturnType().isPrimitive()) {
-                    return ProxyUtils.nullValue(method.getReturnType());
-                }
+            if (result == null && method.getReturnType().isPrimitive()) {
+                return ProxyUtils.nullValue(method.getReturnType());
             }
             return result;
         }
