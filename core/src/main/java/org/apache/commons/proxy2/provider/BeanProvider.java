@@ -17,7 +17,6 @@
 
 package org.apache.commons.proxy2.provider;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
