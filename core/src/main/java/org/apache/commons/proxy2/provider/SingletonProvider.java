@@ -64,7 +64,7 @@ public class SingletonProvider<T> extends ProviderDecorator<T>
                 // Garbage collection
                 inner = null;
             }
+            return instance;
         }
-        return instance;
     }
 }
