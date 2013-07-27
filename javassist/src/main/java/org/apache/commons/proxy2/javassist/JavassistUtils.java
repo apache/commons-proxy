@@ -23,6 +23,7 @@ import org.apache.commons.proxy2.exception.ObjectProviderException;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Some utility methods for dealing with Javassist.  This class is not part of the public API!
@@ -37,10 +38,9 @@ final class JavassistUtils
 //**********************************************************************************************************************
 
     public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
-    private static int classNumber = 0;
-    private static final ClassPool classPool = new ClassPool();
-
-    private static final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+    private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
+    private static final ClassPool CLASS_POOL = new ClassPool();
+    private static final Set<ClassLoader> CLASS_LOADERS = new HashSet<ClassLoader>();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -48,7 +48,7 @@ final class JavassistUtils
 
     static
     {
-        classPool.appendClassPath(new LoaderClassPath(ClassLoader.getSystemClassLoader()));
+        CLASS_POOL.appendClassPath(new LoaderClassPath(ClassLoader.getSystemClassLoader()));
     }
 
     /**
@@ -100,7 +100,7 @@ final class JavassistUtils
      */
     public synchronized static CtClass createClass( String baseName, Class<?> superclass )
     {
-        return classPool.makeClass(baseName + "_" + classNumber++, resolve(superclass));
+        return CLASS_POOL.makeClass(baseName + "_" + CLASS_NUMBER.incrementAndGet(), resolve(superclass));
     }
 
     /**
@@ -111,17 +111,17 @@ final class JavassistUtils
      */
     public static CtClass resolve( Class<?> clazz )
     {
-        synchronized( classLoaders )
+        synchronized(CLASS_LOADERS)
         {
             try
             {
                 final ClassLoader loader = clazz.getClassLoader();
-                if( loader != null && !classLoaders.contains(loader) )
+                if( loader != null && !CLASS_LOADERS.contains(loader) )
                 {
-                    classLoaders.add(loader);
-                    classPool.appendClassPath(new LoaderClassPath(loader));
+                    CLASS_LOADERS.add(loader);
+                    CLASS_POOL.appendClassPath(new LoaderClassPath(loader));
                 }
-                return classPool.get(ProxyUtils.getJavaClassName(clazz));
+                return CLASS_POOL.get(ProxyUtils.getJavaClassName(clazz));
             }
             catch( NotFoundException e )
             {
