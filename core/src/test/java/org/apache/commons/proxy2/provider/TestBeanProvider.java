@@ -30,8 +30,7 @@ public class TestBeanProvider extends AbstractTestCase
     {
         try
         {
-            final BeanProvider<Number> p = new BeanProvider<Number>();
-            p.setBeanClass(Number.class);
+            final BeanProvider<Number> p = new BeanProvider<Number>(Number.class);
             p.getObject();
             fail();
         }
@@ -61,11 +60,11 @@ public class TestBeanProvider extends AbstractTestCase
     {
         try
         {
-            final BeanProvider<Object> p = new BeanProvider<Object>();
+            final BeanProvider<Object> p = new BeanProvider<Object>(null);
             p.getObject();
-            fail();
+            fail("Should throw NullPointerException.");
         }
-        catch( ObjectProviderException e )
+        catch( NullPointerException e )
         {
         }
     }
