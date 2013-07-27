@@ -116,15 +116,16 @@ public final class ProxyUtils
         return interfaces == null ? null : (Class[]) interfaces.toArray(new Class[interfaces.size()]);
     }
 
-    private static List<Class<?>> getAllInterfacesImpl(Class<?> cls, List<Class<?>> list)
+    private static List<Class<?>> getAllInterfacesImpl(final Class<?> cls, List<Class<?>> list)
     {
         if (cls == null)
         {
             return null;
         }
-        while (cls != null)
+        Class<?> currentClass = cls;
+        while (currentClass != null)
         {
-            Class<?>[] interfaces = cls.getInterfaces();
+            Class<?>[] interfaces = currentClass.getInterfaces();
             for (int i = 0; i < interfaces.length; i++)
             {
                 if (!list.contains(interfaces[i]))
@@ -133,7 +134,7 @@ public final class ProxyUtils
                 }
                 getAllInterfacesImpl(interfaces[i], list);
             }
-            cls = cls.getSuperclass();
+            currentClass = currentClass.getSuperclass();
         }
         return list;
     }
