@@ -98,7 +98,7 @@ final class JavassistUtils
      * @param superclass the superclass
      * @return the new derived {@link CtClass}
      */
-    public synchronized static CtClass createClass( String baseName, Class<?> superclass )
+    public static synchronized CtClass createClass( String baseName, Class<?> superclass )
     {
         return CLASS_POOL.makeClass(baseName + "_" + CLASS_NUMBER.incrementAndGet(), resolve(superclass));
     }
