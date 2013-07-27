@@ -17,8 +17,6 @@
 
 package org.apache.commons.proxy2;
 
-import org.apache.commons.proxy2.invoker.NullInvoker;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -68,31 +66,6 @@ public final class ProxyUtils
         NULL_VALUE_MAP.put(Double.TYPE, 0.0);
         NULL_VALUE_MAP.put(Character.TYPE, (char) 0);
         NULL_VALUE_MAP.put(Boolean.TYPE, Boolean.FALSE);
-    }
-
-    /**
-     * Creates a "null object" which implements the <code>proxyClasses</code>.
-     *
-     * @param proxyFactory the proxy factory to be used to create the proxy object
-     * @param proxyClasses the proxy interfaces
-     * @return a "null object" which implements the <code>proxyClasses</code>.
-     */
-    public static Object createNullObject(ProxyFactory proxyFactory, Class<?>[] proxyClasses)
-    {
-        return proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, proxyClasses);
-    }
-
-    /**
-     * Creates a "null object" which implements the <code>proxyClasses</code>.
-     *
-     * @param proxyFactory the proxy factory to be used to create the proxy object
-     * @param classLoader  the class loader to be used by the proxy factory to create the proxy object
-     * @param proxyClasses the proxy interfaces
-     * @return a "null object" which implements the <code>proxyClasses</code>.
-     */
-    public static Object createNullObject(ProxyFactory proxyFactory, ClassLoader classLoader, Class<?>[] proxyClasses)
-    {
-        return proxyFactory.createInvokerProxy(classLoader, NullInvoker.INSTANCE, proxyClasses);
     }
 
     /**
