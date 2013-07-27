@@ -17,7 +17,6 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.annotation.Annotation;
 
@@ -72,7 +71,7 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
 
     /**
      * Get the registered {@link AnnotationFactory}/{@link ClassLoader}.
-     * @return a {@link Pair}
+     * @return a {@link org.apache.commons.lang3.tuple.Pair}
      * @throws IllegalStateException if no ongoing annotation stubbing could be detected
      */
     synchronized ImmutablePair<AnnotationFactory, ClassLoader> requireContext() {
