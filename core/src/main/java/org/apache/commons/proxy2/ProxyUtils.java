@@ -39,8 +39,8 @@ public final class ProxyUtils
 
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class<?>[] EMPTY_ARGUMENT_TYPES = new Class[0];
-    private static final Map<Class<?>, Class<?>> wrapperClassMap = new HashMap<Class<?>, Class<?>>();
-    private static Map<Class<?>, Object> nullValueMap = new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Class<?>> WRAPPER_CLASS_MAP = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Object> NULL_VALUE_MAP = new HashMap<Class<?>, Object>();
 
 //**********************************************************************************************************************
 // Static Methods
@@ -48,26 +48,26 @@ public final class ProxyUtils
 
     static
     {
-        wrapperClassMap.put(Integer.TYPE, Integer.class);
-        wrapperClassMap.put(Character.TYPE, Character.class);
-        wrapperClassMap.put(Boolean.TYPE, Boolean.class);
-        wrapperClassMap.put(Short.TYPE, Short.class);
-        wrapperClassMap.put(Long.TYPE, Long.class);
-        wrapperClassMap.put(Float.TYPE, Float.class);
-        wrapperClassMap.put(Double.TYPE, Double.class);
-        wrapperClassMap.put(Byte.TYPE, Byte.class);
+        WRAPPER_CLASS_MAP.put(Integer.TYPE, Integer.class);
+        WRAPPER_CLASS_MAP.put(Character.TYPE, Character.class);
+        WRAPPER_CLASS_MAP.put(Boolean.TYPE, Boolean.class);
+        WRAPPER_CLASS_MAP.put(Short.TYPE, Short.class);
+        WRAPPER_CLASS_MAP.put(Long.TYPE, Long.class);
+        WRAPPER_CLASS_MAP.put(Float.TYPE, Float.class);
+        WRAPPER_CLASS_MAP.put(Double.TYPE, Double.class);
+        WRAPPER_CLASS_MAP.put(Byte.TYPE, Byte.class);
     }
 
     static
     {
-        nullValueMap.put(Integer.TYPE, 0);
-        nullValueMap.put(Long.TYPE, (long) 0);
-        nullValueMap.put(Short.TYPE, (short) 0);
-        nullValueMap.put(Byte.TYPE, (byte) 0);
-        nullValueMap.put(Float.TYPE, 0.0f);
-        nullValueMap.put(Double.TYPE, 0.0);
-        nullValueMap.put(Character.TYPE, (char) 0);
-        nullValueMap.put(Boolean.TYPE, Boolean.FALSE);
+        NULL_VALUE_MAP.put(Integer.TYPE, 0);
+        NULL_VALUE_MAP.put(Long.TYPE, (long) 0);
+        NULL_VALUE_MAP.put(Short.TYPE, (short) 0);
+        NULL_VALUE_MAP.put(Byte.TYPE, (byte) 0);
+        NULL_VALUE_MAP.put(Float.TYPE, 0.0f);
+        NULL_VALUE_MAP.put(Double.TYPE, 0.0);
+        NULL_VALUE_MAP.put(Character.TYPE, (char) 0);
+        NULL_VALUE_MAP.put(Boolean.TYPE, Boolean.FALSE);
     }
 
     /**
@@ -164,7 +164,7 @@ public final class ProxyUtils
      */
     public static Class<?> getWrapperClass(Class<?> primitiveType)
     {
-        return wrapperClassMap.get(primitiveType);
+        return WRAPPER_CLASS_MAP.get(primitiveType);
     }
 
     /**
@@ -176,7 +176,7 @@ public final class ProxyUtils
     @SuppressWarnings("unchecked")
     public static <T> T nullValue(Class<T> type)
     {
-        return (T) nullValueMap.get(type);
+        return (T) NULL_VALUE_MAP.get(type);
     }
 
     /**
