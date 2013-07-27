@@ -160,7 +160,7 @@ public abstract class JavassistInvocation implements Invocation
      * @return a method invocation class specifically coded to invoke the supplied interface method
      * @throws CannotCompileException if a compilation error occurs
      */
-    synchronized static Class<?> getMethodInvocationClass( ClassLoader classLoader,
+    static synchronized Class<?> getMethodInvocationClass( ClassLoader classLoader,
                                                         Method interfaceMethod )
             throws CannotCompileException
     {
