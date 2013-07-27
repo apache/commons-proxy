@@ -17,15 +17,14 @@
 
 package org.apache.commons.proxy2;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Proxy;
-
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.reflect.Proxy;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test the default ProxyFactory provided by {@link ProxyUtils}.

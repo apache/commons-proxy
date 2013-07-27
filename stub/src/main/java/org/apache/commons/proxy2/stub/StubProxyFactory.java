@@ -17,14 +17,9 @@
 
 package org.apache.commons.proxy2.stub;
 
-import java.lang.reflect.Method;
+import org.apache.commons.proxy2.*;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.Invoker;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.ProxyUtils;
+import java.lang.reflect.Method;
 
 /**
  * {@link ProxyFactory} that stubs proxies' behavior using {@link StubConfigurer}s.

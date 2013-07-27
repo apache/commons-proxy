@@ -20,23 +20,12 @@ package org.apache.commons.proxy2;
 import org.apache.commons.proxy2.provider.BeanProvider;
 import org.apache.commons.proxy2.provider.ConstantProvider;
 import org.apache.commons.proxy2.provider.SingletonProvider;
-import org.apache.commons.proxy2.util.AbstractTestCase;
-import org.apache.commons.proxy2.util.DuplicateEcho;
-import org.apache.commons.proxy2.util.Echo;
-import org.apache.commons.proxy2.util.EchoImpl;
-import org.apache.commons.proxy2.util.SuffixInterceptor;
+import org.apache.commons.proxy2.util.*;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author James Carman

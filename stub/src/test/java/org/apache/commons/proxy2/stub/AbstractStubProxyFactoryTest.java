@@ -17,25 +17,19 @@
 
 package org.apache.commons.proxy2.stub;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
+import org.apache.commons.proxy2.*;
+import org.apache.commons.proxy2.invoker.NullInvoker;
+import org.apache.commons.proxy2.provider.BeanProvider;
+import org.apache.commons.proxy2.provider.ConstantProvider;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.Invoker;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.invoker.NullInvoker;
-import org.apache.commons.proxy2.provider.BeanProvider;
-import org.apache.commons.proxy2.provider.ConstantProvider;
-import org.apache.commons.proxy2.stub.StubConfigurer;
-import org.apache.commons.proxy2.stub.StubProxyFactory;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * Test {@link StubProxyFactory}.

@@ -17,6 +17,13 @@
 
 package org.apache.commons.proxy2.stub;
 
+import org.apache.commons.lang3.AnnotationUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.proxy2.*;
+import org.apache.commons.proxy2.impl.AbstractProxyFactory;
+import org.apache.commons.proxy2.provider.ConstantProvider;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -24,18 +31,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
-
-import org.apache.commons.lang3.AnnotationUtils;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.Invoker;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.ProxyUtils;
-import org.apache.commons.proxy2.impl.AbstractProxyFactory;
-import org.apache.commons.proxy2.provider.ConstantProvider;
 
 /**
  * {@link AnnotationFactory} provides a simplified API over {@link StubProxyFactory}

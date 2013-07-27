@@ -17,9 +17,9 @@
 
 package org.apache.commons.proxy2.stub;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -28,9 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Test {@link AnnotationFactory}.

@@ -17,12 +17,7 @@
 
 package org.apache.commons.proxy2.jdk;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.Invoker;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.ProxyUtils;
+import org.apache.commons.proxy2.*;
 import org.apache.commons.proxy2.impl.AbstractProxyFactory;
 
 import java.io.Serializable;

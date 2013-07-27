@@ -1,10 +1,9 @@
 package org.apache.commons.proxy2.util;
 
 import junit.framework.TestCase;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
-
-import org.apache.commons.lang3.SerializationUtils;
 
 /**
  * @author James Carman

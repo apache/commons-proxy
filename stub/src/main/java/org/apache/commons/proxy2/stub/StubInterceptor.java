@@ -17,14 +17,6 @@
 
 package org.apache.commons.proxy2.stub;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.proxy2.Interceptor;
@@ -32,6 +24,9 @@ import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * StubInterceptor collects, then replays on demand, the stubbing information.

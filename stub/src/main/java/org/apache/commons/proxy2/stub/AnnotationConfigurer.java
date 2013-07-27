@@ -16,10 +16,10 @@
  */
 package org.apache.commons.proxy2.stub;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Special {@link StubConfigurer} subclass that makes creating nested annotations (somewhat more) convenient.

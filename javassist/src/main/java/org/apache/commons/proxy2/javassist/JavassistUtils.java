@@ -17,12 +17,7 @@
 
 package org.apache.commons.proxy2.javassist;
 
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
-import javassist.LoaderClassPath;
-import javassist.NotFoundException;
+import javassist.*;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 

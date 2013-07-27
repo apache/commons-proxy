@@ -17,10 +17,9 @@
 
 package org.apache.commons.proxy2.stub;
 
-import static org.junit.Assert.assertEquals;
-
-import org.apache.commons.proxy2.stub.StubConfigurer;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test StubConfigurer stubType calculation.

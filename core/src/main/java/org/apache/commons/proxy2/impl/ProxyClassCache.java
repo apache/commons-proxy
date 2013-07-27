@@ -19,12 +19,7 @@ package org.apache.commons.proxy2.impl;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * A cache for storing implementation classes for proxies based on a specific type of {@link ProxyClassGenerator}.  A

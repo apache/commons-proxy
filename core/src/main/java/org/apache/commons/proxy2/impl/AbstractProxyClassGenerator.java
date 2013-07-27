@@ -19,11 +19,7 @@ package org.apache.commons.proxy2.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A useful superclass for {@link ProxyClassGenerator} implementations.
