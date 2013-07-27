@@ -75,7 +75,7 @@ public abstract class AnnotationConfigurer<A extends Annotation> extends StubCon
      * @return a {@link Pair}
      * @throws IllegalStateException if no ongoing annotation stubbing could be detected
      */
-    synchronized ImmutablePair<AnnotationFactory, ClassLoader> requireContext() throws IllegalStateException {
+    synchronized ImmutablePair<AnnotationFactory, ClassLoader> requireContext() {
         ImmutablePair<AnnotationFactory, ClassLoader> result = AnnotationFactory.CONTEXT.get();
         if (result == null) {
             throw new IllegalStateException("Could not detect ongoing annotation stubbing");
