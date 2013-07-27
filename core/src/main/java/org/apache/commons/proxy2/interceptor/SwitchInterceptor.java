@@ -82,7 +82,7 @@ public class SwitchInterceptor implements Interceptor, Serializable
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class Case implements Serializable
+    private static final class Case implements Serializable
     {
         private InvocationMatcher matcher;
         private Interceptor interceptor;
