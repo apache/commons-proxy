@@ -49,15 +49,15 @@ public interface StubConfiguration {
     /**
      * Intermediate result of a generic when(...) call
      *
-     * @param <RT>
+     * @param <R>
      */
-    interface When<RT> extends MayThrow {
+    interface When<R> extends MayThrow {
         /**
          * Declare return value.
          * @param result
          * @return the original {@link StubConfiguration} for chaining
          */
-        StubConfiguration thenReturn(RT result);
+        StubConfiguration thenReturn(R result);
 
         /**
          * Defer return value.
@@ -65,7 +65,7 @@ public interface StubConfiguration {
          * @return the original {@link StubConfiguration} for chaining
          */
         StubConfiguration thenAnswer(
-                ObjectProvider<? extends RT> objectProvider);
+                ObjectProvider<? extends R> objectProvider);
 
     }
 

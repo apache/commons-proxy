@@ -86,17 +86,17 @@ public abstract class StubConfigurer<T> implements StubConfiguration {
     /**
      * {@inheritDoc}
      */
-    public <RT> org.apache.commons.proxy2.stub.StubConfiguration.When<RT> when(
-            RT call) {
-        return new When<RT>() {
+    public <R> org.apache.commons.proxy2.stub.StubConfiguration.When<R> when(
+            R call) {
+        return new When<R>() {
 
-            public StubConfiguration thenReturn(RT result) {
+            public StubConfiguration thenReturn(R result) {
                 requireStubInterceptor().addAnswer(result);
                 return StubConfigurer.this;
             }
 
             public StubConfiguration thenAnswer(
-                    ObjectProvider<? extends RT> objectProvider) {
+                    ObjectProvider<? extends R> objectProvider) {
                 requireStubInterceptor().addAnswer(objectProvider);
                 return StubConfigurer.this;
             }
