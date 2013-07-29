@@ -34,8 +34,8 @@ public class TestSwitchInterceptor extends AbstractTestCase
     public void testWithMultipleAdvices() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor();
-        interceptor.onCase(new MethodNameMatcher("echo"), new ConstantInterceptor("bar"));
-        interceptor.onCase(new MethodNameMatcher("echoBack"), new ConstantInterceptor("baz"));
+        interceptor.when(new MethodNameMatcher("echo")).then(new ConstantInterceptor("bar"));
+        interceptor.when(new MethodNameMatcher("echoBack")).then(new ConstantInterceptor("baz"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("baz", interceptor.intercept(invocation));
@@ -51,7 +51,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
 
     public void testWithSingleAdviceWhichDoesNotMatch() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor(new MethodNameMatcher("echoBackZZZZ"), new ConstantInterceptor("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(new ConstantInterceptor("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("foo", interceptor.intercept(invocation));
@@ -59,7 +59,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
 
     public void testWithSingleAdviceWhichMatches() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor(new MethodNameMatcher("echoBack"), new ConstantInterceptor("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(new ConstantInterceptor("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("bar", interceptor.intercept(invocation));

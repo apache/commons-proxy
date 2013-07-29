@@ -17,6 +17,8 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 
@@ -36,7 +38,7 @@ public class SwitchInterceptor implements Interceptor, Serializable
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final List<Case> cases = new CopyOnWriteArrayList<Case>();
+    private final List<Pair<InvocationMatcher, Interceptor>> cases = new CopyOnWriteArrayList<Pair<InvocationMatcher, Interceptor>>();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -46,11 +48,6 @@ public class SwitchInterceptor implements Interceptor, Serializable
     {
     }
 
-    public SwitchInterceptor(InvocationMatcher matcher, Interceptor interceptor)
-    {
-        cases.add(new Case(matcher, interceptor));
-    }
-
 //----------------------------------------------------------------------------------------------------------------------
 // Interceptor Implementation
 //----------------------------------------------------------------------------------------------------------------------
@@ -58,11 +55,11 @@ public class SwitchInterceptor implements Interceptor, Serializable
     @Override
     public Object intercept(Invocation invocation) throws Throwable
     {
-        for (Case currentCase : cases)
+        for (Pair<InvocationMatcher, Interceptor> currentCase : cases)
         {
-            if(currentCase.matcher.matches(invocation))
+            if (currentCase.getLeft().matches(invocation))
             {
-                return currentCase.interceptor.intercept(invocation);
+                return currentCase.getRight().intercept(invocation);
             }
         }
         return invocation.proceed();
@@ -72,25 +69,28 @@ public class SwitchInterceptor implements Interceptor, Serializable
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public SwitchInterceptor onCase(InvocationMatcher matcher, Interceptor interceptor)
+    public CaseBuilder when(InvocationMatcher matcher)
     {
-        cases.add(new Case(matcher, interceptor));
-        return this;
+        return new CaseBuilder(matcher);
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static final class Case implements Serializable
+    public class CaseBuilder
     {
-        private InvocationMatcher matcher;
-        private Interceptor interceptor;
+        private final InvocationMatcher matcher;
 
-        private Case(InvocationMatcher matcher, Interceptor interceptor)
+        public CaseBuilder(InvocationMatcher matcher)
         {
             this.matcher = matcher;
-            this.interceptor = interceptor;
+        }
+
+        public SwitchInterceptor then(Interceptor interceptor)
+        {
+            cases.add(new ImmutablePair<InvocationMatcher, Interceptor>(matcher, interceptor));
+            return SwitchInterceptor.this;
         }
     }
 }
