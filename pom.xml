@@ -210,26 +210,6 @@
                 <version>3.0</version>
             </dependency>
             <dependency>
-                <groupId>axis</groupId>
-                <artifactId>axis-jaxrpc</artifactId>
-                <version>1.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>hessian</groupId>
-                <artifactId>hessian</artifactId>
-                <version>3.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>burlap</groupId>
-                <artifactId>burlap</artifactId>
-                <version>2.1.7</version>
-            </dependency>
-            <dependency>
-                <groupId>xmlrpc</groupId>
-                <artifactId>xmlrpc</artifactId>
-                <version>2.0</version>
-            </dependency>
-            <dependency>
                 <groupId>jmock</groupId>
                 <artifactId>jmock</artifactId>
                 <version>1.0.1</version>

@@ -29,26 +29,6 @@
     <name>Commons Proxy Core</name>
     <dependencies>
         <dependency>
-            <groupId>axis</groupId>
-            <artifactId>axis-jaxrpc</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>hessian</groupId>
-            <artifactId>hessian</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>burlap</groupId>
-            <artifactId>burlap</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>xmlrpc</groupId>
-            <artifactId>xmlrpc</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
