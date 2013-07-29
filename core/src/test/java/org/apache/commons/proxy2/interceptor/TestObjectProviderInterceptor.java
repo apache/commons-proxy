@@ -17,22 +17,30 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
-import org.apache.commons.proxy2.util.Echo;
-import org.apache.commons.proxy2.util.MockInvocation;
 
-import java.lang.reflect.Method;
-
-public class TestConstantInterceptor extends AbstractTestCase
+public class TestObjectProviderInterceptor extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public void testReturnsConstantValue() throws Throwable
+    public void testIntercept() throws Throwable
     {
-        ConstantInterceptor interceptor = new ConstantInterceptor("foo");
-        Method method = Echo.class.getMethod("echo");
-        assertEquals("foo", interceptor.intercept(new MockInvocation(method, null)));
+        ObjectProviderInterceptor interceptor = new ObjectProviderInterceptor(ObjectProviderUtils.constant("Hello!"));
+        assertEquals("Hello!", interceptor.intercept(null));
+    }
+
+    public void testWithNullProvider()
+    {
+        try
+        {
+            new ObjectProviderInterceptor(null);
+        }
+        catch (NullPointerException e)
+        {
+            assertEquals("Provider cannot be null.", e.getMessage());
+        }
     }
 }

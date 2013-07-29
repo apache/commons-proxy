@@ -25,6 +25,8 @@ import org.apache.commons.proxy2.util.MockInvocation;
 
 import java.lang.reflect.Method;
 
+import static org.apache.commons.proxy2.interceptor.InterceptorUtils.constant;
+
 public class TestSwitchInterceptor extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
@@ -34,8 +36,8 @@ public class TestSwitchInterceptor extends AbstractTestCase
     public void testWithMultipleAdvices() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor();
-        interceptor.when(new MethodNameMatcher("echo")).then(new ConstantInterceptor("bar"));
-        interceptor.when(new MethodNameMatcher("echoBack")).then(new ConstantInterceptor("baz"));
+        interceptor.when(new MethodNameMatcher("echo")).then(constant("bar"));
+        interceptor.when(new MethodNameMatcher("echoBack")).then(constant("baz"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("baz", interceptor.intercept(invocation));
@@ -51,7 +53,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
 
     public void testWithSingleAdviceWhichDoesNotMatch() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(new ConstantInterceptor("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(constant("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("foo", interceptor.intercept(invocation));
@@ -59,7 +61,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
 
     public void testWithSingleAdviceWhichMatches() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(new ConstantInterceptor("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(constant("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("bar", interceptor.intercept(invocation));

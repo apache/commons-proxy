@@ -15,38 +15,47 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor;
+package org.apache.commons.proxy2.provider;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.ObjectProvider;
 
-/**
- * A {@link ConstantInterceptor} always returns a constant value.
- */
-public class ConstantInterceptor implements Interceptor
+public final class ObjectProviderUtils
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Fields
+// Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final Object value;
+    public static <T> ObjectProvider<T> bean(Class<T> beanClass)
+    {
+        return new BeanProvider<T>(beanClass);
+    }
+
+    public static <T extends Cloneable> ObjectProvider<T> cloning(T prototype)
+    {
+        return new CloningProvider<T>(prototype);
+    }
+
+    public static <T> ObjectProvider<T> constant(T value)
+    {
+        return new ConstantProvider<T>(value);
+    }
+
+    public static <T> ObjectProvider<T> nullValue()
+    {
+        return new NullProvider<T>();
+    }
+
+    public static <T> ObjectProvider<T> singleton(ObjectProvider<T> inner)
+    {
+        return new SingletonProvider<T>(inner);
+    }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public ConstantInterceptor(Object value)
+    private ObjectProviderUtils()
     {
-        this.value = value;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Interceptor Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object intercept(Invocation invocation) throws Throwable
-    {
-        return value;
+        
     }
 }
