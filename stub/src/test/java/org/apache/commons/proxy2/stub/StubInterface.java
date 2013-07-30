@@ -26,4 +26,16 @@ public interface StubInterface
     public String one(String value);
     public String three(String arg1, String arg2);
     public String two(String value);
+
+    public byte[] byteArray();
+    public char[] charArray();
+    public short[] shortArray();
+    public int[] intArray();
+    public long[] longArray();
+    public float[] floatArray();
+    public double[] doubleArray();
+    public boolean[] booleanArray();
+    public String[] stringArray();
+
+    public String arrayParameter(String... strings);
 }

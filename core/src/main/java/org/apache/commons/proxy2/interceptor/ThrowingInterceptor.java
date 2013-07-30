@@ -18,41 +18,33 @@
 package org.apache.commons.proxy2.interceptor;
 
 import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 
-public final class InterceptorUtils
+public class ThrowingInterceptor implements Interceptor
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Static Methods
+// Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static Interceptor constant(Object value)
-    {
-        return new ObjectProviderInterceptor(ObjectProviderUtils.constant(value));
-    }
-
-    public static Interceptor provider(ObjectProvider<?> provider)
-    {
-        return new ObjectProviderInterceptor(provider);
-    }
-
-    public static Interceptor throwing(Exception e)
-    {
-        return new ThrowingInterceptor(ObjectProviderUtils.constant(e));
-    }
-
-    public static Interceptor throwing(ObjectProvider<? extends Exception> provider)
-    {
-        return new ThrowingInterceptor(provider);
-    }
+    private final ObjectProvider<? extends Exception> provider;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    private InterceptorUtils()
+    public ThrowingInterceptor(ObjectProvider<? extends Exception> provider)
     {
+        this.provider = provider;
+    }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Interceptor Implementation
+//----------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object intercept(Invocation invocation) throws Throwable
+    {
+        throw provider.getObject();
     }
 }

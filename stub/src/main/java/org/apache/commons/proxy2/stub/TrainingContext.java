@@ -145,7 +145,7 @@ public class TrainingContext
         public boolean matches(Invocation invocation)
         {
             return invocation.getMethod().equals(recordedInvocation.getInvokedMethod()) &&
-                    Arrays.equals(invocation.getArguments(), recordedInvocation.getArguments());
+                    Arrays.deepEquals(invocation.getArguments(), recordedInvocation.getArguments());
         }
     }
 }
