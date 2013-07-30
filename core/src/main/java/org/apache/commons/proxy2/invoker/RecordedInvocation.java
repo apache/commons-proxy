@@ -24,51 +24,51 @@ import java.lang.reflect.Method;
 
 /**
  * Detached representation of a method invocation.
+ *
  * @author James Carman
  */
 public class RecordedInvocation
 {
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 // Fields
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 
     private final Method invokedMethod;
     private final Object[] arguments;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Create a new RecordedInvocation instance.
+     *
      * @param invokedMethod
      * @param arguments
      */
-    public RecordedInvocation( Method invokedMethod, Object[] arguments )
+    public RecordedInvocation(Method invokedMethod, Object[] arguments)
     {
         this.invokedMethod = invokedMethod;
         this.arguments = ArrayUtils.clone(arguments);
     }
 
-  //**********************************************************************************************************************
- // Canonical Methods
- //**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
+// Getter/Setter Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Get the invokedMethod.
+     *
      * @return Method
      */
-    public Method getInvokedMethod() {
+    public Method getInvokedMethod()
+    {
         return invokedMethod;
     }
 
-    /**
-     * Get the arguments.
-     * @return Object[]
-     */
-    public Object[] getArguments() {
-        return arguments;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+// Canonical Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
@@ -81,10 +81,10 @@ public class RecordedInvocation
         buffer.append(invokedMethod.getName());
         buffer.append("(");
         int count = arguments.length;
-        for( int i = 0; i < count; i++ )
+        for (int i = 0; i < count; i++)
         {
             Object arg = arguments[i];
-            if( i > 0 )
+            if (i > 0)
             {
                 buffer.append(", ");
             }
@@ -94,14 +94,19 @@ public class RecordedInvocation
         return buffer.toString();
     }
 
+//----------------------------------------------------------------------------------------------------------------------
+// Other Methods
+//----------------------------------------------------------------------------------------------------------------------
+
     /**
      * Add a string representation of <code>input</code> to <code>buffer</code>.
+     *
      * @param buffer
      * @param input
      */
-    protected void convert( StringBuffer buffer, Object input )
+    protected void convert(StringBuffer buffer, Object input)
     {
-        if( input == null )
+        if (input == null)
         {
             buffer.append("<null>");
             return;
@@ -109,7 +114,7 @@ public class RecordedInvocation
 
         // Primitive types, and non-object arrays
         // use toString().
-        if( !( input instanceof Object[] ) )
+        if (!(input instanceof Object[]))
         {
             buffer.append(input.toString());
             return;
@@ -119,11 +124,11 @@ public class RecordedInvocation
             buffer.append("(");
             buffer.append(ProxyUtils.getJavaClassName(input.getClass()));
             buffer.append("){");
-            Object[] array = ( Object[] ) input;
+            Object[] array = (Object[]) input;
             int count = array.length;
-            for( int i = 0; i < count; i++ )
+            for (int i = 0; i < count; i++)
             {
-                if( i > 0 )
+                if (i > 0)
                 {
                     buffer.append(", ");
                 }
@@ -133,5 +138,15 @@ public class RecordedInvocation
             }
             buffer.append("}");
         }
+    }
+
+    /**
+     * Get the arguments.
+     *
+     * @return Object[]
+     */
+    public Object[] getArguments()
+    {
+        return ArrayUtils.clone(arguments);
     }
 }
