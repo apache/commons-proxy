@@ -108,7 +108,7 @@ public class TrainingContext
         private ArgumentMatchersMatcher(RecordedInvocation recordedInvocation, ArgumentMatcher[] matchers)
         {
             this.recordedInvocation = recordedInvocation;
-            this.matchers = matchers;
+            this.matchers = ArrayUtils.clone(matchers);
         }
 
         @Override
