@@ -17,6 +17,9 @@
 
 package org.apache.commons.proxy2.impl;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -29,54 +32,55 @@ import java.util.List;
  */
 public class MethodSignature
 {
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 // Fields
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 
     private final String name;
     private final List<Class<?>> parameterTypes;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * Create a new MethodSignature instance.
+     *
      * @param method
      */
-    public MethodSignature( Method method )
+    public MethodSignature(Method method)
     {
         this.name = method.getName();
         this.parameterTypes = Arrays.asList(method.getParameterTypes());
     }
 
-  //**********************************************************************************************************************
- // Canonical Methods
- //**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
+// Canonical Methods
+//----------------------------------------------------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
      */
-    public boolean equals( Object o )
+    public boolean equals(Object o)
     {
-        if( this == o )
+        if (o == null)
+        {
+            return false;
+        }
+        if (o == this)
         {
             return true;
         }
-        if( o == null || getClass() != o.getClass() )
+        if (o.getClass() != getClass())
         {
             return false;
         }
-        final MethodSignature that = ( MethodSignature ) o;
-        if( !name.equals(that.name) )
-        {
-            return false;
-        }
-        if( !parameterTypes.equals(that.parameterTypes) )
-        {
-            return false;
-        }
-        return true;
+        MethodSignature other = (MethodSignature) o;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(name, other.name)
+                .append(parameterTypes, other.parameterTypes)
+                .build();
     }
 
     /**
@@ -84,9 +88,6 @@ public class MethodSignature
      */
     public int hashCode()
     {
-        int result;
-        result = name.hashCode();
-        result = 29 * result + parameterTypes.hashCode();
-        return result;
+        return new HashCodeBuilder().append(name).append(parameterTypes).build();
     }
 }
