@@ -77,7 +77,6 @@ public class MethodSignature
         }
         MethodSignature other = (MethodSignature) o;
         return new EqualsBuilder()
-                .appendSuper(super.equals(o))
                 .append(name, other.name)
                 .append(parameterTypes, other.parameterTypes)
                 .build();
