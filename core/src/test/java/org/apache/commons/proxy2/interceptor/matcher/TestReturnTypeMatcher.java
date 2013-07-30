@@ -18,7 +18,7 @@
 package org.apache.commons.proxy2.interceptor.matcher;
 
 import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.interceptor.InvocationMatcher;
+import org.apache.commons.proxy2.interceptor.matcher.invocation.ReturnTypeMatcher;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;

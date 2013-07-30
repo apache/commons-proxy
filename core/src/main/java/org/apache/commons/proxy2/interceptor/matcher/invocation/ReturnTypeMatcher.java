@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor.matcher;
+package org.apache.commons.proxy2.interceptor.matcher.invocation;
 
 import org.apache.commons.proxy2.Invocation;
-import org.apache.commons.proxy2.interceptor.InvocationMatcher;
+import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
 
 public class ReturnTypeMatcher implements InvocationMatcher
 {

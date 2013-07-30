@@ -15,19 +15,15 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor;
+package org.apache.commons.proxy2.stub;
 
-import org.apache.commons.proxy2.Invocation;
-
-/**
- * An {@link InvocationMatcher} is used to conditionally match {@link Invocation} objects based on
- * some criteria such as method name, parameter values, etc.
- */
-public interface InvocationMatcher
+public interface StubInterface
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    boolean matches(Invocation invocation);
+    public String one(String value);
+    public String three(String arg1, String arg2);
+    public String two(String value);
 }

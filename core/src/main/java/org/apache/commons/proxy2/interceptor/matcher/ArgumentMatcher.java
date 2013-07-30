@@ -15,34 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor;
+package org.apache.commons.proxy2.interceptor.matcher;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.provider.ObjectProviderUtils;
-
-public final class InterceptorUtils
+public interface ArgumentMatcher
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Static Methods
+// Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static Interceptor constant(Object value)
-    {
-        return new ObjectProviderInterceptor(ObjectProviderUtils.constant(value));
-    }
-
-    public static Interceptor provider(ObjectProvider<?> provider)
-    {
-        return new ObjectProviderInterceptor(provider);
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
-
-    private InterceptorUtils()
-    {
-
-    }
+    boolean matches(Object argument);
 }

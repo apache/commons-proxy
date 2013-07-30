@@ -15,34 +15,19 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor;
+package org.apache.commons.proxy2.interceptor.matcher;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.provider.ObjectProviderUtils;
+import org.apache.commons.proxy2.Invocation;
 
-public final class InterceptorUtils
+/**
+ * An {@link InvocationMatcher} is used to conditionally match {@link Invocation} objects based on
+ * some criteria such as method name, parameter values, etc.
+ */
+public interface InvocationMatcher
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Static Methods
+// Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static Interceptor constant(Object value)
-    {
-        return new ObjectProviderInterceptor(ObjectProviderUtils.constant(value));
-    }
-
-    public static Interceptor provider(ObjectProvider<?> provider)
-    {
-        return new ObjectProviderInterceptor(provider);
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
-
-    private InterceptorUtils()
-    {
-
-    }
+    boolean matches(Invocation invocation);
 }
