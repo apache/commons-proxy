@@ -98,7 +98,7 @@ public class DuckTypingInvoker implements Invoker
         catch( NoSuchMethodException e )
         {
             throw new UnsupportedOperationException(
-                    "Target type " + targetClass.getName() + " does not have a method matching " + method + ".");
+                    "Target type " + targetClass.getName() + " does not have a method matching " + method + ".", e);
         }
     }
 }
