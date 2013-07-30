@@ -54,9 +54,16 @@ public class StubInterceptorBuilder
 
     public <T> StubInterceptorBuilder configure(Class<T> type, Behavior<T> behavior)
     {
-        final TrainingContext context = new TrainingContext(interceptor);
-        T stub = proxyFactory.createInvokerProxy(new TrainingContextInvoker(context), type);
-        behavior.train(context, stub);
+        try
+        {
+            TrainingContext.set(interceptor);
+            T stub = proxyFactory.createInvokerProxy(new TrainingContextInvoker(), type);
+            behavior.train(stub);
+        }
+        finally
+        {
+            TrainingContext.clear();
+        }
         return this;
     }
 
@@ -66,17 +73,10 @@ public class StubInterceptorBuilder
 
     private static final class TrainingContextInvoker implements Invoker
     {
-        private final TrainingContext trainingContext;
-
-        private TrainingContextInvoker(TrainingContext trainingContext)
-        {
-            this.trainingContext = trainingContext;
-        }
-
         @Override
         public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
         {
-            trainingContext.stubMethodInvoked(method, arguments);
+            TrainingContext.getTrainingContext().stubMethodInvoked(method, arguments);
             return ProxyUtils.nullValue(method.getReturnType());
         }
     }

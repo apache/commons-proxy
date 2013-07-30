@@ -27,12 +27,6 @@ import org.apache.commons.proxy2.interceptor.matcher.argument.ArgumentMatcherUti
 public abstract class Behavior<T>
 {
 //----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
-
-    private TrainingContext trainingContext;
-
-//----------------------------------------------------------------------------------------------------------------------
 // Abstract Methods
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -50,7 +44,7 @@ public abstract class Behavior<T>
 
     private void record(ArgumentMatcher matcher)
     {
-        trainingContext.addArgumentMatcher(matcher);
+        trainingContext().addArgumentMatcher(matcher);
     }
 
     protected <R> R eq(R value)
@@ -63,12 +57,6 @@ public abstract class Behavior<T>
     {
         record(ArgumentMatcherUtils.isA(type));
         return ProxyUtils.nullValue(type);
-    }
-
-    void train(TrainingContext context, T stub)
-    {
-        this.trainingContext = context;
-        train(stub);
     }
 
     protected <R> WhenObject<R> when(R expression)
@@ -129,28 +117,33 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenThrow(Exception e)
         {
-            trainingContext.setInterceptor(InterceptorUtils.throwing(e));
+            trainingContext().setInterceptor(InterceptorUtils.throwing(e));
             return Behavior.this;
         }
 
         protected Behavior<T> thenThrow(ObjectProvider<? extends Exception> provider)
         {
-            trainingContext.setInterceptor(InterceptorUtils.throwing(provider));
+            trainingContext().setInterceptor(InterceptorUtils.throwing(provider));
             return Behavior.this;
         }
 
         protected <R> Behavior<T> thenAnswer(ObjectProvider<? extends R> provider)
         {
-            trainingContext.setInterceptor(InterceptorUtils.provider(provider));
+            trainingContext().setInterceptor(InterceptorUtils.provider(provider));
             return Behavior.this;
         }
+    }
+
+    private TrainingContext trainingContext()
+    {
+        return TrainingContext.getTrainingContext();
     }
 
     protected class WhenBooleanArray extends BaseWhen<boolean[]>
     {
         protected Behavior<T> thenReturn(boolean... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -159,7 +152,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(byte... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -168,7 +161,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(char... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -177,7 +170,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(double... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -186,7 +179,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(float... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -195,7 +188,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(int... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -204,7 +197,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(long... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -213,7 +206,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(R value)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(value));
+            trainingContext().setInterceptor(InterceptorUtils.constant(value));
             return Behavior.this;
         }
     }
@@ -222,7 +215,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(R... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }
@@ -231,7 +224,7 @@ public abstract class Behavior<T>
     {
         protected Behavior<T> thenReturn(short... values)
         {
-            trainingContext.setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Behavior.this;
         }
     }

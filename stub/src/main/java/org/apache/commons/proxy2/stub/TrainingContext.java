@@ -36,16 +36,36 @@ public class TrainingContext
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
+    private static final ThreadLocal<TrainingContext> TRAINING_CONTEXT = new ThreadLocal<TrainingContext>();
     private List<ArgumentMatcher> argumentMatchers = new LinkedList<ArgumentMatcher>();
     private InvocationMatcher matcher;
     private Interceptor interceptor;
     private final SwitchInterceptor switchInterceptor;
 
 //----------------------------------------------------------------------------------------------------------------------
+// Static Methods
+//----------------------------------------------------------------------------------------------------------------------
+
+    public static void clear()
+    {
+        TRAINING_CONTEXT.remove();
+    }
+
+    public static TrainingContext getTrainingContext()
+    {
+        return TRAINING_CONTEXT.get();
+    }
+
+    public static void set(SwitchInterceptor interceptor)
+    {
+        TRAINING_CONTEXT.set(new TrainingContext(interceptor));
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public TrainingContext(SwitchInterceptor switchInterceptor)
+    private TrainingContext(SwitchInterceptor switchInterceptor)
     {
         this.switchInterceptor = switchInterceptor;
     }
