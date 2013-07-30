@@ -64,7 +64,7 @@ public class StubInterceptorBuilder
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class TrainingContextInvoker implements Invoker
+    private static final class TrainingContextInvoker implements Invoker
     {
         private final TrainingContext trainingContext;
 
