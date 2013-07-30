@@ -87,7 +87,7 @@ public class TrainingContext
         }
         else if (matchersArray.length == arguments.length)
         {
-            this.matcher = new ArgumentMatchersMatcher(invocation, matchersArray);
+            this.matcher = new MatchingArgumentsMatcher(invocation, matchersArray);
         }
         else
         {
@@ -100,12 +100,29 @@ public class TrainingContext
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class ArgumentMatchersMatcher implements InvocationMatcher
+    private static final class ExactArgumentsMatcher implements InvocationMatcher
+    {
+        private final RecordedInvocation recordedInvocation;
+
+        private ExactArgumentsMatcher(RecordedInvocation recordedInvocation)
+        {
+            this.recordedInvocation = recordedInvocation;
+        }
+
+        @Override
+        public boolean matches(Invocation invocation)
+        {
+            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod()) &&
+                    Arrays.deepEquals(invocation.getArguments(), recordedInvocation.getArguments());
+        }
+    }
+
+    private static final class MatchingArgumentsMatcher implements InvocationMatcher
     {
         private final RecordedInvocation recordedInvocation;
         private final ArgumentMatcher[] matchers;
 
-        private ArgumentMatchersMatcher(RecordedInvocation recordedInvocation, ArgumentMatcher[] matchers)
+        private MatchingArgumentsMatcher(RecordedInvocation recordedInvocation, ArgumentMatcher[] matchers)
         {
             this.recordedInvocation = recordedInvocation;
             this.matchers = ArrayUtils.clone(matchers);
@@ -129,23 +146,6 @@ public class TrainingContext
                 }
             }
             return true;
-        }
-    }
-
-    private static class ExactArgumentsMatcher implements InvocationMatcher
-    {
-        private final RecordedInvocation recordedInvocation;
-
-        private ExactArgumentsMatcher(RecordedInvocation recordedInvocation)
-        {
-            this.recordedInvocation = recordedInvocation;
-        }
-
-        @Override
-        public boolean matches(Invocation invocation)
-        {
-            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod()) &&
-                    Arrays.deepEquals(invocation.getArguments(), recordedInvocation.getArguments());
         }
     }
 }

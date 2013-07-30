@@ -3,7 +3,7 @@ package org.apache.commons.proxy2.interceptor.matcher.argument;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 
-public class ArgumentMatcherUtils
+public final class ArgumentMatcherUtils
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
@@ -37,6 +37,15 @@ public class ArgumentMatcherUtils
     public static ArgumentMatcher same(final Object ref)
     {
         return new SameMatcher(ref);
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Constructors
+//----------------------------------------------------------------------------------------------------------------------
+
+    private ArgumentMatcherUtils()
+    {
+        
     }
 
 //----------------------------------------------------------------------------------------------------------------------

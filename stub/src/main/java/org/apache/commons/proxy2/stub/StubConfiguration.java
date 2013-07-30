@@ -71,11 +71,11 @@ public interface StubConfiguration {
 
     /**
      * "when(...)"
-     * @param <RT>
+     * @param <R>
      * @param call
      * @return {@link When}
      */
-    <RT> When<RT> when(RT call);
+    <R> When<R> when(R call);
 
     /**
      * Intermediate result of a when(boolean[]) call
