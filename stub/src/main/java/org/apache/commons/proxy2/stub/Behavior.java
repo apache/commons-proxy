@@ -59,6 +59,21 @@ public abstract class Behavior<T>
         return ProxyUtils.nullValue(type);
     }
 
+    protected void thenThrow(Exception e)
+    {
+        trainingContext().setInterceptor(InterceptorUtils.throwing(e));
+    }
+
+    protected void thenThrow(ObjectProvider<? extends Exception> provider)
+    {
+        trainingContext().setInterceptor(InterceptorUtils.throwing(provider));
+    }
+
+    private TrainingContext trainingContext()
+    {
+        return TrainingContext.getTrainingContext();
+    }
+
     protected <R> WhenObject<R> when(R expression)
     {
         return new WhenObject<R>();
@@ -132,11 +147,6 @@ public abstract class Behavior<T>
             trainingContext().setInterceptor(InterceptorUtils.provider(provider));
             return Behavior.this;
         }
-    }
-
-    private TrainingContext trainingContext()
-    {
-        return TrainingContext.getTrainingContext();
     }
 
     protected class WhenBooleanArray extends BaseWhen<boolean[]>

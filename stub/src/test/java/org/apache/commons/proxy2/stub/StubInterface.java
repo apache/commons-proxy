@@ -38,4 +38,6 @@ public interface StubInterface
     public String[] stringArray();
 
     public String arrayParameter(String... strings);
+
+    public void voidMethod(String arg);
 }

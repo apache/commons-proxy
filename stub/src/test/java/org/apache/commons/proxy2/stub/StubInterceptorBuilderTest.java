@@ -51,6 +51,36 @@ public class StubInterceptorBuilderTest
         this.builder = new StubInterceptorBuilder(proxyFactory);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testThrowExceptionWithException()
+    {
+        StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        {
+            @Override
+            protected void train(StubInterface stub)
+            {
+                stub.voidMethod("Hello");
+                thenThrow(new IllegalArgumentException("Nope!"));
+            }
+        });
+        proxy.voidMethod("Hello");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testThrowExceptionWithProvidedException()
+    {
+        StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        {
+            @Override
+            protected void train(StubInterface stub)
+            {
+                stub.voidMethod("Hello");
+                thenThrow(ObjectProviderUtils.constant(new IllegalArgumentException("Nope!")));
+            }
+        });
+        proxy.voidMethod("Hello");
+    }
+
     @Test
     public void testWithArrayParameter()
     {
