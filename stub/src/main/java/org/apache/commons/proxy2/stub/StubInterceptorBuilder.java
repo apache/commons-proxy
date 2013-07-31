@@ -52,13 +52,13 @@ public class StubInterceptorBuilder
         return interceptor;
     }
 
-    public <T> StubInterceptorBuilder configure(Class<T> type, Behavior<T> behavior)
+    public <T> StubInterceptorBuilder trainFor(Class<T> type, Trainer<T> trainer)
     {
         try
         {
             TrainingContext.set(interceptor);
             T stub = proxyFactory.createInvokerProxy(new TrainingContextInvoker(), type);
-            behavior.train(stub);
+            trainer.train(stub);
         }
         finally
         {

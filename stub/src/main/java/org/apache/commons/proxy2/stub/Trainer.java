@@ -24,7 +24,7 @@ import org.apache.commons.proxy2.interceptor.InterceptorUtils;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.apache.commons.proxy2.interceptor.matcher.argument.ArgumentMatcherUtils;
 
-public abstract class Behavior<T>
+public abstract class Trainer<T>
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Abstract Methods
@@ -130,112 +130,112 @@ public abstract class Behavior<T>
 
     protected abstract class BaseWhen<R>
     {
-        protected Behavior<T> thenThrow(Exception e)
+        protected Trainer<T> thenThrow(Exception e)
         {
             trainingContext().setInterceptor(InterceptorUtils.throwing(e));
-            return Behavior.this;
+            return Trainer.this;
         }
 
-        protected Behavior<T> thenThrow(ObjectProvider<? extends Exception> provider)
+        protected Trainer<T> thenThrow(ObjectProvider<? extends Exception> provider)
         {
             trainingContext().setInterceptor(InterceptorUtils.throwing(provider));
-            return Behavior.this;
+            return Trainer.this;
         }
 
-        protected <R> Behavior<T> thenAnswer(ObjectProvider<? extends R> provider)
+        protected <R> Trainer<T> thenAnswer(ObjectProvider<? extends R> provider)
         {
             trainingContext().setInterceptor(InterceptorUtils.provider(provider));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenBooleanArray extends BaseWhen<boolean[]>
     {
-        protected Behavior<T> thenReturn(boolean... values)
+        protected Trainer<T> thenReturn(boolean... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenByteArray extends BaseWhen<byte[]>
     {
-        protected Behavior<T> thenReturn(byte... values)
+        protected Trainer<T> thenReturn(byte... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenCharArray extends BaseWhen<char[]>
     {
-        protected Behavior<T> thenReturn(char... values)
+        protected Trainer<T> thenReturn(char... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenDoubleArray extends BaseWhen<double[]>
     {
-        protected Behavior<T> thenReturn(double... values)
+        protected Trainer<T> thenReturn(double... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenFloatArray extends BaseWhen<float[]>
     {
-        protected Behavior<T> thenReturn(float... values)
+        protected Trainer<T> thenReturn(float... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenIntArray extends BaseWhen<int[]>
     {
-        protected Behavior<T> thenReturn(int... values)
+        protected Trainer<T> thenReturn(int... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenLongArray extends BaseWhen<long[]>
     {
-        protected Behavior<T> thenReturn(long... values)
+        protected Trainer<T> thenReturn(long... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenObject<R> extends BaseWhen
     {
-        protected Behavior<T> thenReturn(R value)
+        protected Trainer<T> thenReturn(R value)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(value));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenObjectArray<R> extends BaseWhen<R[]>
     {
-        protected Behavior<T> thenReturn(R... values)
+        protected Trainer<T> thenReturn(R... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 
     protected class WhenShortArray extends BaseWhen<short[]>
     {
-        protected Behavior<T> thenReturn(short... values)
+        protected Trainer<T> thenReturn(short... values)
         {
             trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
-            return Behavior.this;
+            return Trainer.this;
         }
     }
 }

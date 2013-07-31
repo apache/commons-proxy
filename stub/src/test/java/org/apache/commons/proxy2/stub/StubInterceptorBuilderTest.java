@@ -54,7 +54,7 @@ public class StubInterceptorBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testThrowExceptionWithException()
     {
-        StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -69,7 +69,7 @@ public class StubInterceptorBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testThrowExceptionWithProvidedException()
     {
-        StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -84,7 +84,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithArrayParameter()
     {
-        StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -99,7 +99,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testAnyMatcher()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -114,7 +114,7 @@ public class StubInterceptorBuilderTest
     @Test(expected = IllegalStateException.class)
     public void testMixingArgumentMatchingStrategies()
     {
-        builder.configure(StubInterface.class, new Behavior<StubInterface>()
+        builder.trainFor(StubInterface.class, new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -127,7 +127,7 @@ public class StubInterceptorBuilderTest
     @Test(expected = RuntimeException.class)
     public void testThrowingExceptionObject()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -141,7 +141,7 @@ public class StubInterceptorBuilderTest
     @Test(expected = RuntimeException.class)
     public void testThrowingProvidedException()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -155,7 +155,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithArgumentMatchers()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -167,9 +167,9 @@ public class StubInterceptorBuilderTest
         assertEquals("World", proxy.one("Whatever"));
     }
 
-    private StubInterface createProxy(Behavior<StubInterface> behavior)
+    private StubInterface createProxy(Trainer<StubInterface> trainer)
     {
-        Interceptor interceptor = builder.configure(StubInterface.class, behavior).build();
+        Interceptor interceptor = builder.trainFor(StubInterface.class, trainer).build();
 
         return proxyFactory.createInterceptorProxy(target, interceptor, StubInterface.class);
     }
@@ -177,7 +177,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithStringArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -191,7 +191,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithBooleanArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -205,7 +205,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithByteArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -219,7 +219,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithShortArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -233,7 +233,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithIntArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -247,7 +247,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithLongArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -261,7 +261,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithFloatArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -275,7 +275,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithDoubleArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -289,7 +289,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithCharArray()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -303,7 +303,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithMismatchedArgument()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -318,7 +318,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithMultipleMethodsTrained()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
@@ -334,7 +334,7 @@ public class StubInterceptorBuilderTest
     @Test
     public void testWithSingleMethodTrained()
     {
-        final StubInterface proxy = createProxy(new Behavior<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface stub)
