@@ -62,12 +62,13 @@ public class TrainingContext
         return frameDeque.peek();
     }
 
-    <T> T popStub(Class<T> type)
+    <T> T pop()
     {
+        final TrainingContextFrame<?> frame = frameDeque.pop();
         return proxyFactory.createInterceptorProxy(
-                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, type),
-                frameDeque.pop().stubInterceptor,
-                type);
+                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, frame.type),
+                frame.stubInterceptor,
+                frame.type);
     }
 
     <T> T push(Class<T> type)
@@ -77,7 +78,7 @@ public class TrainingContext
 
     <T> T push(Class<T> type, SwitchInterceptor switchInterceptor)
     {
-        TrainingContextFrame<T> frame = new TrainingContextFrame<T>(switchInterceptor);
+        TrainingContextFrame<T> frame = new TrainingContextFrame<T>(type, switchInterceptor);
         Invoker invoker = new TrainingInvoker(frame);
         frameDeque.push(frame);
         return proxyFactory.createInvokerProxy(invoker, type);
@@ -156,8 +157,11 @@ public class TrainingContext
 
         private InvocationMatcher matcher = null;
 
-        private TrainingContextFrame(SwitchInterceptor stubInterceptor)
+        private final Class<T> type;
+
+        private TrainingContextFrame(Class<T> type, SwitchInterceptor stubInterceptor)
         {
+            this.type = type;
             this.stubInterceptor = stubInterceptor;
         }
 

@@ -134,7 +134,7 @@ public abstract class Trainer<T>
         {
             R trainee = trainingContext().push(type);
             trainer.train(trainee);
-            trainingContext().then(InterceptorUtils.constant(trainingContext().popStub(type)));
+            trainingContext().then(InterceptorUtils.constant(trainingContext().pop()));
             return Trainer.this;
         }
 
