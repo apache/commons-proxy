@@ -40,4 +40,6 @@ public interface StubInterface
     public String arrayParameter(String... strings);
 
     public void voidMethod(String arg);
+
+    public StubInterface stub();
 }

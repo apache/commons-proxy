@@ -1,46 +1,27 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.*;
 import org.apache.commons.proxy2.interceptor.SwitchInterceptor;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
+import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public final class TrainingContext
+public class TrainingContext
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
     private static final ThreadLocal<TrainingContext> TRAINING_CONTEXT = new ThreadLocal<TrainingContext>();
-    private List<ArgumentMatcher> argumentMatchers = new LinkedList<ArgumentMatcher>();
-    private InvocationMatcher matcher;
-    private Interceptor interceptor;
-    private final SwitchInterceptor switchInterceptor;
+
+    private final ProxyFactory proxyFactory;
+
+    private Deque<TrainingContextFrame<?>> frameDeque = new LinkedList<TrainingContextFrame<?>>();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
@@ -51,69 +32,65 @@ public final class TrainingContext
         TRAINING_CONTEXT.remove();
     }
 
-    public static TrainingContext getTrainingContext()
+    public static TrainingContext getCurrent()
     {
         return TRAINING_CONTEXT.get();
     }
 
-    public static void set(SwitchInterceptor interceptor)
+    public static TrainingContext set(ProxyFactory proxyFactory)
     {
-        TRAINING_CONTEXT.set(new TrainingContext(interceptor));
+        TrainingContext context = new TrainingContext(proxyFactory);
+        TRAINING_CONTEXT.set(context);
+        return context;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    private TrainingContext(SwitchInterceptor switchInterceptor)
+    public TrainingContext(ProxyFactory proxyFactory)
     {
-        this.switchInterceptor = switchInterceptor;
+        this.proxyFactory = proxyFactory;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public void addArgumentMatcher(ArgumentMatcher argumentMatcher)
+    private TrainingContextFrame<?> peek()
     {
-        argumentMatchers.add(argumentMatcher);
+        return frameDeque.peek();
     }
 
-    public void setInterceptor(Interceptor interceptor)
+    <T> T popStub(Class<T> type)
     {
-        this.interceptor = interceptor;
-        addCase();
+        return proxyFactory.createInterceptorProxy(
+                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, type),
+                frameDeque.pop().stubInterceptor,
+                type);
     }
 
-    private void addCase()
+    <T> T push(Class<T> type)
     {
-        if (matcher != null && interceptor != null)
-        {
-            switchInterceptor.when(matcher).then(interceptor);
-            matcher = null;
-            interceptor = null;
-            argumentMatchers.clear();
-        }
+        return push(type, new SwitchInterceptor());
     }
 
-    public void stubMethodInvoked(Method method, Object[] arguments)
+    <T> T push(Class<T> type, SwitchInterceptor switchInterceptor)
     {
-        final ArgumentMatcher[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers.size()]);
-        argumentMatchers.clear();
-        final RecordedInvocation invocation = new RecordedInvocation(method, arguments);
-        if (ArrayUtils.isEmpty(matchersArray))
-        {
-            this.matcher = new ExactArgumentsMatcher(invocation);
-        }
-        else if (matchersArray.length == arguments.length)
-        {
-            this.matcher = new MatchingArgumentsMatcher(invocation, matchersArray);
-        }
-        else
-        {
-            throw new IllegalStateException("Either use exact arguments or argument matchers, but not both.");
-        }
-        addCase();
+        TrainingContextFrame<T> frame = new TrainingContextFrame<T>(switchInterceptor);
+        Invoker invoker = new TrainingInvoker(frame);
+        frameDeque.push(frame);
+        return proxyFactory.createInvokerProxy(invoker, type);
+    }
+
+    public void record(ArgumentMatcher argumentMatcher)
+    {
+        peek().argumentMatchers.add(argumentMatcher);
+    }
+
+    public void then(Interceptor interceptor)
+    {
+        peek().then(interceptor);
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -166,6 +143,81 @@ public final class TrainingContext
                 }
             }
             return true;
+        }
+    }
+
+    private static class TrainingContextFrame<T>
+    {
+        private final String id = UUID.randomUUID().toString();
+
+        private final SwitchInterceptor stubInterceptor;
+
+        private final List<ArgumentMatcher> argumentMatchers = new LinkedList<ArgumentMatcher>();
+
+        private InvocationMatcher matcher = null;
+
+        private TrainingContextFrame(SwitchInterceptor stubInterceptor)
+        {
+            this.stubInterceptor = stubInterceptor;
+        }
+
+        private String getId()
+        {
+            return id;
+        }
+
+        void then(Interceptor thenInterceptor)
+        {
+            if (matcher == null)
+            {
+                throw new IllegalStateException("No when!");
+            }
+            stubInterceptor.when(matcher).then(thenInterceptor);
+            matcher = null;
+        }
+
+        void methodInvoked(Method method, Object[] arguments)
+        {
+            final ArgumentMatcher[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers.size()]);
+            argumentMatchers.clear();
+            final RecordedInvocation invocation = new RecordedInvocation(method, arguments);
+            if (ArrayUtils.isEmpty(matchersArray))
+            {
+                this.matcher = new ExactArgumentsMatcher(invocation);
+            }
+            else if (matchersArray.length == arguments.length)
+            {
+                this.matcher = new MatchingArgumentsMatcher(invocation, matchersArray);
+            }
+            else
+            {
+                throw new IllegalStateException("Either use exact arguments or argument matchers, but not both.");
+            }
+        }
+    }
+
+    private static class TrainingInvoker implements Invoker
+    {
+        private final String id;
+
+        private TrainingInvoker(TrainingContextFrame<?> frame)
+        {
+            this.id = frame.getId();
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
+        {
+            final TrainingContextFrame<?> frame = getCurrent().peek();
+            if (!frame.getId().equals(id))
+            {
+                throw new IllegalStateException("Wrong stub!");
+            }
+            else
+            {
+                frame.methodInvoked(method, arguments);
+            }
+            return ProxyUtils.nullValue(method.getReturnType());
         }
     }
 }

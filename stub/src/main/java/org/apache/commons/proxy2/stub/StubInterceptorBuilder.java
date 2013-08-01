@@ -18,12 +18,8 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.interceptor.SwitchInterceptor;
-
-import java.lang.reflect.Method;
 
 public class StubInterceptorBuilder
 {
@@ -56,8 +52,8 @@ public class StubInterceptorBuilder
     {
         try
         {
-            TrainingContext.set(interceptor);
-            T stub = proxyFactory.createInvokerProxy(new TrainingContextInvoker(), type);
+            TrainingContext trainingContext = TrainingContext.set(proxyFactory);
+            T stub = trainingContext.push(type, interceptor);
             trainer.train(stub);
         }
         finally
@@ -65,19 +61,5 @@ public class StubInterceptorBuilder
             TrainingContext.clear();
         }
         return this;
-    }
-
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
-
-    private static final class TrainingContextInvoker implements Invoker
-    {
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
-        {
-            TrainingContext.getTrainingContext().stubMethodInvoked(method, arguments);
-            return ProxyUtils.nullValue(method.getReturnType());
-        }
     }
 }

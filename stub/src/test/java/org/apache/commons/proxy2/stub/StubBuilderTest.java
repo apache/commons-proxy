@@ -190,5 +190,11 @@ public class StubBuilderTest
         {
 
         }
+
+        @Override
+        public StubInterface stub()
+        {
+            return null;
+        }
     }
 }

@@ -44,7 +44,7 @@ public abstract class Trainer<T>
 
     private void record(ArgumentMatcher matcher)
     {
-        trainingContext().addArgumentMatcher(matcher);
+        trainingContext().record(matcher);
     }
 
     protected <R> R eq(R value)
@@ -61,17 +61,17 @@ public abstract class Trainer<T>
 
     protected void thenThrow(Exception e)
     {
-        trainingContext().setInterceptor(InterceptorUtils.throwing(e));
+        trainingContext().then(InterceptorUtils.throwing(e));
     }
 
     protected void thenThrow(ObjectProvider<? extends Exception> provider)
     {
-        trainingContext().setInterceptor(InterceptorUtils.throwing(provider));
+        trainingContext().then(InterceptorUtils.throwing(provider));
     }
 
     private TrainingContext trainingContext()
     {
-        return TrainingContext.getTrainingContext();
+        return TrainingContext.getCurrent();
     }
 
     protected <R> WhenObject<R> when(R expression)
@@ -130,21 +130,29 @@ public abstract class Trainer<T>
 
     protected abstract class BaseWhen<R>
     {
+        protected Trainer<T> thenStub(Class<R> type, Trainer<R> trainer)
+        {
+            R trainee = trainingContext().push(type);
+            trainer.train(trainee);
+            trainingContext().then(InterceptorUtils.constant(trainingContext().popStub(type)));
+            return Trainer.this;
+        }
+
         protected Trainer<T> thenThrow(Exception e)
         {
-            trainingContext().setInterceptor(InterceptorUtils.throwing(e));
+            trainingContext().then(InterceptorUtils.throwing(e));
             return Trainer.this;
         }
 
         protected Trainer<T> thenThrow(ObjectProvider<? extends Exception> provider)
         {
-            trainingContext().setInterceptor(InterceptorUtils.throwing(provider));
+            trainingContext().then(InterceptorUtils.throwing(provider));
             return Trainer.this;
         }
 
         protected <R> Trainer<T> thenAnswer(ObjectProvider<? extends R> provider)
         {
-            trainingContext().setInterceptor(InterceptorUtils.provider(provider));
+            trainingContext().then(InterceptorUtils.provider(provider));
             return Trainer.this;
         }
     }
@@ -153,7 +161,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(boolean... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -162,7 +170,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(byte... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -171,7 +179,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(char... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -180,7 +188,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(double... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -189,7 +197,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(float... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -198,7 +206,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(int... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -207,7 +215,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(long... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -216,7 +224,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(R value)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(value));
+            trainingContext().then(InterceptorUtils.constant(value));
             return Trainer.this;
         }
     }
@@ -225,7 +233,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(R... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
@@ -234,7 +242,7 @@ public abstract class Trainer<T>
     {
         protected Trainer<T> thenReturn(short... values)
         {
-            trainingContext().setInterceptor(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return Trainer.this;
         }
     }
