@@ -40,9 +40,10 @@ public class SingletonProvider<T> extends ProviderDecorator<T>
 
     /**
      * Create a new SingletonProvider instance.
+     *
      * @param inner
      */
-    public SingletonProvider( ObjectProvider<? extends T> inner )
+    public SingletonProvider(ObjectProvider<? extends T> inner)
     {
         super(inner);
     }
@@ -56,13 +57,13 @@ public class SingletonProvider<T> extends ProviderDecorator<T>
      */
     public T getObject()
     {
-        synchronized( this )
+        synchronized (this)
         {
-            if( instance == null )
+            if (instance == null)
             {
                 instance = super.getObject();
                 // Garbage collection
-                inner = null;
+                setInner(null);
             }
             return instance;
         }
