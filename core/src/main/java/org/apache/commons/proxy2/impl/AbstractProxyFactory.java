@@ -57,9 +57,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      */
     public <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses )
     {
-        @SuppressWarnings("unchecked")
-        final T result = (T) createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
-        return result;
+        return createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
     }
 
     /**
@@ -75,10 +73,8 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
                                           Class<?>... proxyClasses )
     {
-        @SuppressWarnings("unchecked")
-        final T result = (T) createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
+        return createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
                                       proxyClasses);
-        return result;
     }
 
     /**
@@ -91,10 +87,8 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      */
     public <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses )
     {
-        @SuppressWarnings("unchecked")
-        final T result = (T) createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker,
+        return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker,
                                   proxyClasses);
-        return result;
     }
 
 }
