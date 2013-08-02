@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.interceptor.InterceptorUtils;
@@ -30,7 +31,7 @@ public abstract class Trainer<T>
 // Abstract Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected abstract void train(T stub);
+    protected abstract void train(T trainee);
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
@@ -51,6 +52,12 @@ public abstract class Trainer<T>
     {
         record(ArgumentMatcherUtils.eq(value));
         return value;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<T> getTraineeType()
+    {
+        return (Class<T>) TypeUtils.getRawType(Trainer.class.getTypeParameters()[0], getClass());
     }
 
     protected <R> R isInstance(Class<R> type)
@@ -83,42 +90,42 @@ public abstract class Trainer<T>
     {
         return new WhenByteArray();
     }
-    
+
     protected WhenBooleanArray when(boolean[] expression)
     {
         return new WhenBooleanArray();
     }
-    
+
     protected WhenIntArray when(int[] expression)
     {
         return new WhenIntArray();
     }
-    
+
     protected WhenShortArray when(short[] expresssion)
     {
         return new WhenShortArray();
     }
-    
+
     protected WhenLongArray when(long[] expression)
     {
         return new WhenLongArray();
     }
-    
+
     protected WhenFloatArray when(float[] expression)
     {
         return new WhenFloatArray();
     }
-    
+
     protected WhenDoubleArray when(double[] expression)
     {
         return new WhenDoubleArray();
     }
-    
+
     protected <R> WhenObjectArray<R> when(R[] expression)
     {
-        return new WhenObjectArray<R>();   
+        return new WhenObjectArray<R>();
     }
-    
+
     protected WhenCharArray when(char[] expression)
     {
         return new WhenCharArray();
@@ -130,9 +137,9 @@ public abstract class Trainer<T>
 
     protected abstract class BaseWhen<R>
     {
-        protected Trainer<T> thenStub(Class<R> type, Trainer<R> trainer)
+        protected Trainer<T> thenStub(Trainer<R> trainer)
         {
-            R trainee = trainingContext().push(type);
+            R trainee = trainingContext().push(trainer.getTraineeType());
             trainer.train(trainee);
             trainingContext().then(InterceptorUtils.constant(trainingContext().pop()));
             return Trainer.this;

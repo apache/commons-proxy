@@ -147,7 +147,7 @@ public class TrainingContext
         }
     }
 
-    private static class TrainingContextFrame<T>
+    private static final class TrainingContextFrame<T>
     {
         private final String id = UUID.randomUUID().toString();
 
@@ -200,7 +200,7 @@ public class TrainingContext
         }
     }
 
-    private static class TrainingInvoker implements Invoker
+    private static final class TrainingInvoker implements Invoker
     {
         private final String id;
 

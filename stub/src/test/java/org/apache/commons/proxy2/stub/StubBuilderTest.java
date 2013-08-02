@@ -18,7 +18,6 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.cglib.CglibProxyFactory;
 import org.apache.commons.proxy2.provider.BeanProvider;
 import org.junit.Before;
@@ -27,22 +26,18 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class StubBuilderTest
+public class StubBuilderTest extends AbstractStubTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
-
-    private ProxyFactory proxyFactory;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    @Before
-    public void initialize()
+
+    @Override
+    protected StubInterface createProxy(Trainer<StubInterface> trainer)
     {
-        proxyFactory = new CglibProxyFactory();
+        return new StubBuilder<StubInterface>(proxyFactory, StubInterface.class).train(trainer).build();
     }
 
     @Test
@@ -52,9 +47,9 @@ public class StubBuilderTest
         builder.train(new Trainer<StubInterface>()
         {
             @Override
-            protected void train(StubInterface stub)
+            protected void train(StubInterface trainee)
             {
-                when(stub.one("Foo")).thenReturn("Bar");
+                when(trainee.one("Foo")).thenReturn("Bar");
             }
         });
         StubInterface stub = builder.build();
@@ -76,9 +71,9 @@ public class StubBuilderTest
         builder.train(new Trainer<StubInterface>()
         {
             @Override
-            protected void train(StubInterface stub)
+            protected void train(StubInterface trainee)
             {
-                when(stub.one("Foo")).thenReturn("Bar");
+                when(trainee.one("Foo")).thenReturn("Bar");
             }
         });
         StubInterface stub = builder.build();
@@ -92,9 +87,9 @@ public class StubBuilderTest
         builder.train(new Trainer<StubInterface>()
         {
             @Override
-            protected void train(StubInterface stub)
+            protected void train(StubInterface trainee)
             {
-                when(stub.one("Foo")).thenReturn("Bar");
+                when(trainee.one("Foo")).thenReturn("Bar");
             }
         });
         StubInterface stub = builder.build();
@@ -176,7 +171,7 @@ public class StubBuilderTest
         @Override
         public String[] stringArray()
         {
-            return new String[] {"One", "Two", "Three"};
+            return new String[]{"One", "Two", "Three"};
         }
 
         @Override
