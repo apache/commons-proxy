@@ -19,6 +19,7 @@ package org.apache.commons.proxy2.interceptor;
 
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
@@ -34,8 +35,32 @@ public class InterceptorUtilsTest extends AbstractTestCase
     public void testConstant() throws Throwable
     {
         Interceptor interceptor = InterceptorUtils.constant("Hello!");
-        Method method = Echo.class.getMethod("echoBack", String.class);
-        Invocation invocation = new MockInvocation(method, "World!");
+        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
         assertEquals("Hello!", interceptor.intercept(invocation));
     }
+
+    @Test
+    public void testProvider() throws Throwable
+    {
+        Interceptor interceptor = InterceptorUtils.provider(ObjectProviderUtils.constant("Foo!"));
+        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
+        assertEquals("Foo!", interceptor.intercept(invocation));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testThrowingExceptionObject() throws Throwable
+    {
+        Interceptor interceptor = InterceptorUtils.throwing(new RuntimeException("Oops!"));
+        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
+        interceptor.intercept(invocation);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testThrowingProvidedException() throws Throwable
+    {
+        Interceptor interceptor = InterceptorUtils.throwing(ObjectProviderUtils.constant(new RuntimeException("Oops!")));
+        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
+        interceptor.intercept(invocation);
+    }
+
 }
