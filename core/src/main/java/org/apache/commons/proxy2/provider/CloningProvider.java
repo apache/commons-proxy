@@ -90,7 +90,7 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
         catch (NoSuchMethodException e)
         {
             throw new ObjectProviderException(
-                    String.format("Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()));
+                    String.format("Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()), e);
         }
     }
 
