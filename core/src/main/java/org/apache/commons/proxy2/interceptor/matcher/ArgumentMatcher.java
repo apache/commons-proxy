@@ -17,11 +17,11 @@
 
 package org.apache.commons.proxy2.interceptor.matcher;
 
-public interface ArgumentMatcher
+public interface ArgumentMatcher<T>
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    boolean matches(Object argument);
+    boolean matches(T argument);
 }

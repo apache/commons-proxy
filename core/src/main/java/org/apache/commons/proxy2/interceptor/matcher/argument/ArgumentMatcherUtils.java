@@ -1,6 +1,24 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.apache.commons.proxy2.interceptor.matcher.argument;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 
 public final class ArgumentMatcherUtils
@@ -9,34 +27,64 @@ public final class ArgumentMatcherUtils
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static ArgumentMatcher any()
+    public static ArgumentMatcher<Object> any()
     {
         return new AnyMatcher();
     }
 
-    public static ArgumentMatcher eq(final Object value)
+    public static ArgumentMatcher<String> endsWith(String suffix)
     {
-        return new EqualsMatcher(value);
+        return new EndsWithMatcher(Validate.notNull(suffix));
     }
 
-    public static ArgumentMatcher isA(final Class<?> type)
+    public static <T> ArgumentMatcher<T> eq(final T value)
+    {
+        return new EqualsMatcher<T>(value);
+    }
+
+    public static <C extends Comparable> ArgumentMatcher<C> gt(C comparable)
+    {
+        return new GreaterThanMatcher<C>(comparable);
+    }
+
+    public static <C extends Comparable> ArgumentMatcher<C> gte(C comparable)
+    {
+        return new GreaterThanOrEqualMatcher<C>(comparable);
+    }
+
+    public static ArgumentMatcher<Object> isA(final Class<?> type)
     {
         return new InstanceOfMatcher(type);
     }
 
-    public static ArgumentMatcher isNull()
+    public static ArgumentMatcher<Object> isNull()
     {
         return new IsNullMatcher();
     }
 
-    public static ArgumentMatcher notNull()
+    public static <C extends Comparable> ArgumentMatcher<C> lt(C comparable)
     {
-        return new NotNullMatcher();
+        return new LessThanMatcher<C>(comparable);
     }
 
-    public static ArgumentMatcher same(final Object ref)
+    public static <C extends Comparable> ArgumentMatcher<C> lte(C comparable)
     {
-        return new SameMatcher(ref);
+        return new LessThanOrEqualMatcher<C>(comparable);
+    }
+
+    public static ArgumentMatcher<String> matches(String regex)
+    {
+        return new RegexMatcher(Validate.notNull(regex));
+    }
+
+    public static <T> ArgumentMatcher<T> notNull()
+    {
+        return new NotNullMatcher<T>();
+    }
+
+    public static ArgumentMatcher<String> startsWith(String prefix)
+    {
+        return new StartsWithMatcher(Validate.notNull(prefix));
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -45,14 +93,14 @@ public final class ArgumentMatcherUtils
 
     private ArgumentMatcherUtils()
     {
-        
+
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class AnyMatcher implements ArgumentMatcher
+    private static class AnyMatcher implements ArgumentMatcher<Object>
     {
         @Override
         public boolean matches(Object argument)
@@ -61,23 +109,90 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class EqualsMatcher implements ArgumentMatcher
+    private abstract static class ComparatorMatcher<C extends Comparable> implements ArgumentMatcher<C>
     {
-        private final Object value;
+        private final C comparable;
 
-        public EqualsMatcher(Object value)
+        protected ComparatorMatcher(C comparable)
+        {
+            this.comparable = Validate.notNull(comparable);
+        }
+
+        protected abstract boolean evaluate(int comparison);
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean matches(C argument)
+        {
+            if(argument == null)
+            {
+                return false;
+            }
+            return evaluate(comparable.compareTo(argument));
+        }
+    }
+
+    public static class EndsWithMatcher implements ArgumentMatcher<String>
+    {
+        private final String suffix;
+
+        public EndsWithMatcher(String suffix)
+        {
+            this.suffix = suffix;
+        }
+
+        @Override
+        public boolean matches(String argument)
+        {
+            return argument != null && argument.endsWith(suffix);
+        }
+    }
+
+    private static class EqualsMatcher<T> implements ArgumentMatcher<T>
+    {
+        private final T value;
+
+        public EqualsMatcher(T value)
         {
             this.value = value;
         }
 
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(T argument)
         {
             return ObjectUtils.equals(argument, value);
         }
     }
 
-    private static class InstanceOfMatcher implements ArgumentMatcher
+    private static class GreaterThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    {
+        private GreaterThanMatcher(C comparable)
+        {
+            super(comparable);
+        }
+
+        @Override
+        protected boolean evaluate(int comparison)
+        {
+            return comparison < 0;
+        }
+    }
+
+    private static class GreaterThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    {
+        private GreaterThanOrEqualMatcher(C comparable)
+        {
+            super(comparable);
+        }
+
+        @Override
+        protected boolean evaluate(int comparison)
+        {
+            return comparison <= 0;
+        }
+    }
+
+    private static class InstanceOfMatcher implements ArgumentMatcher<Object>
     {
         private final Class<?> type;
 
@@ -93,7 +208,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class IsNullMatcher implements ArgumentMatcher
+    private static class IsNullMatcher implements ArgumentMatcher<Object>
     {
         @Override
         public boolean matches(Object argument)
@@ -102,28 +217,72 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class NotNullMatcher implements ArgumentMatcher
+    private static class LessThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    {
+        private LessThanMatcher(C comparable)
+        {
+            super(comparable);
+        }
+
+        @Override
+        protected boolean evaluate(int comparison)
+        {
+            return comparison > 0;
+        }
+    }
+
+    private static class LessThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    {
+        private LessThanOrEqualMatcher(C comparable)
+        {
+            super(comparable);
+        }
+
+        @Override
+        protected boolean evaluate(int comparison)
+        {
+            return comparison >= 0;
+        }
+    }
+
+    private static class NotNullMatcher<T> implements ArgumentMatcher<T>
     {
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(T argument)
         {
             return argument != null;
         }
     }
 
-    private static class SameMatcher implements ArgumentMatcher
+    public static class RegexMatcher implements ArgumentMatcher<String>
     {
-        private final Object ref;
+        private final String regex;
 
-        public SameMatcher(Object ref)
+        public RegexMatcher(String regex)
         {
-            this.ref = ref;
+            this.regex = regex;
         }
 
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(String argument)
         {
-            return argument == ref;
+            return argument != null && argument.matches(regex);
+        }
+    }
+
+    private static class StartsWithMatcher implements ArgumentMatcher<String>
+    {
+        private final String prefix;
+
+        private StartsWithMatcher(String prefix)
+        {
+            this.prefix = prefix;
+        }
+
+        @Override
+        public boolean matches(String argument)
+        {
+            return argument != null && argument.startsWith(prefix);
         }
     }
 }
