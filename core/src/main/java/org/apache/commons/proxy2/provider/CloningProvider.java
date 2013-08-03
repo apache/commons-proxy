@@ -56,11 +56,12 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
      */
     public CloningProvider(T cloneable)
     {
+        Validate.notNull(cloneable, "Cloneable object cannot be null.");
         Validate.isTrue(
                 MethodUtils.getAccessibleMethod(cloneable.getClass(), "clone") != null,
                 String.format("Class %s does not override clone() method as public.",
                         cloneable.getClass().getName()));
-        this.cloneable = Validate.notNull(cloneable, "Cloneable object cannot be null.");
+        this.cloneable = cloneable;
     }
 
     //**********************************************************************************************************************
