@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.provider;
+package org.apache.commons.proxy2.exception;
 
-import org.apache.commons.proxy2.util.AbstractTestCase;
-
-/**
- * @author James Carman
- * @since 1.0
- */
-public class TestNullProvider extends AbstractTestCase
+public class DelegateProviderExceptionTest extends AbstractExceptionClassTestCase
 {
 //**********************************************************************************************************************
-// Other Methods
+// Constructors
 //**********************************************************************************************************************
 
-    public void testGetObject()
+    public DelegateProviderExceptionTest()
     {
-        final NullProvider<Object> provider = new NullProvider<Object>();
-        assertNull(provider.getObject());
-    }
-
-    public void testSerialization()
-    {
-        assertSerializable(new NullProvider<Object>());
+        super(ObjectProviderException.class);
     }
 }

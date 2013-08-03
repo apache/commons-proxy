@@ -21,15 +21,19 @@ import org.apache.commons.proxy2.interceptor.matcher.invocation.MethodNameMatche
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
+import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-public class TestMethodNameMatcher extends AbstractTestCase
+import static org.junit.Assert.*;
+
+public class MethodNameMatcherTest extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testWithMatchingMethod() throws Exception
     {
         MethodNameMatcher matcher = new MethodNameMatcher("echo");
@@ -37,6 +41,7 @@ public class TestMethodNameMatcher extends AbstractTestCase
         assertTrue(matcher.matches(new MockInvocation(method,null)));
     }
 
+    @Test
     public void testWithNonMatchingMethod() throws Exception
     {
         MethodNameMatcher matcher = new MethodNameMatcher("foo");

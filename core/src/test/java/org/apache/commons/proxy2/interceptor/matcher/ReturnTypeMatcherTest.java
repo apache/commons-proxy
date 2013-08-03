@@ -22,16 +22,20 @@ import org.apache.commons.proxy2.interceptor.matcher.invocation.ReturnTypeMatche
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
+import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-public class TestReturnTypeMatcher extends AbstractTestCase
+import static org.junit.Assert.*;
+
+public class ReturnTypeMatcherTest extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testExactMatchNonMatching() throws Throwable
     {
         Method method = Echo.class.getMethod("echoBack", String.class);
@@ -40,6 +44,7 @@ public class TestReturnTypeMatcher extends AbstractTestCase
         assertFalse(matcher.matches(invocation));
     }
 
+    @Test
     public void testMatchVoid() throws Throwable
     {
         Method method = Echo.class.getMethod("echo");
@@ -48,6 +53,7 @@ public class TestReturnTypeMatcher extends AbstractTestCase
         assertTrue(matcher.matches(invocation));
     }
 
+    @Test
     public void testWithSupertypeMatch() throws Throwable
     {
         Method method = Echo.class.getMethod("echoBack", String.class);

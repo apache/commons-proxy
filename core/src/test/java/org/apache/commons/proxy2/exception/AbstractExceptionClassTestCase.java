@@ -17,13 +17,15 @@
 
 package org.apache.commons.proxy2.exception;
 
-import junit.framework.TestCase;
+import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * @author James Carman
  * @since 1.0
  */
-public abstract class AbstractExceptionClassTestCase extends TestCase
+public abstract class AbstractExceptionClassTestCase extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Fields
@@ -44,6 +46,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
 // Other Methods
 //**********************************************************************************************************************
 
+    @Test
     public void testCauseOnlyConstructor() throws Exception
     {
         final Exception cause = new Exception();
@@ -52,6 +55,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
         assertEquals(cause, e.getCause());
     }
 
+    @Test
     public void testMessageAndCauseConstructor() throws Exception
     {
         final Exception cause = new Exception();
@@ -61,6 +65,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
         assertEquals(cause, e.getCause());
     }
 
+    @Test
     public void testMessageOnlyConstructor() throws Exception
     {
         final String message = "message";
@@ -69,6 +74,7 @@ public abstract class AbstractExceptionClassTestCase extends TestCase
         assertNull(e.getCause());
     }
 
+    @Test
     public void testNoArgConstructor() throws Exception
     {
         Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {}).newInstance(new Object[] {});

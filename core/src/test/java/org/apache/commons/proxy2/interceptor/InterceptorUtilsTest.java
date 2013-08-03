@@ -15,16 +15,27 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.exception;
+package org.apache.commons.proxy2.interceptor;
 
-public class TestInvocationHandlerException extends AbstractExceptionClassTestCase
+import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.apache.commons.proxy2.util.Echo;
+import org.apache.commons.proxy2.util.MockInvocation;
+import org.junit.Test;
+
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.*;
+
+public class InterceptorUtilsTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
-
-    public TestInvocationHandlerException()
+    @Test
+    public void testConstant() throws Throwable
     {
-        super(InvokerException.class);
+        Interceptor interceptor = InterceptorUtils.constant("Hello!");
+        Method method = Echo.class.getMethod("echoBack", String.class);
+        Invocation invocation = new MockInvocation(method, "World!");
+        assertEquals("Hello!", interceptor.intercept(invocation));
     }
 }

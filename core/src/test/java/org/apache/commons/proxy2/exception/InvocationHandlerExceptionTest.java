@@ -17,14 +17,14 @@
 
 package org.apache.commons.proxy2.exception;
 
-public class TestDelegateProviderException extends AbstractExceptionClassTestCase
+public class InvocationHandlerExceptionTest extends AbstractExceptionClassTestCase
 {
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public TestDelegateProviderException()
+    public InvocationHandlerExceptionTest()
     {
-        super(ObjectProviderException.class);
+        super(InvokerException.class);
     }
 }

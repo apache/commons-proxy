@@ -18,34 +18,30 @@
 package org.apache.commons.proxy2.provider;
 
 import org.apache.commons.proxy2.util.AbstractTestCase;
-import org.apache.commons.proxy2.util.EchoImpl;
+import org.junit.Test;
 
-import java.util.Date;
+import static org.junit.Assert.*;
 
-public class TestObjectProviderUtils extends AbstractTestCase
+/**
+ * @since 1.0
+ */
+public class ConstantProviderTest extends AbstractTestCase
 {
-    public void testBean() throws Exception
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    @Test
+    public void testGetObject() throws Exception
     {
-        assertTrue(ObjectProviderUtils.bean(EchoImpl.class) instanceof BeanProvider);
+        final String s = "Hello, World!";
+        final ConstantProvider<String> provider = new ConstantProvider<String>(s);
+        assertSame(s, provider.getObject());
     }
 
-    public void testCloning() throws Exception
+    @Test
+    public void testSerialization()
     {
-        assertTrue(ObjectProviderUtils.cloning(new Date()) instanceof CloningProvider);
-    }
-
-    public void testConstant() throws Exception
-    {
-        assertTrue(ObjectProviderUtils.constant("Hello") instanceof ConstantProvider);
-    }
-
-    public void testNullValue() throws Exception
-    {
-        assertTrue(ObjectProviderUtils.nullValue() instanceof NullProvider);
-    }
-
-    public void testSingleton() throws Exception
-    {
-        assertTrue(ObjectProviderUtils.singleton(new ConstantProvider<Object>("Hello")) instanceof SingletonProvider);
+        assertSerializable(new ConstantProvider<String>("Hello, World!"));
     }
 }

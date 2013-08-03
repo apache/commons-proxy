@@ -19,33 +19,39 @@ package org.apache.commons.proxy2.provider;
 
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class TestCloningProvider extends AbstractTestCase
+import static org.junit.Assert.*;
+
+public class CloningProviderTest extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    @Test
     public void testSerialization()
     {
         assertSerializable(new CloningProvider<Date>(new Date()));
     }
 
+    @Test
     public void testValidCloneable()
     {
         final Date now = new Date();
         final CloningProvider<Date> provider = new CloningProvider<Date>(now);
-        final Date clone1 = ( Date ) provider.getObject();
+        final Date clone1 = (Date) provider.getObject();
         assertEquals(now, clone1);
         assertNotSame(now, clone1);
-        final Date clone2 = ( Date ) provider.getObject();
+        final Date clone2 = (Date) provider.getObject();
         assertEquals(now, clone2);
         assertNotSame(now, clone2);
         assertNotSame(clone2, clone1);
     }
 
+    @Test
     public void testWithExceptionThrown()
     {
         final CloningProvider<ExceptionCloneable> provider = new CloningProvider<ExceptionCloneable>(new ExceptionCloneable());
@@ -54,35 +60,22 @@ public class TestCloningProvider extends AbstractTestCase
             provider.getObject();
             fail();
         }
-        catch( ObjectProviderException e )
+        catch (ObjectProviderException e)
         {
         }
     }
 
+    @Test(expected = IllegalArgumentException.class)
     public void testWithInvalidCloneable()
     {
-        final CloningProvider<InvalidCloneable> provider = new CloningProvider<InvalidCloneable>(new InvalidCloneable());
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        new CloningProvider<InvalidCloneable>(new InvalidCloneable());
     }
 
-    public void testWithPrivateCloneMethod()
+    @Test(expected = IllegalArgumentException.class)
+    public void testWithProtectedCloneMethod()
     {
-        final CloningProvider<PrivateCloneable> provider = new CloningProvider<PrivateCloneable>(new PrivateCloneable());
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        final CloningProvider<ProtectedCloneable> provider = new CloningProvider<ProtectedCloneable>(new ProtectedCloneable());
+        provider.getObject();
     }
 
 //**********************************************************************************************************************
@@ -101,7 +94,7 @@ public class TestCloningProvider extends AbstractTestCase
     {
     }
 
-    public static class PrivateCloneable implements Cloneable
+    public static class ProtectedCloneable implements Cloneable
     {
         protected Object clone()
         {

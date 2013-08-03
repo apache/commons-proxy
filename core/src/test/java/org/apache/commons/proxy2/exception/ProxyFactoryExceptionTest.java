@@ -15,26 +15,20 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.impl;
+package org.apache.commons.proxy2.exception;
 
-import junit.framework.TestCase;
-import org.apache.commons.proxy2.util.DuplicateEcho;
-import org.apache.commons.proxy2.util.Echo;
-
-public class TestMethodSignature extends TestCase
+/**
+ * @author James Carman
+ * @since 1.0
+ */
+public class ProxyFactoryExceptionTest extends AbstractExceptionClassTestCase
 {
 //**********************************************************************************************************************
-// Other Methods
+// Constructors
 //**********************************************************************************************************************
 
-    public void testEquals() throws Exception
+    public ProxyFactoryExceptionTest()
     {
-        final MethodSignature sig = new MethodSignature(Echo.class.getMethod("echoBack", new Class[] {String.class}));
-        assertTrue(sig.equals(sig));
-        assertFalse(sig.equals("echoBack"));
-        assertEquals(sig, new MethodSignature(Echo.class.getMethod("echoBack", new Class[] {String.class})));
-        assertEquals(sig, new MethodSignature(DuplicateEcho.class.getMethod("echoBack", new Class[] {String.class})));
-        assertFalse(sig.equals(new MethodSignature(Echo.class.getMethod("echoBack", new Class[] {String.class, String.class}))));
-        assertFalse(sig.equals(new MethodSignature(Echo.class.getMethod("echo", new Class[] {}))));
+        super(ProxyFactoryException.class);
     }
 }

@@ -19,13 +19,13 @@ package org.apache.commons.proxy2.cglib;
 
 import org.apache.commons.proxy2.AbstractSubclassingProxyFactoryTestCase;
 
-public class TestCglibProxyFactory extends AbstractSubclassingProxyFactoryTestCase
+public class CglibProxyFactoryTest extends AbstractSubclassingProxyFactoryTestCase
 {
 //**********************************************************************************************************************
 // Constructors
 //**********************************************************************************************************************
 
-    public TestCglibProxyFactory()
+    public CglibProxyFactoryTest()
     {
     }
 }

@@ -19,54 +19,38 @@ package org.apache.commons.proxy2.provider;
 
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.junit.Test;
 
-public class TestBeanProvider extends AbstractTestCase
+public class BeanProviderTest extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Other Methods
 //**********************************************************************************************************************
 
+    @Test(expected = ObjectProviderException.class)
     public void testAbstractBeanClass()
     {
-        try
-        {
-            final BeanProvider<Number> p = new BeanProvider<Number>(Number.class);
-            p.getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        final BeanProvider<Number> p = new BeanProvider<Number>(Number.class);
+        p.getObject();
     }
 
+    @Test(expected = ObjectProviderException.class)
     public void testNonAccessibleConstructor()
     {
-        try
-        {
-            new BeanProvider<MyBean>(MyBean.class).getObject();
-            fail();
-        }
-        catch( ObjectProviderException e )
-        {
-        }
+        new BeanProvider<MyBean>(MyBean.class).getObject();
     }
 
+    @Test
     public void testSerialization()
     {
         assertSerializable(new BeanProvider<MyBean>(MyBean.class));
     }
 
+    @Test(expected = NullPointerException.class)
     public void testWithNullBeanClass()
     {
-        try
-        {
-            final BeanProvider<Object> p = new BeanProvider<Object>(null);
-            p.getObject();
-            fail("Should throw NullPointerException.");
-        }
-        catch( NullPointerException e )
-        {
-        }
+        final BeanProvider<Object> p = new BeanProvider<Object>(null);
+        p.getObject();
     }
 
 //**********************************************************************************************************************

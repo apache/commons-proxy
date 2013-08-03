@@ -17,16 +17,22 @@
 
 package org.apache.commons.proxy2;
 
-import junit.framework.TestCase;
+import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.DuplicateEcho;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class TestProxyUtils extends TestCase
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+public class ProxyUtilsTest extends AbstractTestCase
 {
 //**********************************************************************************************************************
 // Fields
@@ -38,17 +44,20 @@ public class TestProxyUtils extends TestCase
 // Other Methods
 //**********************************************************************************************************************
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         prevProperties = System.getProperties();
         System.setProperties(new Properties());
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         System.setProperties(prevProperties);
     }
 
+    @Test
     public void testNullValue()
     {
         assertNullValue(null, String.class);
@@ -67,25 +76,7 @@ public class TestProxyUtils extends TestCase
         assertEquals(expected, ProxyUtils.nullValue(type));
     }
 
-    public void testCreateNullObject() throws Exception
-    {
-        /*final Echo nullEcho = ( Echo ) ProxyUtils
-                .createNullObject(new JavassistProxyFactory(), new Class[] {Echo.class});
-        assertNull(nullEcho.echoBack("hello"));
-        assertNull(nullEcho.echoBack("hello", "world"));
-        assertEquals(( int ) 0, nullEcho.echoBack(12345));*/
-    }
-
-    public void testCreateNullObjectWithClassLoader() throws Exception
-    {
-        /*final Echo nullEcho = ( Echo ) ProxyUtils.createNullObject(new JavassistProxyFactory(),
-                                                                   Echo.class.getClassLoader(),
-                                                                   new Class[] {Echo.class});
-        assertNull(nullEcho.echoBack("hello"));
-        assertNull(nullEcho.echoBack("hello", "world"));
-        assertEquals(( int ) 0, nullEcho.echoBack(12345));*/
-    }
-
+    @Test
     public void testGetAllInterfaces()
     {
         assertNull(ProxyUtils.getAllInterfaces(null));
@@ -93,6 +84,7 @@ public class TestProxyUtils extends TestCase
                      Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
     }
 
+    @Test
     public void testGetJavaClassName() throws Exception
     {
         assertEquals("java.lang.Object[]", ProxyUtils.getJavaClassName(Object[].class));

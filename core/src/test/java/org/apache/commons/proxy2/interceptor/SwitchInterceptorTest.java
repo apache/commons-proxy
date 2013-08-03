@@ -22,17 +22,21 @@ import org.apache.commons.proxy2.interceptor.matcher.invocation.MethodNameMatche
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
 import static org.apache.commons.proxy2.interceptor.InterceptorUtils.constant;
 
-public class TestSwitchInterceptor extends AbstractTestCase
+public class SwitchInterceptorTest extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testWithMultipleAdvices() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor();
@@ -43,6 +47,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
         assertEquals("baz", interceptor.intercept(invocation));
     }
 
+    @Test
     public void testWithNoAdvice() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor();
@@ -51,6 +56,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
         assertEquals("foo", interceptor.intercept(invocation));
     }
 
+    @Test
     public void testWithSingleAdviceWhichDoesNotMatch() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(constant("bar"));
@@ -59,6 +65,7 @@ public class TestSwitchInterceptor extends AbstractTestCase
         assertEquals("foo", interceptor.intercept(invocation));
     }
 
+    @Test
     public void testWithSingleAdviceWhichMatches() throws Throwable
     {
         SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(constant("bar"));

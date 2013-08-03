@@ -23,8 +23,11 @@ import org.apache.commons.proxy2.provider.ConstantProvider;
 import org.apache.commons.proxy2.util.AbstractEcho;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
+import org.junit.Test;
 
 import java.util.Date;
+
+import static org.junit.Assert.*;
 
 /**
  * @author James Carman
@@ -33,15 +36,17 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractProxyFactoryTestCase
 {
+//----------------------------------------------------------------------------------------------------------------------
+// Fields
+//----------------------------------------------------------------------------------------------------------------------
+
     private static final Class<?>[] DATE_ONLY = new Class[]{Date.class};
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
 
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 // Other Methods
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testCanProxy()
     {
         assertTrue(factory.canProxy(new Class[]{Echo.class}));
@@ -54,122 +59,128 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(factory.canProxy(new Class[]{Echo.class, EchoImpl.class, String.class}));
     }
 
-    public void testDelegatorWithMultipleSuperclasses()
+    @Test
+    public void testDelegatorEquals() throws Exception
     {
-        try
-        {
-            factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()),
-                    new Class[]{EchoImpl.class, String.class});
-            fail();
-        }
-        catch (ProxyFactoryException e)
-        {
-        }
+        final EqualsEcho echo = new EqualsEcho("text");
+        final Echo proxy1 = factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
+                new Class[]{EqualsEcho.class});
+        final Echo proxy2 = factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
+                new Class[]{EqualsEcho.class});
+        assertEquals(proxy1, proxy1);
+        assertFalse(proxy1.equals(proxy2));
+        assertFalse(proxy2.equals(proxy1));
     }
 
+    @Test(expected = ProxyFactoryException.class)
+    public void testDelegatorWithMultipleSuperclasses()
+    {
+        factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()),
+                new Class[]{EchoImpl.class, String.class});
+    }
+
+    @Test
     public void testDelegatorWithSuperclass()
     {
-        final Echo echo = (Echo) factory
+        final Echo echo = factory
                 .createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{Echo.class, EchoImpl.class});
         assertTrue(echo instanceof EchoImpl);
     }
 
-    public void testInterceptorWithMultipleSuperclasses()
+    @Test
+    public void testInterceptorEquals()
     {
-        try
-        {
-            factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(),
-                    new Class[]{EchoImpl.class, String.class});
-            fail();
-        }
-        catch (ProxyFactoryException e)
-        {
-        }
+        final EqualsEcho echo = new EqualsEcho("text");
+        final Echo proxy1 = factory.createInterceptorProxy(echo,
+                new NoOpMethodInterceptor(), new Class[]{EqualsEcho.class});
+        final Echo proxy2 = factory.createInterceptorProxy(echo,
+                new NoOpMethodInterceptor(), new Class[]{EqualsEcho.class});
+        assertEquals(proxy1, proxy1);
+        assertFalse(proxy1.equals(proxy2));
+        assertFalse(proxy2.equals(proxy1));
     }
 
+    @Test(expected = ProxyFactoryException.class)
+    public void testInterceptorWithMultipleSuperclasses()
+    {
+        factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(),
+                new Class[]{EchoImpl.class, String.class});
+    }
+
+    @Test
     public void testInterceptorWithSuperclass()
     {
-        final Echo echo = (Echo) factory
+        final Echo echo = factory
                 .createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), new Class[]{Echo.class, EchoImpl.class});
         assertTrue(echo instanceof EchoImpl);
     }
 
+    @Test(expected = ProxyFactoryException.class)
     public void testInvocationHandlerWithMultipleSuperclasses()
     {
-        try
-        {
-            factory.createInvokerProxy(new NullInvoker(),
-                    new Class[]{EchoImpl.class, String.class});
-            fail();
-        }
-        catch (ProxyFactoryException e)
-        {
-        }
+        factory.createInvokerProxy(new NullInvoker(),
+                new Class[]{EchoImpl.class, String.class});
     }
 
+    @Test
+    public void testInvokerEquals() throws Exception
+    {
+        final Date proxy1 = factory.createInvokerProxy(new InvokerTester(), DATE_ONLY);
+        final Date proxy2 = factory.createInvokerProxy(new InvokerTester(), DATE_ONLY);
+        assertEquals(proxy1, proxy1);
+        assertFalse(proxy1.equals(proxy2));
+        assertFalse(proxy2.equals(proxy1));
+    }
+
+    @Test
     public void testInvokerWithSuperclass()
     {
-        final Echo echo = (Echo) factory
+        final Echo echo = factory
                 .createInvokerProxy(new NullInvoker(), new Class[]{Echo.class, EchoImpl.class});
         assertTrue(echo instanceof EchoImpl);
     }
 
+    @Test
     public void testProxiesWithClashingFinalMethodInSuperclass()
     {
         final Class<?>[] proxyClasses = new Class[]{Echo.class, FinalMethodEcho.class};
-        Echo proxy = (Echo) factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), proxyClasses);
+        Echo proxy = factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), proxyClasses);
         assertEquals("final", proxy.echoBack("echo"));
 
-        proxy = (Echo) factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), proxyClasses);
+        proxy = factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), proxyClasses);
         assertEquals("final", proxy.echoBack("echo"));
 
-        proxy = (Echo) factory.createInvokerProxy(new NullInvoker(), proxyClasses);
+        proxy = factory.createInvokerProxy(new NullInvoker(), proxyClasses);
         assertEquals("final", proxy.echoBack("echo"));
     }
 
+    @Test
     public void testWithAbstractSuperclass()
     {
-        final Echo echo = (Echo) factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{AbstractEcho.class});
+        final Echo echo = factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{AbstractEcho.class});
         assertEquals("hello", echo.echoBack("hello"));
         assertEquals("helloworld", echo.echoBack("hello", "world"));
     }
 
-    public void testInterceptorEquals()
-    {
-        final EqualsEcho echo = new EqualsEcho("text");
-        final Echo proxy1 = (Echo) factory.createInterceptorProxy(echo,
-                new NoOpMethodInterceptor(), new Class[] { EqualsEcho.class } );
-        final Echo proxy2 = (Echo) factory.createInterceptorProxy(echo,
-                new NoOpMethodInterceptor(), new Class[] { EqualsEcho.class } );
-        assertEquals(proxy1, proxy1);
-        assertFalse(proxy1.equals(proxy2));
-        assertFalse(proxy2.equals(proxy1));
-    }
-
-    public void testInvokerEquals() throws Exception
-    {
-        final Date proxy1 = (Date) factory.createInvokerProxy(new InvokerTester(), DATE_ONLY);
-        final Date proxy2 = (Date) factory.createInvokerProxy(new InvokerTester(), DATE_ONLY);
-        assertEquals(proxy1, proxy1);
-        assertFalse(proxy1.equals(proxy2));
-        assertFalse(proxy2.equals(proxy1));
-    }
-
-    public void testDelegatorEquals() throws Exception
-    {
-        final EqualsEcho echo = new EqualsEcho("text");
-        final Echo proxy1 = (Echo) factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
-                new Class[] { EqualsEcho.class });
-        final Echo proxy2 = (Echo) factory.createDelegatorProxy(new ConstantProvider<Echo>(echo),
-                new Class[] { EqualsEcho.class });
-        assertEquals(proxy1, proxy1);
-        assertFalse(proxy1.equals(proxy2));
-        assertFalse(proxy2.equals(proxy1));
-    }
-
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
 // Inner Classes
-//**********************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------
+
+    public static class EqualsEcho extends EchoImpl
+    {
+        @SuppressWarnings("unused")
+        private final String text;
+
+        protected EqualsEcho()
+        {
+            this("testing");
+        }
+
+        public EqualsEcho(String text)
+        {
+            this.text = text;
+        }
+    }
 
     public static final class FinalEcho extends EchoImpl
     {
@@ -180,22 +191,6 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         public final String echoBack(String message)
         {
             return "final";
-        }
-    }
-
-    public static class EqualsEcho extends EchoImpl
-    {
-        @SuppressWarnings("unused")
-        private final String text;
-
-        public EqualsEcho()
-        {
-            this("testing");
-        }
-
-        public EqualsEcho(String text)
-        {
-            this.text = text;
         }
     }
 

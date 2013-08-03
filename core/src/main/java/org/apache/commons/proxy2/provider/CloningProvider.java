@@ -17,13 +17,13 @@
 
 package org.apache.commons.proxy2.provider;
 
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Merely calls <code>clone()</code> (reflectively) on the given {@link Cloneable} object.
@@ -33,7 +33,9 @@ import java.lang.reflect.Method;
  */
 public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, Serializable
 {
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1L;
 
 //**********************************************************************************************************************
@@ -41,7 +43,6 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
 //**********************************************************************************************************************
 
     private final T cloneable;
-    private Method cloneMethod;
 
 //**********************************************************************************************************************
 // Constructors
@@ -53,14 +54,18 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
      *
      * @param cloneable the object to clone
      */
-    public CloningProvider( T cloneable )
+    public CloningProvider(T cloneable)
     {
-        this.cloneable = cloneable;
+        Validate.isTrue(
+                MethodUtils.getAccessibleMethod(cloneable.getClass(), "clone") != null,
+                String.format("Class %s does not override clone() method as public.",
+                        cloneable.getClass().getName()));
+        this.cloneable = Validate.notNull(cloneable, "Cloneable object cannot be null.");
     }
 
-  //**********************************************************************************************************************
- // ObjectProvider Implementation
- //**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // ObjectProvider Implementation
+    //**********************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -70,17 +75,22 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
     {
         try
         {
-            return (T)getCloneMethod().invoke(cloneable, ProxyUtils.EMPTY_ARGUMENTS);
+            return (T) MethodUtils.invokeExactMethod(cloneable, "clone");
         }
-        catch( IllegalAccessException e )
+        catch (IllegalAccessException e)
         {
             throw new ObjectProviderException(
                     "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e);
         }
-        catch( InvocationTargetException e )
+        catch (InvocationTargetException e)
         {
             throw new ObjectProviderException(
                     "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e);
+        }
+        catch (NoSuchMethodException e)
+        {
+            throw new ObjectProviderException(
+                    String.format("Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()));
         }
     }
 
@@ -88,20 +98,5 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
 // Getter/Setter Methods
 //**********************************************************************************************************************
 
-    private synchronized Method getCloneMethod()
-    {
-        if( cloneMethod == null )
-        {
-            try
-            {
-                cloneMethod = cloneable.getClass().getMethod("clone", ProxyUtils.EMPTY_ARGUMENT_TYPES);
-            }
-            catch( NoSuchMethodException e )
-            {
-                throw new ObjectProviderException(
-                        "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e);
-            }
-        }
-        return cloneMethod;
-    }
+
 }

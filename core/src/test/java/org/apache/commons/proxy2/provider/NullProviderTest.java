@@ -15,23 +15,33 @@
  * limitations under the License.
  */
 
-package org.apache.commons.proxy2.interceptor;
+package org.apache.commons.proxy2.provider;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.util.AbstractTestCase;
-import org.apache.commons.proxy2.util.Echo;
-import org.apache.commons.proxy2.util.MockInvocation;
+import org.junit.Test;
 
-import java.lang.reflect.Method;
+import static org.junit.Assert.*;
 
-public class TestInterceptorUtils extends AbstractTestCase
+/**
+ * @author James Carman
+ * @since 1.0
+ */
+public class NullProviderTest extends AbstractTestCase
 {
-    public void testConstant() throws Throwable
+//**********************************************************************************************************************
+// Other Methods
+//**********************************************************************************************************************
+
+    @Test
+    public void testGetObject()
     {
-        Interceptor interceptor = InterceptorUtils.constant("Hello!");
-        Method method = Echo.class.getMethod("echoBack", String.class);
-        Invocation invocation = new MockInvocation(method, "World!");
-        assertEquals("Hello!", interceptor.intercept(invocation));
+        final NullProvider<Object> provider = new NullProvider<Object>();
+        assertNull(provider.getObject());
+    }
+
+    @Test
+    public void testSerialization()
+    {
+        assertSerializable(new NullProvider<Object>());
     }
 }

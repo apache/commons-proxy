@@ -19,28 +19,26 @@ package org.apache.commons.proxy2.interceptor;
 
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.junit.Test;
 
-public class TestObjectProviderInterceptor extends AbstractTestCase
+import static org.junit.Assert.*;
+
+public class ObjectProviderInterceptorTest extends AbstractTestCase
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testIntercept() throws Throwable
     {
         ObjectProviderInterceptor interceptor = new ObjectProviderInterceptor(ObjectProviderUtils.constant("Hello!"));
         assertEquals("Hello!", interceptor.intercept(null));
     }
 
+    @Test(expected = NullPointerException.class)
     public void testWithNullProvider()
     {
-        try
-        {
-            new ObjectProviderInterceptor(null);
-        }
-        catch (NullPointerException e)
-        {
-            assertEquals("Provider cannot be null.", e.getMessage());
-        }
+        new ObjectProviderInterceptor(null);
     }
 }
