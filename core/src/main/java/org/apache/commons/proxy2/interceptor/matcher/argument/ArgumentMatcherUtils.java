@@ -100,7 +100,7 @@ public final class ArgumentMatcherUtils
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static class AnyMatcher implements ArgumentMatcher<Object>
+    private static final class AnyMatcher implements ArgumentMatcher<Object>
     {
         @Override
         public boolean matches(Object argument)
@@ -148,7 +148,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class EqualsMatcher<T> implements ArgumentMatcher<T>
+    private static final class EqualsMatcher<T> implements ArgumentMatcher<T>
     {
         private final T value;
 
@@ -164,7 +164,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class GreaterThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    private static final class GreaterThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
     {
         private GreaterThanMatcher(C comparable)
         {
@@ -178,7 +178,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class GreaterThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    private static final class GreaterThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
     {
         private GreaterThanOrEqualMatcher(C comparable)
         {
@@ -192,7 +192,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class InstanceOfMatcher implements ArgumentMatcher<Object>
+    private static final class InstanceOfMatcher implements ArgumentMatcher<Object>
     {
         private final Class<?> type;
 
@@ -208,7 +208,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class IsNullMatcher implements ArgumentMatcher<Object>
+    private static final class IsNullMatcher implements ArgumentMatcher<Object>
     {
         @Override
         public boolean matches(Object argument)
@@ -217,7 +217,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class LessThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    private static final class LessThanMatcher<C extends Comparable> extends ComparatorMatcher<C>
     {
         private LessThanMatcher(C comparable)
         {
@@ -231,7 +231,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class LessThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
+    private static final class LessThanOrEqualMatcher<C extends Comparable> extends ComparatorMatcher<C>
     {
         private LessThanOrEqualMatcher(C comparable)
         {
@@ -245,7 +245,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class NotNullMatcher<T> implements ArgumentMatcher<T>
+    private static final class NotNullMatcher<T> implements ArgumentMatcher<T>
     {
         @Override
         public boolean matches(T argument)
@@ -270,7 +270,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static class StartsWithMatcher implements ArgumentMatcher<String>
+    private static final class StartsWithMatcher implements ArgumentMatcher<String>
     {
         private final String prefix;
 
