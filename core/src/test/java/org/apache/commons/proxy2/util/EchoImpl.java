@@ -48,11 +48,31 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
 
     public String echoBack( String[] messages )
     {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for( int i = 0; i < messages.length; i++ )
         {
             String message = messages[i];
             sb.append(message);
+        }
+        return sb.toString();
+    }
+
+    public String echoBack( String[][] messages )
+    {
+        final StringBuilder sb = new StringBuilder();
+        for( int i = 0; i < messages.length; i++ )
+        {
+            sb.append(echoBack(messages[i]));
+        }
+        return sb.toString();
+    }
+
+    public String echoBack( String[][][] messages )
+    {
+        final StringBuilder sb = new StringBuilder();
+        for( int i = 0; i < messages.length; i++ )
+        {
+            sb.append(echoBack(messages[i]));
         }
         return sb.toString();
     }

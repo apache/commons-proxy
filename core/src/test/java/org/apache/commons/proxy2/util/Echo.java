@@ -35,6 +35,10 @@ public interface Echo
 
     public String echoBack( String[] messages );
 
+    public String echoBack( String[][] messages );
+
+    public String echoBack( String[][][] messages );
+
     public int echoBack( int i );
 
     public boolean echoBack( boolean b );
@@ -44,4 +48,5 @@ public interface Echo
     public void illegalArgument();
 
     public void ioException() throws IOException;
+
 }
