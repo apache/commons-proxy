@@ -21,14 +21,36 @@ import java.lang.annotation.Annotation;
 
 import org.apache.commons.proxy2.interceptor.InterceptorUtils;
 
-public abstract class AnnotationTrainer<A extends Annotation> extends BaseAnnotationTrainer<AnnotationTrainer<A>, A>
+public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A>, A extends Annotation> extends BaseTrainer<S, A>
 {
-    protected AnnotationTrainer() {
+    protected BaseAnnotationTrainer() {
         super();
     }
 
-    protected AnnotationTrainer(Class<A> traineeType) {
+    protected BaseAnnotationTrainer(Class<A> traineeType) {
         super(traineeType);
+    }
+
+    protected class WhenAnnotation<R> extends WhenObject<R>
+    {
+        protected S thenStub(Class<R> type) {
+            trainingContext().push(type);
+            trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
+            return self();
+        }
+
+        @Override
+        protected S thenStub(BaseTrainer<?, R> trainer) {
+            final R trainee = trainingContext().push(trainer.traineeType);
+            trainer.train(trainee);
+            trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
+            return self();
+        }
+    }
+
+    @Override
+    protected <R> WhenAnnotation<R> when(R expression) {
+        return new WhenAnnotation<R>();
     }
 
 }
