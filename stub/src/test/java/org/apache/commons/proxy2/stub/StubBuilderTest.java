@@ -17,14 +17,12 @@
 
 package org.apache.commons.proxy2.stub;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.proxy2.cglib.CglibProxyFactory;
-import org.apache.commons.proxy2.provider.BeanProvider;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.proxy2.provider.BeanProvider;
+import org.junit.Test;
 
 public class StubBuilderTest extends AbstractStubTestCase
 {
