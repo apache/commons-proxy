@@ -39,6 +39,8 @@ public class SwitchInterceptor implements Interceptor, Serializable
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
+    private static final long serialVersionUID = 1L;
+
     private final List<Pair<InvocationMatcher, Interceptor>> cases = new CopyOnWriteArrayList<Pair<InvocationMatcher, Interceptor>>();
 
 //----------------------------------------------------------------------------------------------------------------------
