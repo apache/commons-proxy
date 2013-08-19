@@ -49,7 +49,7 @@ public class RecordedInvocation
     public RecordedInvocation(Method invokedMethod, Object[] arguments)
     {
         this.invokedMethod = invokedMethod;
-        this.arguments = ArrayUtils.clone(arguments);
+        this.arguments = ArrayUtils.nullToEmpty(ArrayUtils.clone(arguments));
     }
 
 //----------------------------------------------------------------------------------------------------------------------
