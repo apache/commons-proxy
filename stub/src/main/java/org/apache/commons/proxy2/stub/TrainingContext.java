@@ -64,13 +64,18 @@ public class TrainingContext
 
     <T> T pop()
     {
+        return pop(NullInvoker.INSTANCE);
+    }
+
+    <T> T pop(Invoker invoker)
+    {
         final TrainingContextFrame<?> frame = frameDeque.pop();
         return proxyFactory.createInterceptorProxy(
-                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, frame.type),
+                proxyFactory.createInvokerProxy(invoker, frame.type),
                 frame.stubInterceptor,
                 frame.type);
     }
-
+    
     <T> T push(Class<T> type)
     {
         return push(type, new SwitchInterceptor());
@@ -84,7 +89,7 @@ public class TrainingContext
         return proxyFactory.createInvokerProxy(invoker, type);
     }
 
-    public void record(ArgumentMatcher argumentMatcher)
+    public void record(ArgumentMatcher<?> argumentMatcher)
     {
         peek().argumentMatchers.add(argumentMatcher);
     }
@@ -118,9 +123,9 @@ public class TrainingContext
     private static final class MatchingArgumentsMatcher implements InvocationMatcher
     {
         private final RecordedInvocation recordedInvocation;
-        private final ArgumentMatcher[] matchers;
+        private final ArgumentMatcher<?>[] matchers;
 
-        private MatchingArgumentsMatcher(RecordedInvocation recordedInvocation, ArgumentMatcher[] matchers)
+        private MatchingArgumentsMatcher(RecordedInvocation recordedInvocation, ArgumentMatcher<?>[] matchers)
         {
             this.recordedInvocation = recordedInvocation;
             this.matchers = ArrayUtils.clone(matchers);
@@ -138,7 +143,9 @@ public class TrainingContext
             for (int i = 0; i < arguments.length; i++)
             {
                 Object argument = arguments[i];
-                if (!matchers[i].matches(argument))
+                @SuppressWarnings({ "rawtypes", "unchecked" })
+                final boolean matches = ((ArgumentMatcher) matchers[i]).matches(argument);
+                if (!matches)
                 {
                     return false;
                 }
@@ -153,7 +160,7 @@ public class TrainingContext
 
         private final SwitchInterceptor stubInterceptor;
 
-        private final List<ArgumentMatcher> argumentMatchers = new LinkedList<ArgumentMatcher>();
+        private final List<ArgumentMatcher<?>> argumentMatchers = new LinkedList<ArgumentMatcher<?>>();
 
         private InvocationMatcher matcher = null;
 
@@ -182,7 +189,7 @@ public class TrainingContext
 
         void methodInvoked(Method method, Object[] arguments)
         {
-            final ArgumentMatcher[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers.size()]);
+            final ArgumentMatcher<?>[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers.size()]);
             argumentMatchers.clear();
             final RecordedInvocation invocation = new RecordedInvocation(method, arguments);
             if (ArrayUtils.isEmpty(matchersArray))
@@ -202,6 +209,8 @@ public class TrainingContext
 
     private static final class TrainingInvoker implements Invoker
     {
+        private static final long serialVersionUID = 1L;
+
         private final String id;
 
         private TrainingInvoker(TrainingContextFrame<?> frame)
