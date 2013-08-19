@@ -277,6 +277,11 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         }
     }
 
+    /**
+     * Intermediate result of a when(Class) call.
+     * Provided because it is such a common case to have a mismatch between a
+     * declared Class<?> return type and the bound parameter of a class literal.
+     */
     protected class WhenClass extends BaseWhen<Class<?>>
     {
         protected S thenReturn(Class<?> value)
