@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.lang3.builder.Builder;
+import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.interceptor.SwitchInterceptor;
@@ -30,9 +31,9 @@ public class StubBuilder<T> implements Builder<T>
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
+    protected final Class<T> type;
     private final ProxyFactory proxyFactory;
     private final T target;
-    private final Class<T> type;
     private final SwitchInterceptor switchInterceptor = new SwitchInterceptor();
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -41,11 +42,16 @@ public class StubBuilder<T> implements Builder<T>
 
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type)
     {
-        this.proxyFactory = proxyFactory;
-        this.type = type;
-        this.target = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, type);
+        this(proxyFactory, type, NullInvoker.INSTANCE);
     }
 
+    public StubBuilder(ProxyFactory proxyFactory, Class<T> type, Invoker invoker)
+    {
+        this.proxyFactory = proxyFactory;
+        this.type = type;
+        this.target = proxyFactory.createInvokerProxy(invoker, type);
+    }
+    
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type, ObjectProvider<? extends T> provider)
     {
         this.proxyFactory = proxyFactory;
@@ -69,7 +75,7 @@ public class StubBuilder<T> implements Builder<T>
         return proxyFactory.createInterceptorProxy(target, switchInterceptor, type);
     }
 
-    public StubBuilder<T> train(Trainer<T> trainer)
+    public StubBuilder<T> train(BaseTrainer<?, T> trainer)
     {
         try
         {
