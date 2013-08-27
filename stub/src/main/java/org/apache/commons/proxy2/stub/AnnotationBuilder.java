@@ -22,8 +22,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 import org.apache.commons.lang3.AnnotationUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -159,6 +162,44 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
         }
     };
 
+    private class MapAnnotationTrainer extends AnnotationTrainer<A>
+    {
+        final Map<String, ?> members;
+
+        MapAnnotationTrainer(Map<String, ?> members)
+        {
+            super(type);
+            this.members = members;
+        }
+
+        @Override
+        protected void train(A trainee)
+        {
+            WhenObject<Object> bud;
+            AnnotationTrainer<A> dy = this;
+            for (Map.Entry<String, ?> attr : members.entrySet()) {
+                final Method m;
+                try {
+                    m = traineeType.getDeclaredMethod(attr.getKey());
+                } catch (Exception e1) {
+                    throw new IllegalArgumentException(String.format("Could not detect annotation member %1$s",
+                        attr.getKey()));
+                }
+                try {
+                    bud = dy.when(m.invoke(trainee));
+                } catch (Exception e) {
+                    //it must have happened on the invoke, so we didn't call when... it shouldn't happen, but we'll simply skip:
+                    continue;
+                }
+                final Object value = attr.getValue();
+                Validate.isTrue(TypeUtils.isInstance(value, m.getReturnType()),
+                        "Value %s can not be assigned to %s", value,
+                        m.getReturnType());
+                dy = bud.thenReturn(value);
+            }
+        }
+    }
+
     public static <A extends Annotation> A buildDefault(Class<A> type)
     {
         return of(type).build();
@@ -192,6 +233,11 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     private AnnotationBuilder(Class<A> type, A target)
     {
         super(PROXY_FACTORY, type, target);
+    }
+
+    public AnnotationBuilder<A> withMembers(Map<String, ?> members)
+    {
+        return train(new MapAnnotationTrainer(members));
     }
 
     @Override

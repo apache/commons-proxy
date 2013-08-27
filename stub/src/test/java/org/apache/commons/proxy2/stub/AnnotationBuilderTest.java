@@ -19,7 +19,12 @@ package org.apache.commons.proxy2.stub;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -76,6 +81,29 @@ public class AnnotationBuilderTest
         assertEquals(0, nestingAnnotation.child().finiteValues().length);
         assertEquals(null, nestingAnnotation.child().someType());
         assertEquals("somethingElse", nestingAnnotation.somethingElse());
+    }
+
+    @Test
+    public void testMemberMap()
+    {
+        final Map<String, Object> members = new HashMap<String, Object>();
+        members.put("annString", "foo");
+        members.put("finiteValues", FiniteValues.values());
+        members.put("someType", Object.class);
+
+        final CustomAnnotation customAnnotation = AnnotationBuilder.of(CustomAnnotation.class).withMembers(members).build();
+        		
+        assertNotNull(customAnnotation);
+        assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
+        assertEquals("foo", customAnnotation.annString());
+        assertEquals(3, customAnnotation.finiteValues().length);
+        assertEquals(Object.class, customAnnotation.someType());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadMemberMap()
+    {
+        AnnotationBuilder.of(CustomAnnotation.class).withMembers(Collections.singletonMap("annString", Integer.valueOf(100)));
     }
 
     public @interface NestingAnnotation
