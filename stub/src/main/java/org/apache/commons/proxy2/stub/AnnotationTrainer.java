@@ -19,8 +19,6 @@ package org.apache.commons.proxy2.stub;
 
 import java.lang.annotation.Annotation;
 
-import org.apache.commons.proxy2.interceptor.InterceptorUtils;
-
 public abstract class AnnotationTrainer<A extends Annotation> extends BaseAnnotationTrainer<AnnotationTrainer<A>, A>
 {
     protected AnnotationTrainer() {
