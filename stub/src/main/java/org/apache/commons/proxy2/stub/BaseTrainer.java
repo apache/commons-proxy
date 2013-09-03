@@ -20,8 +20,8 @@ package org.apache.commons.proxy2.stub;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.TypeUtils;
+import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.ObjectProvider;
-import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.interceptor.InterceptorUtils;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.apache.commons.proxy2.interceptor.matcher.argument.ArgumentMatcherUtils;
@@ -178,20 +178,23 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
     {
         public S thenThrow(Exception e)
         {
-            trainingContext().then(InterceptorUtils.throwing(e));
-            return self();
+            return then(InterceptorUtils.throwing(e));
         }
 
         public S thenThrow(ObjectProvider<? extends Exception> provider)
         {
-            trainingContext().then(InterceptorUtils.throwing(provider));
-            return self();
+            return then(InterceptorUtils.throwing(provider));
         }
 
         public S thenAnswer(ObjectProvider<? extends R> provider)
         {
-            trainingContext().then(InterceptorUtils.provider(provider));
-            return self();
+        	return then(InterceptorUtils.provider(provider));
+        }
+
+        public S then(Interceptor interceptor)
+        {
+        	trainingContext().then(interceptor);
+        	return self();
         }
     }
 
