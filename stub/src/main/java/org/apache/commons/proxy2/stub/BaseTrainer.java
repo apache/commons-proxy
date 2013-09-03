@@ -178,19 +178,19 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected abstract class BaseWhen<R>
     {
-        protected S thenThrow(Exception e)
+        public S thenThrow(Exception e)
         {
             trainingContext().then(InterceptorUtils.throwing(e));
             return self();
         }
 
-        protected S thenThrow(ObjectProvider<? extends Exception> provider)
+        public S thenThrow(ObjectProvider<? extends Exception> provider)
         {
             trainingContext().then(InterceptorUtils.throwing(provider));
             return self();
         }
 
-        protected S thenAnswer(ObjectProvider<? extends R> provider)
+        public S thenAnswer(ObjectProvider<? extends R> provider)
         {
             trainingContext().then(InterceptorUtils.provider(provider));
             return self();
@@ -199,7 +199,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenBooleanArray extends BaseWhen<boolean[]>
     {
-        protected S thenReturn(boolean... values)
+        public S thenReturn(boolean... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -208,7 +208,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenByteArray extends BaseWhen<byte[]>
     {
-        protected S thenReturn(byte... values)
+        public S thenReturn(byte... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -217,7 +217,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenCharArray extends BaseWhen<char[]>
     {
-        protected S thenReturn(char... values)
+        public S thenReturn(char... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -226,7 +226,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenDoubleArray extends BaseWhen<double[]>
     {
-        protected S thenReturn(double... values)
+        public S thenReturn(double... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -235,7 +235,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenFloatArray extends BaseWhen<float[]>
     {
-        protected S thenReturn(float... values)
+        public S thenReturn(float... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -244,7 +244,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenIntArray extends BaseWhen<int[]>
     {
-        protected S thenReturn(int... values)
+    	public S thenReturn(int... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -253,7 +253,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenLongArray extends BaseWhen<long[]>
     {
-        protected S thenReturn(long... values)
+    	public S thenReturn(long... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -262,13 +262,13 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenObject<R> extends BaseWhen<R>
     {
-        protected S thenReturn(R value)
+    	public S thenReturn(R value)
         {
             trainingContext().then(InterceptorUtils.constant(value));
             return self();
         }
 
-        protected S thenStub(BaseTrainer<?, R> trainer)
+        public S thenStub(BaseTrainer<?, R> trainer)
         {
             final R trainee = trainingContext().push(trainer.traineeType);
             trainer.train(trainee);
@@ -284,7 +284,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
      */
     protected class WhenClass extends BaseWhen<Class<?>>
     {
-        protected S thenReturn(Class<?> value)
+    	public S thenReturn(Class<?> value)
         {
             trainingContext().then(InterceptorUtils.constant(value));
             return self();
@@ -293,7 +293,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenObjectArray<R> extends BaseWhen<R[]>
     {
-        protected S thenReturn(R... values)
+    	public S thenReturn(R... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -302,7 +302,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenShortArray extends BaseWhen<short[]>
     {
-        protected S thenReturn(short... values)
+    	public S thenReturn(short... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();

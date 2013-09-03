@@ -33,14 +33,14 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
 
     protected class WhenAnnotation<R> extends WhenObject<R>
     {
-        protected S thenStub(Class<R> type) {
+    	public S thenStub(Class<R> type) {
             trainingContext().push(type);
             trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
             return self();
         }
 
         @Override
-        protected S thenStub(BaseTrainer<?, R> trainer) {
+        public S thenStub(BaseTrainer<?, R> trainer) {
             final R trainee = trainingContext().push(trainer.traineeType);
             trainer.train(trainee);
             trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
