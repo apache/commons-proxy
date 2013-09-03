@@ -111,57 +111,57 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         return TrainingContext.getCurrent();
     }
 
-    protected <R> WhenObject<R> when(R expression)
+    public <R> WhenObject<R> when(R expression)
     {
         return new WhenObject<R>();
     }
 
-    protected WhenClass when(Class<?> expression)
+    public WhenClass when(Class<?> expression)
     {
         return new WhenClass();
     }
 
-    protected WhenByteArray when(byte[] expression)
+    public WhenByteArray when(byte[] expression)
     {
         return new WhenByteArray();
     }
 
-    protected WhenBooleanArray when(boolean[] expression)
+    public WhenBooleanArray when(boolean[] expression)
     {
         return new WhenBooleanArray();
     }
 
-    protected WhenIntArray when(int[] expression)
+    public WhenIntArray when(int[] expression)
     {
         return new WhenIntArray();
     }
 
-    protected WhenShortArray when(short[] expresssion)
+    public WhenShortArray when(short[] expresssion)
     {
         return new WhenShortArray();
     }
 
-    protected WhenLongArray when(long[] expression)
+    public WhenLongArray when(long[] expression)
     {
         return new WhenLongArray();
     }
 
-    protected WhenFloatArray when(float[] expression)
+    public WhenFloatArray when(float[] expression)
     {
         return new WhenFloatArray();
     }
 
-    protected WhenDoubleArray when(double[] expression)
+    public WhenDoubleArray when(double[] expression)
     {
         return new WhenDoubleArray();
     }
 
-    protected <R> WhenObjectArray<R> when(R[] expression)
+    public <R> WhenObjectArray<R> when(R[] expression)
     {
         return new WhenObjectArray<R>();
     }
 
-    protected WhenCharArray when(char[] expression)
+    public WhenCharArray when(char[] expression)
     {
         return new WhenCharArray();
     }

@@ -49,7 +49,7 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
     }
 
     @Override
-    protected <R> WhenAnnotation<R> when(R expression) {
+	public <R> WhenAnnotation<R> when(R expression) {
         return new WhenAnnotation<R>();
     }
 
