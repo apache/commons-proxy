@@ -75,25 +75,23 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected <R> R any(Class<R> type)
     {
-        record(ArgumentMatcherUtils.any());
-        return null;
-    }
-
-    private void record(ArgumentMatcher<?> matcher)
-    {
-        trainingContext().record(matcher);
+        return argThat(ArgumentMatcherUtils.<R> any());
     }
 
     protected <R> R eq(R value)
     {
-        record(ArgumentMatcherUtils.eq(value));
-        return value;
+        return argThat(ArgumentMatcherUtils.eq(value));
     }
 
     protected <R> R isInstance(Class<R> type)
     {
-        record(ArgumentMatcherUtils.isA(type));
-        return ProxyUtils.nullValue(type);
+        return argThat(ArgumentMatcherUtils.<R> isA(type));
+    }
+
+    protected <R> R argThat(ArgumentMatcher<R> matcher)
+    {
+        trainingContext().record(matcher);
+        return null;
     }
 
     protected void thenThrow(Exception e)

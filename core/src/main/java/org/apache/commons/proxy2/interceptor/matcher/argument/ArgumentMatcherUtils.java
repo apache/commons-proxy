@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.interceptor.matcher.argument;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 
@@ -27,9 +28,9 @@ public final class ArgumentMatcherUtils
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static ArgumentMatcher<Object> any()
+    public static <T> ArgumentMatcher<T> any()
     {
-        return new AnyMatcher();
+        return new AnyMatcher<T>();
     }
 
     public static ArgumentMatcher<String> endsWith(String suffix)
@@ -52,14 +53,14 @@ public final class ArgumentMatcherUtils
         return new GreaterThanOrEqualMatcher<C>(comparable);
     }
 
-    public static ArgumentMatcher<Object> isA(final Class<?> type)
+    public static <T> ArgumentMatcher<T> isA(final Class<?> type)
     {
-        return new InstanceOfMatcher(type);
+        return new InstanceOfMatcher<T>(type);
     }
 
-    public static ArgumentMatcher<Object> isNull()
+    public static <T> ArgumentMatcher<T> isNull()
     {
-        return new IsNullMatcher();
+        return new IsNullMatcher<T>();
     }
 
     public static <C extends Comparable<?>> ArgumentMatcher<C> lt(C comparable)
@@ -100,10 +101,10 @@ public final class ArgumentMatcherUtils
 // Inner Classes
 //----------------------------------------------------------------------------------------------------------------------
 
-    private static final class AnyMatcher implements ArgumentMatcher<Object>
+    private static final class AnyMatcher<T> implements ArgumentMatcher<T>
     {
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(T argument)
         {
             return true;
         }
@@ -146,7 +147,7 @@ public final class ArgumentMatcherUtils
         @Override
         public boolean matches(String argument)
         {
-            return argument != null && argument.endsWith(suffix);
+        	return StringUtils.endsWith(argument, suffix);
         }
     }
 
@@ -194,26 +195,26 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class InstanceOfMatcher implements ArgumentMatcher<Object>
+    private static final class InstanceOfMatcher<T> implements ArgumentMatcher<T>
     {
         private final Class<?> type;
 
         public InstanceOfMatcher(Class<?> type)
         {
-            this.type = type;
+            this.type = Validate.notNull(type, "type");
         }
 
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(T argument)
         {
             return type.isInstance(argument);
         }
     }
 
-    private static final class IsNullMatcher implements ArgumentMatcher<Object>
+    private static final class IsNullMatcher<T> implements ArgumentMatcher<T>
     {
         @Override
-        public boolean matches(Object argument)
+        public boolean matches(T argument)
         {
             return argument == null;
         }
@@ -284,7 +285,7 @@ public final class ArgumentMatcherUtils
         @Override
         public boolean matches(String argument)
         {
-            return argument != null && argument.startsWith(prefix);
+        	return StringUtils.startsWith(argument, prefix);
         }
     }
 }
