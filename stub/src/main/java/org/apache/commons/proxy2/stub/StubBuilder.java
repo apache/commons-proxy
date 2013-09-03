@@ -75,7 +75,7 @@ public class StubBuilder<T> implements Builder<T>
         return proxyFactory.createInterceptorProxy(target, switchInterceptor, type);
     }
 
-    public StubBuilder<T> train(BaseTrainer<?, T> trainer)
+    public StubBuilder<T> train(BaseTrainer<?, ? super T> trainer)
     {
         try
         {

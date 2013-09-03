@@ -241,7 +241,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     }
 
     @Override
-    public AnnotationBuilder<A> train(BaseTrainer<?, A> trainer)
+    public AnnotationBuilder<A> train(BaseTrainer<?, ? super A> trainer)
     {
         return (AnnotationBuilder<A>) super.train(trainer);
     }
