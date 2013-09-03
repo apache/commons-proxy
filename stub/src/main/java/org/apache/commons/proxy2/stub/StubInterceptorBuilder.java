@@ -48,12 +48,12 @@ public class StubInterceptorBuilder
         return interceptor;
     }
 
-    public <T> StubInterceptorBuilder trainFor(Class<T> type, Trainer<T> trainer)
+    public <T> StubInterceptorBuilder train(Trainer<T> trainer)
     {
         try
         {
-            TrainingContext trainingContext = TrainingContext.set(proxyFactory);
-            T stub = trainingContext.push(type, interceptor);
+            final TrainingContext trainingContext = TrainingContext.set(proxyFactory);
+            final T stub = trainingContext.push(trainer.traineeType, interceptor);
             trainer.train(stub);
         }
         finally

@@ -50,7 +50,7 @@ public class StubInterceptorBuilderTest extends AbstractStubTestCase
     @Override
     protected StubInterface createProxy(Trainer<StubInterface> trainer)
     {
-        Interceptor interceptor = builder.trainFor(StubInterface.class, trainer).build();
+        Interceptor interceptor = builder.train(trainer).build();
         return proxyFactory.createInterceptorProxy(
                 proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, StubInterface.class),
                 interceptor,
