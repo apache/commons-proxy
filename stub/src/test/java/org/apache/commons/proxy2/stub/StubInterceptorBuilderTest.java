@@ -18,14 +18,12 @@
 package org.apache.commons.proxy2.stub;
 
 import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.cglib.CglibProxyFactory;
 import org.apache.commons.proxy2.invoker.NullInvoker;
-import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import static org.junit.Assert.*;
 
@@ -57,43 +55,43 @@ public class StubInterceptorBuilderTest extends AbstractStubTestCase
                 StubInterface.class);
     }
 
-    //    @Test
-//    public void testWithNestedAnnotations()
-//    {
-//        Interceptor interceptor = builder.trainFor(RetentionWrapper.class, new Trainer<RetentionWrapper>()
-//        {
-//            @Override
-//            protected void train(RetentionWrapper trainee)
-//            {
-//
-//                when(trainee.value()).thenStub(new Trainer<Retention>()
-//                {
-//                    @Override
-//                    protected void train(Retention trainee)
-//                    {
-//                        when(trainee.value()).thenReturn(RetentionPolicy.RUNTIME);
-//                    }
-//                });
-//            }
-//        }).build();
-//        RetentionWrapper wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, RetentionWrapper.class);
-//        assertNotNull(wrapper.value());
-//        assertEquals(RetentionPolicy.RUNTIME, wrapper.value().value());
-//    }
-//
-//    @Test
-//    public void testWithSimpleAnnotations()
-//    {
-//        Interceptor interceptor = builder.trainFor(Retention.class, new Trainer<Retention>()
-//        {
-//            @Override
-//            protected void train(Retention trainee)
-//            {
-//                when(trainee.value()).thenReturn(RetentionPolicy.RUNTIME);
-//            }
-//        }).build();
-//        Retention wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, Retention.class);
-//        assertEquals(RetentionPolicy.RUNTIME, wrapper.value());
-//    }
+    @Test
+    public void testWithNestedAnnotations()
+    {
+        Interceptor interceptor = builder.train(new Trainer<RetentionWrapper>()
+        {
+            @Override
+            protected void train(RetentionWrapper trainee)
+            {
+
+                when(trainee.value()).thenStub(new Trainer<Retention>()
+                {
+                    @Override
+                    protected void train(Retention trainee)
+                    {
+                        when(trainee.value()).thenReturn(RetentionPolicy.RUNTIME);
+                    }
+                });
+            }
+        }).build();
+        RetentionWrapper wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, RetentionWrapper.class);
+        assertNotNull(wrapper.value());
+        assertEquals(RetentionPolicy.RUNTIME, wrapper.value().value());
+    }
+
+    @Test
+    public void testWithSimpleAnnotations()
+    {
+        Interceptor interceptor = builder.train(new Trainer<Retention>()
+        {
+            @Override
+            protected void train(Retention trainee)
+            {
+                when(trainee.value()).thenReturn(RetentionPolicy.RUNTIME);
+            }
+        }).build();
+        Retention wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, Retention.class);
+        assertEquals(RetentionPolicy.RUNTIME, wrapper.value());
+    }
 
 }
