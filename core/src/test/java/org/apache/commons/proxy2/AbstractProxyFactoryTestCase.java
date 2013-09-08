@@ -226,11 +226,10 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         proxy.illegalArgument();
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testInterfaceHierarchies()
     {
-        final SortedSet set = factory.createDelegatorProxy(new ConstantProvider<SortedSet>(new TreeSet()), SortedSet.class);
+        final SortedSet<String> set = factory.createDelegatorProxy(new ConstantProvider<SortedSet<String>>(new TreeSet<String>()), SortedSet.class);
         set.add("Hello");
     }
 
