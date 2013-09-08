@@ -24,6 +24,7 @@ import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.exception.ProxyFactoryException;
 import org.apache.commons.proxy2.impl.AbstractProxyClassGenerator;
 import org.apache.commons.proxy2.impl.AbstractSubclassingProxyFactory;
+import org.apache.commons.proxy2.impl.ProxyClassCache;
 import org.apache.xbean.asm4.ClassWriter;
 import org.apache.xbean.asm4.Label;
 import org.apache.xbean.asm4.MethodVisitor;
@@ -36,36 +37,38 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 {
+	private static final ProxyClassCache PROXY_CLASS_CACHE = new ProxyClassCache(new ProxyGenerator());
+
     @Override
     public <T> T createDelegatorProxy(final ClassLoader classLoader, final ObjectProvider<?> delegateProvider, final Class<?>... proxyClasses)
     {
-        return ProxyGenerator.newProxyInstance(classLoader, new DelegatorInvocationHandler(delegateProvider), proxyClasses);
+        return createProxy(classLoader, new DelegatorInvocationHandler(delegateProvider), proxyClasses);
     }
 
     @Override
     public <T> T createInterceptorProxy(final ClassLoader classLoader, final Object target, final Interceptor interceptor, final Class<?>... proxyClasses)
     {
-        return ProxyGenerator.newProxyInstance(classLoader, new InterceptorInvocationHandler(target, interceptor), proxyClasses);
+        return createProxy(classLoader, new InterceptorInvocationHandler(target, interceptor), proxyClasses);
     }
 
     @Override
     public <T> T createInvokerProxy(final ClassLoader classLoader, final Invoker invoker, final Class<?>... proxyClasses)
     {
-        return ProxyGenerator.newProxyInstance(classLoader, new InvokerInvocationHandler(invoker), proxyClasses);
+        return createProxy(classLoader, new InvokerInvocationHandler(invoker), proxyClasses);
+    }
+
+    private <T> T createProxy(final ClassLoader classLoader, InvocationHandler invocationHandler, final Class<?>... proxyClasses)
+    {
+    	final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(classLoader, proxyClasses);
+    	return ProxyGenerator.constructProxy(proxyClass, invocationHandler);
     }
 
     private static class ProxyGenerator extends AbstractProxyClassGenerator implements Opcodes
@@ -75,24 +78,46 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         private static final String HANDLER_NAME = "__handler";
         private static final ReentrantLock LOCK = new ReentrantLock();
 
-        public static <T> T newProxyInstance(final ClassLoader classLoader, final InvocationHandler handler, final Class<?>... classes) throws ProxyFactoryException
+        @Override
+        public Class<?> generateProxyClass(final ClassLoader classLoader, final Class<?>... proxyClasses)
         {
-            try
-            {
-                final Class<?> superclass = getSuperclass(classes);
-                if (superclass == Object.class)
-                {
-                    @SuppressWarnings("unchecked")
-					final T result = (T) Proxy.newProxyInstance(classLoader, classes, handler);
-					return result;
-                }
-                final Class<?> proxyClass = createProxy(superclass, classLoader, getImplementationMethods(classes), toInterfaces(classes));
-                return constructProxy(proxyClass, handler);
-            }
-            catch (final Exception e)
-            {
-                throw new ProxyFactoryException(e);
-            }
+        	final Class<?> superclass = getSuperclass(proxyClasses);
+        	final String proxyName = CLASSNAME_PREFIX + CLASS_NUMBER.incrementAndGet();
+			final Method[] implementationMethods = getImplementationMethods(proxyClasses);
+			final Class<?>[] interfaces = toInterfaces(proxyClasses);
+			final String classFileName = proxyName.replace('.', '/');
+
+			try
+			{
+			    return classLoader.loadClass(proxyName);
+			}
+			catch (Exception e)
+			{
+			    // no-op
+			}
+
+			LOCK.lock();
+			try
+			{
+			    try
+			    { // Try it again, another thread may have beaten this one...
+			        return classLoader.loadClass(proxyName);
+			    }
+			    catch (Exception e)
+			    {
+			        // no-op
+			    }
+
+			    final byte[] proxyBytes = generateProxy(superclass, classFileName, implementationMethods, interfaces);
+			    return Unsafe.defineClass(classLoader, superclass, proxyName, proxyBytes);
+			}
+			catch (final Exception e)
+			{
+			    throw new ProxyFactoryException(e);
+			}
+			finally {
+			    LOCK.unlock();
+			}
         }
 
         public static <T> T constructProxy(final Class<?> clazz, final java.lang.reflect.InvocationHandler handler) throws IllegalStateException
@@ -117,48 +142,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
         }
 
-        public static Class<?> createProxy(final Class<?> classToProxy, final ClassLoader loader, final String proxyName, final Method[] methods, final Class<?>... interfaces)
-        {
-            final String classFileName = proxyName.replace('.', '/');
-
-            try
-            {
-                return loader.loadClass(proxyName);
-            }
-            catch (Exception e)
-            {
-                // no-op
-            }
-
-            LOCK.lock();
-            try
-            {
-                try
-                { // Try it again, another thread may have beaten this one...
-                    return loader.loadClass(proxyName);
-                }
-                catch (Exception e)
-                {
-                    // no-op
-                }
-
-                final byte[] proxyBytes = generateProxy(classToProxy, classFileName, methods, interfaces);
-                return Unsafe.defineClass(loader, classToProxy, proxyName, proxyBytes);
-            }
-            catch (final Exception e)
-            {
-                throw new ProxyFactoryException(e);
-            }
-            finally {
-                LOCK.unlock();
-            }
-        }
-
-        public static Class<?> createProxy(final Class<?> classToProxy, final ClassLoader cl, final Method[] methods, final Class<?>... interfaces)
-        {
-            return createProxy(classToProxy, cl, CLASSNAME_PREFIX + CLASS_NUMBER.incrementAndGet(), methods, interfaces);
-        }
-
         public static byte[] generateProxy(final Class<?> classToProxy, final String proxyName, final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
         {
             final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -180,15 +163,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             // push InvocationHandler fields
             cw.visitField(ACC_FINAL + ACC_PRIVATE, HANDLER_NAME, "Ljava/lang/reflect/InvocationHandler;", null, null).visitEnd();
 
-            final Map<String, List<Method>> methodMap = new HashMap<String, List<Method>>();
-
-            findMethods(classToProxy, methodMap);
-
-            for (final Class<?> anInterface : interfaces)
-            {
-                findMethods(anInterface, methodMap);
-            }
-
             for (final Method method : methods)
             {
                 processMethod(cw, method, proxyClassFileName, HANDLER_NAME);
@@ -197,53 +171,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             return cw.toByteArray();
         }
 
-        private static void findMethods(Class<?> clazz, final Map<String, List<Method>> methodMap)
-        {
-            while (clazz != null) {
-                for (final Method method : clazz.getDeclaredMethods())
-                {
-                    final int modifiers = method.getModifiers();
-
-                    if (Modifier.isFinal(modifiers) || Modifier.isStatic(modifiers))
-                    {
-                        continue;
-                    }
-
-                    List<Method> methods = methodMap.get(method.getName());
-                    if (methods == null)
-                    {
-                        methods = new ArrayList<Method>();
-                        methods.add(method);
-                        methodMap.put(method.getName(), methods);
-                    }
-                    else if (!isOverridden(methods, method))
-                    {
-                        methods.add(method);
-                    }
-                }
-
-                clazz = clazz.getSuperclass();
-            }
-        }
-
-        private static boolean isOverridden(final List<Method> methods, final Method method)
-        {
-            for (final Method m : methods)
-            {
-                if (Arrays.equals(m.getParameterTypes(), method.getParameterTypes()))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private static void processMethod(final ClassWriter cw, final Method method, final String proxyName, final String handlerName) throws ProxyFactoryException {
-            if ("<init>".equals(method.getName()))
-            {
-                return;
-            }
-
             final Class<?> returnType = method.getReturnType();
             final Class<?>[] parameterTypes = method.getParameterTypes();
             final Class<?>[] exceptionTypes = method.getExceptionTypes();
@@ -756,12 +684,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 return "L" + className.replace('.', '/') + ";";
             }
             return className.replace('.', '/');
-        }
-
-        @Override // not used ATM
-        public Class<?> generateProxyClass(final ClassLoader classLoader, final Class<?>... proxyClasses)
-        {
-            return createProxy(getSuperclass(proxyClasses), classLoader, getImplementationMethods(proxyClasses), toInterfaces(proxyClasses));
         }
 
         private static class Unsafe
