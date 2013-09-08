@@ -49,6 +49,11 @@ public class SuffixInterceptor implements Interceptor
 
     public Object intercept( Invocation methodInvocation ) throws Throwable
     {
-        return methodInvocation.proceed() + suffix;
+    	Object result = methodInvocation.proceed();
+    	if (result instanceof String)
+    	{
+    		result = ((String) result) + suffix;
+    	}
+    	return result;
     }
 }
