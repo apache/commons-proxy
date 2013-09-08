@@ -67,7 +67,11 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     private <T> T createProxy(final ClassLoader classLoader, InvocationHandler invocationHandler, final Class<?>... proxyClasses)
     {
     	final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(classLoader, proxyClasses);
-    	return ProxyGenerator.constructProxy(proxyClass, invocationHandler);
+    	final Object instance = Unsafe.allocateInstance(proxyClass);
+		Unsafe.setValue(ProxyGenerator.getDeclaredField(proxyClass, ProxyGenerator.HANDLER_NAME), instance, invocationHandler);
+		@SuppressWarnings("unchecked")
+		final T result = (T) instance;
+		return result;
     }
 
     private static class ProxyGenerator extends AbstractProxyClassGenerator implements Opcodes
@@ -96,15 +100,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 			}
         }
 
-        public static <T> T constructProxy(final Class<?> clazz, final java.lang.reflect.InvocationHandler handler) throws IllegalStateException
-        {
-            final Object instance = Unsafe.allocateInstance(clazz);
-            Unsafe.setValue(getDeclaredField(clazz, HANDLER_NAME), instance, handler);
-            @SuppressWarnings("unchecked")
-			final T result = (T) instance;
-			return result;
-        }
-
         private static Field getDeclaredField(final Class<?> clazz, final String fieldName)
         {
             try
@@ -118,7 +113,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
         }
 
-        public static byte[] generateProxy(final Class<?> classToProxy, final String proxyName, final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
+        private static byte[] generateProxy(final Class<?> classToProxy, final String proxyName, final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
         {
             final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
@@ -477,7 +472,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             throw new IllegalStateException("Type: " + type.getCanonicalName() + " is not a primitive type");
         }
 
-        static String getCastType(final Class<?> returnType)
+        private static String getCastType(final Class<?> returnType)
         {
             if (returnType.isPrimitive())
             {
@@ -576,7 +571,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             mv.visitTypeInsn(ANEWARRAY, type.getCanonicalName().replace('.', '/'));
         }
 
-        static String getMethodSignatureAsString(final Class<?> returnType, final Class<?>[] parameterTypes)
+        private static String getMethodSignatureAsString(final Class<?> returnType, final Class<?>[] parameterTypes)
         {
             final StringBuilder builder = new StringBuilder("(");
             for (final Class<?> parameterType : parameterTypes) {
@@ -634,7 +629,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             throw new IllegalStateException("Type: " + type.getCanonicalName() + " is not a primitive type");
         }
 
-        public static String getAsmTypeAsString(final Class<?> parameterType, final boolean wrap)
+        private static String getAsmTypeAsString(final Class<?> parameterType, final boolean wrap)
         {
             if (parameterType.isArray())
             {
@@ -660,179 +655,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 return "L" + className.replace('.', '/') + ";";
             }
             return className.replace('.', '/');
-        }
-
-        private static class Unsafe
-        {
-            // sun.misc.Unsafe
-            private static final Object unsafe;
-            private static final Method defineClass;
-            private static final Method allocateInstance;
-            private static final Method putObject;
-            private static final Method objectFieldOffset;
-
-            static
-            {
-                final Class<?> unsafeClass;
-                try {
-                    unsafeClass = AccessController.doPrivileged(new PrivilegedAction<Class<?>>()
-            		{
-                        @Override
-                        public Class<?> run()
-                        {
-                            try
-                            {
-                                return Thread.currentThread().getContextClassLoader().loadClass("sun.misc.Unsafe");
-                            }
-                            catch (Exception e)
-                            {
-                                try
-                                {
-                                    return ClassLoader.getSystemClassLoader().loadClass("sun.misc.Unsafe");
-                                }
-                                catch (ClassNotFoundException e1)
-                                {
-                                    throw new IllegalStateException("Cannot get sun.misc.Unsafe", e);
-                                }
-                            }
-                        }
-                    });
-                }
-                catch (Exception e)
-                {
-                    throw new IllegalStateException("Cannot get sun.misc.Unsafe class", e);
-                }
-
-                unsafe = AccessController.doPrivileged(new PrivilegedAction<Object>()
-        		{
-                    @Override
-                    public Object run()
-                    {
-                        try
-                        {
-                            final Field field = unsafeClass.getDeclaredField("theUnsafe");
-                            field.setAccessible(true);
-                            return field.get(null);
-                        }
-                        catch (Exception e)
-                        {
-                            throw new IllegalStateException("Cannot get sun.misc.Unsafe", e);
-                        }
-                    }
-                });
-                allocateInstance = AccessController.doPrivileged(new PrivilegedAction<Method>()
-        		{
-                    @Override
-                    public Method run()
-                    {
-                        try
-                        {
-                            final Method mtd = unsafeClass.getDeclaredMethod("allocateInstance", Class.class);
-                            mtd.setAccessible(true);
-                            return mtd;
-                        }
-                        catch (Exception e)
-                        {
-                            throw new IllegalStateException("Cannot get sun.misc.Unsafe.allocateInstance", e);
-                        }
-                    }
-                });
-                objectFieldOffset = AccessController.doPrivileged(new PrivilegedAction<Method>()
-        		{
-                    @Override
-                    public Method run()
-                    {
-                        try
-                        {
-                            final Method mtd = unsafeClass.getDeclaredMethod("objectFieldOffset", Field.class);
-                            mtd.setAccessible(true);
-                            return mtd;
-                        }
-                        catch (Exception e)
-                        {
-                            throw new IllegalStateException("Cannot get sun.misc.Unsafe.objectFieldOffset", e);
-                        }
-                    }
-                });
-                putObject = AccessController.doPrivileged(new PrivilegedAction<Method>()
-        		{
-                    @Override
-                    public Method run()
-                    {
-                        try
-                        {
-                            final Method mtd = unsafeClass.getDeclaredMethod("putObject", Object.class, long.class, Object.class);
-                            mtd.setAccessible(true);
-                            return mtd;
-                        }
-                        catch (Exception e)
-                        {
-                            throw new IllegalStateException("Cannot get sun.misc.Unsafe.putObject", e);
-                        }
-                    }
-                });
-                defineClass = AccessController.doPrivileged(new PrivilegedAction<Method>()
-        		{
-                    @Override
-                    public Method run()
-                    {
-                        try
-                        {
-                            final Method mtd = unsafeClass.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class, ClassLoader.class, ProtectionDomain.class);
-                            mtd.setAccessible(true);
-                            return mtd;
-                        }
-                        catch (Exception e)
-                        {
-                            throw new IllegalStateException("Cannot get sun.misc.Unsafe.defineClass", e);
-                        }
-                    }
-                });
-            }
-
-            private static Object allocateInstance(final Class<?> clazz)
-            {
-                try
-                {
-                    return allocateInstance.invoke(unsafe, clazz);
-                }
-                catch (IllegalAccessException e)
-                {
-                    throw new IllegalStateException("Failed to allocateInstance of Proxy class " + clazz.getName(), e);
-                }
-                catch (InvocationTargetException e)
-                {
-                    final Throwable throwable = e.getTargetException() != null ? e.getTargetException() : e;
-                    throw new IllegalStateException("Failed to allocateInstance of Proxy class " + clazz.getName(), throwable);
-                }
-            }
-
-            private static void setValue(final Field field, final Object object, final Object value)
-            {
-                final long offset;
-                try
-                {
-                    offset = (Long) objectFieldOffset.invoke(unsafe, field);
-                }
-                catch (Exception e)
-                {
-                    throw new IllegalStateException("Failed getting offset for: field=" + field.getName() + "  class=" + field.getDeclaringClass().getName(), e);
-                }
-
-                try
-                {
-                    putObject.invoke(unsafe, object, offset, value);
-                }
-                catch (Exception e)
-                {
-                    throw new IllegalStateException("Failed putting field=" + field.getName() + "  class=" + field.getDeclaringClass().getName(), e);
-                }
-            }
-
-            private static Class<?> defineClass(final ClassLoader loader, final Class<?> clsToProxy, final String proxyName, final byte[] proxyBytes) throws IllegalAccessException, InvocationTargetException
-            {
-                return (Class<?>) defineClass.invoke(unsafe, proxyName, proxyBytes, 0, proxyBytes.length, loader, clsToProxy.getProtectionDomain());
-            }
         }
     }
 
@@ -972,4 +794,177 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
         }
     }
+
+	static class Unsafe
+	{
+	    // sun.misc.Unsafe
+	    private static final Object unsafe;
+	    private static final Method defineClass;
+	    private static final Method allocateInstance;
+	    private static final Method putObject;
+	    private static final Method objectFieldOffset;
+	
+	    static
+	    {
+	        final Class<?> unsafeClass;
+	        try {
+	            unsafeClass = AccessController.doPrivileged(new PrivilegedAction<Class<?>>()
+	    		{
+	                @Override
+	                public Class<?> run()
+	                {
+	                    try
+	                    {
+	                        return Thread.currentThread().getContextClassLoader().loadClass("sun.misc.Unsafe");
+	                    }
+	                    catch (Exception e)
+	                    {
+	                        try
+	                        {
+	                            return ClassLoader.getSystemClassLoader().loadClass("sun.misc.Unsafe");
+	                        }
+	                        catch (ClassNotFoundException e1)
+	                        {
+	                            throw new IllegalStateException("Cannot get sun.misc.Unsafe", e);
+	                        }
+	                    }
+	                }
+	            });
+	        }
+	        catch (Exception e)
+	        {
+	            throw new IllegalStateException("Cannot get sun.misc.Unsafe class", e);
+	        }
+	
+	        unsafe = AccessController.doPrivileged(new PrivilegedAction<Object>()
+			{
+	            @Override
+	            public Object run()
+	            {
+	                try
+	                {
+	                    final Field field = unsafeClass.getDeclaredField("theUnsafe");
+	                    field.setAccessible(true);
+	                    return field.get(null);
+	                }
+	                catch (Exception e)
+	                {
+	                    throw new IllegalStateException("Cannot get sun.misc.Unsafe", e);
+	                }
+	            }
+	        });
+	        allocateInstance = AccessController.doPrivileged(new PrivilegedAction<Method>()
+			{
+	            @Override
+	            public Method run()
+	            {
+	                try
+	                {
+	                    final Method mtd = unsafeClass.getDeclaredMethod("allocateInstance", Class.class);
+	                    mtd.setAccessible(true);
+	                    return mtd;
+	                }
+	                catch (Exception e)
+	                {
+	                    throw new IllegalStateException("Cannot get sun.misc.Unsafe.allocateInstance", e);
+	                }
+	            }
+	        });
+	        objectFieldOffset = AccessController.doPrivileged(new PrivilegedAction<Method>()
+			{
+	            @Override
+	            public Method run()
+	            {
+	                try
+	                {
+	                    final Method mtd = unsafeClass.getDeclaredMethod("objectFieldOffset", Field.class);
+	                    mtd.setAccessible(true);
+	                    return mtd;
+	                }
+	                catch (Exception e)
+	                {
+	                    throw new IllegalStateException("Cannot get sun.misc.Unsafe.objectFieldOffset", e);
+	                }
+	            }
+	        });
+	        putObject = AccessController.doPrivileged(new PrivilegedAction<Method>()
+			{
+	            @Override
+	            public Method run()
+	            {
+	                try
+	                {
+	                    final Method mtd = unsafeClass.getDeclaredMethod("putObject", Object.class, long.class, Object.class);
+	                    mtd.setAccessible(true);
+	                    return mtd;
+	                }
+	                catch (Exception e)
+	                {
+	                    throw new IllegalStateException("Cannot get sun.misc.Unsafe.putObject", e);
+	                }
+	            }
+	        });
+	        defineClass = AccessController.doPrivileged(new PrivilegedAction<Method>()
+			{
+	            @Override
+	            public Method run()
+	            {
+	                try
+	                {
+	                    final Method mtd = unsafeClass.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class, ClassLoader.class, ProtectionDomain.class);
+	                    mtd.setAccessible(true);
+	                    return mtd;
+	                }
+	                catch (Exception e)
+	                {
+	                    throw new IllegalStateException("Cannot get sun.misc.Unsafe.defineClass", e);
+	                }
+	            }
+	        });
+	    }
+	
+	    static Object allocateInstance(final Class<?> clazz)
+	    {
+	        try
+	        {
+	            return allocateInstance.invoke(unsafe, clazz);
+	        }
+	        catch (IllegalAccessException e)
+	        {
+	            throw new IllegalStateException("Failed to allocateInstance of Proxy class " + clazz.getName(), e);
+	        }
+	        catch (InvocationTargetException e)
+	        {
+	            final Throwable throwable = e.getTargetException() != null ? e.getTargetException() : e;
+	            throw new IllegalStateException("Failed to allocateInstance of Proxy class " + clazz.getName(), throwable);
+	        }
+	    }
+	
+	    static void setValue(final Field field, final Object object, final Object value)
+	    {
+	        final long offset;
+	        try
+	        {
+	            offset = (Long) objectFieldOffset.invoke(unsafe, field);
+	        }
+	        catch (Exception e)
+	        {
+	            throw new IllegalStateException("Failed getting offset for: field=" + field.getName() + "  class=" + field.getDeclaringClass().getName(), e);
+	        }
+	
+	        try
+	        {
+	            putObject.invoke(unsafe, object, offset, value);
+	        }
+	        catch (Exception e)
+	        {
+	            throw new IllegalStateException("Failed putting field=" + field.getName() + "  class=" + field.getDeclaringClass().getName(), e);
+	        }
+	    }
+	
+	    static Class<?> defineClass(final ClassLoader loader, final Class<?> clsToProxy, final String proxyName, final byte[] proxyBytes) throws IllegalAccessException, InvocationTargetException
+	    {
+	        return (Class<?>) defineClass.invoke(unsafe, proxyName, proxyBytes, 0, proxyBytes.length, loader, clsToProxy.getProtectionDomain());
+	    }
+	}
 }
