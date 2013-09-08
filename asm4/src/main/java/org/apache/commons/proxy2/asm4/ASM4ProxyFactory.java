@@ -128,8 +128,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 interfaceNames[i] = anInterface.getName().replace('.', '/');
             }
 
-            cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, proxyClassFileName, null, classFileName, interfaceNames);
-            cw.visitSource(classFileName + ".java", null);
+            cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, proxyClassFileName, null, classFileName, interfaceNames);
 
             // push InvocationHandler fields
             cw.visitField(ACC_FINAL + ACC_PRIVATE, HANDLER_NAME, "Ljava/lang/reflect/InvocationHandler;", null, null).visitEnd();
