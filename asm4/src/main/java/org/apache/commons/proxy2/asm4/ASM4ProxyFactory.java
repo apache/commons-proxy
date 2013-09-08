@@ -45,6 +45,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
@@ -69,6 +70,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class ProxyGenerator extends AbstractProxyClassGenerator implements Opcodes
     {
+        private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
+        private static final String CLASSNAME_PREFIX = "CommonsProxyASM4_";
         private static final String HANDLER_NAME = "__handler";
         private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -153,17 +156,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
         public static Class<?> createProxy(final Class<?> classToProxy, final ClassLoader cl, final Method[] methods, final Class<?>... interfaces)
         {
-            return createProxy(classToProxy, cl, proxyName(classToProxy.getName()), methods, interfaces);
-        }
-
-        private static String proxyName(final String name)
-        {
-            final String proxy = name + "$$CommonsProxy";
-            if (!proxy.startsWith("java"))
-            {
-                return proxy;
-            }
-            return "org.apache.commons.proxy2.generated." + proxy;
+            return createProxy(classToProxy, cl, CLASSNAME_PREFIX + CLASS_NUMBER.incrementAndGet(), methods, interfaces);
         }
 
         public static byte[] generateProxy(final Class<?> classToProxy, final String proxyName, final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
