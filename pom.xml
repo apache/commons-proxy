@@ -84,20 +84,12 @@
             <name>Matt Benson</name>
             <email>mbenson@apache.org</email>
             <roles>
-                <role>Claim-jumper</role>
+                <role>developer</role>
             </roles>
         </developer>
     </developers>
 
     <contributors>
-        <contributor>
-            <name>J&#246;rg Schaible</name>
-            <email>joerg.schaible@gmx.de</email>
-            <organization/>
-            <roles>
-                <role>advisor</role>
-            </roles>
-        </contributor>
         <contributor>
             <name>Howard M. Lewis Ship</name>
             <email>hlship@apache.org</email>
@@ -106,6 +98,14 @@
                 <role>advisor</role>
             </roles>
             <url>http://www.howardlewisship.com/</url>
+        </contributor>
+        <contributor>
+            <name>J&#246;rg Schaible</name>
+            <email>joerg.schaible@gmx.de</email>
+            <organization/>
+            <roles>
+                <role>advisor</role>
+            </roles>
         </contributor>
     </contributors>
 
