@@ -41,7 +41,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.ProtectionDomain;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 {
@@ -76,7 +75,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
         private static final String CLASSNAME_PREFIX = "CommonsProxyASM4_";
         private static final String HANDLER_NAME = "__handler";
-        private static final ReentrantLock LOCK = new ReentrantLock();
 
         @Override
         public Class<?> generateProxyClass(final ClassLoader classLoader, final Class<?>... proxyClasses)
@@ -89,34 +87,12 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
 			try
 			{
-			    return classLoader.loadClass(proxyName);
-			}
-			catch (Exception e)
-			{
-			    // no-op
-			}
-
-			LOCK.lock();
-			try
-			{
-			    try
-			    { // Try it again, another thread may have beaten this one...
-			        return classLoader.loadClass(proxyName);
-			    }
-			    catch (Exception e)
-			    {
-			        // no-op
-			    }
-
 			    final byte[] proxyBytes = generateProxy(superclass, classFileName, implementationMethods, interfaces);
 			    return Unsafe.defineClass(classLoader, superclass, proxyName, proxyBytes);
 			}
 			catch (final Exception e)
 			{
 			    throw new ProxyFactoryException(e);
-			}
-			finally {
-			    LOCK.unlock();
 			}
         }
 
