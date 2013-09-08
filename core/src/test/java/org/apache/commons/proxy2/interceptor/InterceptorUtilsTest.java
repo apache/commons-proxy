@@ -22,10 +22,7 @@ import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
-import org.apache.commons.proxy2.util.MockInvocation;
 import org.junit.Test;
-
-import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 

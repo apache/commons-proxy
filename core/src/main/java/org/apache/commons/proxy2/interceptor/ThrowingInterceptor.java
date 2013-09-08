@@ -23,11 +23,13 @@ import org.apache.commons.proxy2.ObjectProvider;
 
 public class ThrowingInterceptor implements Interceptor
 {
+	private static final long serialVersionUID = 1L;
+
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final ObjectProvider<? extends Exception> provider;
+	private final ObjectProvider<? extends Exception> provider;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors

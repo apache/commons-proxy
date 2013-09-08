@@ -28,11 +28,13 @@ import org.apache.commons.proxy2.ObjectProvider;
  */
 public class ObjectProviderInterceptor implements Interceptor
 {
+	private static final long serialVersionUID = 1L;
+
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    private final ObjectProvider<?> provider;
+	private final ObjectProvider<?> provider;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
