@@ -23,6 +23,7 @@
     <modules>
         <module>core</module>
         <module>jdk</module>
+        <module>asm4</module>
         <module>javassist</module>
         <module>cglib</module>
         <module>stub</module>
@@ -106,6 +107,12 @@
             <roles>
                 <role>advisor</role>
             </roles>
+        </contributor>
+        <contributor>
+            <name>Mark Struberg</name>
+        </contributor>
+        <contributor>
+            <name>Romain Manni-Bucau</name>
         </contributor>
     </contributors>
 
@@ -208,6 +215,11 @@
                 <groupId>jboss</groupId>
                 <artifactId>javassist</artifactId>
                 <version>3.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.xbean</groupId>
+              <artifactId>xbean-asm4-shaded</artifactId>
+              <version>3.14</version>
             </dependency>
             <dependency>
                 <groupId>jmock</groupId>
