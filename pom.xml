@@ -217,9 +217,14 @@
                 <version>3.0</version>
             </dependency>
             <dependency>
-              <groupId>org.apache.xbean</groupId>
-              <artifactId>xbean-asm4-shaded</artifactId>
-              <version>3.14</version>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm</artifactId>
+              <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.ow2.asm</groupId>
+              <artifactId>asm-commons</artifactId>
+              <version>${asm.version}</version>
             </dependency>
             <dependency>
                 <groupId>jmock</groupId>
@@ -242,5 +247,6 @@
         <commons.binary.suffix></commons.binary.suffix>
         <commons.jira.id>PROXY</commons.jira.id>
         <commons.jira.pid>12310731</commons.jira.pid>
+        <asm.version>4.1</asm.version>
     </properties>
 </project>
