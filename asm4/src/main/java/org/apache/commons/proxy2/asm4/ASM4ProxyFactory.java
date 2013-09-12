@@ -19,7 +19,6 @@ package org.apache.commons.proxy2.asm4;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,27 +39,31 @@ import org.objectweb.asm.commons.GeneratorAdapter;
 
 public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 {
-	private static final ProxyClassCache PROXY_CLASS_CACHE = new ProxyClassCache(new ProxyGenerator());
+    private static final ProxyClassCache PROXY_CLASS_CACHE = new ProxyClassCache(new ProxyGenerator());
 
     @Override
-    public <T> T createDelegatorProxy(final ClassLoader classLoader, final ObjectProvider<?> delegateProvider, final Class<?>... proxyClasses)
+    public <T> T createDelegatorProxy(final ClassLoader classLoader, final ObjectProvider<?> delegateProvider,
+            final Class<?>... proxyClasses)
     {
         return createProxy(classLoader, new DelegatorInvoker(delegateProvider), proxyClasses);
     }
 
     @Override
-    public <T> T createInterceptorProxy(final ClassLoader classLoader, final Object target, final Interceptor interceptor, final Class<?>... proxyClasses)
+    public <T> T createInterceptorProxy(final ClassLoader classLoader, final Object target,
+            final Interceptor interceptor, final Class<?>... proxyClasses)
     {
         return createProxy(classLoader, new InterceptorInvoker(target, interceptor), proxyClasses);
     }
 
     @Override
-    public <T> T createInvokerProxy(final ClassLoader classLoader, final Invoker invoker, final Class<?>... proxyClasses)
+    public <T> T createInvokerProxy(final ClassLoader classLoader, final Invoker invoker,
+            final Class<?>... proxyClasses)
     {
         return createProxy(classLoader, new InvokerInvoker(invoker), proxyClasses);
     }
 
-    private <T> T createProxy(final ClassLoader classLoader, final AbstractInvoker invoker, final Class<?>... proxyClasses)
+    private <T> T createProxy(final ClassLoader classLoader, final AbstractInvoker invoker,
+            final Class<?>... proxyClasses)
     {
         final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(classLoader, proxyClasses);
         try
@@ -85,24 +88,25 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         @Override
         public Class<?> generateProxyClass(final ClassLoader classLoader, final Class<?>... proxyClasses)
         {
-        	final Class<?> superclass = getSuperclass(proxyClasses);
-        	final String proxyName = CLASSNAME_PREFIX + CLASS_NUMBER.incrementAndGet();
-			final Method[] implementationMethods = getImplementationMethods(proxyClasses);
-			final Class<?>[] interfaces = toInterfaces(proxyClasses);
-			final String classFileName = proxyName.replace('.', '/');
+            final Class<?> superclass = getSuperclass(proxyClasses);
+            final String proxyName = CLASSNAME_PREFIX + CLASS_NUMBER.incrementAndGet();
+            final Method[] implementationMethods = getImplementationMethods(proxyClasses);
+            final Class<?>[] interfaces = toInterfaces(proxyClasses);
+            final String classFileName = proxyName.replace('.', '/');
 
-			try
-			{
-			    final byte[] proxyBytes = generateProxy(superclass, classFileName, implementationMethods, interfaces);
-			    return loadClass(classLoader, proxyName, proxyBytes);
-			}
-			catch (final Exception e)
-			{
-			    throw new ProxyFactoryException(e);
-			}
+            try
+            {
+                final byte[] proxyBytes = generateProxy(superclass, classFileName, implementationMethods, interfaces);
+                return loadClass(classLoader, proxyName, proxyBytes);
+            }
+            catch (final Exception e)
+            {
+                throw new ProxyFactoryException(e);
+            }
         }
 
-        private static byte[] generateProxy(final Class<?> classToProxy, final String proxyName, final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
+        private static byte[] generateProxy(final Class<?> classToProxy, final String proxyName,
+                final Method[] methods, final Class<?>... interfaces) throws ProxyFactoryException
         {
             final ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
@@ -116,7 +120,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
 
             final Type superType = Type.getType(classToProxy);
-            cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, proxyType.getInternalName(), null, superType.getInternalName(), interfaceNames);
+            cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, proxyType.getInternalName(), null, superType.getInternalName(),
+                    interfaceNames);
 
             // create Invoker field
             cw.visitField(ACC_FINAL + ACC_PRIVATE, HANDLER_NAME, INVOKER_TYPE.getDescriptor(), null, null).visitEnd();
@@ -147,32 +152,24 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             mg.endMethod();
         }
 
-        private static void processMethod(final ClassWriter cw, final Method method, final Type proxyType, final String handlerName) throws ProxyFactoryException {
+        private static void processMethod(final ClassWriter cw, final Method method, final Type proxyType,
+                final String handlerName) throws ProxyFactoryException
+        {
             final Type sig = Type.getType(method);
             final Type[] exceptionTypes = getTypes(method.getExceptionTypes());
 
-            final int modifiers = method.getModifiers();
-
             // push the method definition
-            int modifier = 0;
-            if (Modifier.isPublic(modifiers))
-            {
-                modifier = ACC_PUBLIC;
-            }
-            else if (Modifier.isProtected(modifiers))
-            {
-                modifier = ACC_PROTECTED;
-            }
-
+            final int access = (ACC_PUBLIC | ACC_PROTECTED) & method.getModifiers();
             final org.objectweb.asm.commons.Method m = org.objectweb.asm.commons.Method.getMethod(method);
-            final GeneratorAdapter mg = new GeneratorAdapter(modifier, m, null, getTypes(method.getExceptionTypes()), cw);
+            final GeneratorAdapter mg = new GeneratorAdapter(access, m, null, getTypes(method.getExceptionTypes()), cw);
 
             final Label tryBlock = exceptionTypes.length > 0 ? mg.mark() : null;
 
             mg.push(Type.getType(method.getDeclaringClass()));
 
             // the following code generates the bytecode for this line of Java:
-            // Method method = <proxy>.class.getMethod("add", new Class[] { <array of function argument classes> });
+            // Method method = <proxy>.class.getMethod("add", new Class[] {
+            // <array of function argument classes> });
 
             // get the method name to invoke, and push to stack
 
@@ -196,11 +193,13 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
 
             // invoke getMethod() with the method name and the array of types
-            mg.invokeVirtual(classType, org.objectweb.asm.commons.Method.getMethod("java.lang.reflect.Method getDeclaredMethod(String, Class[])"));
+            mg.invokeVirtual(classType, org.objectweb.asm.commons.Method
+                    .getMethod("java.lang.reflect.Method getDeclaredMethod(String, Class[])"));
             // store the returned method for later
 
             // the following code generates bytecode equivalent to:
-            // return ((<returntype>) invoker.invoke(this, method, new Object[] { <function arguments }))[.<primitive>Value()];
+            // return ((<returntype>) invoker.invoke(this, method, new Object[]
+            // { <function arguments }))[.<primitive>Value()];
 
             mg.loadThis();
 
@@ -235,7 +234,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             }
 
             // invoke the invoker
-            mg.invokeInterface(INVOKER_TYPE, org.objectweb.asm.commons.Method.getMethod("Object invoke(Object, java.lang.reflect.Method, Object[])"));
+            mg.invokeInterface(INVOKER_TYPE, org.objectweb.asm.commons.Method
+                    .getMethod("Object invoke(Object, java.lang.reflect.Method, Object[])"));
 
             // cast the result
             mg.unbox(sig.getReturnType());
@@ -251,18 +251,21 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
                 final Label throwCause = new Label();
 
-                mg.invokeVirtual(caughtExceptionType, org.objectweb.asm.commons.Method.getMethod("Throwable getCause()"));
-                
+                mg.invokeVirtual(caughtExceptionType,
+                        org.objectweb.asm.commons.Method.getMethod("Throwable getCause()"));
+
                 for (int i = 0; i < exceptionTypes.length; i++)
                 {
                     mg.dup();
                     mg.push(exceptionTypes[i]);
                     mg.swap();
-                    mg.invokeVirtual(classType, org.objectweb.asm.commons.Method.getMethod("boolean isInstance(Object)"));
+                    mg.invokeVirtual(classType,
+                            org.objectweb.asm.commons.Method.getMethod("boolean isInstance(Object)"));
                     // if true, throw cause:
                     mg.ifZCmp(GeneratorAdapter.NE, throwCause);
                 }
-                // no exception types matched; throw UndeclaredThrowableException:
+                // no exception types matched; throw
+                // UndeclaredThrowableException:
                 final int cause = mg.newLocal(Type.getType(Exception.class));
                 mg.storeLocal(cause);
                 final Type undeclaredType = Type.getType(UndeclaredThrowableException.class);
@@ -331,13 +334,13 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    //////////////// these classes should be protected in ProxyFactory
+    // ////////////// these classes should be protected in ProxyFactory
     @SuppressWarnings("serial")
-	private static class DelegatorInvoker extends AbstractInvoker
-	{
+    private static class DelegatorInvoker extends AbstractInvoker
+    {
         private final ObjectProvider<?> delegateProvider;
 
-        protected DelegatorInvoker(ObjectProvider<?> delegateProvider) 
+        protected DelegatorInvoker(ObjectProvider<?> delegateProvider)
         {
             this.delegateProvider = delegateProvider;
         }
@@ -356,8 +359,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private static class InterceptorInvoker extends AbstractInvoker
-	{
+    private static class InterceptorInvoker extends AbstractInvoker
+    {
         private final Object target;
         private final Interceptor methodInterceptor;
 
@@ -375,8 +378,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private abstract static class AbstractInvoker implements Invoker, Serializable
-	{
+    private abstract static class AbstractInvoker implements Invoker, Serializable
+    {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
             if (isHashCode(method))
@@ -394,8 +397,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private static class InvokerInvoker extends AbstractInvoker
-	{
+    private static class InvokerInvoker extends AbstractInvoker
+    {
         private final Invoker invoker;
 
         public InvokerInvoker(Invoker invoker)
@@ -411,28 +414,26 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
     protected static boolean isHashCode(Method method)
     {
-        return "hashCode".equals(method.getName()) &&
-            Integer.TYPE.equals(method.getReturnType()) &&
-            method.getParameterTypes().length == 0;
+        return "hashCode".equals(method.getName()) && Integer.TYPE.equals(method.getReturnType())
+                && method.getParameterTypes().length == 0;
     }
 
     protected static boolean isEqualsMethod(Method method)
     {
-        return "equals".equals(method.getName()) &&
-            Boolean.TYPE.equals(method.getReturnType()) &&
-            method.getParameterTypes().length == 1 &&
-            Object.class.equals(method.getParameterTypes()[0]);
+        return "equals".equals(method.getName()) && Boolean.TYPE.equals(method.getReturnType())
+                && method.getParameterTypes().length == 1 && Object.class.equals(method.getParameterTypes()[0]);
     }
 
     @SuppressWarnings("serial")
-	private static class ReflectionInvocation implements Invocation, Serializable
-	{
+    private static class ReflectionInvocation implements Invocation, Serializable
+    {
         private final Method method;
         private final Object[] arguments;
         private final Object proxy;
         private final Object target;
 
-        public ReflectionInvocation(final Object target, final Object proxy, final Method method, final Object[] arguments)
+        public ReflectionInvocation(final Object target, final Object proxy, final Method method,
+                final Object[] arguments)
         {
             this.method = method;
             this.arguments = (arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments);
