@@ -17,7 +17,6 @@
 package org.apache.commons.proxy2.asm4;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -46,29 +45,28 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     @Override
     public <T> T createDelegatorProxy(final ClassLoader classLoader, final ObjectProvider<?> delegateProvider, final Class<?>... proxyClasses)
     {
-        return createProxy(classLoader, new DelegatorInvocationHandler(delegateProvider), proxyClasses);
+        return createProxy(classLoader, new DelegatorInvoker(delegateProvider), proxyClasses);
     }
 
     @Override
     public <T> T createInterceptorProxy(final ClassLoader classLoader, final Object target, final Interceptor interceptor, final Class<?>... proxyClasses)
     {
-        return createProxy(classLoader, new InterceptorInvocationHandler(target, interceptor), proxyClasses);
+        return createProxy(classLoader, new InterceptorInvoker(target, interceptor), proxyClasses);
     }
 
     @Override
     public <T> T createInvokerProxy(final ClassLoader classLoader, final Invoker invoker, final Class<?>... proxyClasses)
     {
-        return createProxy(classLoader, new InvokerInvocationHandler(invoker), proxyClasses);
+        return createProxy(classLoader, new InvokerInvoker(invoker), proxyClasses);
     }
 
-    private <T> T createProxy(final ClassLoader classLoader, final InvocationHandler invocationHandler, final Class<?>... proxyClasses)
+    private <T> T createProxy(final ClassLoader classLoader, final AbstractInvoker invoker, final Class<?>... proxyClasses)
     {
-        final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(
-                classLoader, proxyClasses);
+        final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(classLoader, proxyClasses);
         try
         {
             @SuppressWarnings("unchecked")
-            final T result = (T) proxyClass.getConstructor(InvocationHandler.class).newInstance(invocationHandler);
+            final T result = (T) proxyClass.getConstructor(Invoker.class).newInstance(invoker);
             return result;
         }
         catch (Exception e)
@@ -82,7 +80,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
         private static final String CLASSNAME_PREFIX = "CommonsProxyASM4_";
         private static final String HANDLER_NAME = "__handler";
-        private static final Type HANDLER_TYPE = Type.getType(InvocationHandler.class);
+        private static final Type INVOKER_TYPE = Type.getType(Invoker.class);
 
         @Override
         public Class<?> generateProxyClass(final ClassLoader classLoader, final Class<?>... proxyClasses)
@@ -120,8 +118,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             final Type superType = Type.getType(classToProxy);
             cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, proxyType.getInternalName(), null, superType.getInternalName(), interfaceNames);
 
-            // push InvocationHandler fields
-            cw.visitField(ACC_FINAL + ACC_PRIVATE, HANDLER_NAME, HANDLER_TYPE.getDescriptor(), null, null).visitEnd();
+            // create Invoker field
+            cw.visitField(ACC_FINAL + ACC_PRIVATE, HANDLER_NAME, INVOKER_TYPE.getDescriptor(), null, null).visitEnd();
 
             init(cw, proxyType, superType);
 
@@ -136,7 +134,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         private static void init(final ClassWriter cw, final Type proxyType, Type superType)
         {
             final GeneratorAdapter mg = new GeneratorAdapter(ACC_PUBLIC, new org.objectweb.asm.commons.Method("<init>",
-                    Type.VOID_TYPE, new Type[] { HANDLER_TYPE }), null, null, cw);
+                    Type.VOID_TYPE, new Type[] { INVOKER_TYPE }), null, null, cw);
             // invoke super constructor:
             mg.loadThis();
             mg.invokeConstructor(superType, org.objectweb.asm.commons.Method.getMethod("void <init> ()"));
@@ -144,7 +142,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             // assign handler:
             mg.loadThis();
             mg.loadArg(0);
-            mg.putField(proxyType, HANDLER_NAME, HANDLER_TYPE);
+            mg.putField(proxyType, HANDLER_NAME, INVOKER_TYPE);
             mg.returnValue();
             mg.endMethod();
         }
@@ -202,11 +200,11 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             // store the returned method for later
 
             // the following code generates bytecode equivalent to:
-            // return ((<returntype>) invocationHandler.invoke(this, method, new Object[] { <function arguments }))[.<primitive>Value()];
+            // return ((<returntype>) invoker.invoke(this, method, new Object[] { <function arguments }))[.<primitive>Value()];
 
             mg.loadThis();
 
-            mg.getField(proxyType, handlerName, HANDLER_TYPE);
+            mg.getField(proxyType, handlerName, INVOKER_TYPE);
             // put below method:
             mg.swap();
 
@@ -236,8 +234,8 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 mg.arrayStore(objectType);
             }
 
-            // invoke the invocationHandler
-            mg.invokeInterface(HANDLER_TYPE, org.objectweb.asm.commons.Method.getMethod("Object invoke(Object, java.lang.reflect.Method, Object[])"));
+            // invoke the invoker
+            mg.invokeInterface(INVOKER_TYPE, org.objectweb.asm.commons.Method.getMethod("Object invoke(Object, java.lang.reflect.Method, Object[])"));
 
             // cast the result
             mg.unbox(sig.getReturnType());
@@ -335,11 +333,11 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
 
     //////////////// these classes should be protected in ProxyFactory
     @SuppressWarnings("serial")
-	private static class DelegatorInvocationHandler extends AbstractInvocationHandler
+	private static class DelegatorInvoker extends AbstractInvoker
 	{
         private final ObjectProvider<?> delegateProvider;
 
-        protected DelegatorInvocationHandler(ObjectProvider<?> delegateProvider) 
+        protected DelegatorInvoker(ObjectProvider<?> delegateProvider) 
         {
             this.delegateProvider = delegateProvider;
         }
@@ -358,12 +356,12 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private static class InterceptorInvocationHandler extends AbstractInvocationHandler
+	private static class InterceptorInvoker extends AbstractInvoker
 	{
         private final Object target;
         private final Interceptor methodInterceptor;
 
-        public InterceptorInvocationHandler(Object target, Interceptor methodInterceptor)
+        public InterceptorInvoker(Object target, Interceptor methodInterceptor)
         {
             this.target = target;
             this.methodInterceptor = methodInterceptor;
@@ -377,7 +375,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private abstract static class AbstractInvocationHandler implements InvocationHandler, Serializable
+	private abstract static class AbstractInvoker implements Invoker, Serializable
 	{
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
@@ -396,11 +394,11 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     }
 
     @SuppressWarnings("serial")
-	private static class InvokerInvocationHandler extends AbstractInvocationHandler
+	private static class InvokerInvoker extends AbstractInvoker
 	{
         private final Invoker invoker;
 
-        public InvokerInvocationHandler(Invoker invoker)
+        public InvokerInvoker(Invoker invoker)
         {
             this.invoker = invoker;
         }
