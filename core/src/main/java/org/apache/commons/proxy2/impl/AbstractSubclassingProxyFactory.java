@@ -128,7 +128,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
                 }
                 return superclass;
             default:
-                final StringBuffer errorMessage = new StringBuffer("Proxy class cannot extend ");
+                final StringBuilder errorMessage = new StringBuilder("Proxy class cannot extend ");
                 for( int i = 0; i < superclasses.length; i++ )
                 {
                     Class<?> c = superclasses[i];
