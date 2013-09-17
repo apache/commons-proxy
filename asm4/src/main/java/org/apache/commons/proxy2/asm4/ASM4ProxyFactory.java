@@ -334,7 +334,6 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    // ////////////// these classes should be protected in ProxyFactory
     @SuppressWarnings("serial")
     private static class DelegatorInvoker extends AbstractInvoker
     {
