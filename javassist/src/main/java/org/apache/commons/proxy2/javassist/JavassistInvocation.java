@@ -204,7 +204,7 @@ public abstract class JavassistInvocation implements Invocation
 // Constructors
 //**********************************************************************************************************************
 
-    public JavassistInvocation( Object proxy, Object target, Method method, Object[] arguments )
+    protected JavassistInvocation( Object proxy, Object target, Method method, Object[] arguments )
     {
         this.proxy = proxy;
         this.target = target;
