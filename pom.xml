@@ -26,7 +26,6 @@
         <module>asm4</module>
         <module>javassist</module>
         <module>cglib</module>
-        <module>stub</module>
         <module>build-tools</module>
         <module>test</module>
     </modules>
