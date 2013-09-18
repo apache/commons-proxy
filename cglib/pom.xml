@@ -28,6 +28,8 @@
 
     <artifactId>commons-proxy2-cglib</artifactId>
     <name>Commons Proxy CGLIB Proxies Module</name>
+    <description>Proxies based on classes dynamically generated using cglib
+    </description>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

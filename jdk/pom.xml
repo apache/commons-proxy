@@ -28,6 +28,8 @@
 
     <artifactId>commons-proxy2-jdk</artifactId>
     <name>Commons Proxy JDK Proxies Module</name>
+    <description>Interface-based proxies using the core JDK Proxy mechanism
+    </description>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

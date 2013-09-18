@@ -28,6 +28,8 @@
 
     <artifactId>commons-proxy2-asm4</artifactId>
     <name>Commons Proxy ASM4 Proxies Module</name>
+    <description>Proxies based on classes dynamically generated using ASM v4
+    </description>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
