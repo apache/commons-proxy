@@ -45,7 +45,7 @@ public class MockInvocation implements Invocation
     @Override
     public Object getProxy()
     {
-        return null;
+        throw new UnsupportedOperationException("Proxy objects aren't supported.");
     }
 
     @Override
