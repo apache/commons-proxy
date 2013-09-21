@@ -19,9 +19,15 @@ package org.apache.commons.proxy2.stub;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.provider.BeanProvider;
+import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.junit.Test;
 
 public class StubBuilderTest extends AbstractStubTestCase
@@ -92,6 +98,33 @@ public class StubBuilderTest extends AbstractStubTestCase
         });
         StubInterface stub = builder.build();
         assertEquals("Bar", stub.one("Foo"));
+    }
+
+    @Test
+    public void testAdditionalInterfaces() {
+        StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class,
+                ObjectProviderUtils.constant(new SimpleStub()));
+        builder.train(new Trainer<Iterable<String>>()
+        {
+
+            @Override
+            protected void train(Iterable<String> trainee)
+            {
+                when(trainee.iterator()).thenAnswer(new ObjectProvider<Iterator<String>>()
+                {
+                    @Override
+                    public Iterator<String> getObject()
+                    {
+                        return Arrays.asList("foo", "bar", "baz").iterator();
+                    }
+                });
+            }
+        });
+        builder.addProxyTypes(Cloneable.class, Marker.class);
+        StubInterface stub = builder.build();
+        assertTrue(stub instanceof Iterable<?>);
+        assertTrue(stub instanceof Cloneable);
+        assertTrue(stub instanceof Marker);
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -189,5 +222,9 @@ public class StubBuilderTest extends AbstractStubTestCase
         {
             return null;
         }
+    }
+
+    public interface Marker
+    {
     }
 }

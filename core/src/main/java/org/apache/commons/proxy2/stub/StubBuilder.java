@@ -17,6 +17,12 @@
 
 package org.apache.commons.proxy2.stub;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
@@ -31,10 +37,10 @@ public class StubBuilder<T> implements Builder<T>
 // Fields
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected final Class<T> type;
     private final ProxyFactory proxyFactory;
     private final T target;
     private final SwitchInterceptor switchInterceptor = new SwitchInterceptor();
+    private final Set<Class<?>> proxyTypes = new HashSet<Class<?>>();
 
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
@@ -48,22 +54,22 @@ public class StubBuilder<T> implements Builder<T>
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type, Invoker invoker)
     {
         this.proxyFactory = proxyFactory;
-        this.type = type;
         this.target = proxyFactory.createInvokerProxy(invoker, type);
+        this.proxyTypes.add(Validate.notNull(type));
     }
     
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type, ObjectProvider<? extends T> provider)
     {
         this.proxyFactory = proxyFactory;
-        this.type = type;
         this.target = proxyFactory.createDelegatorProxy(provider, type);
+        this.proxyTypes.add(Validate.notNull(type));
     }
 
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type, T target)
     {
         this.proxyFactory = proxyFactory;
-        this.type = type;
         this.target = proxyFactory.createDelegatorProxy(new ConstantProvider<T>(target), type);
+        this.proxyTypes.add(Validate.notNull(type));
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -72,21 +78,29 @@ public class StubBuilder<T> implements Builder<T>
 
     public T build()
     {
-        return proxyFactory.createInterceptorProxy(target, switchInterceptor, type);
+        return proxyFactory.createInterceptorProxy(target, switchInterceptor,
+                proxyTypes.toArray(ArrayUtils.EMPTY_CLASS_ARRAY));
     }
 
-    public StubBuilder<T> train(BaseTrainer<?, ? super T> trainer)
+    public <O> StubBuilder<T> train(BaseTrainer<?, O> trainer)
     {
         try
         {
             TrainingContext trainingContext = TrainingContext.set(proxyFactory);
-            T trainee = trainingContext.push(type, switchInterceptor);
+            final O trainee = trainingContext.push(trainer.traineeType, switchInterceptor);
             trainer.train(trainee);
+            proxyTypes.add(trainer.traineeType);
         }
         finally
         {
             TrainingContext.clear();
         }
+        return this;
+    }
+
+    public StubBuilder<T> addProxyTypes(Class<?>... proxyTypes)
+    {
+        Collections.addAll(this.proxyTypes, Validate.noNullElements(proxyTypes));
         return this;
     }
 }
