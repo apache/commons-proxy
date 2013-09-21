@@ -18,7 +18,6 @@
 package org.apache.commons.proxy2.interceptor;
 
 import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 
@@ -72,21 +71,12 @@ public final class InterceptorUtils
         return new ThrowingInterceptor(provider);
     }
 
-    /**
-     * Creates an {@link Interceptor} that delegates to the specified {@link Invoker}.
-     * @param invoker delegate
-     * @return invoker {@link Interceptor}
-     */
-    public static Interceptor invoking(Invoker invoker)
-    {
-        return new InvokerInterceptor(invoker);
-    }
-
 //----------------------------------------------------------------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
     private InterceptorUtils()
     {
+
     }
 }
