@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>15</version>
+        <version>32</version>
     </parent>
     <artifactId>commons-proxy</artifactId>
     <version>1.1-SNAPSHOT</version>
@@ -110,6 +110,15 @@
                         <descriptor>src/assembly/src.xml</descriptor>
                     </descriptors>
                     <tarLongFileMode>gnu</tarLongFileMode>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <configuration>
+                    <ignorePathsToDelete>
+                        <ignorePathToDelete>javadocs</ignorePathToDelete>
+                    </ignorePathsToDelete>
                 </configuration>
             </plugin>
         </plugins>
@@ -244,8 +253,8 @@
     </distributionManagement>
 
     <properties>
-        <maven.compile.source>1.4</maven.compile.source>
-        <maven.compile.target>1.4</maven.compile.target>
+        <maven.compiler.source>1.4</maven.compiler.source>
+        <maven.compiler.target>1.4</maven.compiler.target>
         <commons.componentid>proxy</commons.componentid>
         <commons.release.version>1.0</commons.release.version>
         <commons.binary.suffix></commons.binary.suffix>
