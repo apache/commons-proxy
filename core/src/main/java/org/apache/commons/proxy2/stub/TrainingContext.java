@@ -8,6 +8,7 @@ import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -230,7 +231,14 @@ public class TrainingContext
             {
                 frame.methodInvoked(method, arguments);
             }
-            return ProxyUtils.nullValue(method.getReturnType());
+
+            final Class<?> type = method.getReturnType();
+
+            if (Object[].class.isAssignableFrom(type))
+            {
+                return Array.newInstance(type.getComponentType(), 0);
+            }
+            return ProxyUtils.nullValue(type);
         }
     }
 }

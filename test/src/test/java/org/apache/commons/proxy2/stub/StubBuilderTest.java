@@ -222,6 +222,12 @@ public class StubBuilderTest extends AbstractStubTestCase
         {
             return null;
         }
+
+        @Override
+        public StubInterface[] stubs()
+        {
+            return new StubInterface[0];
+        }
     }
 
     public interface Marker

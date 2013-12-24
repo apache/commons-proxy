@@ -17,6 +17,10 @@
 
 package org.apache.commons.proxy2.stub;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.TypeUtils;
@@ -28,19 +32,19 @@ import org.apache.commons.proxy2.interceptor.matcher.argument.ArgumentMatcherUti
 
 public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Fields
+    // ----------------------------------------------------------------------------------------------------------------------
     public final Class<T> traineeType;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Constructors
+    // ----------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Create a new {@link BaseTrainer} instance. This constructor should only be called
-     * by classes that explicitly assign the T parameter in the class definition.
-     * This should include basically any runtime-usable class.
+     * Create a new {@link BaseTrainer} instance. This constructor should only
+     * be called by classes that explicitly assign the T parameter in the class
+     * definition. This should include basically any runtime-usable class.
      */
     protected BaseTrainer()
     {
@@ -56,22 +60,22 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
             return;
         }
         @SuppressWarnings("unchecked")
-        final Class<T> resolvedVariable =
-            (Class<T>) TypeUtils.getRawType(BaseTrainer.class.getTypeParameters()[1], getClass());
+        final Class<T> resolvedVariable = (Class<T>) TypeUtils.getRawType(BaseTrainer.class.getTypeParameters()[1],
+                getClass());
         Validate.isTrue(resolvedVariable != null, "Trainee type was not specified and could not be calculated for %s",
-            getClass());
+                getClass());
         this.traineeType = resolvedVariable;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Abstract Methods
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Abstract Methods
+    // ----------------------------------------------------------------------------------------------------------------------
 
     protected abstract void train(T trainee);
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    // ----------------------------------------------------------------------------------------------------------------------
 
     protected <R> R any(Class<R> type)
     {
@@ -156,7 +160,9 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     public <R> WhenObjectArray<R> when(R[] expression)
     {
-        return new WhenObjectArray<R>();
+        @SuppressWarnings("unchecked")
+        final Class<? extends R> componentType = (Class<? extends R>) expression.getClass().getComponentType();
+        return new WhenObjectArray<R>(componentType);
     }
 
     public WhenCharArray when(char[] expression)
@@ -170,9 +176,9 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         return (S) this;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Inner Classes
+    // ----------------------------------------------------------------------------------------------------------------------
 
     protected abstract class BaseWhen<R>
     {
@@ -188,13 +194,13 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
         public S thenAnswer(ObjectProvider<? extends R> provider)
         {
-        	return then(InterceptorUtils.provider(provider));
+            return then(InterceptorUtils.provider(provider));
         }
 
         public S then(Interceptor interceptor)
         {
-        	trainingContext().then(interceptor);
-        	return self();
+            trainingContext().then(interceptor);
+            return self();
         }
     }
 
@@ -245,7 +251,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenIntArray extends BaseWhen<int[]>
     {
-    	public S thenReturn(int... values)
+        public S thenReturn(int... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -254,7 +260,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenLongArray extends BaseWhen<long[]>
     {
-    	public S thenReturn(long... values)
+        public S thenReturn(long... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();
@@ -263,7 +269,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenObject<R> extends BaseWhen<R>
     {
-    	public S thenReturn(R value)
+        public S thenReturn(R value)
         {
             trainingContext().then(InterceptorUtils.constant(value));
             return self();
@@ -279,13 +285,13 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
     }
 
     /**
-     * Intermediate result of a when(Class) call.
-     * Provided because it is such a common case to have a mismatch between a
-     * declared Class<?> return type and the bound parameter of a class literal.
+     * Intermediate result of a when(Class) call. Provided because it is such a
+     * common case to have a mismatch between a declared Class<?> return type
+     * and the bound parameter of a class literal.
      */
     protected class WhenClass extends BaseWhen<Class<?>>
     {
-    	public S thenReturn(Class<?> value)
+        public S thenReturn(Class<?> value)
         {
             trainingContext().then(InterceptorUtils.constant(value));
             return self();
@@ -294,16 +300,55 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenObjectArray<R> extends BaseWhen<R[]>
     {
-    	public S thenReturn(R... values)
+        private final Class<? extends R> componentType;
+
+        private WhenObjectArray(Class<? extends R> componentType)
+        {
+            this.componentType = componentType;
+        }
+
+        public S thenReturn(R... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
+            return self();
+        }
+
+        public StubArrayBuilder<R> thenBuildArray()
+        {
+            return new StubArrayBuilder<R>(componentType);
+        }
+    }
+
+    protected class StubArrayBuilder<R>
+    {
+        private final Class<? extends R> componentType;
+        private final List<R> elements = new ArrayList<R>();
+
+        private StubArrayBuilder(Class<? extends R> componentType)
+        {
+            this.componentType = componentType;
+        }
+
+        public StubArrayBuilder<R> addElement(BaseTrainer<?, R> trainer)
+        {
+            final R trainee = trainingContext().push(trainer.traineeType);
+            trainer.train(trainee);
+            elements.add(trainingContext().<R> pop());
+            return this;
+        }
+
+        public S build()
+        {
+            @SuppressWarnings("unchecked")
+            final R[] array = elements.toArray((R[]) Array.newInstance(componentType, elements.size()));
+            trainingContext().then(InterceptorUtils.constant(array));
             return self();
         }
     }
 
     protected class WhenShortArray extends BaseWhen<short[]>
     {
-    	public S thenReturn(short... values)
+        public S thenReturn(short... values)
         {
             trainingContext().then(InterceptorUtils.constant(ArrayUtils.clone(values)));
             return self();

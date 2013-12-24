@@ -23,23 +23,24 @@ public interface StubInterface
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public String one(String value);
-    public String three(String arg1, String arg2);
-    public String two(String value);
+    String one(String value);
+    String three(String arg1, String arg2);
+    String two(String value);
 
-    public byte[] byteArray();
-    public char[] charArray();
-    public short[] shortArray();
-    public int[] intArray();
-    public long[] longArray();
-    public float[] floatArray();
-    public double[] doubleArray();
-    public boolean[] booleanArray();
-    public String[] stringArray();
+    byte[] byteArray();
+    char[] charArray();
+    short[] shortArray();
+    int[] intArray();
+    long[] longArray();
+    float[] floatArray();
+    double[] doubleArray();
+    boolean[] booleanArray();
+    String[] stringArray();
 
-    public String arrayParameter(String... strings);
+    String arrayParameter(String... strings);
 
-    public void voidMethod(String arg);
+    void voidMethod(String arg);
 
-    public StubInterface stub();
+    StubInterface stub();
+    StubInterface[] stubs();
 }

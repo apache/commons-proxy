@@ -13,22 +13,22 @@ import static org.junit.Assert.*;
 
 public abstract class AbstractStubTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Fields
+    // ----------------------------------------------------------------------------------------------------------------------
 
     protected ProxyFactory proxyFactory;
     protected StubInterface target;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Abstract Methods
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Abstract Methods
+    // ----------------------------------------------------------------------------------------------------------------------
 
     protected abstract StubInterface createProxy(Trainer<StubInterface> trainer);
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    // ----------------------------------------------------------------------------------------------------------------------
 
     @Before
     public final void setUpProxyFactory()
@@ -60,7 +60,8 @@ public abstract class AbstractStubTestCase
             @Override
             protected void train(StubInterface trainee)
             {
-                when(trainee.three(isInstance(String.class), "World")).thenAnswer(ObjectProviderUtils.constant("World"));
+                when(trainee.three(isInstance(String.class), "World"))
+                        .thenAnswer(ObjectProviderUtils.constant("World"));
             }
         });
     }
@@ -85,6 +86,37 @@ public abstract class AbstractStubTestCase
         });
         assertNotNull(proxy.stub());
         assertEquals("World", proxy.stub().one("Hello"));
+    }
+
+    @Test
+    public void testStubArray()
+    {
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        {
+            @Override
+            protected void train(StubInterface trainee)
+            {
+                when(trainee.stubs()).thenBuildArray().addElement(new Trainer<StubInterface>()
+                {
+                    @Override
+                    protected void train(StubInterface trainee)
+                    {
+                        when(trainee.one("Whatever")).thenReturn("Zero");
+                    }
+                }).addElement(new Trainer<StubInterface>()
+                {
+                    @Override
+                    protected void train(StubInterface trainee)
+                    {
+                        when(trainee.one("Whatever")).thenReturn("One");
+                    }
+                })
+                .build();
+            }
+        });
+
+        assertEquals("Zero", proxy.stubs()[0].one("Whatever"));
+        assertEquals("One", proxy.stubs()[1].one("Whatever"));
     }
 
     @Test(expected = IllegalStateException.class)
@@ -152,7 +184,8 @@ public abstract class AbstractStubTestCase
             @Override
             protected void train(StubInterface trainee)
             {
-                when(trainee.one("Hello")).thenThrow(ObjectProviderUtils.constant(new RuntimeException("No way, Jose!")));
+                when(trainee.one("Hello")).thenThrow(
+                        ObjectProviderUtils.constant(new RuntimeException("No way, Jose!")));
             }
         });
         proxy.one("Hello");
@@ -219,7 +252,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.booleanArray()).thenReturn(false, true, false);
             }
         });
-        assertTrue(Arrays.equals(new boolean[]{false, true, false}, proxy.booleanArray()));
+        assertTrue(Arrays.equals(new boolean[] { false, true, false }, proxy.booleanArray()));
     }
 
     @Test
@@ -233,7 +266,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.byteArray()).thenReturn((byte) 1, (byte) 2);
             }
         });
-        assertArrayEquals(new byte[]{1, 2}, proxy.byteArray());
+        assertArrayEquals(new byte[] { 1, 2 }, proxy.byteArray());
     }
 
     @Test
@@ -247,7 +280,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.charArray()).thenReturn('a', 'b', 'c');
             }
         });
-        assertArrayEquals(new char[]{'a', 'b', 'c'}, proxy.charArray());
+        assertArrayEquals(new char[] { 'a', 'b', 'c' }, proxy.charArray());
     }
 
     @Test
@@ -261,7 +294,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.doubleArray()).thenReturn(1.0, 2.0);
             }
         });
-        assertArrayEquals(new double[]{1.0, 2.0}, proxy.doubleArray(), 0.0);
+        assertArrayEquals(new double[] { 1.0, 2.0 }, proxy.doubleArray(), 0.0);
     }
 
     @Test
@@ -275,7 +308,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.floatArray()).thenReturn(1f, 2f);
             }
         });
-        assertArrayEquals(new float[]{1f, 2f}, proxy.floatArray(), 0.0f);
+        assertArrayEquals(new float[] { 1f, 2f }, proxy.floatArray(), 0.0f);
     }
 
     @Test
@@ -289,7 +322,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.intArray()).thenReturn(1, 2);
             }
         });
-        assertArrayEquals(new int[]{1, 2}, proxy.intArray());
+        assertArrayEquals(new int[] { 1, 2 }, proxy.intArray());
     }
 
     @Test
@@ -303,7 +336,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.longArray()).thenReturn(1, 2);
             }
         });
-        assertArrayEquals(new long[]{1, 2}, proxy.longArray());
+        assertArrayEquals(new long[] { 1, 2 }, proxy.longArray());
     }
 
     @Test
@@ -348,7 +381,7 @@ public abstract class AbstractStubTestCase
                 when(trainee.shortArray()).thenReturn((short) 1, (short) 2);
             }
         });
-        assertArrayEquals(new short[]{1, 2}, proxy.shortArray());
+        assertArrayEquals(new short[] { 1, 2 }, proxy.shortArray());
     }
 
     @Test
@@ -378,6 +411,6 @@ public abstract class AbstractStubTestCase
                 when(trainee.stringArray()).thenReturn("One", "Two");
             }
         });
-        assertArrayEquals(new String[]{"One", "Two"}, proxy.stringArray());
+        assertArrayEquals(new String[] { "One", "Two" }, proxy.stringArray());
     }
 }
