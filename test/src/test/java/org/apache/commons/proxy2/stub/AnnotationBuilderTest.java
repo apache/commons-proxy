@@ -46,16 +46,17 @@ public class AnnotationBuilderTest
     @Test
     public void testStubbedAnnotation()
     {
-        final CustomAnnotation customAnnotation =
-            AnnotationBuilder.of(CustomAnnotation.class).train(new AnnotationTrainer<CustomAnnotation>()
-            {
-                @Override
-                protected void train(CustomAnnotation trainee)
+        final CustomAnnotation customAnnotation = AnnotationBuilder.of(CustomAnnotation.class)
+                .train(new AnnotationTrainer<CustomAnnotation>()
                 {
-                    when(trainee.someType()).thenReturn(Object.class).when(trainee.finiteValues())
-                        .thenReturn(FiniteValues.ONE, FiniteValues.THREE).when(trainee.annString()).thenReturn("hey");
-                }
-            }).build();
+                    @Override
+                    protected void train(CustomAnnotation trainee)
+                    {
+                        when(trainee.someType()).thenReturn(Object.class).when(trainee.finiteValues())
+                                .thenReturn(FiniteValues.ONE, FiniteValues.THREE).when(trainee.annString())
+                                .thenReturn("hey");
+                    }
+                }).build();
 
         assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
         assertEquals("hey", customAnnotation.annString());
@@ -66,16 +67,16 @@ public class AnnotationBuilderTest
     @Test
     public void testNestedStubbedAnnotation()
     {
-        final NestingAnnotation nestingAnnotation =
-            AnnotationBuilder.of(NestingAnnotation.class).train(new AnnotationTrainer<NestingAnnotation>()
-            {
-                @Override
-                protected void train(NestingAnnotation trainee)
+        final NestingAnnotation nestingAnnotation = AnnotationBuilder.of(NestingAnnotation.class)
+                .train(new AnnotationTrainer<NestingAnnotation>()
                 {
-                    when(trainee.child()).thenStub(CustomAnnotation.class).when(trainee.somethingElse())
-                        .thenReturn("somethingElse");
-                }
-            }).build();
+                    @Override
+                    protected void train(NestingAnnotation trainee)
+                    {
+                        when(trainee.child()).thenStub(CustomAnnotation.class).when(trainee.somethingElse())
+                                .thenReturn("somethingElse");
+                    }
+                }).build();
 
         assertEquals("", nestingAnnotation.child().annString());
         assertEquals(0, nestingAnnotation.child().finiteValues().length);
@@ -91,8 +92,9 @@ public class AnnotationBuilderTest
         members.put("finiteValues", FiniteValues.values());
         members.put("someType", Object.class);
 
-        final CustomAnnotation customAnnotation = AnnotationBuilder.of(CustomAnnotation.class).withMembers(members).build();
-        		
+        final CustomAnnotation customAnnotation = AnnotationBuilder.of(CustomAnnotation.class).withMembers(members)
+                .build();
+
         assertNotNull(customAnnotation);
         assertEquals(CustomAnnotation.class, customAnnotation.annotationType());
         assertEquals("foo", customAnnotation.annString());
@@ -103,7 +105,8 @@ public class AnnotationBuilderTest
     @Test(expected = IllegalArgumentException.class)
     public void testBadMemberMap()
     {
-        AnnotationBuilder.of(CustomAnnotation.class).withMembers(Collections.singletonMap("annString", Integer.valueOf(100)));
+        AnnotationBuilder.of(CustomAnnotation.class).withMembers(
+                Collections.singletonMap("annString", Integer.valueOf(100)));
     }
 
     public @interface NestingAnnotation
