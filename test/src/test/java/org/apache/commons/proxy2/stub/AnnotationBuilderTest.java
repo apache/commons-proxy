@@ -102,6 +102,41 @@ public class AnnotationBuilderTest
         assertEquals(Object.class, customAnnotation.someType());
     }
 
+    @Test
+    public void testNestedStubbedAnnotationArray()
+    {
+        final NestingAnnotation nestingAnnotation = AnnotationBuilder.of(NestingAnnotation.class)
+                .train(new AnnotationTrainer<NestingAnnotation>()
+                {
+
+                    @Override
+                    protected void train(NestingAnnotation trainee)
+                    {
+                        when(trainee.children()).thenBuildArray().addElement(new AnnotationTrainer<CustomAnnotation>()
+                        {
+                            @Override
+                            protected void train(CustomAnnotation trainee)
+                            {
+                                when(trainee.finiteValues()).thenReturn(FiniteValues.ONE, FiniteValues.THREE);
+                            }
+                        }).addElement(new AnnotationTrainer<CustomAnnotation>()
+                        {
+                            @Override
+                            protected void train(CustomAnnotation trainee)
+                            {
+                                when(trainee.finiteValues()).thenReturn(FiniteValues.TWO);
+                            }
+                        }).build();
+                    }
+                }).build();
+
+        assertNull(nestingAnnotation.child());
+        assertEquals(2, nestingAnnotation.children().length);
+        assertArrayEquals(new FiniteValues[] { FiniteValues.ONE, FiniteValues.THREE },
+                nestingAnnotation.children()[0].finiteValues());
+        assertArrayEquals(new FiniteValues[] { FiniteValues.TWO }, nestingAnnotation.children()[1].finiteValues());
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testBadMemberMap()
     {
@@ -114,6 +149,8 @@ public class AnnotationBuilderTest
         CustomAnnotation child();
 
         String somethingElse();
+
+        CustomAnnotation[] children() default {};
     }
 
     public @interface CustomAnnotation

@@ -21,26 +21,31 @@ import java.lang.annotation.Annotation;
 
 import org.apache.commons.proxy2.interceptor.InterceptorUtils;
 
-public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A>, A extends Annotation> extends BaseTrainer<S, A>
+public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A>, A extends Annotation> extends
+        BaseTrainer<S, A>
 {
-    protected BaseAnnotationTrainer() {
+    protected BaseAnnotationTrainer()
+    {
         super();
     }
 
-    protected BaseAnnotationTrainer(Class<A> traineeType) {
+    protected BaseAnnotationTrainer(Class<A> traineeType)
+    {
         super(traineeType);
     }
 
     protected class WhenAnnotation<R> extends WhenObject<R>
     {
-    	public S thenStub(Class<R> type) {
+        public S thenStub(Class<R> type)
+        {
             trainingContext().push(type);
             trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
             return self();
         }
 
         @Override
-        public S thenStub(BaseTrainer<?, R> trainer) {
+        public S thenStub(BaseTrainer<?, R> trainer)
+        {
             final R trainee = trainingContext().push(trainer.traineeType);
             trainer.train(trainee);
             trainingContext().then(InterceptorUtils.constant(trainingContext().pop(AnnotationInvoker.INSTANCE)));
@@ -48,9 +53,59 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
         }
     }
 
+    protected class WhenAnnotationArray<R> extends WhenObjectArray<R>
+    {
+        protected WhenAnnotationArray(Class<? extends R> componentType)
+        {
+            super(componentType);
+        }
+
+        @Override
+        public StubAnnotationArrayBuilder<R> thenBuildArray()
+        {
+            return new StubAnnotationArrayBuilder<R>(componentType);
+        }
+    }
+
+    protected class StubAnnotationArrayBuilder<R> extends StubArrayBuilder<R>
+    {
+        private final BaseTrainer<?, R> annotationTypeTrainer;
+
+        private <N extends Annotation> StubAnnotationArrayBuilder(final Class<? extends R> componentType)
+        {
+            super(componentType);
+            @SuppressWarnings("unchecked")
+            final Class<N> annotationType = (Class<N>) componentType;
+            @SuppressWarnings("unchecked")
+            final BaseTrainer<?, R> annotationTypeTrainer = (BaseTrainer<?, R>) new AnnotationTypeTrainer<N>(
+                    annotationType);
+            this.annotationTypeTrainer = annotationTypeTrainer;
+        }
+
+        @Override
+        public StubAnnotationArrayBuilder<R> addElement(BaseTrainer<?, R> trainer)
+        {
+            final R trainee = trainingContext().push(trainer.traineeType);
+
+            annotationTypeTrainer.train(trainee);
+            trainer.train(trainee);
+
+            elements.add(trainingContext().<R> pop());
+            return this;
+        }
+    }
+
     @Override
-	public <R> WhenAnnotation<R> when(R expression) {
+    public <R> WhenAnnotation<R> when(R expression)
+    {
         return new WhenAnnotation<R>();
     }
 
+    @Override
+    public <R> WhenAnnotationArray<R> when(R[] expression)
+    {
+        @SuppressWarnings("unchecked")
+        final Class<? extends R> componentType = (Class<? extends R>) expression.getClass().getComponentType();
+        return new WhenAnnotationArray<R>(componentType);
+    }
 }

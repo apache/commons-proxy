@@ -235,18 +235,21 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     {
         super(PROXY_FACTORY, type, invoker);
         this.annotationType = type;
+        train(new AnnotationTypeTrainer<A>(type));
     }
 
     private AnnotationBuilder(Class<A> type, ObjectProvider<? extends A> provider)
     {
         super(PROXY_FACTORY, type, provider);
         this.annotationType = type;
+        train(new AnnotationTypeTrainer<A>(type));
     }
 
     private AnnotationBuilder(Class<A> type, A target)
     {
         super(PROXY_FACTORY, type, target);
         this.annotationType = type;
+        train(new AnnotationTypeTrainer<A>(type));
     }
 
     public AnnotationBuilder<A> withMembers(Map<String, ?> members)
@@ -258,19 +261,5 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     public <O> AnnotationBuilder<A> train(BaseTrainer<?, O> trainer)
     {
         return (AnnotationBuilder<A>) super.train(trainer);
-    }
-
-    @Override
-    public A build()
-    {
-        train(new AnnotationTrainer<A>(annotationType)
-        {
-            @Override
-            protected void train(A trainee)
-            {
-                when(trainee.annotationType()).thenReturn(annotationType);
-            }
-        });
-        return super.build();
     }
 }

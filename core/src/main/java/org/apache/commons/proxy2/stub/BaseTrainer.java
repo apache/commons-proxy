@@ -300,9 +300,9 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class WhenObjectArray<R> extends BaseWhen<R[]>
     {
-        private final Class<? extends R> componentType;
+        protected final Class<? extends R> componentType;
 
-        private WhenObjectArray(Class<? extends R> componentType)
+        protected WhenObjectArray(Class<? extends R> componentType)
         {
             this.componentType = componentType;
         }
@@ -321,10 +321,10 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected class StubArrayBuilder<R>
     {
-        private final Class<? extends R> componentType;
-        private final List<R> elements = new ArrayList<R>();
+        protected final List<R> elements = new ArrayList<R>();
+        protected final Class<? extends R> componentType;
 
-        private StubArrayBuilder(Class<? extends R> componentType)
+        protected StubArrayBuilder(Class<? extends R> componentType)
         {
             this.componentType = componentType;
         }
