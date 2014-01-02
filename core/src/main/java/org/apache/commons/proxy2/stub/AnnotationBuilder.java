@@ -38,7 +38,8 @@ import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 
 public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
 {
-    // underlying proxyfactory implementation based on org.apache.commons.proxy2.jdk.JdkProxyFactory
+    // underlying proxyfactory implementation based on
+    // org.apache.commons.proxy2.jdk.JdkProxyFactory
 
     private static class InterceptorInvocationHandler implements InvocationHandler, Serializable
     {
@@ -66,7 +67,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
             if (ProxyUtils.isEqualsMethod(method))
             {
                 return args[0] instanceof Annotation
-                    && AnnotationUtils.equals((Annotation) proxy, (Annotation) args[0]);
+                        && AnnotationUtils.equals((Annotation) proxy, (Annotation) args[0]);
             }
             if ("toString".equals(method.getName()) && method.getParameterTypes().length == 0)
             {
@@ -114,7 +115,8 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
             try
             {
                 return method.invoke(target, arguments);
-            } catch (InvocationTargetException e)
+            }
+            catch (InvocationTargetException e)
             {
                 throw e.getTargetException();
             }
@@ -138,27 +140,27 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
 
         @SuppressWarnings("unchecked")
         public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-            Class<?>... proxyClasses)
+                Class<?>... proxyClasses)
         {
             return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
-                ObjectProviderUtils.constant(target), interceptor));
+                    ObjectProviderUtils.constant(target), interceptor));
         }
 
         @SuppressWarnings("unchecked")
         public <T> T createDelegatorProxy(ClassLoader classLoader, final ObjectProvider<?> delegateProvider,
-            Class<?>... proxyClasses)
+                Class<?>... proxyClasses)
         {
             return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
-                delegateProvider, new Interceptor()
-                {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public Object intercept(Invocation invocation) throws Throwable
+                    delegateProvider, new Interceptor()
                     {
-                        return invocation.proceed();
-                    }
-                }));
+                        private static final long serialVersionUID = 1L;
+
+                        @Override
+                        public Object intercept(Invocation invocation) throws Throwable
+                        {
+                            return invocation.proceed();
+                        }
+                    }));
         }
     };
 
@@ -177,24 +179,31 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
         {
             WhenObject<Object> bud;
             AnnotationTrainer<A> dy = this;
-            for (Map.Entry<String, ?> attr : members.entrySet()) {
+            for (Map.Entry<String, ?> attr : members.entrySet())
+            {
                 final Method m;
-                try {
+                try
+                {
                     m = traineeType.getDeclaredMethod(attr.getKey());
-                } catch (Exception e1) {
-                    throw new IllegalArgumentException(String.format("Could not detect annotation member %1$s",
-                        attr.getKey()));
                 }
-                try {
+                catch (Exception e1)
+                {
+                    throw new IllegalArgumentException(String.format("Could not detect annotation member %1$s",
+                            attr.getKey()));
+                }
+                try
+                {
                     bud = dy.when(m.invoke(trainee));
-                } catch (Exception e) {
-                    //it must have happened on the invoke, so we didn't call when... it shouldn't happen, but we'll simply skip:
+                }
+                catch (Exception e)
+                {
+                    // it must have happened on the invoke, so we didn't call
+                    // when... it shouldn't happen, but we'll simply skip:
                     continue;
                 }
                 final Object value = attr.getValue();
-                Validate.isTrue(TypeUtils.isInstance(value, m.getReturnType()),
-                        "Value %s can not be assigned to %s", value,
-                        m.getReturnType());
+                Validate.isTrue(TypeUtils.isInstance(value, m.getReturnType()), "Value %s can not be assigned to %s",
+                        value, m.getReturnType());
                 dy = bud.thenReturn(value);
             }
         }
@@ -252,7 +261,8 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     }
 
     @Override
-    public A build() {
+    public A build()
+    {
         train(new AnnotationTrainer<A>(annotationType)
         {
             @Override
