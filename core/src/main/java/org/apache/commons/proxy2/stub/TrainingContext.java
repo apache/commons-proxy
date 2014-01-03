@@ -35,7 +35,7 @@ class TrainingContext
         return TRAINING_CONTEXT.get();
     }
 
-    static TrainingContext join(ProxyFactory proxyFactory)
+    static synchronized TrainingContext join(ProxyFactory proxyFactory)
     {
         final TrainingContext context = new TrainingContext(proxyFactory);
         TRAINING_CONTEXT.set(context);
@@ -58,13 +58,16 @@ class TrainingContext
 
     void part()
     {
-        if (resume == null)
+        synchronized (TRAINING_CONTEXT)
         {
-            TRAINING_CONTEXT.remove();
-        }
-        else
-        {
-            TRAINING_CONTEXT.set(resume);
+            if (resume == null)
+            {
+                TRAINING_CONTEXT.remove();
+            }
+            else
+            {
+                TRAINING_CONTEXT.set(resume);
+            }
         }
     }
 
