@@ -110,7 +110,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     protected TrainingContext trainingContext()
     {
-        return TrainingContext.getCurrent();
+        return TrainingContext.current();
     }
 
     public <R> WhenObject<R> when(R expression)

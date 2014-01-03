@@ -84,16 +84,16 @@ public class StubBuilder<T> implements Builder<T>
 
     public <O> StubBuilder<T> train(BaseTrainer<?, O> trainer)
     {
+        final TrainingContext trainingContext = TrainingContext.join(proxyFactory);
         try
         {
-            TrainingContext trainingContext = TrainingContext.set(proxyFactory);
             final O trainee = trainingContext.push(trainer.traineeType, switchInterceptor);
             trainer.train(trainee);
             proxyTypes.add(trainer.traineeType);
         }
         finally
         {
-            TrainingContext.clear();
+            trainingContext.part();
         }
         return this;
     }

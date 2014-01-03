@@ -413,4 +413,29 @@ public abstract class AbstractStubTestCase
         });
         assertArrayEquals(new String[] { "One", "Two" }, proxy.stringArray());
     }
+
+    /*
+     * This test replicates #thenStub() functionality in a more "ignorant" (ergo versatile) manner.
+     */
+    @Test
+    public void testInterruptResume()
+    {
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        {
+            @Override
+            protected void train(StubInterface trainee)
+            {
+                when(trainee.stub()).thenReturn(createProxy(new Trainer<StubInterface>()
+                {
+                    @Override
+                    protected void train(StubInterface trainee)
+                    {
+                        when(trainee.one("Hello")).thenReturn("World");
+                    }
+                }));
+            }
+        });
+        assertNotNull(proxy.stub());
+        assertEquals("World", proxy.stub().one("Hello"));
+    }
 }

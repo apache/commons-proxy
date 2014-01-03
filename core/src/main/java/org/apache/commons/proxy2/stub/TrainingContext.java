@@ -12,7 +12,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class TrainingContext
+class TrainingContext
 {
 //----------------------------------------------------------------------------------------------------------------------
 // Fields
@@ -24,23 +24,20 @@ public class TrainingContext
 
     private Deque<TrainingContextFrame<?>> frameDeque = new LinkedList<TrainingContextFrame<?>>();
 
+    private final TrainingContext resume;
+
 //----------------------------------------------------------------------------------------------------------------------
 // Static Methods
 //----------------------------------------------------------------------------------------------------------------------
 
-    public static void clear()
-    {
-        TRAINING_CONTEXT.remove();
-    }
-
-    public static TrainingContext getCurrent()
+    static TrainingContext current()
     {
         return TRAINING_CONTEXT.get();
     }
 
-    public static TrainingContext set(ProxyFactory proxyFactory)
+    static TrainingContext join(ProxyFactory proxyFactory)
     {
-        TrainingContext context = new TrainingContext(proxyFactory);
+        final TrainingContext context = new TrainingContext(proxyFactory);
         TRAINING_CONTEXT.set(context);
         return context;
     }
@@ -49,14 +46,27 @@ public class TrainingContext
 // Constructors
 //----------------------------------------------------------------------------------------------------------------------
 
-    public TrainingContext(ProxyFactory proxyFactory)
+    private TrainingContext(ProxyFactory proxyFactory)
     {
         this.proxyFactory = proxyFactory;
+        this.resume = current();
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Other Methods
 //----------------------------------------------------------------------------------------------------------------------
+
+    void part()
+    {
+        if (resume == null)
+        {
+            TRAINING_CONTEXT.remove();
+        }
+        else
+        {
+            TRAINING_CONTEXT.set(resume);
+        }
+    }
 
     private TrainingContextFrame<?> peek()
     {
@@ -90,12 +100,12 @@ public class TrainingContext
         return proxyFactory.createInvokerProxy(invoker, type);
     }
 
-    public void record(ArgumentMatcher<?> argumentMatcher)
+    void record(ArgumentMatcher<?> argumentMatcher)
     {
         peek().argumentMatchers.add(argumentMatcher);
     }
 
-    public void then(Interceptor interceptor)
+    void then(Interceptor interceptor)
     {
         peek().then(interceptor);
     }
@@ -222,7 +232,7 @@ public class TrainingContext
         @Override
         public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
         {
-            final TrainingContextFrame<?> frame = getCurrent().peek();
+            final TrainingContextFrame<?> frame = current().peek();
             if (!frame.getId().equals(id))
             {
                 throw new IllegalStateException("Wrong stub!");

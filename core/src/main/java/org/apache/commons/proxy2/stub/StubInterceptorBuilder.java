@@ -50,15 +50,15 @@ public class StubInterceptorBuilder
 
     public <T> StubInterceptorBuilder train(Trainer<T> trainer)
     {
+        final TrainingContext trainingContext = TrainingContext.join(proxyFactory);
         try
         {
-            final TrainingContext trainingContext = TrainingContext.set(proxyFactory);
             final T stub = trainingContext.push(trainer.traineeType, interceptor);
             trainer.train(stub);
         }
         finally
         {
-            TrainingContext.clear();
+            trainingContext.part();
         }
         return this;
     }
