@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
   ~ contributor license agreements.  See the NOTICE file distributed with
@@ -15,6 +16,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <project name="Commons Proxy">
   <bannerRight>
     <name>Commons Proxy</name>
@@ -24,7 +26,6 @@
   <body>
     <menu name="Commons Proxy">
       <item name="Overview" href="index.html"/>
-      <item name="Download" href="http://commons.apache.org/proxy/download_proxy.cgi"/>
       <item name="Mailing lists" href="/mail-lists.html"/>
       <item name="Issue Tracking" href="/issue-tracking.html"/>
       <item name="Team" href="/team-list.html"/>
