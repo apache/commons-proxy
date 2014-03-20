@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy2</artifactId>
+            <artifactId>commons-proxy2-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -42,7 +42,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy2</artifactId>
+            <artifactId>commons-proxy2-core</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>

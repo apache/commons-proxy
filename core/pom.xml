@@ -25,7 +25,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>commons-proxy2</artifactId>
+    <artifactId>commons-proxy2-core</artifactId>
     <name>Commons Proxy Core</name>
     <dependencies>
         <dependency>
