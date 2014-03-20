@@ -46,6 +46,7 @@
     <commons.rc.version>RC1</commons.rc.version>
     <commons.jira.id>PROXY</commons.jira.id>
     <commons.jira.pid>12310731</commons.jira.pid>
+    <commons.site.path>commons-proxy</commons.site.path>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/${commons.site.path}</commons.scmPubUrl>
 
     <asm.version>4.2</asm.version>
