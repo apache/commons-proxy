@@ -5,33 +5,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.asm4.ASM4ProxyFactory;
-import org.apache.commons.proxy2.cglib.CglibProxyFactory;
 import org.apache.commons.proxy2.invoker.NullInvoker;
-import org.apache.commons.proxy2.javassist.JavassistProxyFactory;
-import org.apache.commons.proxy2.jdk.JdkProxyFactory;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 
-@RunWith(Parameterized.class)
-public abstract class AbstractStubTestCase
+public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticTest
 {
     // ----------------------------------------------------------------------------------------------------------------------
     // Fields
     // ----------------------------------------------------------------------------------------------------------------------
 
-    @Parameter
-    public ProxyFactory proxyFactory;
     protected StubInterface target;
 
     // ----------------------------------------------------------------------------------------------------------------------
@@ -43,16 +29,6 @@ public abstract class AbstractStubTestCase
     // ----------------------------------------------------------------------------------------------------------------------
     // Other Methods
     // ----------------------------------------------------------------------------------------------------------------------
-
-    @Parameters(name = "{0}")
-    public static List<Object[]> createParameters() {
-        final List<Object[]> result = new ArrayList<Object[]>();
-        result.add(new Object[] { new JdkProxyFactory() });
-        result.add(new Object[] { new CglibProxyFactory() });
-        result.add(new Object[] { new JavassistProxyFactory() });
-        result.add(new Object[] { new ASM4ProxyFactory() });
-        return result;
-    }
 
     @Before
     public final void setUpProxyFactory()
