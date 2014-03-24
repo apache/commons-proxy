@@ -23,7 +23,8 @@ import java.io.Serializable;
  * 
  * @since 2.0
  */
-public interface WriteReplace extends Serializable {
+public interface WriteReplace extends Serializable
+{
     /**
      * Get the serialized version of this object.
      * @return Object

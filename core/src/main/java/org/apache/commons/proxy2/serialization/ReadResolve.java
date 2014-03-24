@@ -23,7 +23,8 @@ import java.io.Serializable;
  * 
  * @since 2.0
  */
-public interface ReadResolve extends Serializable {
+public interface ReadResolve extends Serializable
+{
     /**
      * Get the deserialized version of this {@link Serializable}.
      * @return Object
