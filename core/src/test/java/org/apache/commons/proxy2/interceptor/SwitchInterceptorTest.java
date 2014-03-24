@@ -17,18 +17,17 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import static org.apache.commons.proxy2.interceptor.InterceptorUtils.constant;
+import static org.junit.Assert.assertEquals;
+
+import java.lang.reflect.Method;
+
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.interceptor.matcher.invocation.MethodNameMatcher;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Method;
-
-import static org.apache.commons.proxy2.interceptor.InterceptorUtils.constant;
 
 public class SwitchInterceptorTest extends AbstractTestCase
 {
