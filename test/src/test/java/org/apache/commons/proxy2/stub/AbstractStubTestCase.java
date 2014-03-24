@@ -1,15 +1,18 @@
 package org.apache.commons.proxy2.stub;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.cglib.CglibProxyFactory;
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public abstract class AbstractStubTestCase
 {
