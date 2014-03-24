@@ -17,15 +17,16 @@
 
 package org.apache.commons.proxy2.stub;
 
-import org.apache.commons.proxy2.Interceptor;
-import org.apache.commons.proxy2.invoker.NullInvoker;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static org.junit.Assert.*;
+import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.invoker.NullInvoker;
+import org.junit.Before;
+import org.junit.Test;
 
 public class StubInterceptorBuilderTest extends AbstractStubTestCase
 {
