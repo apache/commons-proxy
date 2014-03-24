@@ -28,10 +28,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A {@link SwitchInterceptor} maintains a list of {@link org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher}/{@link Interceptor} pairs.  Each
- * invocation will be checked against the registered InvocationMatchers.  If one matches the current invocation, then
- * the corresponding Interceptor will be called.  If no InvocationMatchers match, then the invocation will merely
- * {@link org.apache.commons.proxy2.Invocation#proceed()} method is called.
+ * A {@link SwitchInterceptor} maintains a list of
+ * {@link org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher}/{@link Interceptor} pairs. Each invocation
+ * will be checked against the registered InvocationMatchers.  If one matches the current invocation, then the
+ * corresponding Interceptor will be called. If no InvocationMatchers match, the
+ * {@link org.apache.commons.proxy2.Invocation#proceed()} method is called with no interception.
  */
 public class SwitchInterceptor implements Interceptor, Serializable
 {
@@ -85,7 +86,7 @@ public class SwitchInterceptor implements Interceptor, Serializable
     {
         private final InvocationMatcher matcher;
 
-        public CaseBuilder(InvocationMatcher matcher)
+        private CaseBuilder(InvocationMatcher matcher)
         {
             this.matcher = matcher;
         }
