@@ -111,8 +111,6 @@ under the License.
     </dependency>
   </dependencies>
 
-  <!-- TODO create md5 and sha1 hashes directly, since skipped deploy
-       plugin won't be doing it for us -->
   <build>
     <plugins>
       <plugin>
@@ -148,6 +146,12 @@ under the License.
                 </configuration>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <configuration>
+              <createChecksum>true</createChecksum>
+            </configuration>
           </plugin>
         </plugins>
       </build>
