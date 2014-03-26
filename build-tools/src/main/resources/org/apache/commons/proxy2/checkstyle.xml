@@ -22,24 +22,19 @@
 
 <!-- commons proxy2 customization of default Checkstyle behavior -->
 <module name="Checker">
-  <property name="localeLanguage" value="en"/>
-
-  <module name="Header">
-    <property name="headerFile" value="${checkstyle.header.file}"/>
-  </module>
+  <property name="localeLanguage" value="en" />
 
   <!-- no tabs allowed in files -->
-  <module name="FileTabCharacter"/>
+  <module name="FileTabCharacter" />
 
   <module name="TreeWalker">
-    <!-- Verify that EVERY source file has the appropriate license -->
     <!-- check sane import statements -->
-    <module name="AvoidStarImport"/>
-    <module name="RedundantImport"/>
-    <module name="UnusedImports"/>
+    <module name="AvoidStarImport" />
+    <module name="RedundantImport" />
+    <module name="UnusedImports" />
 
     <module name="LineLength">
-      <property name="max" value="120"/>
+      <property name="max" value="120" />
     </module>
   </module>
 </module>

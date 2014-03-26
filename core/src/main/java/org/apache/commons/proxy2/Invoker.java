@@ -22,25 +22,29 @@ import java.lang.reflect.Method;
 
 /**
  * An invoker is responsible for handling a method invocation.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
 public interface Invoker extends Serializable
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     /**
-     * "Invokes" the method.  Implementation should throw a {@link org.apache.commons.proxy2.exception.InvokerException}
+     * "Invokes" the method. Implementation should throw a {@link org.apache.commons.proxy2.exception.InvokerException}
      * if problems arise while trying to invoke the method.
-     *
-     * @param proxy     the proxy2 object
-     * @param method    the method being invoked
-     * @param arguments the arguments
+     * 
+     * @param proxy
+     *            the proxy2 object
+     * @param method
+     *            the method being invoked
+     * @param arguments
+     *            the arguments
      * @return the return value
-     * @throws Throwable thrown by the implementation
+     * @throws Throwable
+     *             thrown by the implementation
      */
-    Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable;
+    Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable;
 }

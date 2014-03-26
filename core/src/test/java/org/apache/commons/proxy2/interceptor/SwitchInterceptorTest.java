@@ -31,9 +31,9 @@ import org.junit.Test;
 
 public class SwitchInterceptorTest extends AbstractTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Test
     public void testWithMultipleAdvices() throws Throwable
@@ -58,7 +58,8 @@ public class SwitchInterceptorTest extends AbstractTestCase
     @Test
     public void testWithSingleAdviceWhichDoesNotMatch() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(constant("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBackZZZZ")).then(
+                constant("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("foo", interceptor.intercept(invocation));
@@ -67,7 +68,8 @@ public class SwitchInterceptorTest extends AbstractTestCase
     @Test
     public void testWithSingleAdviceWhichMatches() throws Throwable
     {
-        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(constant("bar"));
+        SwitchInterceptor interceptor = new SwitchInterceptor().when(new MethodNameMatcher("echoBack")).then(
+                constant("bar"));
         Method method = Echo.class.getMethod("echoBack", String.class);
         Invocation invocation = new MockInvocation(method, "foo", "foo");
         assertEquals("bar", interceptor.intercept(invocation));

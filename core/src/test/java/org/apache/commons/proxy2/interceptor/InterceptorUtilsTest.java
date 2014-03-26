@@ -17,14 +17,14 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class InterceptorUtilsTest extends AbstractTestCase
 {
@@ -55,7 +55,8 @@ public class InterceptorUtilsTest extends AbstractTestCase
     @Test(expected = RuntimeException.class)
     public void testThrowingProvidedException() throws Throwable
     {
-        Interceptor interceptor = InterceptorUtils.throwing(ObjectProviderUtils.constant(new RuntimeException("Oops!")));
+        Interceptor interceptor = InterceptorUtils
+                .throwing(ObjectProviderUtils.constant(new RuntimeException("Oops!")));
         Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
         interceptor.intercept(invocation);
     }

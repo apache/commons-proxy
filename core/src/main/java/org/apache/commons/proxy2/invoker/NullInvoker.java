@@ -17,16 +17,16 @@
 
 package org.apache.commons.proxy2.invoker;
 
-import org.apache.commons.proxy2.Invoker;
-import org.apache.commons.proxy2.ProxyUtils;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
+import org.apache.commons.proxy2.Invoker;
+import org.apache.commons.proxy2.ProxyUtils;
+
 /**
- * An {@link Invoker} implementation which merely returns null for all method invocations.  This class is
- * useful for scenarios where the "null object" design pattern is needed.
- *
+ * An {@link Invoker} implementation which merely returns null for all method invocations. This class is useful for
+ * scenarios where the "null object" design pattern is needed.
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -40,14 +40,14 @@ public class NullInvoker implements Invoker, Serializable
      */
     public static final NullInvoker INSTANCE = new NullInvoker();
 
-  //**********************************************************************************************************************
- // Invoker Implementation
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Invoker Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
      */
-    public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
     {
         final Class<?> returnType = method.getReturnType();
         return ProxyUtils.nullValue(returnType);

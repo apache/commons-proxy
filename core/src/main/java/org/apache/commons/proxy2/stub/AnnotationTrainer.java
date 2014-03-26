@@ -21,11 +21,13 @@ import java.lang.annotation.Annotation;
 
 public abstract class AnnotationTrainer<A extends Annotation> extends BaseAnnotationTrainer<AnnotationTrainer<A>, A>
 {
-    protected AnnotationTrainer() {
+    protected AnnotationTrainer()
+    {
         super();
     }
 
-    protected AnnotationTrainer(Class<A> traineeType) {
+    protected AnnotationTrainer(Class<A> traineeType)
+    {
         super(traineeType);
     }
 

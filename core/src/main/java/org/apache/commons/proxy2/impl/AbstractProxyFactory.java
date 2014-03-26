@@ -23,23 +23,23 @@ import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.ProxyFactory;
 
 /**
- * Base abstract {@link ProxyFactory} implementation, primarily providing
- * implementations of the interface methods that are typically convenience
- * constructs over the other methods.
+ * Base abstract {@link ProxyFactory} implementation, primarily providing implementations of the interface methods that
+ * are typically convenience constructs over the other methods.
  */
 public abstract class AbstractProxyFactory implements ProxyFactory
 {
     /**
      * Returns true if all <code>proxyClasses</code> are interfaces.
-     *
-     * @param proxyClasses the proxy classes
+     * 
+     * @param proxyClasses
+     *            the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
-    public boolean canProxy( Class<?>... proxyClasses )
+    public boolean canProxy(Class<?>... proxyClasses)
     {
-        for( Class<?> proxyClass : proxyClasses )
+        for (Class<?> proxyClass : proxyClasses)
         {
-            if( !proxyClass.isInterface() )
+            if (!proxyClass.isInterface())
             {
                 return false;
             }
@@ -48,47 +48,52 @@ public abstract class AbstractProxyFactory implements ProxyFactory
     }
 
     /**
-     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>.  The proxy will be
+     * Creates a proxy which delegates to the object provided by <code>delegateProvider</code>. The proxy will be
      * generated using the current thread's "context class loader."
-     *
-     * @param delegateProvider the delegate provider
-     * @param proxyClasses     the interfaces that the proxy should implement
+     * 
+     * @param delegateProvider
+     *            the delegate provider
+     * @param proxyClasses
+     *            the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
-    public <T> T createDelegatorProxy( ObjectProvider<?> delegateProvider, Class<?>... proxyClasses )
+    public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider, Class<?>... proxyClasses)
     {
         return createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
     }
 
     /**
      * Creates a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
-     * <code>target</code> object.  The proxy will be generated using the current thread's "context class loader."
-     *
-     * @param target       the target object
-     * @param interceptor  the method interceptor
-     * @param proxyClasses the interfaces that the proxy should implement
+     * <code>target</code> object. The proxy will be generated using the current thread's "context class loader."
+     * 
+     * @param target
+     *            the target object
+     * @param interceptor
+     *            the method interceptor
+     * @param proxyClasses
+     *            the interfaces that the proxy should implement
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
-    public <T> T createInterceptorProxy( Object target, Interceptor interceptor,
-                                          Class<?>... proxyClasses )
+    public <T> T createInterceptorProxy(Object target, Interceptor interceptor, Class<?>... proxyClasses)
     {
         return createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
-                                      proxyClasses);
+                proxyClasses);
     }
 
     /**
-     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations.  The proxy will be
+     * Creates a proxy which uses the provided {@link Invoker} to handle all method invocations. The proxy will be
      * generated using the current thread's "context class loader."
-     *
-     * @param invoker      the invoker
-     * @param proxyClasses the interfaces that the proxy should implement
+     * 
+     * @param invoker
+     *            the invoker
+     * @param proxyClasses
+     *            the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
-    public <T> T createInvokerProxy( Invoker invoker, Class<?>... proxyClasses )
+    public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses)
     {
-        return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker,
-                                  proxyClasses);
+        return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker, proxyClasses);
     }
 
 }

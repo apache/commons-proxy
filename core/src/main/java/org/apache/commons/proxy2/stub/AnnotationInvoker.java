@@ -29,10 +29,11 @@ public final class AnnotationInvoker implements Invoker
     public static final AnnotationInvoker INSTANCE = new AnnotationInvoker();
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
+    {
         final Object result = method.getDefaultValue();
-        return result == null && method.getReturnType().isPrimitive() ? ProxyUtils
-            .nullValue(method.getReturnType()) : result;
+        return result == null && method.getReturnType().isPrimitive() ? ProxyUtils.nullValue(method.getReturnType())
+                : result;
     }
-    
+
 }

@@ -17,6 +17,12 @@
 
 package org.apache.commons.proxy2.interceptor.matcher;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
+
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.interceptor.matcher.invocation.ReturnTypeMatcher;
 import org.apache.commons.proxy2.util.AbstractTestCase;
@@ -24,16 +30,11 @@ import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.MockInvocation;
 import org.junit.Test;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
-import static org.junit.Assert.*;
-
 public class ReturnTypeMatcherTest extends AbstractTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Test
     public void testExactMatchNonMatching() throws Throwable

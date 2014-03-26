@@ -17,17 +17,18 @@
 
 package org.apache.commons.proxy2.interceptor.matcher.argument;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ArgumentMatcherUtilsTest
 {
     @Test
     public void testAny() throws Exception
     {
-        ArgumentMatcher<Object> matcher =ArgumentMatcherUtils.any();
+        ArgumentMatcher<Object> matcher = ArgumentMatcherUtils.any();
         assertTrue(matcher.matches(null));
         assertTrue(matcher.matches("Hello!"));
         assertTrue(matcher.matches(12345));

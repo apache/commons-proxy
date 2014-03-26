@@ -33,18 +33,18 @@ import org.apache.commons.proxy2.provider.ConstantProvider;
 
 public class StubBuilder<T> implements Builder<T>
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final ProxyFactory proxyFactory;
     private final T target;
     private final SwitchInterceptor switchInterceptor = new SwitchInterceptor();
     private final Set<Class<?>> proxyTypes = new HashSet<Class<?>>();
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type)
     {
@@ -57,7 +57,7 @@ public class StubBuilder<T> implements Builder<T>
         this.target = proxyFactory.createInvokerProxy(invoker, type);
         this.proxyTypes.add(Validate.notNull(type));
     }
-    
+
     public StubBuilder(ProxyFactory proxyFactory, Class<T> type, ObjectProvider<? extends T> provider)
     {
         this.proxyFactory = proxyFactory;
@@ -72,9 +72,9 @@ public class StubBuilder<T> implements Builder<T>
         this.proxyTypes.add(Validate.notNull(type));
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     public T build()
     {

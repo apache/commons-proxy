@@ -22,16 +22,16 @@ import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
 
 public class ReturnTypeMatcher implements InvocationMatcher
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final boolean exactMatch;
     private final Class<?> returnType;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     public ReturnTypeMatcher(Class<?> returnType)
     {
@@ -44,16 +44,14 @@ public class ReturnTypeMatcher implements InvocationMatcher
         this.exactMatch = exactMatch;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// InvocationMatcher Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
+    //******************************************************************************************************************
+    // InvocationMatcher Implementation
+    //******************************************************************************************************************
 
     @Override
     public boolean matches(Invocation invocation)
     {
-        return exactMatch ?
-                returnType.equals(invocation.getMethod().getReturnType()) :
-                returnType.isAssignableFrom(invocation.getMethod().getReturnType());
+        return exactMatch ? returnType.equals(invocation.getMethod().getReturnType()) : returnType
+                .isAssignableFrom(invocation.getMethod().getReturnType());
     }
 }

@@ -16,16 +16,16 @@
  */
 package org.apache.commons.proxy2.util;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
+
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ProxyUtils;
-
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
-import static org.junit.Assert.*;
 
 /**
  * @author James Carman
@@ -33,14 +33,14 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractTestCase
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
-    protected void assertSerializable( Object o )
+    protected void assertSerializable(Object o)
     {
         assertTrue(o instanceof Serializable);
-        SerializationUtils.clone(( Serializable ) o);
+        SerializationUtils.clone((Serializable) o);
     }
 
     protected MockInvocationBuilder mockInvocation(Class<?> type, String name, Class<?>... argumentTypes)

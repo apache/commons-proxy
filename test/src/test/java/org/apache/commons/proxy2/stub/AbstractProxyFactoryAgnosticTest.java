@@ -33,10 +33,12 @@ import org.junit.runners.Parameterized.Parameters;
  * Conveniently defines the setup for a unit test class that runs with all known {@link ProxyFactory} implementations.
  */
 @RunWith(Parameterized.class)
-public abstract class AbstractProxyFactoryAgnosticTest {
+public abstract class AbstractProxyFactoryAgnosticTest
+{
 
     @Parameters(name = "{0}")
-    public static List<Object[]> createParameters() {
+    public static List<Object[]> createParameters()
+    {
         final List<Object[]> result = new ArrayList<Object[]>();
         result.add(new Object[] { new JdkProxyFactory() });
         result.add(new Object[] { new CglibProxyFactory() });

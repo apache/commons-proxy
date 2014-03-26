@@ -27,6 +27,7 @@ public interface WriteReplace extends Serializable
 {
     /**
      * Get the serialized version of this object.
+     * 
      * @return Object
      */
     Object writeReplace();

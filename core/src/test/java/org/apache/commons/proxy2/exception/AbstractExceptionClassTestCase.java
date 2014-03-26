@@ -17,9 +17,11 @@
 
 package org.apache.commons.proxy2.exception;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * @author James Carman
@@ -27,30 +29,31 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractExceptionClassTestCase extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Fields
+    //**********************************************************************************************************************
 
     private final Class<?> exceptionClass;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Constructors
+    //**********************************************************************************************************************
 
-    public AbstractExceptionClassTestCase( Class<?> exceptionClass )
+    public AbstractExceptionClassTestCase(Class<?> exceptionClass)
     {
         this.exceptionClass = exceptionClass;
     }
 
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Test
     public void testCauseOnlyConstructor() throws Exception
     {
         final Exception cause = new Exception();
-        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {Throwable.class}).newInstance(new Object[] {cause});
+        Exception e = (Exception) exceptionClass.getConstructor(new Class[] { Throwable.class }).newInstance(
+                new Object[] { cause });
         assertEquals(cause.toString(), e.getMessage());
         assertEquals(cause, e.getCause());
     }
@@ -60,7 +63,8 @@ public abstract class AbstractExceptionClassTestCase extends AbstractTestCase
     {
         final Exception cause = new Exception();
         final String message = "message";
-        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {String.class, Throwable.class}).newInstance(new Object[] {message, cause});
+        Exception e = (Exception) exceptionClass.getConstructor(new Class[] { String.class, Throwable.class })
+                .newInstance(new Object[] { message, cause });
         assertEquals(message, e.getMessage());
         assertEquals(cause, e.getCause());
     }
@@ -69,7 +73,8 @@ public abstract class AbstractExceptionClassTestCase extends AbstractTestCase
     public void testMessageOnlyConstructor() throws Exception
     {
         final String message = "message";
-        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {String.class}).newInstance(new Object[] {message});
+        Exception e = (Exception) exceptionClass.getConstructor(new Class[] { String.class }).newInstance(
+                new Object[] { message });
         assertEquals(message, e.getMessage());
         assertNull(e.getCause());
     }
@@ -77,7 +82,7 @@ public abstract class AbstractExceptionClassTestCase extends AbstractTestCase
     @Test
     public void testNoArgConstructor() throws Exception
     {
-        Exception e = ( Exception ) exceptionClass.getConstructor(new Class[] {}).newInstance(new Object[] {});
+        Exception e = (Exception) exceptionClass.getConstructor(new Class[] {}).newInstance(new Object[] {});
         assertNull(e.getMessage());
         assertNull(e.getCause());
     }

@@ -17,15 +17,14 @@
 
 package org.apache.commons.proxy2.invoker;
 
-import org.apache.commons.proxy2.Invoker;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import org.apache.commons.proxy2.Invoker;
+
 /**
- * An adapter class to adapt the JDK's {@link InvocationHandler} interface to Commons Proxy's
- * {@link Invoker} interface.
- *
+ * An adapter class to adapt the JDK's {@link InvocationHandler} interface to Commons Proxy's {@link Invoker} interface.
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -34,33 +33,34 @@ public class InvocationHandlerAdapter implements Invoker
     /** Serialization version */
     private static final long serialVersionUID = 1L;
 
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final InvocationHandler invocationHandler;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new InvocationHandlerAdapter instance.
+     * 
      * @param invocationHandler
      */
-    public InvocationHandlerAdapter( InvocationHandler invocationHandler )
+    public InvocationHandlerAdapter(InvocationHandler invocationHandler)
     {
         this.invocationHandler = invocationHandler;
     }
 
-  //**********************************************************************************************************************
- // Invoker Implementation
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Invoker Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
      */
-    public Object invoke( Object proxy, Method method, Object[] arguments ) throws Throwable
+    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
     {
         return invocationHandler.invoke(proxy, method, arguments);
     }

@@ -27,6 +27,7 @@ public interface ReadResolve extends Serializable
 {
     /**
      * Get the deserialized version of this {@link Serializable}.
+     * 
      * @return Object
      */
     Object readResolve();

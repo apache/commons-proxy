@@ -17,52 +17,56 @@
 
 package org.apache.commons.proxy2;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Proxy;
+
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Proxy;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 /**
  * Test the default ProxyFactory provided by {@link ProxyUtils}.
  */
-public class DefaultProxyFactoryTest {
+public class DefaultProxyFactoryTest
+{
     private ProxyFactory proxyFactory;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         proxyFactory = ProxyUtils.proxyFactory();
     }
 
     @Test
-    public void testBasic() {
-        Foo foo = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE,
-                Foo.class);
+    public void testBasic()
+    {
+        Foo foo = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, Foo.class);
         assertNotNull(foo);
         assertTrue(foo instanceof Proxy);
     }
 
     @Test
-    public void testSubclassing() {
-        Bar bar = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE,
-                Bar.class);
+    public void testSubclassing()
+    {
+        Bar bar = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, Bar.class);
         assertNotNull(bar);
     }
 
     @Test
-    public void testCombined() {
-        Bar bar = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE,
-                Bar.class, Foo.class);
+    public void testCombined()
+    {
+        Bar bar = proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, Bar.class, Foo.class);
         assertNotNull(bar);
         assertTrue(bar instanceof Foo);
     }
 
-    public interface Foo {
+    public interface Foo
+    {
     }
 
-    public static class Bar {
+    public static class Bar
+    {
     }
 }

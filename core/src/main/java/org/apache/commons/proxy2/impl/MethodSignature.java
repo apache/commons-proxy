@@ -36,7 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * A class for capturing the signature of a method (its name and parameter types).
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -86,7 +86,8 @@ public class MethodSignature implements Serializable
 
     private static class SignaturePosition extends ParsePosition
     {
-        SignaturePosition() {
+        SignaturePosition()
+        {
             super(0);
         }
 
@@ -118,7 +119,8 @@ public class MethodSignature implements Serializable
         while (pos.getIndex() < internal.length())
         {
             final char c = internal.charAt(pos.getIndex());
-            if (Character.isWhitespace(c)) {
+            if (Character.isWhitespace(c))
+            {
                 pos.next();
                 continue;
             }
@@ -135,21 +137,25 @@ public class MethodSignature implements Serializable
                 pos.next();
                 break;
             }
-            try {
+            try
+            {
                 params.add(parseType(internal, pos));
-            } catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e)
+            {
                 throw new IllegalArgumentException(String.format("Method signature \"%s\" references unknown type",
-                    internal), e);
+                        internal), e);
             }
         }
         Validate.isTrue(complete, "Method signature \"%s\" is incomplete", internal);
         Validate.isTrue(StringUtils.isBlank(internal.substring(pos.getIndex())),
-            "Method signature \"%s\" includes unrecognized content beyond end", internal);
+                "Method signature \"%s\" includes unrecognized content beyond end", internal);
 
         return Pair.of(name, params.toArray(ArrayUtils.EMPTY_CLASS_ARRAY));
     }
 
-    private static Class<?> parseType(String internal, SignaturePosition pos) throws ClassNotFoundException {
+    private static Class<?> parseType(String internal, SignaturePosition pos) throws ClassNotFoundException
+    {
         final int here = pos.getIndex();
         final char c = internal.charAt(here);
 
@@ -164,33 +170,33 @@ public class MethodSignature implements Serializable
             final int type = pos.getIndex();
             final int semi = internal.indexOf(';', type);
             Validate.isTrue(semi > 0, "Type at index %s of method signature \"%s\" not terminated by semicolon", here,
-                internal);
+                    internal);
             final String className = internal.substring(type, semi).replace('/', '.');
             Validate.notBlank(className, "Invalid classname at position %s of method signature \"%s\"", type, internal);
             pos.setIndex(semi + 1);
             return Class.forName(className);
         default:
             throw new IllegalArgumentException(String.format(
-            "Unexpected character at index %s of method signature \"%s\"", here, internal));
+                    "Unexpected character at index %s of method signature \"%s\"", here, internal));
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     /**
      * Stored as a Java method descriptor minus return type.
      */
     private final String internal;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new MethodSignature instance.
-     *
+     * 
      * @param method
      */
     public MethodSignature(Method method)
@@ -204,25 +210,25 @@ public class MethodSignature implements Serializable
         this.internal = buf.toString();
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Methods
+    //******************************************************************************************************************
 
     /**
-     * Get the corresponding {@link Method} instance
-     * from the specified {@link Class}.
+     * Get the corresponding {@link Method} instance from the specified {@link Class}.
+     * 
      * @param type
      * @return Method
      */
     public Method toMethod(Class<?> type)
     {
-        final Pair<String,Class<?>[]> info = parse(internal);
+        final Pair<String, Class<?>[]> info = parse(internal);
         return MethodUtils.getAccessibleMethod(type, info.getLeft(), info.getRight());
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Canonical Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Canonical Methods
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}

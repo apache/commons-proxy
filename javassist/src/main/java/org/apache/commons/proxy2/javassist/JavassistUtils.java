@@ -17,34 +17,40 @@
 
 package org.apache.commons.proxy2.javassist;
 
-import javassist.*;
-import org.apache.commons.proxy2.ProxyUtils;
-import org.apache.commons.proxy2.exception.ObjectProviderException;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtField;
+import javassist.LoaderClassPath;
+import javassist.NotFoundException;
+
+import org.apache.commons.proxy2.ProxyUtils;
+import org.apache.commons.proxy2.exception.ObjectProviderException;
+
 /**
- * Some utility methods for dealing with Javassist.  This class is not part of the public API!
- *
+ * Some utility methods for dealing with Javassist. This class is not part of the public API!
+ * 
  * @author James Carman
  * @since 1.0
  */
 final class JavassistUtils
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
     private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
     private static final ClassPool CLASS_POOL = new ClassPool();
     private static final Set<ClassLoader> CLASS_LOADERS = new HashSet<ClassLoader>();
 
-//**********************************************************************************************************************
-// Static Methods
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Static Methods
+    //******************************************************************************************************************
 
     static
     {
@@ -53,13 +59,17 @@ final class JavassistUtils
 
     /**
      * Adds a field to a class.
-     *
-     * @param fieldType      the field's type
-     * @param fieldName      the field name
-     * @param enclosingClass the class receiving the new field
-     * @throws CannotCompileException if a compilation problem occurs
+     * 
+     * @param fieldType
+     *            the field's type
+     * @param fieldName
+     *            the field name
+     * @param enclosingClass
+     *            the class receiving the new field
+     * @throws CannotCompileException
+     *             if a compilation problem occurs
      */
-    public static void addField( Class<?> fieldType, String fieldName, CtClass enclosingClass )
+    public static void addField(Class<?> fieldType, String fieldName, CtClass enclosingClass)
             throws CannotCompileException
     {
         enclosingClass.addField(new CtField(resolve(fieldType), fieldName, enclosingClass));
@@ -67,13 +77,15 @@ final class JavassistUtils
 
     /**
      * Adds interfaces to a {@link CtClass}
-     *
-     * @param ctClass      the {@link CtClass}
-     * @param proxyClasses the interfaces
+     * 
+     * @param ctClass
+     *            the {@link CtClass}
+     * @param proxyClasses
+     *            the interfaces
      */
-    public static void addInterfaces( CtClass ctClass, Class<?>[] proxyClasses )
+    public static void addInterfaces(CtClass ctClass, Class<?>[] proxyClasses)
     {
-        for( int i = 0; i < proxyClasses.length; i++ )
+        for (int i = 0; i < proxyClasses.length; i++)
         {
             Class<?> proxyInterface = proxyClasses[i];
             ctClass.addInterface(resolve(proxyInterface));
@@ -82,72 +94,78 @@ final class JavassistUtils
 
     /**
      * Creates a new {@link CtClass} derived from the Java {@link Class} using the default base name.
-     *
-     * @param superclass the superclass
+     * 
+     * @param superclass
+     *            the superclass
      * @return the new derived {@link CtClass}
      */
-    public static CtClass createClass( Class<?> superclass )
+    public static CtClass createClass(Class<?> superclass)
     {
         return createClass(DEFAULT_BASE_NAME, superclass);
     }
 
     /**
      * Creates a new {@link CtClass} derived from the Java {@link Class} using the supplied base name.
-     *
-     * @param baseName   the base name
-     * @param superclass the superclass
+     * 
+     * @param baseName
+     *            the base name
+     * @param superclass
+     *            the superclass
      * @return the new derived {@link CtClass}
      */
-    public static synchronized CtClass createClass( String baseName, Class<?> superclass )
+    public static synchronized CtClass createClass(String baseName, Class<?> superclass)
     {
         return CLASS_POOL.makeClass(baseName + "_" + CLASS_NUMBER.incrementAndGet(), resolve(superclass));
     }
 
     /**
      * Finds the {@link CtClass} corresponding to the Java {@link Class} passed in.
-     *
-     * @param clazz the Java {@link Class}
+     * 
+     * @param clazz
+     *            the Java {@link Class}
      * @return the {@link CtClass}
      */
-    public static CtClass resolve( Class<?> clazz )
+    public static CtClass resolve(Class<?> clazz)
     {
-        synchronized(CLASS_LOADERS)
+        synchronized (CLASS_LOADERS)
         {
             try
             {
                 final ClassLoader loader = clazz.getClassLoader();
-                if( loader != null && !CLASS_LOADERS.contains(loader) )
+                if (loader != null && !CLASS_LOADERS.contains(loader))
                 {
                     CLASS_LOADERS.add(loader);
                     CLASS_POOL.appendClassPath(new LoaderClassPath(loader));
                 }
                 return CLASS_POOL.get(ProxyUtils.getJavaClassName(clazz));
             }
-            catch( NotFoundException e )
+            catch (NotFoundException e)
             {
-                throw new ObjectProviderException(
-                        "Unable to find class " + clazz.getName() + " in default Javassist class pool.", e);
+                throw new ObjectProviderException("Unable to find class " + clazz.getName()
+                        + " in default Javassist class pool.", e);
             }
         }
     }
 
     /**
      * Resolves an array of Java {@link Class}es to an array of their corresponding {@link CtClass}es.
-     *
-     * @param classes the Java {@link Class}es
+     * 
+     * @param classes
+     *            the Java {@link Class}es
      * @return the corresponding {@link CtClass}es
      */
-    public static CtClass[] resolve( Class<?>[] classes )
+    public static CtClass[] resolve(Class<?>[] classes)
     {
         final CtClass[] ctClasses = new CtClass[classes.length];
-        for( int i = 0; i < ctClasses.length; ++i )
+        for (int i = 0; i < ctClasses.length; ++i)
         {
             ctClasses[i] = resolve(classes[i]);
         }
         return ctClasses;
     }
 
-    private JavassistUtils() {
+    private JavassistUtils()
+    {
         // Hiding constructor in utility class!
     }
 }

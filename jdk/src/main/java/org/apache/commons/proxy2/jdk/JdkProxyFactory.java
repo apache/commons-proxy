@@ -17,90 +17,104 @@
 
 package org.apache.commons.proxy2.jdk;
 
-import org.apache.commons.proxy2.*;
-import org.apache.commons.proxy2.impl.AbstractProxyFactory;
-
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.Invoker;
+import org.apache.commons.proxy2.ObjectProvider;
+import org.apache.commons.proxy2.ProxyUtils;
+import org.apache.commons.proxy2.impl.AbstractProxyFactory;
+
 /**
  * {@link ProxyFactory} implementation that uses {@link java.lang.reflect.Proxy} proxies.
  */
 public class JdkProxyFactory extends AbstractProxyFactory
 {
-//**********************************************************************************************************************
-// ProxyFactory Implementation
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // ProxyFactory Implementation
+    //******************************************************************************************************************
 
     /**
      * Creates a proxy2 which delegates to the object provided by <code>delegateProvider</code>.
-     *
-     * @param classLoader      the class loader to use when generating the proxy2
-     * @param delegateProvider the delegate provider
-     * @param proxyClasses     the interfaces that the proxy2 should implement
+     * 
+     * @param classLoader
+     *            the class loader to use when generating the proxy2
+     * @param delegateProvider
+     *            the delegate provider
+     * @param proxyClasses
+     *            the interfaces that the proxy2 should implement
      * @return a proxy2 which delegates to the object provided by the target <code>delegateProvider>
      */
     @SuppressWarnings("unchecked")
-    public <T> T createDelegatorProxy( ClassLoader classLoader, ObjectProvider<?> delegateProvider,
-                                        Class<?>... proxyClasses )
+    public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
+            Class<?>... proxyClasses)
     {
-        return (T) Proxy.newProxyInstance(classLoader, proxyClasses,
-                                      new DelegatorInvocationHandler(delegateProvider));
+        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new DelegatorInvocationHandler(delegateProvider));
     }
 
     /**
      * Creates a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
      * <code>target</code> object.
-     *
-     * @param classLoader  the class loader to use when generating the proxy2
-     * @param target       the target object
-     * @param interceptor  the method interceptor
-     * @param proxyClasses the interfaces that the proxy2 should implement.
+     * 
+     * @param classLoader
+     *            the class loader to use when generating the proxy2
+     * @param target
+     *            the target object
+     * @param interceptor
+     *            the method interceptor
+     * @param proxyClasses
+     *            the interfaces that the proxy2 should implement.
      * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
     @SuppressWarnings("unchecked")
-    public <T> T createInterceptorProxy( ClassLoader classLoader, Object target, Interceptor interceptor,
-                                          Class<?>... proxyClasses )
+    public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+            Class<?>... proxyClasses)
     {
-        return (T) Proxy
-                .newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target, interceptor));
+        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target,
+                interceptor));
     }
 
     /**
      * Creates a proxy2 which uses the provided {@link Invoker} to handle all method invocations.
-     *
-     * @param classLoader  the class loader to use when generating the proxy2
-     * @param invoker      the invoker
-     * @param proxyClasses the interfaces that the proxy2 should implement
+     * 
+     * @param classLoader
+     *            the class loader to use when generating the proxy2
+     * @param invoker
+     *            the invoker
+     * @param proxyClasses
+     *            the interfaces that the proxy2 should implement
      * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
      */
     @SuppressWarnings("unchecked")
-    public <T> T createInvokerProxy( ClassLoader classLoader, Invoker invoker,
-                                      Class<?>... proxyClasses )
+    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
         return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
     }
 
-//**********************************************************************************************************************
-// Inner Classes
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Inner Classes
+    //******************************************************************************************************************
 
     private abstract static class AbstractInvocationHandler implements InvocationHandler, Serializable
     {
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
-        public Object invoke( Object proxy, Method method, Object[] args ) throws Throwable
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
-            if( ProxyUtils.isHashCode(method) )
+            if (ProxyUtils.isHashCode(method))
             {
                 return System.identityHashCode(proxy);
             }
-            else if( ProxyUtils.isEqualsMethod(method) )
+            else if (ProxyUtils.isEqualsMethod(method))
             {
                 return proxy == args[0];
             }
@@ -110,7 +124,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
             }
         }
 
-        protected abstract Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable;
+        protected abstract Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable;
     }
 
     private static class DelegatorInvocationHandler extends AbstractInvocationHandler
@@ -120,18 +134,18 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
         private final ObjectProvider<?> delegateProvider;
 
-        protected DelegatorInvocationHandler( ObjectProvider<?> delegateProvider )
+        protected DelegatorInvocationHandler(ObjectProvider<?> delegateProvider)
         {
             this.delegateProvider = delegateProvider;
         }
 
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
+        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             try
             {
                 return method.invoke(delegateProvider.getObject(), args);
             }
-            catch( InvocationTargetException e )
+            catch (InvocationTargetException e)
             {
                 throw e.getTargetException();
             }
@@ -146,13 +160,13 @@ public class JdkProxyFactory extends AbstractProxyFactory
         private final Object target;
         private final Interceptor methodInterceptor;
 
-        public InterceptorInvocationHandler( Object target, Interceptor methodInterceptor )
+        public InterceptorInvocationHandler(Object target, Interceptor methodInterceptor)
         {
             this.target = target;
             this.methodInterceptor = methodInterceptor;
         }
 
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
+        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             final ReflectionInvocation invocation = new ReflectionInvocation(proxy, target, method, args);
             return methodInterceptor.intercept(invocation);
@@ -166,33 +180,30 @@ public class JdkProxyFactory extends AbstractProxyFactory
 
         private final Invoker invoker;
 
-        public InvokerInvocationHandler( Invoker invoker )
+        public InvokerInvocationHandler(Invoker invoker)
         {
             this.invoker = invoker;
         }
 
-        public Object invokeImpl( Object proxy, Method method, Object[] args ) throws Throwable
+        public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             return invoker.invoke(proxy, method, args);
         }
     }
 
-    private static class ReflectionInvocation implements Invocation, Serializable
+    private static class ReflectionInvocation implements Invocation
     {
-        /** Serialization version */
-        private static final long serialVersionUID = 1L;
-
         private final Object proxy;
         private final Object target;
         private final Method method;
         private final Object[] arguments;
 
-        public ReflectionInvocation( Object proxy, Object target, Method method, Object[] arguments )
+        public ReflectionInvocation(Object proxy, Object target, Method method, Object[] arguments)
         {
             this.proxy = proxy;
             this.target = target;
             this.method = method;
-            this.arguments = ( arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments );
+            this.arguments = ObjectUtils.defaultIfNull(ArrayUtils.clone(arguments), ProxyUtils.EMPTY_ARGUMENTS);
         }
 
         public Object[] getArguments()
@@ -216,7 +227,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
             {
                 return method.invoke(target, arguments);
             }
-            catch( InvocationTargetException e )
+            catch (InvocationTargetException e)
             {
                 throw e.getTargetException();
             }

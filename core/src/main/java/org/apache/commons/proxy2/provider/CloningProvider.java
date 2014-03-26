@@ -17,17 +17,17 @@
 
 package org.apache.commons.proxy2.provider;
 
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Merely calls <code>clone()</code> (reflectively) on the given {@link Cloneable} object.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -38,35 +38,33 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
      */
     private static final long serialVersionUID = 1L;
 
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final T cloneable;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
-     * Constructs a provider which returns clone copies of the specified {@link Cloneable}
-     * object.
-     *
-     * @param cloneable the object to clone
+     * Constructs a provider which returns clone copies of the specified {@link Cloneable} object.
+     * 
+     * @param cloneable
+     *            the object to clone
      */
     public CloningProvider(T cloneable)
     {
         Validate.notNull(cloneable, "Cloneable object cannot be null.");
-        Validate.isTrue(
-                MethodUtils.getAccessibleMethod(cloneable.getClass(), "clone") != null,
-                String.format("Class %s does not override clone() method as public.",
-                        cloneable.getClass().getName()));
+        Validate.isTrue(MethodUtils.getAccessibleMethod(cloneable.getClass(), "clone") != null,
+                String.format("Class %s does not override clone() method as public.", cloneable.getClass().getName()));
         this.cloneable = cloneable;
     }
 
-    //**********************************************************************************************************************
+    //******************************************************************************************************************
     // ObjectProvider Implementation
-    //**********************************************************************************************************************
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -80,24 +78,20 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
         }
         catch (IllegalAccessException e)
         {
-            throw new ObjectProviderException(
-                    "Class " + cloneable.getClass().getName() + " does not have a public clone() method.", e);
+            throw new ObjectProviderException("Class " + cloneable.getClass().getName()
+                    + " does not have a public clone() method.", e);
         }
         catch (InvocationTargetException e)
         {
-            throw new ObjectProviderException(
-                    "Attempt to clone object of type " + cloneable.getClass().getName() + " threw an exception.", e);
+            throw new ObjectProviderException("Attempt to clone object of type " + cloneable.getClass().getName()
+                    + " threw an exception.", e);
         }
         catch (NoSuchMethodException e)
         {
-            throw new ObjectProviderException(
-                    String.format("Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()), e);
+            throw new ObjectProviderException(String.format(
+                    "Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()),
+                    e);
         }
     }
-
-//**********************************************************************************************************************
-// Getter/Setter Methods
-//**********************************************************************************************************************
-
 
 }

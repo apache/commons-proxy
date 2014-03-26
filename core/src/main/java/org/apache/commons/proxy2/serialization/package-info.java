@@ -34,4 +34,5 @@
  * equivalent proxy object, which probably implies some form of {@code static} access.
  */
 package org.apache.commons.proxy2.serialization;
-import java.io.Serializable;
+
+

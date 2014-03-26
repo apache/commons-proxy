@@ -32,19 +32,18 @@ import org.apache.commons.proxy2.interceptor.matcher.argument.ArgumentMatcherUti
 
 public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 {
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     // Fields
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     public final Class<T> traineeType;
 
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     // Constructors
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
 
     /**
-     * Create a new {@link BaseTrainer} instance. This constructor should only
-     * be called by classes that explicitly assign the T parameter in the class
-     * definition. This should include basically any runtime-usable class.
+     * Create a new {@link BaseTrainer} instance. This constructor should only be called by classes that explicitly
+     * assign the T parameter in the class definition. This should include basically any runtime-usable class.
      */
     protected BaseTrainer()
     {
@@ -67,15 +66,15 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         this.traineeType = resolvedVariable;
     }
 
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     // Abstract Methods
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
 
     protected abstract void train(T trainee);
 
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     // Other Methods
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
 
     protected <R> R any(Class<R> type)
     {
@@ -176,9 +175,9 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         return (S) this;
     }
 
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
     // Inner Classes
-    // ----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
 
     protected abstract class BaseWhen<R>
     {
@@ -285,9 +284,8 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
     }
 
     /**
-     * Intermediate result of a when(Class) call. Provided because it is such a
-     * common case to have a mismatch between a declared Class<?> return type
-     * and the bound parameter of a class literal.
+     * Intermediate result of a when(Class) call. Provided because it is such a common case to have a mismatch between a
+     * declared Class<?> return type and the bound parameter of a class literal.
      */
     protected class WhenClass extends BaseWhen<Class<?>>
     {

@@ -25,8 +25,7 @@ import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
 
 /**
- * Delegates a method invocation to the object provided by an
- * {@link ObjectProvider}.
+ * Delegates a method invocation to the object provided by an {@link ObjectProvider}.
  * 
  * @param <T>
  */

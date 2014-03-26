@@ -19,22 +19,32 @@ package org.apache.commons.proxy2.stub;
 
 public interface StubInterface
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     String one(String value);
+
     String three(String arg1, String arg2);
+
     String two(String value);
 
     byte[] byteArray();
+
     char[] charArray();
+
     short[] shortArray();
+
     int[] intArray();
+
     long[] longArray();
+
     float[] floatArray();
+
     double[] doubleArray();
+
     boolean[] booleanArray();
+
     String[] stringArray();
 
     String arrayParameter(String... strings);
@@ -42,5 +52,6 @@ public interface StubInterface
     void voidMethod(String arg);
 
     StubInterface stub();
+
     StubInterface[] stubs();
 }

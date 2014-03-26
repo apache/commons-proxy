@@ -17,42 +17,54 @@
 
 package org.apache.commons.proxy2.cglib;
 
-import net.sf.cglib.proxy.*;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.proxy2.*;
-import org.apache.commons.proxy2.impl.AbstractSubclassingProxyFactory;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
+
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.CallbackFilter;
+import net.sf.cglib.proxy.Dispatcher;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.Invoker;
+import org.apache.commons.proxy2.ObjectProvider;
+import org.apache.commons.proxy2.ProxyUtils;
+import org.apache.commons.proxy2.impl.AbstractSubclassingProxyFactory;
 
 /**
  * Cglib-based {@link ProxyFactory} implementation.
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private static CallbackFilter callbackFilter = new CglibProxyFactoryCallbackFilter();
 
-  //**********************************************************************************************************************
- // ProxyFactory Implementation
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // ProxyFactory Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
-                                       Class<?>... proxyClasses)
+            Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
-        enhancer.setCallbacks(new Callback[]{new ObjectProviderDispatcher(targetProvider), new EqualsHandler(), new HashCodeHandler()});
+        enhancer.setCallbacks(new Callback[] { new ObjectProviderDispatcher(targetProvider), new EqualsHandler(),
+                new HashCodeHandler() });
         return (T) enhancer.create();
     }
 
@@ -61,14 +73,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
      */
     @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
-                                         Class<?>... proxyClasses)
+            Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
-        enhancer.setCallbacks(new Callback[]{new InterceptorBridge(target, interceptor), new EqualsHandler(), new HashCodeHandler()});
+        enhancer.setCallbacks(new Callback[] { new InterceptorBridge(target, interceptor), new EqualsHandler(),
+                new HashCodeHandler() });
         return (T) enhancer.create();
     }
 
@@ -76,21 +89,21 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-                                     Class<?>... proxyClasses)
+    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
         enhancer.setCallbackFilter(callbackFilter);
-        enhancer.setCallbacks(new Callback[]{new InvokerBridge(invoker), new EqualsHandler(), new HashCodeHandler()});
+        enhancer.setCallbacks(
+                new Callback[] { new InvokerBridge(invoker), new EqualsHandler(), new HashCodeHandler() });
         return (T) enhancer.create();
     }
 
-//**********************************************************************************************************************
-// Inner Classes
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Inner Classes
+    //******************************************************************************************************************
 
     private static class CglibProxyFactoryCallbackFilter implements CallbackFilter
     {
@@ -133,7 +146,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    private static class InterceptorBridge implements net.sf.cglib.proxy.MethodInterceptor, Serializable
+    private static class InterceptorBridge implements MethodInterceptor, Serializable
     {
         /** Serialization version */
         private static final long serialVersionUID = 1L;
@@ -171,11 +184,8 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         }
     }
 
-    private static class MethodProxyInvocation implements Invocation, Serializable
+    private static class MethodProxyInvocation implements Invocation
     {
-        /** Serialization version */
-        private static final long serialVersionUID = 1L;
-
         private final Object proxy;
         private final Object target;
         private final Method method;
@@ -188,7 +198,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
             this.method = method;
             this.methodProxy = methodProxy;
-            this.args = ArrayUtils.clone(args);
+            this.args = ObjectUtils.defaultIfNull(ArrayUtils.clone(args), ProxyUtils.EMPTY_ARGUMENTS);
         }
 
         public Method getMethod()

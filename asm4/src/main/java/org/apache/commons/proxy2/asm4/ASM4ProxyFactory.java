@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.Invoker;
@@ -423,8 +425,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 && method.getParameterTypes().length == 1 && Object.class.equals(method.getParameterTypes()[0]);
     }
 
-    @SuppressWarnings("serial")
-    private static class ReflectionInvocation implements Invocation, Serializable
+    private static class ReflectionInvocation implements Invocation
     {
         private final Method method;
         private final Object[] arguments;
@@ -435,7 +436,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
                 final Object[] arguments)
         {
             this.method = method;
-            this.arguments = (arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments);
+            this.arguments = ObjectUtils.defaultIfNull(ArrayUtils.clone(arguments), ProxyUtils.EMPTY_ARGUMENTS);
             this.proxy = proxy;
             this.target = target;
         }

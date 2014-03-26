@@ -26,30 +26,29 @@ import java.io.Serializable;
  */
 public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializable
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Fields
+    //**********************************************************************************************************************
 
     private static final long serialVersionUID = -4844873352607521103L;
 
-//**********************************************************************************************************************
-// Echo Implementation
-//**********************************************************************************************************************
-
+    //**********************************************************************************************************************
+    // Echo Implementation
+    //**********************************************************************************************************************
 
     public void echo()
     {
     }
 
-    public boolean echoBack( boolean b )
+    public boolean echoBack(boolean b)
     {
         return b;
     }
 
-    public String echoBack( String[] messages )
+    public String echoBack(String[] messages)
     {
         final StringBuilder sb = new StringBuilder();
-        for( int i = 0; i < messages.length; i++ )
+        for (int i = 0; i < messages.length; i++)
         {
             String message = messages[i];
             sb.append(message);
@@ -57,32 +56,32 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         return sb.toString();
     }
 
-    public String echoBack( String[][] messages )
+    public String echoBack(String[][] messages)
     {
         final StringBuilder sb = new StringBuilder();
-        for( int i = 0; i < messages.length; i++ )
+        for (int i = 0; i < messages.length; i++)
         {
             sb.append(echoBack(messages[i]));
         }
         return sb.toString();
     }
 
-    public String echoBack( String[][][] messages )
+    public String echoBack(String[][][] messages)
     {
         final StringBuilder sb = new StringBuilder();
-        for( int i = 0; i < messages.length; i++ )
+        for (int i = 0; i < messages.length; i++)
         {
             sb.append(echoBack(messages[i]));
         }
         return sb.toString();
     }
 
-    public int echoBack( int i )
+    public int echoBack(int i)
     {
         return i;
     }
 
-    public String echoBack( String message1, String message2 )
+    public String echoBack(String message1, String message2)
     {
         return message1 + message2;
     }

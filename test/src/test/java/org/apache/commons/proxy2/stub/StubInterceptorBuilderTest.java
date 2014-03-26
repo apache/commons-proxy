@@ -30,15 +30,15 @@ import org.junit.Test;
 
 public class StubInterceptorBuilderTest extends AbstractStubTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Fields
+    //----------------------------------------------------------------------------------------------------------------------
 
     private StubInterceptorBuilder builder;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Before
     public void initialize()
@@ -51,8 +51,7 @@ public class StubInterceptorBuilderTest extends AbstractStubTestCase
     {
         Interceptor interceptor = builder.train(trainer).build();
         return proxyFactory.createInterceptorProxy(
-                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, StubInterface.class),
-                interceptor,
+                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE, StubInterface.class), interceptor,
                 StubInterface.class);
     }
 
@@ -75,7 +74,8 @@ public class StubInterceptorBuilderTest extends AbstractStubTestCase
                 });
             }
         }).build();
-        RetentionWrapper wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, RetentionWrapper.class);
+        RetentionWrapper wrapper = proxyFactory.createInterceptorProxy(
+                proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, RetentionWrapper.class);
         assertNotNull(wrapper.value());
         assertEquals(RetentionPolicy.RUNTIME, wrapper.value().value());
     }
@@ -91,7 +91,8 @@ public class StubInterceptorBuilderTest extends AbstractStubTestCase
                 when(trainee.value()).thenReturn(RetentionPolicy.RUNTIME);
             }
         }).build();
-        Retention wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE), interceptor, Retention.class);
+        Retention wrapper = proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(NullInvoker.INSTANCE),
+                interceptor, Retention.class);
         assertEquals(RetentionPolicy.RUNTIME, wrapper.value());
     }
 

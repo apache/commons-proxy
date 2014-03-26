@@ -16,35 +16,37 @@
  */
 package org.apache.commons.proxy2.util;
 
-import org.apache.commons.proxy2.Invocation;
-
 import java.lang.reflect.Method;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.ProxyUtils;
 
 public class MockInvocation implements Invocation
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Fields
+    //----------------------------------------------------------------------------------------------------------------------
 
     private final Method method;
     private final Object[] arguments;
     private final Object returnValue;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Constructors
+    //----------------------------------------------------------------------------------------------------------------------
 
     public MockInvocation(Method method, Object returnValue, Object... arguments)
     {
         this.returnValue = returnValue;
-        this.arguments = arguments;
+        this.arguments = ObjectUtils.defaultIfNull(ArrayUtils.clone(arguments), ProxyUtils.EMPTY_ARGUMENTS);
         this.method = method;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Invocation Implementation
-//----------------------------------------------------------------------------------------------------------------------
-
+    //----------------------------------------------------------------------------------------------------------------------
+    // Invocation Implementation
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Object[] getArguments()

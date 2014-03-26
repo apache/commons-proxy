@@ -17,44 +17,45 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * A {@link SwitchInterceptor} maintains a list of
  * {@link org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher}/{@link Interceptor} pairs. Each invocation
- * will be checked against the registered InvocationMatchers.  If one matches the current invocation, then the
+ * will be checked against the registered InvocationMatchers. If one matches the current invocation, then the
  * corresponding Interceptor will be called. If no InvocationMatchers match, the
  * {@link org.apache.commons.proxy2.Invocation#proceed()} method is called with no interception.
  */
 public class SwitchInterceptor implements Interceptor, Serializable
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private static final long serialVersionUID = 1L;
 
-    private final List<Pair<InvocationMatcher, Interceptor>> cases = new CopyOnWriteArrayList<Pair<InvocationMatcher, Interceptor>>();
+    private final List<Pair<InvocationMatcher, Interceptor>> cases
+        = new CopyOnWriteArrayList<Pair<InvocationMatcher, Interceptor>>();
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     public SwitchInterceptor()
     {
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Interceptor Implementation
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Interceptor Implementation
+    //******************************************************************************************************************
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable
@@ -69,18 +70,18 @@ public class SwitchInterceptor implements Interceptor, Serializable
         return invocation.proceed();
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     public CaseBuilder when(InvocationMatcher matcher)
     {
         return new CaseBuilder(matcher);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Inner Classes
+    //******************************************************************************************************************
 
     public class CaseBuilder
     {

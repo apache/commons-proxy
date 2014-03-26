@@ -20,14 +20,14 @@ package org.apache.commons.proxy2.interceptor.matcher;
 import org.apache.commons.proxy2.Invocation;
 
 /**
- * An {@link InvocationMatcher} is used to conditionally match {@link Invocation} objects based on
- * some criteria such as method name, parameter values, etc.
+ * An {@link InvocationMatcher} is used to conditionally match {@link Invocation} objects based on some criteria such as
+ * method name, parameter values, etc.
  */
 public interface InvocationMatcher
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     boolean matches(Invocation invocation);
 }

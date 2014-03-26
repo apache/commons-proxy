@@ -19,51 +19,57 @@ package org.apache.commons.proxy2.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A useful superclass for {@link ProxyClassGenerator} implementations.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator
 {
-//**********************************************************************************************************************
-// Static Methods
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Static Methods
+    //******************************************************************************************************************
 
     /**
-     * Returns all methods that a proxy class must implement from the proxy interfaces.  This method makes sure there
-     * are no method signature clashes. For methods with the same signature (name and parameter types), the one
-     * encountered first will be returned in the result. Final methods are also excluded from the result.
-     *
-     * @param proxyClasses the interfaces the proxy class must implement
+     * Returns all methods that a proxy class must implement from the proxy interfaces. This method makes sure there are
+     * no method signature clashes. For methods with the same signature (name and parameter types), the one encountered
+     * first will be returned in the result. Final methods are also excluded from the result.
+     * 
+     * @param proxyClasses
+     *            the interfaces the proxy class must implement
      * @return all methods that the proxy class must implement
      */
-    public static Method[] getImplementationMethods( Class<?>[] proxyClasses )
+    public static Method[] getImplementationMethods(Class<?>[] proxyClasses)
     {
         final Map<MethodSignature, Method> signatureMethodMap = new HashMap<MethodSignature, Method>();
         final Set<MethodSignature> finalizedSignatures = new HashSet<MethodSignature>();
-        for( int i = 0; i < proxyClasses.length; i++ )
+        for (int i = 0; i < proxyClasses.length; i++)
         {
             Class<?> proxyInterface = proxyClasses[i];
             final Method[] methods = proxyInterface.getMethods();
-            for( int j = 0; j < methods.length; j++ )
+            for (int j = 0; j < methods.length; j++)
             {
                 final MethodSignature signature = new MethodSignature(methods[j]);
-                if( Modifier.isFinal(methods[j].getModifiers()) )
+                if (Modifier.isFinal(methods[j].getModifiers()))
                 {
                     finalizedSignatures.add(signature);
                 }
-                else if( !signatureMethodMap.containsKey(signature) )
+                else if (!signatureMethodMap.containsKey(signature))
                 {
                     signatureMethodMap.put(signature, methods[j]);
                 }
             }
         }
         final Collection<Method> resultingMethods = signatureMethodMap.values();
-        for (MethodSignature signature : finalizedSignatures) {
+        for (MethodSignature signature : finalizedSignatures)
+        {
             resultingMethods.remove(signatureMethodMap.get(signature));
         }
         return resultingMethods.toArray(new Method[resultingMethods.size()]);

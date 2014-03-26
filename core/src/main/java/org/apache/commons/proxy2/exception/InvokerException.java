@@ -19,7 +19,7 @@ package org.apache.commons.proxy2.exception;
 
 /**
  * To be used by an {@link org.apache.commons.proxy2.Invoker} when they encounter an error.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -28,9 +28,9 @@ public class InvokerException extends RuntimeException
     /** Serialization version */
     private static final long serialVersionUID = -1L;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new InvokerException instance.
@@ -41,28 +41,31 @@ public class InvokerException extends RuntimeException
 
     /**
      * Create a new InvokerException instance.
+     * 
      * @param message
      */
-    public InvokerException( String message )
+    public InvokerException(String message)
     {
         super(message);
     }
 
     /**
      * Create a new InvokerException instance.
+     * 
      * @param cause
      */
-    public InvokerException( Throwable cause )
+    public InvokerException(Throwable cause)
     {
         super(cause);
     }
 
     /**
      * Create a new InvokerException instance.
+     * 
      * @param message
      * @param cause
      */
-    public InvokerException( String message, Throwable cause )
+    public InvokerException(String message, Throwable cause)
     {
         super(message, cause);
     }

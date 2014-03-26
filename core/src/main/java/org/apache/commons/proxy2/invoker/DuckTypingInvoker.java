@@ -17,19 +17,20 @@
 
 package org.apache.commons.proxy2.invoker;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ObjectProvider;
 
-import java.lang.reflect.Method;
-
 /**
  * An invoker which supports <a href="http://en.wikipedia.org/wiki/Duck_typing">&quot;duck typing&quot;</a>, meaning
- * that it finds a matching method on the object returned from the target provider and invokes it.  This class is
- * useful for adapting an existing class to an interface it does not implement.
+ * that it finds a matching method on the object returned from the target provider and invokes it. This class is useful
+ * for adapting an existing class to an interface it does not implement.
  * <p>
  * <b>Example:</b>
  * </p>
  * <p>
+ * 
  * <pre>
  * public class LegacyDuck // Does not implement interface!
  * {
@@ -48,6 +49,7 @@ import java.lang.reflect.Method;
  * DuckTypingInvoker invoker = new DuckTypingInvoker(targetProvider);
  * Duck duck = ( Duck )proxyFactory.createInvokerProxy( invoker, new Class[] { Duck.class } );
  * </pre>
+ * 
  * </p>
  */
 public class DuckTypingInvoker implements Invoker
@@ -55,50 +57,51 @@ public class DuckTypingInvoker implements Invoker
     /** Serialization version */
     private static final long serialVersionUID = 1L;
 
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final ObjectProvider<?> targetProvider;
 
-  //**********************************************************************************************************************
- // Constructors
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new DuckTypingInvoker instance.
+     * 
      * @param targetProvider
      */
-    public DuckTypingInvoker( final ObjectProvider<?> targetProvider )
+    public DuckTypingInvoker(final ObjectProvider<?> targetProvider)
     {
         this.targetProvider = targetProvider;
     }
 
-  //**********************************************************************************************************************
- // Invoker Implementation
- //**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Invoker Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
      */
-    public Object invoke( final Object proxy, final Method method, final Object[] arguments ) throws Throwable
+    public Object invoke(final Object proxy, final Method method, final Object[] arguments) throws Throwable
     {
         final Object target = targetProvider.getObject();
         final Class<?> targetClass = target.getClass();
         try
         {
             final Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
-            if( method.getReturnType().isAssignableFrom(targetMethod.getReturnType()) )
+            if (method.getReturnType().isAssignableFrom(targetMethod.getReturnType()))
             {
                 return targetMethod.invoke(target, arguments);
             }
-            throw new UnsupportedOperationException(
-                    "Target type " + targetClass.getName() + " method has incompatible return type.");
+            throw new UnsupportedOperationException("Target type " + targetClass.getName()
+                    + " method has incompatible return type.");
         }
-        catch( NoSuchMethodException e )
+        catch (NoSuchMethodException e)
         {
-            throw new UnsupportedOperationException(
-                    "Target type " + targetClass.getName() + " does not have a method matching " + method + ".", e);
+            throw new UnsupportedOperationException("Target type " + targetClass.getName()
+                    + " does not have a method matching " + method + ".", e);
         }
     }
 }

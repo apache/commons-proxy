@@ -21,21 +21,22 @@ import java.io.Serializable;
 
 /**
  * "Intercepts" a method invocation.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
 public interface Interceptor extends Serializable
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     /**
      * Intercept the specified {@link Invocation}.
+     * 
      * @param invocation
      * @return return value of the method
      * @throws Throwable
      */
-    Object intercept( Invocation invocation ) throws Throwable;
+    Object intercept(Invocation invocation) throws Throwable;
 }

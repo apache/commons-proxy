@@ -17,6 +17,11 @@
 
 package org.apache.commons.proxy2.impl;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.SerializationUtils;
@@ -27,13 +32,11 @@ import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class MethodSignatureTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Test
     public void testEquals() throws Exception
@@ -58,13 +61,18 @@ public class MethodSignatureTest extends AbstractTestCase
     public void testToString() throws Exception
     {
         assertEquals("echo()", new MethodSignature(Echo.class.getMethod("echo")).toString());
-        assertEquals("echoBack(Ljava/lang/String;)", new MethodSignature(Echo.class.getMethod("echoBack", String.class)).toString());
-        assertEquals("echoBack([Ljava/lang/String;)", new MethodSignature(Echo.class.getMethod("echoBack", String[].class)).toString());
-        assertEquals("echoBack([[Ljava/lang/String;)", new MethodSignature(Echo.class.getMethod("echoBack", String[][].class)).toString());
-        assertEquals("echoBack([[[Ljava/lang/String;)", new MethodSignature(Echo.class.getMethod("echoBack", String[][][].class)).toString());
+        assertEquals("echoBack(Ljava/lang/String;)",
+                new MethodSignature(Echo.class.getMethod("echoBack", String.class)).toString());
+        assertEquals("echoBack([Ljava/lang/String;)",
+                new MethodSignature(Echo.class.getMethod("echoBack", String[].class)).toString());
+        assertEquals("echoBack([[Ljava/lang/String;)",
+                new MethodSignature(Echo.class.getMethod("echoBack", String[][].class)).toString());
+        assertEquals("echoBack([[[Ljava/lang/String;)",
+                new MethodSignature(Echo.class.getMethod("echoBack", String[][][].class)).toString());
         assertEquals("echoBack(I)", new MethodSignature(Echo.class.getMethod("echoBack", int.class)).toString());
         assertEquals("echoBack(Z)", new MethodSignature(Echo.class.getMethod("echoBack", boolean.class)).toString());
-        assertEquals("echoBack(Ljava/lang/String;Ljava/lang/String;)", new MethodSignature(Echo.class.getMethod("echoBack", String.class, String.class)).toString());
+        assertEquals("echoBack(Ljava/lang/String;Ljava/lang/String;)",
+                new MethodSignature(Echo.class.getMethod("echoBack", String.class, String.class)).toString());
         assertEquals("illegalArgument()", new MethodSignature(Echo.class.getMethod("illegalArgument")).toString());
         assertEquals("ioException()", new MethodSignature(Echo.class.getMethod("ioException")).toString());
     }

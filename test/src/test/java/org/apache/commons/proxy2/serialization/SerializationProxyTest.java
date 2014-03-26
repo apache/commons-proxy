@@ -16,7 +16,8 @@
  */
 package org.apache.commons.proxy2.serialization;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.Serializable;
 
@@ -58,24 +59,24 @@ public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
     private static SwitchInterceptor implementProvider(String value)
     {
         return new SwitchInterceptor().when(new DeclaredByMatcher(Provider.class)).then(
-            InterceptorUtils.constant(new NonSerializableStringWrapper(value)));
+                InterceptorUtils.constant(new NonSerializableStringWrapper(value)));
     }
 
     private static Provider serializableProvider(final String value)
     {
         return PROXY_FACTORY.get().createInterceptorProxy(
-            null,
-            implementProvider(value).when(new DeclaredByMatcher(WriteReplace.class)).then(
-                InterceptorUtils.constant(new ReadResolve()
-                {
-                    private static final long serialVersionUID = 1L;
+                null,
+                implementProvider(value).when(new DeclaredByMatcher(WriteReplace.class)).then(
+                        InterceptorUtils.constant(new ReadResolve()
+                        {
+                            private static final long serialVersionUID = 1L;
 
-                    @Override
-                    public Object readResolve()
-                    {
-                        return serializableProvider(value);
-                    }
-                })), Provider.class, WriteReplace.class);
+                            @Override
+                            public Object readResolve()
+                            {
+                                return serializableProvider(value);
+                            }
+                        })), Provider.class, WriteReplace.class);
     }
 
     @Before
@@ -93,15 +94,16 @@ public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
     @Test(expected = SerializationException.class)
     public void testNaive()
     {
-        final Provider proxy =
-            proxyFactory.createInterceptorProxy(null, implementProvider("foo"), Provider.class, Serializable.class);
+        final Provider proxy = proxyFactory.createInterceptorProxy(null, implementProvider("foo"), Provider.class,
+                Serializable.class);
         assertEquals("foo", proxy.getObject().getValue());
         assertTrue(Serializable.class.isInstance(proxy));
         SerializationUtils.roundtrip((Serializable) proxy);
     }
 
     @Test
-    public void testSerializationProxy() {
+    public void testSerializationProxy()
+    {
         final Provider proxy = serializableProvider("foo");
         assertEquals("foo", proxy.getObject().getValue());
         assertTrue(Serializable.class.isInstance(proxy));

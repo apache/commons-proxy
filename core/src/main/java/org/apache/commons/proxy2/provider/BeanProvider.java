@@ -17,15 +17,15 @@
 
 package org.apache.commons.proxy2.provider;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 
-import java.io.Serializable;
-
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
@@ -34,30 +34,31 @@ public class BeanProvider<T> implements ObjectProvider<T>, Serializable
     /** Serialization version */
     private static final long serialVersionUID = 1L;
 
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final Class<? extends T> beanClass;
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Constructs a provider which instantiates objects of the specified bean class.
-     *
-     * @param beanClass the bean class
+     * 
+     * @param beanClass
+     *            the bean class
      */
-    public BeanProvider( Class<? extends T> beanClass )
+    public BeanProvider(Class<? extends T> beanClass)
     {
         Validate.notNull(beanClass, "Bean class cannot be null.");
         this.beanClass = beanClass;
     }
 
-//**********************************************************************************************************************
-// ObjectProvider Implementation
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // ObjectProvider Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -68,14 +69,13 @@ public class BeanProvider<T> implements ObjectProvider<T>, Serializable
         {
             return beanClass.newInstance();
         }
-        catch( InstantiationException e )
+        catch (InstantiationException e)
         {
-            throw new ObjectProviderException("Class " + beanClass.getName() + " is not concrete.", e);
+            throw new ObjectProviderException(e, "%s is not concrete.", beanClass);
         }
-        catch( IllegalAccessException e )
+        catch (IllegalAccessException e)
         {
-            throw new ObjectProviderException("Constructor for class " + beanClass.getName() + " is not accessible.",
-                    e);
+            throw new ObjectProviderException(e, "Constructor for %s is not accessible.", beanClass);
         }
     }
 }

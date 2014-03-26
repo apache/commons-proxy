@@ -17,19 +17,20 @@
 
 package org.apache.commons.proxy2.invoker.recorder;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * An {@link InvocationRecorder} records method invocations against its generated proxies.
+ * 
  * @author James Carman
  */
 public class InvocationRecorder
@@ -39,15 +40,17 @@ public class InvocationRecorder
 
     /**
      * Create a new InvocationRecorder instance.
+     * 
      * @param proxyFactory
      */
-    public InvocationRecorder( ProxyFactory proxyFactory )
+    public InvocationRecorder(ProxyFactory proxyFactory)
     {
         this.proxyFactory = proxyFactory;
     }
 
     /**
-     * Get the invocations that have been recorded up to this point.  The list is "live" and should not be modified.
+     * Get the invocations that have been recorded up to this point. The list is "live" and should not be modified.
+     * 
      * @return {@link List} of {@link RecordedInvocation}
      */
     public List<RecordedInvocation> getRecordedInvocations()
@@ -57,25 +60,27 @@ public class InvocationRecorder
 
     /**
      * Generate a recording proxy for the specified class.
+     * 
      * @param <T>
      * @param type
      * @return the generated proxy
      */
-    public <T> T proxy( Class<T> type )
+    public <T> T proxy(Class<T> type)
     {
         return proxy(type, type);
     }
 
     /**
      * Generate a recording proxy for the specified class, qualified as <code>genericType</code>.
+     * 
      * @param <T>
      * @param genericType
      * @param type
      * @return the generated proxy
      */
-    public <T> T proxy( Type genericType, Class<T> type )
+    public <T> T proxy(Type genericType, Class<T> type)
     {
-        if( proxyFactory.canProxy(type) )
+        if (proxyFactory.canProxy(type))
         {
             @SuppressWarnings("unchecked")
             final T result = (T) proxyFactory.createInvokerProxy(new InvocationRecorderInvoker(genericType), type);
@@ -91,7 +96,7 @@ public class InvocationRecorder
 
         private final Type targetType;
 
-        private InvocationRecorderInvoker( Type targetType )
+        private InvocationRecorderInvoker(Type targetType)
         {
             this.targetType = targetType;
         }
@@ -99,7 +104,7 @@ public class InvocationRecorder
         /**
          * {@inheritDoc}
          */
-        public Object invoke( Object o, Method method, Object[] args ) throws Throwable
+        public Object invoke(Object o, Method method, Object[] args) throws Throwable
         {
             recordedInvocations.add(new RecordedInvocation(method, args));
             final Class<?> returnType = TypeUtils.getRawType(method.getGenericReturnType(), targetType);

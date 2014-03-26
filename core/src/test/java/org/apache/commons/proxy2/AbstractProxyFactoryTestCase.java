@@ -17,18 +17,34 @@
 
 package org.apache.commons.proxy2;
 
-import org.apache.commons.proxy2.provider.BeanProvider;
-import org.apache.commons.proxy2.provider.ConstantProvider;
-import org.apache.commons.proxy2.provider.SingletonProvider;
-import org.apache.commons.proxy2.util.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import org.apache.commons.proxy2.provider.BeanProvider;
+import org.apache.commons.proxy2.provider.ConstantProvider;
+import org.apache.commons.proxy2.provider.SingletonProvider;
+import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.apache.commons.proxy2.util.DuplicateEcho;
+import org.apache.commons.proxy2.util.Echo;
+import org.apache.commons.proxy2.util.EchoImpl;
+import org.apache.commons.proxy2.util.SuffixInterceptor;
+import org.junit.Test;
 
 /**
  * @author James Carman
@@ -37,17 +53,17 @@ import static org.junit.Assert.*;
 @SuppressWarnings("serial")
 public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Fields
+    //**********************************************************************************************************************
 
-    private static final Class<?>[] ECHO_ONLY = new Class[]{Echo.class};
+    private static final Class<?>[] ECHO_ONLY = new Class[] { Echo.class };
     protected final ProxyFactory factory;
-    private static final Class<?>[] COMPARABLE_ONLY = new Class[]{Comparable.class};
+    private static final Class<?>[] COMPARABLE_ONLY = new Class[] { Comparable.class };
 
-//**********************************************************************************************************************
-// Constructors
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Constructors
+    //**********************************************************************************************************************
 
     protected AbstractProxyFactoryTestCase()
     {
@@ -64,9 +80,9 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     }
 
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     private ObjectProvider<Echo> createSingletonEcho()
     {
@@ -98,10 +114,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     public void testInterceptorEquals()
     {
         final Date date = new Date();
-        final Comparable<?> proxy1 = factory.createInterceptorProxy(date,
-                new NoOpMethodInterceptor(), COMPARABLE_ONLY);
-        final Comparable<?> proxy2 = factory.createInterceptorProxy(date,
-                new NoOpMethodInterceptor(), COMPARABLE_ONLY);
+        final Comparable<?> proxy1 = factory.createInterceptorProxy(date, new NoOpMethodInterceptor(), COMPARABLE_ONLY);
+        final Comparable<?> proxy2 = factory.createInterceptorProxy(date, new NoOpMethodInterceptor(), COMPARABLE_ONLY);
         assertEquals(proxy1, proxy1);
         assertFalse(proxy1.equals(proxy2));
         assertFalse(proxy2.equals(proxy1));
@@ -121,10 +135,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     public void testDelegatorEquals() throws Exception
     {
         final Date date = new Date();
-        final Comparable<?> proxy1 = factory.createDelegatorProxy(new ConstantProvider<Date>(date),
-                COMPARABLE_ONLY);
-        final Comparable<?> proxy2 = factory.createDelegatorProxy(new ConstantProvider<Date>(date),
-                COMPARABLE_ONLY);
+        final Comparable<?> proxy1 = factory.createDelegatorProxy(new ConstantProvider<Date>(date), COMPARABLE_ONLY);
+        final Comparable<?> proxy2 = factory.createDelegatorProxy(new ConstantProvider<Date>(date), COMPARABLE_ONLY);
         assertEquals(proxy1, proxy1);
         assertFalse(proxy1.equals(proxy2));
         assertFalse(proxy2.equals(proxy1));
@@ -183,9 +195,10 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     public void testDelegatingProxyInterfaceOrder()
     {
         final Echo echo = factory.createDelegatorProxy(createSingletonEcho(), Echo.class, DuplicateEcho.class);
-        final List<Class<?>> expected = new LinkedList<Class<?>>(Arrays.<Class<?>>asList(Echo.class, DuplicateEcho.class));
+        final List<Class<?>> expected = new LinkedList<Class<?>>(Arrays.<Class<?>> asList(Echo.class,
+                DuplicateEcho.class));
         final List<Class<?>> actual = new LinkedList<Class<?>>(Arrays.asList(echo.getClass().getInterfaces()));
-        actual.retainAll(expected);  // Doesn't alter order!
+        actual.retainAll(expected); // Doesn't alter order!
         assertEquals(expected, actual);
     }
 
@@ -229,7 +242,8 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
     @Test
     public void testInterfaceHierarchies()
     {
-        final SortedSet<String> set = factory.createDelegatorProxy(new ConstantProvider<SortedSet<String>>(new TreeSet<String>()), SortedSet.class);
+        final SortedSet<String> set = factory.createDelegatorProxy(new ConstantProvider<SortedSet<String>>(
+                new TreeSet<String>()), SortedSet.class);
         set.add("Hello");
     }
 
@@ -337,9 +351,9 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         proxy.echo();
     }
 
-//**********************************************************************************************************************
-// Inner Classes
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Inner Classes
+    //**********************************************************************************************************************
 
     private static class ChangeArgumentInterceptor implements Interceptor
     {

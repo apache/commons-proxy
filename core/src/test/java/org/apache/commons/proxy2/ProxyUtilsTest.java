@@ -17,6 +17,13 @@
 
 package org.apache.commons.proxy2;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Properties;
+
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.DuplicateEcho;
 import org.apache.commons.proxy2.util.Echo;
@@ -25,24 +32,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Properties;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 public class ProxyUtilsTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Fields
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Fields
+    //**********************************************************************************************************************
 
     private Properties prevProperties;
 
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Before
     public void setUp() throws Exception
@@ -61,17 +61,17 @@ public class ProxyUtilsTest extends AbstractTestCase
     public void testNullValue()
     {
         assertNullValue(null, String.class);
-        assertNullValue(( char ) 0, Character.TYPE);
+        assertNullValue((char) 0, Character.TYPE);
         assertNullValue(0, Integer.TYPE);
-        assertNullValue(( long ) 0, Long.TYPE);
-        assertNullValue(( short ) 0, Short.TYPE);
-        assertNullValue(( double ) 0, Double.TYPE);
-        assertNullValue(( float ) 0, Float.TYPE);
+        assertNullValue((long) 0, Long.TYPE);
+        assertNullValue((short) 0, Short.TYPE);
+        assertNullValue((double) 0, Double.TYPE);
+        assertNullValue((float) 0, Float.TYPE);
         assertNullValue(false, Boolean.TYPE);
-        assertNullValue(( byte ) 0, Byte.TYPE);
+        assertNullValue((byte) 0, Byte.TYPE);
     }
 
-    private void assertNullValue( Object expected, Class<?> type )
+    private void assertNullValue(Object expected, Class<?> type)
     {
         assertEquals(expected, ProxyUtils.nullValue(type));
     }
@@ -80,8 +80,8 @@ public class ProxyUtilsTest extends AbstractTestCase
     public void testGetAllInterfaces()
     {
         assertNull(ProxyUtils.getAllInterfaces(null));
-        assertEquals(Arrays.asList(new Class[] {DuplicateEcho.class, Serializable.class, Echo.class}),
-                     Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
+        assertEquals(Arrays.asList(new Class[] { DuplicateEcho.class, Serializable.class, Echo.class }),
+                Arrays.asList(ProxyUtils.getAllInterfaces(EchoImpl.class)));
     }
 
     @Test

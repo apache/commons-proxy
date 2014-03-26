@@ -17,13 +17,13 @@
 
 package org.apache.commons.proxy2.provider;
 
-import org.apache.commons.proxy2.util.AbstractTestCase;
-import org.apache.commons.proxy2.util.EchoImpl;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import org.apache.commons.proxy2.util.AbstractTestCase;
+import org.apache.commons.proxy2.util.EchoImpl;
+import org.junit.Test;
 
 public class ObjectProviderUtilsTest extends AbstractTestCase
 {

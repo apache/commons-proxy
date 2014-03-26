@@ -33,10 +33,9 @@ import org.junit.Test;
 public class StubBuilderTest extends AbstractStubTestCase
 {
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
-
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Override
     protected StubInterface createProxy(Trainer<StubInterface> trainer)
@@ -47,7 +46,8 @@ public class StubBuilderTest extends AbstractStubTestCase
     @Test
     public void testWithConcreteTarget()
     {
-        StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class, new SimpleStub());
+        StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class,
+                new SimpleStub());
         builder.train(new Trainer<StubInterface>()
         {
             @Override
@@ -87,7 +87,8 @@ public class StubBuilderTest extends AbstractStubTestCase
     @Test
     public void testWithObjectProviderTarget()
     {
-        StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class, new BeanProvider<StubInterface>(SimpleStub.class));
+        StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class,
+                new BeanProvider<StubInterface>(SimpleStub.class));
         builder.train(new Trainer<StubInterface>()
         {
             @Override
@@ -101,7 +102,8 @@ public class StubBuilderTest extends AbstractStubTestCase
     }
 
     @Test
-    public void testAdditionalInterfaces() {
+    public void testAdditionalInterfaces()
+    {
         StubBuilder<StubInterface> builder = new StubBuilder<StubInterface>(proxyFactory, StubInterface.class,
                 ObjectProviderUtils.constant(new SimpleStub()));
         builder.train(new Trainer<Iterable<String>>()
@@ -127,9 +129,9 @@ public class StubBuilderTest extends AbstractStubTestCase
         assertTrue(stub instanceof Marker);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Inner Classes
+    //----------------------------------------------------------------------------------------------------------------------
 
     private static class SimpleStub implements StubInterface
     {
@@ -154,55 +156,55 @@ public class StubBuilderTest extends AbstractStubTestCase
         @Override
         public byte[] byteArray()
         {
-            return new byte[]{1, 2, 3};
+            return new byte[] { 1, 2, 3 };
         }
 
         @Override
         public char[] charArray()
         {
-            return new char[]{'1', '2', '3'};
+            return new char[] { '1', '2', '3' };
         }
 
         @Override
         public short[] shortArray()
         {
-            return new short[]{1, 2, 3};
+            return new short[] { 1, 2, 3 };
         }
 
         @Override
         public int[] intArray()
         {
-            return new int[]{1, 2, 3};
+            return new int[] { 1, 2, 3 };
         }
 
         @Override
         public long[] longArray()
         {
-            return new long[]{1, 2, 3};
+            return new long[] { 1, 2, 3 };
         }
 
         @Override
         public float[] floatArray()
         {
-            return new float[]{1.0f, 2.0f, 3.0f};
+            return new float[] { 1.0f, 2.0f, 3.0f };
         }
 
         @Override
         public double[] doubleArray()
         {
-            return new double[]{1.0, 2.0, 3.0};
+            return new double[] { 1.0, 2.0, 3.0 };
         }
 
         @Override
         public boolean[] booleanArray()
         {
-            return new boolean[]{true, false, true};
+            return new boolean[] { true, false, true };
         }
 
         @Override
         public String[] stringArray()
         {
-            return new String[]{"One", "Two", "Three"};
+            return new String[] { "One", "Two", "Three" };
         }
 
         @Override

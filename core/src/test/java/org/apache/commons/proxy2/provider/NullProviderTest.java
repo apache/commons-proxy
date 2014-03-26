@@ -17,10 +17,10 @@
 
 package org.apache.commons.proxy2.provider;
 
+import static org.junit.Assert.assertNull;
+
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author James Carman
@@ -28,9 +28,9 @@ import static org.junit.Assert.*;
  */
 public class NullProviderTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Test
     public void testGetObject()

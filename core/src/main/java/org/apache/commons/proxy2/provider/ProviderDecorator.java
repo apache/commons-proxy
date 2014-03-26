@@ -20,31 +20,31 @@ package org.apache.commons.proxy2.provider;
 import org.apache.commons.proxy2.ObjectProvider;
 
 /**
- * Returns the result of the inner {@link ObjectProvider provider}.  Subclasses can override the {@link #getObject()}
+ * Returns the result of the inner {@link ObjectProvider provider}. Subclasses can override the {@link #getObject()}
  * method and decorate what comes back from the inner provider in some way (by {@link SingletonProvider caching it} for
  * example).
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
 public class ProviderDecorator<T> implements ObjectProvider<T>
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     /**
      * The wrapped {@link ObjectProvider}.
      */
     private ObjectProvider<? extends T> inner;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new ProviderDecorator instance.
-     *
+     * 
      * @param inner
      */
     public ProviderDecorator(ObjectProvider<? extends T> inner)
@@ -52,9 +52,9 @@ public class ProviderDecorator<T> implements ObjectProvider<T>
         this.inner = inner;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// ObjectProvider Implementation
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // ObjectProvider Implementation
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -64,9 +64,9 @@ public class ProviderDecorator<T> implements ObjectProvider<T>
         return inner.getObject();
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Getter/Setter Methods
+    //******************************************************************************************************************
 
     protected ObjectProvider<? extends T> getInner()
     {

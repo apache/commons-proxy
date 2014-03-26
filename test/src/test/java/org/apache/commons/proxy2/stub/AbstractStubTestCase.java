@@ -125,8 +125,7 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                     {
                         when(trainee.one("Whatever")).thenReturn("One");
                     }
-                })
-                .build();
+                }).build();
             }
         });
 

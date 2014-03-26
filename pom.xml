@@ -249,7 +249,7 @@
       <dependency>
         <groupId>org.javassist</groupId>
         <artifactId>javassist</artifactId>
-        <version>3.18.1.GA</version>
+        <version>3.18.1-GA</version>
       </dependency>
       <dependency>
         <groupId>org.ow2.asm</groupId>
@@ -279,6 +279,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${checkstyle.version}</version>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
@@ -418,7 +423,7 @@
         </dependencies>
         <configuration>
           <configLocation>org/apache/commons/proxy2/checkstyle.xml</configLocation>
-          <headerLocation>org/apache/commons/proxy2/license-header.txt</headerLocation>
+          <includes>**/*.java</includes>
         </configuration>
       </plugin>
       <!-- Unfortunately the much simpler
@@ -493,7 +498,7 @@
         <dependencies>
           <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-weaver-build-tools</artifactId>
+            <artifactId>commons-proxy2-build-tools</artifactId>
             <version>${project.version}</version>
           </dependency>
         </dependencies>
@@ -592,12 +597,12 @@
         <dependencies>
           <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-weaver-build-tools</artifactId>
+            <artifactId>commons-proxy2-build-tools</artifactId>
             <version>${project.version}</version>
           </dependency>
         </dependencies>
         <configuration>
-          <!--excludeFilterFile>/org/apache/commons/proxy2/findbugs-exclude-filter.xml</excludeFilterFile-->
+          <excludeFilterFile>/org/apache/commons/proxy2/findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
@@ -605,14 +610,6 @@
 
   <reporting>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>org/apache/commons/proxy2/checkstyle.xml</configLocation>
-          <headerLocation>org/apache/commons/proxy2/license-header.txt</headerLocation>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>

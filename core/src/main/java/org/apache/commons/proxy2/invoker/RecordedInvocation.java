@@ -17,32 +17,32 @@
 
 package org.apache.commons.proxy2.invoker;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.proxy2.ProxyUtils;
 
-import java.lang.reflect.Method;
-
 /**
  * Detached representation of a method invocation.
- *
+ * 
  * @author James Carman
  */
 public class RecordedInvocation
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private final Method invokedMethod;
     private final Object[] arguments;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     /**
      * Create a new RecordedInvocation instance.
-     *
+     * 
      * @param invokedMethod
      * @param arguments
      */
@@ -52,13 +52,13 @@ public class RecordedInvocation
         this.arguments = ArrayUtils.nullToEmpty(ArrayUtils.clone(arguments));
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Getter/Setter Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Getter/Setter Methods
+    //******************************************************************************************************************
 
     /**
      * Get the invokedMethod.
-     *
+     * 
      * @return Method
      */
     public Method getInvokedMethod()
@@ -66,9 +66,9 @@ public class RecordedInvocation
         return invokedMethod;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Canonical Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Canonical Methods
+    //******************************************************************************************************************
 
     /**
      * {@inheritDoc}
@@ -94,13 +94,13 @@ public class RecordedInvocation
         return buffer.toString();
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     /**
      * Add a string representation of <code>input</code> to <code>buffer</code>.
-     *
+     * 
      * @param buffer
      * @param input
      */
@@ -119,30 +119,27 @@ public class RecordedInvocation
             buffer.append(input.toString());
             return;
         }
-        else
+        buffer.append("(");
+        buffer.append(ProxyUtils.getJavaClassName(input.getClass()));
+        buffer.append("){");
+        Object[] array = (Object[]) input;
+        int count = array.length;
+        for (int i = 0; i < count; i++)
         {
-            buffer.append("(");
-            buffer.append(ProxyUtils.getJavaClassName(input.getClass()));
-            buffer.append("){");
-            Object[] array = (Object[]) input;
-            int count = array.length;
-            for (int i = 0; i < count; i++)
+            if (i > 0)
             {
-                if (i > 0)
-                {
-                    buffer.append(", ");
-                }
-                // We use convert() again, because it could be a multi-dimensional array
-                // where each element must be converted.
-                convert(buffer, array[i]);
+                buffer.append(", ");
             }
-            buffer.append("}");
+            // We use convert() again, because it could be a multi-dimensional array
+            // where each element must be converted.
+            convert(buffer, array[i]);
         }
+        buffer.append("}");
     }
 
     /**
      * Get the arguments.
-     *
+     * 
      * @return Object[]
      */
     public Object[] getArguments()

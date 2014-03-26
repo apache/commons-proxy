@@ -25,6 +25,8 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import org.apache.commons.lang3.AnnotationUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.proxy2.Interceptor;
@@ -79,11 +81,8 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
 
     }
 
-    private static class ReflectionInvocation implements Invocation, Serializable
+    private static class ReflectionInvocation implements Invocation
     {
-        /** Serialization version */
-        private static final long serialVersionUID = 1L;
-
         private final Method method;
         private final Object[] arguments;
         private final Object target;
@@ -91,7 +90,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
         public ReflectionInvocation(Object target, Method method, Object[] arguments)
         {
             this.method = method;
-            this.arguments = (arguments == null ? ProxyUtils.EMPTY_ARGUMENTS : arguments);
+            this.arguments = ObjectUtils.defaultIfNull(ArrayUtils.clone(arguments), ProxyUtils.EMPTY_ARGUMENTS);
             this.target = target;
         }
 

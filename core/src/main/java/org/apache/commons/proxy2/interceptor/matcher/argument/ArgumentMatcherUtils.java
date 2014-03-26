@@ -24,9 +24,9 @@ import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 
 public final class ArgumentMatcherUtils
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Static Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Static Methods
+    //******************************************************************************************************************
 
     public static <T> ArgumentMatcher<T> any()
     {
@@ -88,18 +88,18 @@ public final class ArgumentMatcherUtils
         return new StartsWithMatcher(Validate.notNull(prefix));
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     private ArgumentMatcherUtils()
     {
 
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Inner Classes
+    //******************************************************************************************************************
 
     private static final class AnyMatcher<T> implements ArgumentMatcher<T>
     {
@@ -147,7 +147,7 @@ public final class ArgumentMatcherUtils
         @Override
         public boolean matches(String argument)
         {
-        	return StringUtils.endsWith(argument, suffix);
+            return StringUtils.endsWith(argument, suffix);
         }
     }
 
@@ -160,6 +160,7 @@ public final class ArgumentMatcherUtils
             this.value = value;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public boolean matches(T argument)
         {
@@ -285,7 +286,7 @@ public final class ArgumentMatcherUtils
         @Override
         public boolean matches(String argument)
         {
-        	return StringUtils.startsWith(argument, prefix);
+            return StringUtils.startsWith(argument, prefix);
         }
     }
 }

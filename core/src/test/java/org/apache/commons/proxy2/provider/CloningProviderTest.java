@@ -17,19 +17,21 @@
 
 package org.apache.commons.proxy2.provider;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+
+import java.util.Date;
+
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
 
-import java.util.Date;
-
-import static org.junit.Assert.*;
-
 public class CloningProviderTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Test
     public void testSerialization()
@@ -54,7 +56,8 @@ public class CloningProviderTest extends AbstractTestCase
     @Test
     public void testWithExceptionThrown()
     {
-        final CloningProvider<ExceptionCloneable> provider = new CloningProvider<ExceptionCloneable>(new ExceptionCloneable());
+        final CloningProvider<ExceptionCloneable> provider = new CloningProvider<ExceptionCloneable>(
+                new ExceptionCloneable());
         try
         {
             provider.getObject();
@@ -74,13 +77,14 @@ public class CloningProviderTest extends AbstractTestCase
     @Test(expected = IllegalArgumentException.class)
     public void testWithProtectedCloneMethod()
     {
-        final CloningProvider<ProtectedCloneable> provider = new CloningProvider<ProtectedCloneable>(new ProtectedCloneable());
+        final CloningProvider<ProtectedCloneable> provider = new CloningProvider<ProtectedCloneable>(
+                new ProtectedCloneable());
         provider.getObject();
     }
 
-//**********************************************************************************************************************
-// Inner Classes
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Inner Classes
+    //**********************************************************************************************************************
 
     public static class ExceptionCloneable implements Cloneable
     {

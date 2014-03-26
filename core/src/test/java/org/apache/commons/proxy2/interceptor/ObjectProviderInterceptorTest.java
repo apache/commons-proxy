@@ -17,17 +17,17 @@
 
 package org.apache.commons.proxy2.interceptor;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class ObjectProviderInterceptorTest extends AbstractTestCase
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+    // Other Methods
+    //----------------------------------------------------------------------------------------------------------------------
 
     @Test
     public void testIntercept() throws Throwable

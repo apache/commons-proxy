@@ -17,23 +17,25 @@
 
 package org.apache.commons.proxy2;
 
+import java.io.Serializable;
+
 /**
  * Provides an object to a delegating proxy.
- *
+ * 
  * @author James Carman
  * @since 1.0
  */
-public interface ObjectProvider<T>
+public interface ObjectProvider<T> extends Serializable
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     /**
-     * Returns an object.  Implementing classes should throw a
+     * Returns an object. Implementing classes should throw a
      * {@link org.apache.commons.proxy2.exception.ObjectProviderException} if any problems arise while
      * constructing/finding the object.
-     *
+     * 
      * @return the object on which the method should be called
      */
     T getObject();

@@ -20,25 +20,28 @@ import java.util.Arrays;
 import java.util.ServiceLoader;
 
 /**
- * {@link ProxyFactory} implementation that delegates to the first discovered
- * {@link ProxyFactory} service provider that {@link #canProxy(Class...)}.
- *
+ * {@link ProxyFactory} implementation that delegates to the first discovered {@link ProxyFactory} service provider that
+ * {@link #canProxy(Class...)}.
+ * 
  * @author Matt Benson
  */
-class DefaultProxyFactory implements ProxyFactory {
+class DefaultProxyFactory implements ProxyFactory
+{
     /** Shared instance */
     static final DefaultProxyFactory INSTANCE = new DefaultProxyFactory();
 
-    private static final ServiceLoader<ProxyFactory> SERVICES = ServiceLoader
-            .load(ProxyFactory.class);
+    private static final ServiceLoader<ProxyFactory> SERVICES = ServiceLoader.load(ProxyFactory.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean canProxy(Class<?>... proxyClasses) {
-        for (ProxyFactory proxyFactory : SERVICES) {
-            if (proxyFactory.canProxy(proxyClasses)) {
+    public boolean canProxy(Class<?>... proxyClasses)
+    {
+        for (ProxyFactory proxyFactory : SERVICES)
+        {
+            if (proxyFactory.canProxy(proxyClasses))
+            {
                 return true;
             }
         }
@@ -49,11 +52,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider,
-            Class<?>... proxyClasses) {
+    public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider, Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
-                delegateProvider, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(delegateProvider, proxyClasses);
         return result;
     }
 
@@ -61,11 +63,12 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createDelegatorProxy(ClassLoader classLoader,
-            ObjectProvider<?> delegateProvider, Class<?>... proxyClasses) {
+    public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
+            Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(
-                classLoader, delegateProvider, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(classLoader, delegateProvider,
+                proxyClasses);
         return result;
     }
 
@@ -73,11 +76,11 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createInterceptorProxy(Object target, Interceptor interceptor,
-            Class<?>... proxyClasses) {
+    public <T> T createInterceptorProxy(Object target, Interceptor interceptor, Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
-                target, interceptor, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(target, interceptor,
+                proxyClasses);
         return result;
     }
 
@@ -85,11 +88,12 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createInterceptorProxy(ClassLoader classLoader, Object target,
-            Interceptor interceptor, Class<?>... proxyClasses) {
+    public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
+            Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(
-                classLoader, target, interceptor, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(classLoader, target,
+                interceptor, proxyClasses);
         return result;
     }
 
@@ -97,10 +101,10 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses) {
+    public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
-                invoker, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(invoker, proxyClasses);
         return result;
     }
 
@@ -108,21 +112,23 @@ class DefaultProxyFactory implements ProxyFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker,
-            Class<?>... proxyClasses) {
+    public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
+    {
         @SuppressWarnings("unchecked")
-        final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(
-                classLoader, invoker, proxyClasses);
+        final T result = (T) getCapableProxyFactory(proxyClasses)
+                .createInvokerProxy(classLoader, invoker, proxyClasses);
         return result;
     }
 
-    private ProxyFactory getCapableProxyFactory(Class<?>... proxyClasses) {
-        for (ProxyFactory proxyFactory : SERVICES) {
-            if (proxyFactory.canProxy(proxyClasses)) {
+    private ProxyFactory getCapableProxyFactory(Class<?>... proxyClasses)
+    {
+        for (ProxyFactory proxyFactory : SERVICES)
+        {
+            if (proxyFactory.canProxy(proxyClasses))
+            {
                 return proxyFactory;
             }
         }
-        throw new IllegalArgumentException("Could not proxy "
-                + Arrays.toString(proxyClasses));
+        throw new IllegalArgumentException("Could not proxy " + Arrays.toString(proxyClasses));
     }
 }

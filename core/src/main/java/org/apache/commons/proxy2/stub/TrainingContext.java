@@ -16,23 +16,31 @@
  */
 package org.apache.commons.proxy2.stub;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.proxy2.*;
+import org.apache.commons.proxy2.Interceptor;
+import org.apache.commons.proxy2.Invocation;
+import org.apache.commons.proxy2.Invoker;
+import org.apache.commons.proxy2.ProxyFactory;
+import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.interceptor.SwitchInterceptor;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.apache.commons.proxy2.interceptor.matcher.InvocationMatcher;
 import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.invoker.RecordedInvocation;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.util.*;
-
 class TrainingContext
 {
-//----------------------------------------------------------------------------------------------------------------------
-// Fields
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Fields
+    //******************************************************************************************************************
 
     private static final ThreadLocal<TrainingContext> TRAINING_CONTEXT = new ThreadLocal<TrainingContext>();
 
@@ -42,9 +50,9 @@ class TrainingContext
 
     private final TrainingContext resume;
 
-//----------------------------------------------------------------------------------------------------------------------
-// Static Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Static Methods
+    //******************************************************************************************************************
 
     static TrainingContext current()
     {
@@ -58,9 +66,9 @@ class TrainingContext
         return context;
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Constructors
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Constructors
+    //******************************************************************************************************************
 
     private TrainingContext(ProxyFactory proxyFactory)
     {
@@ -68,9 +76,9 @@ class TrainingContext
         this.resume = current();
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Other Methods
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Other Methods
+    //******************************************************************************************************************
 
     void part()
     {
@@ -100,12 +108,10 @@ class TrainingContext
     <T> T pop(Invoker invoker)
     {
         final TrainingContextFrame<?> frame = frameDeque.pop();
-        return proxyFactory.createInterceptorProxy(
-                proxyFactory.createInvokerProxy(invoker, frame.type),
-                frame.stubInterceptor,
-                frame.type);
+        return proxyFactory.createInterceptorProxy(proxyFactory.createInvokerProxy(invoker, frame.type),
+                frame.stubInterceptor, frame.type);
     }
-    
+
     <T> T push(Class<T> type)
     {
         return push(type, new SwitchInterceptor());
@@ -129,9 +135,9 @@ class TrainingContext
         peek().then(interceptor);
     }
 
-//----------------------------------------------------------------------------------------------------------------------
-// Inner Classes
-//----------------------------------------------------------------------------------------------------------------------
+    //******************************************************************************************************************
+    // Inner Classes
+    //******************************************************************************************************************
 
     private static final class ExactArgumentsMatcher implements InvocationMatcher
     {
@@ -145,8 +151,8 @@ class TrainingContext
         @Override
         public boolean matches(Invocation invocation)
         {
-            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod()) &&
-                    Arrays.deepEquals(invocation.getArguments(), recordedInvocation.getArguments());
+            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod())
+                    && Arrays.deepEquals(invocation.getArguments(), recordedInvocation.getArguments());
         }
     }
 
@@ -164,8 +170,8 @@ class TrainingContext
         @Override
         public boolean matches(Invocation invocation)
         {
-            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod()) &&
-                    allArgumentsMatch(invocation.getArguments());
+            return invocation.getMethod().equals(recordedInvocation.getInvokedMethod())
+                    && allArgumentsMatch(invocation.getArguments());
         }
 
         private boolean allArgumentsMatch(Object[] arguments)
@@ -219,7 +225,8 @@ class TrainingContext
 
         void methodInvoked(Method method, Object[] arguments)
         {
-            final ArgumentMatcher<?>[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers.size()]);
+            final ArgumentMatcher<?>[] matchersArray = argumentMatchers.toArray(new ArgumentMatcher[argumentMatchers
+                    .size()]);
             argumentMatchers.clear();
             final RecordedInvocation invocation = new RecordedInvocation(method, arguments);
             if (ArrayUtils.isEmpty(matchersArray))

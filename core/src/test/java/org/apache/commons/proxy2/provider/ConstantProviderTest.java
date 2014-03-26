@@ -17,19 +17,19 @@
 
 package org.apache.commons.proxy2.provider;
 
+import static org.junit.Assert.assertSame;
+
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @since 1.0
  */
 public class ConstantProviderTest extends AbstractTestCase
 {
-//**********************************************************************************************************************
-// Other Methods
-//**********************************************************************************************************************
+    //**********************************************************************************************************************
+    // Other Methods
+    //**********************************************************************************************************************
 
     @Test
     public void testGetObject() throws Exception
