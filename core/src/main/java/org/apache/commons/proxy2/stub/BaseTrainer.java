@@ -58,7 +58,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
             this.traineeType = traineeType;
             return;
         }
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // T is this class's second type parameter; thus the raw type is Class<T>
         final Class<T> resolvedVariable = (Class<T>) TypeUtils.getRawType(BaseTrainer.class.getTypeParameters()[1],
                 getClass());
         Validate.isTrue(resolvedVariable != null, "Trainee type was not specified and could not be calculated for %s",
@@ -159,7 +159,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
     public <R> WhenObjectArray<R> when(R[] expression)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // we can reasonably say that the component type of an R[] is Class<? extends R>:
         final Class<? extends R> componentType = (Class<? extends R>) expression.getClass().getComponentType();
         return new WhenObjectArray<R>(componentType);
     }
@@ -169,10 +169,11 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
         return new WhenCharArray();
     }
 
-    @SuppressWarnings("unchecked")
     protected S self()
     {
-        return (S) this;
+        @SuppressWarnings("unchecked") // S is our "self" type parameter
+        final S self = (S) this;
+        return self;
     }
 
     //******************************************************************************************************************
@@ -337,7 +338,7 @@ public abstract class BaseTrainer<S extends BaseTrainer<S, T>, T>
 
         public S build()
         {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked") // an array of component type ? extends R is assignable to R[]:
             final R[] array = elements.toArray((R[]) Array.newInstance(componentType, elements.size()));
             trainingContext().then(InterceptorUtils.constant(array));
             return self();

@@ -22,8 +22,6 @@ import java.util.ServiceLoader;
 /**
  * {@link ProxyFactory} implementation that delegates to the first discovered {@link ProxyFactory} service provider that
  * {@link #canProxy(Class...)}.
- * 
- * @author Matt Benson
  */
 class DefaultProxyFactory implements ProxyFactory
 {
@@ -54,7 +52,7 @@ class DefaultProxyFactory implements ProxyFactory
     @Override
     public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider, Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(delegateProvider, proxyClasses);
         return result;
     }
@@ -66,7 +64,7 @@ class DefaultProxyFactory implements ProxyFactory
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
             Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses).createDelegatorProxy(classLoader, delegateProvider,
                 proxyClasses);
         return result;
@@ -78,7 +76,7 @@ class DefaultProxyFactory implements ProxyFactory
     @Override
     public <T> T createInterceptorProxy(Object target, Interceptor interceptor, Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(target, interceptor,
                 proxyClasses);
         return result;
@@ -91,7 +89,7 @@ class DefaultProxyFactory implements ProxyFactory
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses).createInterceptorProxy(classLoader, target,
                 interceptor, proxyClasses);
         return result;
@@ -103,7 +101,7 @@ class DefaultProxyFactory implements ProxyFactory
     @Override
     public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses).createInvokerProxy(invoker, proxyClasses);
         return result;
     }
@@ -114,7 +112,7 @@ class DefaultProxyFactory implements ProxyFactory
     @Override
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // type inference
         final T result = (T) getCapableProxyFactory(proxyClasses)
                 .createInvokerProxy(classLoader, invoker, proxyClasses);
         return result;

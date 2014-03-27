@@ -179,7 +179,7 @@ class TrainingContext
             for (int i = 0; i < arguments.length; i++)
             {
                 Object argument = arguments[i];
-                @SuppressWarnings({ "rawtypes", "unchecked" })
+                @SuppressWarnings({ "rawtypes", "unchecked"}) // we can't know generic argument types
                 final boolean matches = ((ArgumentMatcher) matchers[i]).matches(argument);
                 if (!matches)
                 {

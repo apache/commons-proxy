@@ -53,11 +53,13 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @return a proxy2 which delegates to the object provided by the target <code>delegateProvider>
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
             Class<?>... proxyClasses)
     {
-        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new DelegatorInvocationHandler(delegateProvider));
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new DelegatorInvocationHandler(
+                delegateProvider));
+        return result;
     }
 
     /**
@@ -76,12 +78,13 @@ public class JdkProxyFactory extends AbstractProxyFactory
      *         <code>target</code> object.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
     {
-        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target,
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(target,
                 interceptor));
+        return result;
     }
 
     /**
@@ -96,10 +99,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
-        return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvokerInvocationHandler(invoker));
+        return result;
     }
 
     //******************************************************************************************************************

@@ -130,10 +130,10 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
     private static final ProxyFactory PROXY_FACTORY = new AbstractProxyFactory()
     {
         @Override
-        @SuppressWarnings("unchecked")
         public <T> T createInvokerProxy(ClassLoader classLoader, final Invoker invoker, Class<?>... proxyClasses)
         {
-            return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvocationHandler()
+            @SuppressWarnings("unchecked") // type inference
+            final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InvocationHandler()
             {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
@@ -141,23 +141,25 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
                     return invoker.invoke(proxy, method, args);
                 }
             });
+            return result;
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
                 Class<?>... proxyClasses)
         {
-            return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
+            @SuppressWarnings("unchecked") // type inference
+            final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
                     ObjectProviderUtils.constant(target), interceptor));
+            return result;
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public <T> T createDelegatorProxy(ClassLoader classLoader, final ObjectProvider<?> delegateProvider,
                 Class<?>... proxyClasses)
         {
-            return (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
+            @SuppressWarnings("unchecked") // type inference
+            final T result = (T) Proxy.newProxyInstance(classLoader, proxyClasses, new InterceptorInvocationHandler(
                     delegateProvider, new Interceptor()
                     {
                         private static final long serialVersionUID = 1L;
@@ -168,6 +170,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
                             return invocation.proceed();
                         }
                     }));
+            return result;
         }
     };
 

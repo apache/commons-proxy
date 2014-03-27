@@ -74,9 +74,15 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
         private <N extends Annotation> StubAnnotationArrayBuilder(final Class<? extends R> componentType)
         {
             super(componentType);
+            
+            /*
+             * We know the only type of array method that can be hosted on an annotation is an annotation array.
+             * Therefore we declare a bogus annotation type parameter on this method which we use to create
+             * our AnnotationTypeTrainer, whose type parameter requires an annotation type. N == R
+             */
             @SuppressWarnings("unchecked")
             final Class<N> annotationType = (Class<N>) componentType;
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked") // and cast it back
             final BaseTrainer<?, R> trainer = (BaseTrainer<?, R>) new AnnotationTypeTrainer<N>(
                     annotationType);
             this.annotationTypeTrainer = trainer;
@@ -104,7 +110,7 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
     @Override
     public <R> WhenAnnotationArray<R> when(R[] expression)
     {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // we can reasonably say that the component type of an R[] is Class<? extends R>:
         final Class<? extends R> componentType = (Class<? extends R>) expression.getClass().getComponentType();
         return new WhenAnnotationArray<R>(componentType);
     }

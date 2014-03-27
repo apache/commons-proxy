@@ -70,7 +70,7 @@ public class ASMProxyFactory extends AbstractSubclassingProxyFactory
         final Class<?> proxyClass = PROXY_CLASS_CACHE.getProxyClass(classLoader, proxyClasses);
         try
         {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked") // type inference
             final T result = (T) proxyClass.getConstructor(Invoker.class).newInstance(invoker);
             return result;
         }

@@ -165,10 +165,11 @@ public final class ProxyUtils
      *            the type
      * @return the null value
      */
-    @SuppressWarnings("unchecked")
     public static <T> T nullValue(Class<T> type)
     {
-        return (T) NULL_VALUE_MAP.get(type);
+        @SuppressWarnings("unchecked") // map only contains matching type/value entries
+        final T result = (T) NULL_VALUE_MAP.get(type);
+        return result;
     }
 
     /**

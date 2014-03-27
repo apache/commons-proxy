@@ -55,7 +55,6 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
             Class<?>... proxyClasses)
     {
@@ -66,14 +65,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(new Callback[] { new ObjectProviderDispatcher(targetProvider), new EqualsHandler(),
                 new HashCodeHandler() });
-        return (T) enhancer.create();
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) enhancer.create();
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
     {
@@ -84,14 +84,15 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(new Callback[] { new InterceptorBridge(target, interceptor), new EqualsHandler(),
                 new HashCodeHandler() });
-        return (T) enhancer.create();
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) enhancer.create();
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
         final Enhancer enhancer = new Enhancer();
@@ -101,7 +102,9 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(
                 new Callback[] { new InvokerBridge(invoker), new EqualsHandler(), new HashCodeHandler() });
-        return (T) enhancer.create();
+        @SuppressWarnings("unchecked") // type inference
+        final T result = (T) enhancer.create();
+        return result;
     }
 
     //******************************************************************************************************************

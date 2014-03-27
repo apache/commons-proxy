@@ -69,12 +69,12 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
             Class<?>... proxyClasses)
     {
         try
         {
+            @SuppressWarnings("unchecked") // type inference
             final Class<? extends T> clazz = (Class<? extends T>) DELEGATING_PROXY_CACHE.getProxyClass(classLoader,
                     proxyClasses);
             return clazz.getConstructor(ObjectProvider.class).newInstance(targetProvider);
@@ -89,12 +89,12 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
     {
         try
         {
+            @SuppressWarnings("unchecked") // type inference
             final Class<? extends T> clazz = (Class<? extends T>) INTERCEPTOR_PROXY_CACHE.getProxyClass(classLoader,
                     proxyClasses);
             return clazz.getConstructor(Object.class, Interceptor.class).newInstance(target, interceptor);
@@ -109,11 +109,11 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
         try
         {
+            @SuppressWarnings("unchecked") // type inference
             final Class<? extends T> clazz = (Class<? extends T>) INVOKER_PROXY_CACHE.getProxyClass(classLoader,
                     proxyClasses);
             return clazz.getConstructor(Invoker.class).newInstance(invoker);
