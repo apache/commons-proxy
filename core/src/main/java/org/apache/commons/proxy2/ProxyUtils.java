@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,8 +38,8 @@ public final class ProxyUtils
 
     public static final Object[] EMPTY_ARGUMENTS = new Object[0];
     public static final Class<?>[] EMPTY_ARGUMENT_TYPES = new Class[0];
-    private static final Map<Class<?>, Class<?>> WRAPPER_CLASS_MAP = new HashMap<Class<?>, Class<?>>();
-    private static final Map<Class<?>, Object> NULL_VALUE_MAP = new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Class<?>> WRAPPER_CLASS_MAP;
+    private static final Map<Class<?>, Object> NULL_VALUE_MAP;
 
     //******************************************************************************************************************
     // Static Methods
@@ -46,26 +47,30 @@ public final class ProxyUtils
 
     static
     {
-        WRAPPER_CLASS_MAP.put(Integer.TYPE, Integer.class);
-        WRAPPER_CLASS_MAP.put(Character.TYPE, Character.class);
-        WRAPPER_CLASS_MAP.put(Boolean.TYPE, Boolean.class);
-        WRAPPER_CLASS_MAP.put(Short.TYPE, Short.class);
-        WRAPPER_CLASS_MAP.put(Long.TYPE, Long.class);
-        WRAPPER_CLASS_MAP.put(Float.TYPE, Float.class);
-        WRAPPER_CLASS_MAP.put(Double.TYPE, Double.class);
-        WRAPPER_CLASS_MAP.put(Byte.TYPE, Byte.class);
+        final Map<Class<?>, Class<?>> wrappers = new HashMap<Class<?>, Class<?>>();
+        wrappers.put(Integer.TYPE, Integer.class);
+        wrappers.put(Character.TYPE, Character.class);
+        wrappers.put(Boolean.TYPE, Boolean.class);
+        wrappers.put(Short.TYPE, Short.class);
+        wrappers.put(Long.TYPE, Long.class);
+        wrappers.put(Float.TYPE, Float.class);
+        wrappers.put(Double.TYPE, Double.class);
+        wrappers.put(Byte.TYPE, Byte.class);
+        WRAPPER_CLASS_MAP = Collections.unmodifiableMap(wrappers);
     }
 
     static
     {
-        NULL_VALUE_MAP.put(Integer.TYPE, Integer.valueOf(0));
-        NULL_VALUE_MAP.put(Long.TYPE, Long.valueOf(0));
-        NULL_VALUE_MAP.put(Short.TYPE, Short.valueOf((short) 0));
-        NULL_VALUE_MAP.put(Byte.TYPE, Byte.valueOf((byte) 0));
-        NULL_VALUE_MAP.put(Float.TYPE, Float.valueOf(0.0f));
-        NULL_VALUE_MAP.put(Double.TYPE, Double.valueOf(0.0));
-        NULL_VALUE_MAP.put(Character.TYPE, Character.valueOf((char) 0));
-        NULL_VALUE_MAP.put(Boolean.TYPE, Boolean.FALSE);
+        final Map<Class<?>, Object> nullValues = new HashMap<Class<?>, Object>();
+        nullValues.put(Integer.TYPE, Integer.valueOf(0));
+        nullValues.put(Long.TYPE, Long.valueOf(0));
+        nullValues.put(Short.TYPE, Short.valueOf((short) 0));
+        nullValues.put(Byte.TYPE, Byte.valueOf((byte) 0));
+        nullValues.put(Float.TYPE, Float.valueOf(0.0f));
+        nullValues.put(Double.TYPE, Double.valueOf(0.0));
+        nullValues.put(Character.TYPE, Character.valueOf((char) 0));
+        nullValues.put(Boolean.TYPE, Boolean.FALSE);
+        NULL_VALUE_MAP = Collections.unmodifiableMap(nullValues);
     }
 
     /**
