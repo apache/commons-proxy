@@ -18,12 +18,8 @@ package org.apache.commons.proxy2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
-import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.asm.ASMProxyFactory;
-import org.apache.commons.proxy2.cglib.CglibProxyFactory;
-import org.apache.commons.proxy2.javassist.JavassistProxyFactory;
-import org.apache.commons.proxy2.jdk.JdkProxyFactory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
@@ -40,10 +36,10 @@ public abstract class AbstractProxyFactoryAgnosticTest
     public static List<Object[]> createParameters()
     {
         final List<Object[]> result = new ArrayList<Object[]>();
-        result.add(new Object[] { new JdkProxyFactory() });
-        result.add(new Object[] { new CglibProxyFactory() });
-        result.add(new Object[] { new JavassistProxyFactory() });
-        result.add(new Object[] { new ASMProxyFactory() });
+        for (ProxyFactory proxyFactory : ServiceLoader.load(ProxyFactory.class))
+        {
+            result.add(new Object[] { proxyFactory });
+        }
         return result;
     }
 
