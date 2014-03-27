@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import org.apache.commons.proxy2.interceptor.matcher.ArgumentMatcher;
 import org.junit.Test;
 
+@SuppressWarnings("boxing") // test code
 public class ArgumentMatcherUtilsTest
 {
     @Test
