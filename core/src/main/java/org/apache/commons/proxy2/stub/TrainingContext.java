@@ -46,7 +46,7 @@ class TrainingContext
 
     private final ProxyFactory proxyFactory;
 
-    private Deque<TrainingContextFrame<?>> frameDeque = new LinkedList<TrainingContextFrame<?>>();
+    private final Deque<TrainingContextFrame<?>> frameDeque = new LinkedList<TrainingContextFrame<?>>();
 
     private final TrainingContext resume;
 

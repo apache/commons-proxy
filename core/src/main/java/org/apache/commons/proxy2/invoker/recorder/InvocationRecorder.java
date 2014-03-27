@@ -36,7 +36,7 @@ import org.apache.commons.proxy2.invoker.RecordedInvocation;
 public class InvocationRecorder
 {
     private final ProxyFactory proxyFactory;
-    private List<RecordedInvocation> recordedInvocations = new LinkedList<RecordedInvocation>();
+    private final List<RecordedInvocation> recordedInvocations = new LinkedList<RecordedInvocation>();
 
     /**
      * Create a new InvocationRecorder instance.
