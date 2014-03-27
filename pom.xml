@@ -50,7 +50,7 @@
     <commons.site.path>commons-proxy</commons.site.path>
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/${commons.site.path}</commons.scmPubUrl>
 
-    <asm.version>4.2</asm.version>
+    <asm.version>5.0.1</asm.version>
     <ant.version>1.9.3</ant.version>
     <checkstyle.version>2.11</checkstyle.version>
     <!-- Unfortunately reporting sections ignore pluginManagement settings, so define the versions here -->
@@ -243,7 +243,7 @@
       <dependency>
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
-        <version>2.1_3</version>
+        <version>3.1</version>
       </dependency>
       <dependency>
         <groupId>jboss</groupId>
@@ -268,7 +268,7 @@
       <dependency>
         <groupId>jmock</groupId>
         <artifactId>jmock</artifactId>
-        <version>1.0.1</version>
+        <version>1.2.0</version>
         <scope>test</scope>
       </dependency>
       <dependency>
