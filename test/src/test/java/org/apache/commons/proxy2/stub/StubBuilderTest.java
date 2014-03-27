@@ -114,6 +114,8 @@ public class StubBuilderTest extends AbstractStubTestCase
             {
                 when(trainee.iterator()).thenAnswer(new ObjectProvider<Iterator<String>>()
                 {
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public Iterator<String> getObject()
                     {
