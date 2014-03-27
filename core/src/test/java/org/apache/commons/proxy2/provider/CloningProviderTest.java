@@ -44,10 +44,10 @@ public class CloningProviderTest extends AbstractTestCase
     {
         final Date now = new Date();
         final CloningProvider<Date> provider = new CloningProvider<Date>(now);
-        final Date clone1 = (Date) provider.getObject();
+        final Date clone1 = provider.getObject();
         assertEquals(now, clone1);
         assertNotSame(now, clone1);
-        final Date clone2 = (Date) provider.getObject();
+        final Date clone2 = provider.getObject();
         assertEquals(now, clone2);
         assertNotSame(now, clone2);
         assertNotSame(clone2, clone1);
