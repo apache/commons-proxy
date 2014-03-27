@@ -65,12 +65,12 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
         {
             if (ProxyUtils.isHashCode(method))
             {
-                return AnnotationUtils.hashCode((Annotation) proxy);
+                return Integer.valueOf(AnnotationUtils.hashCode((Annotation) proxy));
             }
             if (ProxyUtils.isEqualsMethod(method))
             {
-                return args[0] instanceof Annotation
-                        && AnnotationUtils.equals((Annotation) proxy, (Annotation) args[0]);
+                return Boolean.valueOf(args[0] instanceof Annotation
+                        && AnnotationUtils.equals((Annotation) proxy, (Annotation) args[0]));
             }
             if ("toString".equals(method.getName()) && method.getParameterTypes().length == 0)
             {

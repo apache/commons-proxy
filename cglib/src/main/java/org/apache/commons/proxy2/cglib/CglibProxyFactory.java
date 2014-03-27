@@ -136,7 +136,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
-            return o == objects[0];
+            return Boolean.valueOf(o == objects[0]);
         }
     }
 
@@ -148,7 +148,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
-            return System.identityHashCode(o);
+            return Integer.valueOf(System.identityHashCode(o));
         }
     }
 

@@ -116,11 +116,11 @@ public class JdkProxyFactory extends AbstractProxyFactory
         {
             if (ProxyUtils.isHashCode(method))
             {
-                return System.identityHashCode(proxy);
+                return Integer.valueOf(System.identityHashCode(proxy));
             }
             else if (ProxyUtils.isEqualsMethod(method))
             {
-                return proxy == args[0];
+                return Boolean.valueOf(proxy == args[0]);
             }
             else
             {

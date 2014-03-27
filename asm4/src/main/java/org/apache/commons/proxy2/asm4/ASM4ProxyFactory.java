@@ -388,11 +388,11 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
         {
             if (isHashCode(method))
             {
-                return System.identityHashCode(proxy);
+                return Integer.valueOf(System.identityHashCode(proxy));
             }
             if (isEqualsMethod(method))
             {
-                return proxy == args[0];
+                return Boolean.valueOf(proxy == args[0]);
             }
             return invokeImpl(proxy, method, args);
         }
