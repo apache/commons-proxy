@@ -164,18 +164,18 @@
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>commons-proxy2-asm4</artifactId>
+        <artifactId>commons-proxy2-asm</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>commons-proxy2-asm4</artifactId>
+        <artifactId>commons-proxy2-asm</artifactId>
         <classifier>sources</classifier>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>commons-proxy2-asm4</artifactId>
+        <artifactId>commons-proxy2-asm</artifactId>
         <classifier>javadoc</classifier>
         <version>${project.version}</version>
       </dependency>
@@ -703,7 +703,7 @@
     <module>build-tools</module>
     <module>core</module>
     <module>jdk</module>
-    <module>asm4</module>
+    <module>asm</module>
     <module>javassist</module>
     <module>cglib</module>
     <module>test</module>

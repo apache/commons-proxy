@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.proxy2.ProxyFactory;
-import org.apache.commons.proxy2.asm4.ASM4ProxyFactory;
+import org.apache.commons.proxy2.asm.ASMProxyFactory;
 import org.apache.commons.proxy2.cglib.CglibProxyFactory;
 import org.apache.commons.proxy2.javassist.JavassistProxyFactory;
 import org.apache.commons.proxy2.jdk.JdkProxyFactory;
@@ -43,7 +43,7 @@ public abstract class AbstractProxyFactoryAgnosticTest
         result.add(new Object[] { new JdkProxyFactory() });
         result.add(new Object[] { new CglibProxyFactory() });
         result.add(new Object[] { new JavassistProxyFactory() });
-        result.add(new Object[] { new ASM4ProxyFactory() });
+        result.add(new Object[] { new ASMProxyFactory() });
         return result;
     }
 

@@ -26,9 +26,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>commons-proxy2-asm4</artifactId>
-    <name>Commons Proxy ASM4 Proxies Module</name>
-    <description>Proxies based on classes dynamically generated using ASM v4
+    <artifactId>commons-proxy2-asm</artifactId>
+    <name>Commons Proxy ASM Proxies Module</name>
+    <description>Proxies based on classes dynamically generated using ASM v4+
     </description>
     <dependencies>
         <dependency>

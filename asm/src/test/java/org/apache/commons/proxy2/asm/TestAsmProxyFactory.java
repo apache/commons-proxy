@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy2.asm4;
+package org.apache.commons.proxy2.asm;
 
 import org.apache.commons.proxy2.AbstractSubclassingProxyFactoryTestCase;
 
-public class TestAsm4ProxyFactory extends AbstractSubclassingProxyFactoryTestCase
+public class TestAsmProxyFactory extends AbstractSubclassingProxyFactoryTestCase
 {
-    //**********************************************************************************************************************
-    // Constructors
-    //**********************************************************************************************************************
 }

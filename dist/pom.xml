@@ -55,16 +55,16 @@ under the License.
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
-      <artifactId>commons-proxy2-asm4</artifactId>
+      <artifactId>commons-proxy2-asm</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
-      <artifactId>commons-proxy2-asm4</artifactId>
+      <artifactId>commons-proxy2-asm</artifactId>
       <classifier>sources</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
-      <artifactId>commons-proxy2-asm4</artifactId>
+      <artifactId>commons-proxy2-asm</artifactId>
       <classifier>javadoc</classifier>
     </dependency>
     <dependency>

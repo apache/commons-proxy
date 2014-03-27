@@ -52,7 +52,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>commons-proxy2-asm4</artifactId>
+            <artifactId>commons-proxy2-asm</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

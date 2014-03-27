@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.proxy2.asm4;
+package org.apache.commons.proxy2.asm;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +39,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.GeneratorAdapter;
 
-public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
+public class ASMProxyFactory extends AbstractSubclassingProxyFactory
 {
     private static final ProxyClassCache PROXY_CLASS_CACHE = new ProxyClassCache(new ProxyGenerator());
 
@@ -83,7 +83,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     private static class ProxyGenerator extends AbstractProxyClassGenerator implements Opcodes
     {
         private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
-        private static final String CLASSNAME_PREFIX = "CommonsProxyASM4_";
+        private static final String CLASSNAME_PREFIX = "CommonsProxyASM_";
         private static final String HANDLER_NAME = "__handler";
         private static final Type INVOKER_TYPE = Type.getType(Invoker.class);
 
