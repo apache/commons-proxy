@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.provider;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
 
@@ -71,7 +72,7 @@ public class CloningProviderTest extends AbstractTestCase
     @Test(expected = IllegalArgumentException.class)
     public void testWithInvalidCloneable()
     {
-        new CloningProvider<InvalidCloneable>(new InvalidCloneable());
+        assertNotNull(new CloningProvider<InvalidCloneable>(new InvalidCloneable())); // assert is used to avoid not used warning
     }
 
     @Test(expected = IllegalArgumentException.class)

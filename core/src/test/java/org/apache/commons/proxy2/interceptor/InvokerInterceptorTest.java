@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.interceptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Method;
 
@@ -55,6 +56,6 @@ public class InvokerInterceptorTest extends AbstractTestCase
     @Test(expected = NullPointerException.class)
     public void testWithNullInvoker()
     {
-        new InvokerInterceptor(null);
+        assertNotNull(new InvokerInterceptor(null)); // assert is used to avoid not used warning
     }
 }
