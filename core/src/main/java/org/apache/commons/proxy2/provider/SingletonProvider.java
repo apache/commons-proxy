@@ -32,6 +32,8 @@ public class SingletonProvider<T> extends ProviderDecorator<T>
     // Fields
     //******************************************************************************************************************
 
+    private static final long serialVersionUID = 1L;
+
     private T instance;
 
     //******************************************************************************************************************

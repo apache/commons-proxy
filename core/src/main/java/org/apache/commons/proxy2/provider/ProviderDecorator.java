@@ -33,6 +33,8 @@ public class ProviderDecorator<T> implements ObjectProvider<T>
     // Fields
     //******************************************************************************************************************
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The wrapped {@link ObjectProvider}.
      */
