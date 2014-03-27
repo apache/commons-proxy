@@ -43,12 +43,12 @@ public final class ArgumentMatcherUtils
         return new EqualsMatcher<T>(value);
     }
 
-    public static <C extends Comparable<?>> ArgumentMatcher<C> gt(C comparable)
+    public static <C extends Comparable<C>> ArgumentMatcher<C> gt(C comparable)
     {
         return new GreaterThanMatcher<C>(comparable);
     }
 
-    public static <C extends Comparable<?>> ArgumentMatcher<C> gte(C comparable)
+    public static <C extends Comparable<C>> ArgumentMatcher<C> gte(C comparable)
     {
         return new GreaterThanOrEqualMatcher<C>(comparable);
     }
@@ -63,12 +63,12 @@ public final class ArgumentMatcherUtils
         return new IsNullMatcher<T>();
     }
 
-    public static <C extends Comparable<?>> ArgumentMatcher<C> lt(C comparable)
+    public static <C extends Comparable<C>> ArgumentMatcher<C> lt(C comparable)
     {
         return new LessThanMatcher<C>(comparable);
     }
 
-    public static <C extends Comparable<?>> ArgumentMatcher<C> lte(C comparable)
+    public static <C extends Comparable<C>> ArgumentMatcher<C> lte(C comparable)
     {
         return new LessThanOrEqualMatcher<C>(comparable);
     }
@@ -110,7 +110,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private abstract static class ComparatorMatcher<C extends Comparable<?>> implements ArgumentMatcher<C>
+    private abstract static class ComparatorMatcher<C extends Comparable<C>> implements ArgumentMatcher<C>
     {
         private final C comparable;
 
@@ -122,15 +122,13 @@ public final class ArgumentMatcherUtils
         protected abstract boolean evaluate(int comparison);
 
         @Override
-        @SuppressWarnings("unchecked")
         public boolean matches(C argument)
         {
             if (argument == null)
             {
                 return false;
             }
-            @SuppressWarnings("rawtypes")
-            final int comparison = ((Comparable) comparable).compareTo(argument);
+            final int comparison = (comparable).compareTo(argument);
             return evaluate(comparison);
         }
     }
@@ -168,7 +166,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class GreaterThanMatcher<C extends Comparable<?>> extends ComparatorMatcher<C>
+    private static final class GreaterThanMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
     {
         private GreaterThanMatcher(C comparable)
         {
@@ -182,7 +180,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class GreaterThanOrEqualMatcher<C extends Comparable<?>> extends ComparatorMatcher<C>
+    private static final class GreaterThanOrEqualMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
     {
         private GreaterThanOrEqualMatcher(C comparable)
         {
@@ -221,7 +219,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class LessThanMatcher<C extends Comparable<?>> extends ComparatorMatcher<C>
+    private static final class LessThanMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
     {
         private LessThanMatcher(C comparable)
         {
@@ -235,7 +233,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class LessThanOrEqualMatcher<C extends Comparable<?>> extends ComparatorMatcher<C>
+    private static final class LessThanOrEqualMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
     {
         private LessThanOrEqualMatcher(C comparable)
         {
