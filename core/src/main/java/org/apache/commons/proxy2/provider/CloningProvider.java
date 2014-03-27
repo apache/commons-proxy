@@ -18,9 +18,10 @@
 package org.apache.commons.proxy2.provider;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.CloneFailedException;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.commons.proxy2.ObjectProvider;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
@@ -69,28 +70,14 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public T getObject()
     {
         try
         {
-            return (T) MethodUtils.invokeExactMethod(cloneable, "clone");
+            return ObjectUtils.clone(cloneable);
         }
-        catch (IllegalAccessException e)
-        {
-            throw new ObjectProviderException("Class " + cloneable.getClass().getName()
-                    + " does not have a public clone() method.", e);
-        }
-        catch (InvocationTargetException e)
-        {
-            throw new ObjectProviderException("Attempt to clone object of type " + cloneable.getClass().getName()
-                    + " threw an exception.", e);
-        }
-        catch (NoSuchMethodException e)
-        {
-            throw new ObjectProviderException(String.format(
-                    "Class %s does not have a clone() method (should never happen).", cloneable.getClass().getName()),
-                    e);
+        catch (CloneFailedException e) {
+            throw new ObjectProviderException(e.getMessage(), e.getCause());
         }
     }
 
