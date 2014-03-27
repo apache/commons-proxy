@@ -165,7 +165,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
 
     private class MapAnnotationTrainer extends AnnotationTrainer<A>
     {
-        final Map<String, ?> members;
+        private final Map<String, ?> members;
 
         MapAnnotationTrainer(Map<String, ?> members)
         {
