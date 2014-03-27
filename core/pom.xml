@@ -72,6 +72,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.version}</version>
                 <configuration>
                     <!--rulesets>
                         <ruleset>/org/apache/commons/proxy2/pmd.xml</ruleset>
@@ -81,6 +82,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
                 <configuration>
                     <xmlOutput>true</xmlOutput>
                     <excludeFilterFile>/org/apache/commons/proxy2/findbugs-exclude-filter.xml</excludeFilterFile>
