@@ -27,7 +27,7 @@ import org.apache.commons.proxy2.ProxyFactory;
 import org.apache.commons.proxy2.interceptor.InterceptorUtils;
 import org.apache.commons.proxy2.interceptor.SwitchInterceptor;
 import org.apache.commons.proxy2.interceptor.matcher.invocation.DeclaredByMatcher;
-import org.apache.commons.proxy2.stub.AbstractProxyFactoryAgnosticTest;
+import org.apache.commons.proxy2.AbstractProxyFactoryAgnosticTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
