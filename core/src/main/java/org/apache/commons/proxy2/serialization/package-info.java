@@ -22,15 +22,15 @@
  * Commons Proxy because its proxies are generalized to expose only methods declared by superclasses (where applicable)
  * or proxied interfaces. Therefore we declare the following interfaces:
  * <ul>
- *   <li>{@link ReadResolve}</li>
- *   <li>{@link WriteReplace}</li>
+ *   <li>{@link org.apache.commons.proxy2.serialization.ReadResolve ReadResolve}</li>
+ *   <li>{@link org.apache.commons.proxy2.serialization.WriteReplace WriteReplace}</li>
  * </ul>
  *
- * Typically, you should define your proxy to include {@link WriteReplace} among its interfaces, and implement it to
- * return some object that implements {@link ReadResolve} (or simply declares the {@code Object readResolve()} method
+ * Typically, you should define your proxy to include {@link org.apache.commons.proxy2.serialization.WriteReplace WriteReplace} among its interfaces, and implement it to
+ * return some object that implements {@link org.apache.commons.proxy2.serialization.ReadResolve ReadResolve} (or simply declares the {@code Object readResolve()} method
  * in any scope, but using the interface brings compiler assistance).
  *
- * Hint: Your {@link ReadResolve#readResolve()} implementation will typically use serialized information to recreate an
+ * Hint: Your {@link org.apache.commons.proxy2.serialization.ReadResolve ReadResolve#readResolve()} implementation will typically use serialized information to recreate an
  * equivalent proxy object, which probably implies some form of {@code static} access.
  */
 package org.apache.commons.proxy2.serialization;

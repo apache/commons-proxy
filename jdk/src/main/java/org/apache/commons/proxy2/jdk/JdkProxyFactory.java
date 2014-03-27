@@ -33,7 +33,7 @@ import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.impl.AbstractProxyFactory;
 
 /**
- * {@link ProxyFactory} implementation that uses {@link java.lang.reflect.Proxy} proxies.
+ * {@link org.apache.commons.proxy2.ProxyFactory ProxyFactory} implementation that uses {@link java.lang.reflect.Proxy} proxies.
  */
 public class JdkProxyFactory extends AbstractProxyFactory
 {

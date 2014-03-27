@@ -37,7 +37,7 @@ import org.apache.commons.proxy2.ProxyUtils;
 import org.apache.commons.proxy2.impl.AbstractSubclassingProxyFactory;
 
 /**
- * Cglib-based {@link ProxyFactory} implementation.
+ * Cglib-based {@link org.apache.commons.proxy2.ProxyFactory ProxyFactory} implementation.
  */
 public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 {
