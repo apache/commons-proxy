@@ -20,9 +20,10 @@ package org.apache.commons.proxy2;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ClassUtils;
 
 /**
  * Provides some helpful proxy utility methods.
@@ -36,8 +37,8 @@ public final class ProxyUtils
     // Fields
     //******************************************************************************************************************
 
-    public static final Object[] EMPTY_ARGUMENTS = new Object[0];
-    public static final Class<?>[] EMPTY_ARGUMENT_TYPES = new Class[0];
+    public static final Object[] EMPTY_ARGUMENTS = ArrayUtils.EMPTY_OBJECT_ARRAY;
+    public static final Class<?>[] EMPTY_ARGUMENT_TYPES = ArrayUtils.EMPTY_CLASS_ARRAY;
     private static final Map<Class<?>, Class<?>> WRAPPER_CLASS_MAP;
     private static final Map<Class<?>, Object> NULL_VALUE_MAP;
 
@@ -96,31 +97,7 @@ public final class ProxyUtils
      */
     public static Class<?>[] getAllInterfaces(Class<?> cls)
     {
-        final List<Class<?>> interfaces = getAllInterfacesImpl(cls, new LinkedList<Class<?>>());
-        return interfaces == null ? null : (Class[]) interfaces.toArray(new Class[interfaces.size()]);
-    }
-
-    private static List<Class<?>> getAllInterfacesImpl(final Class<?> cls, List<Class<?>> list)
-    {
-        if (cls == null)
-        {
-            return null;
-        }
-        Class<?> currentClass = cls;
-        while (currentClass != null)
-        {
-            Class<?>[] interfaces = currentClass.getInterfaces();
-            for (int i = 0; i < interfaces.length; i++)
-            {
-                if (!list.contains(interfaces[i]))
-                {
-                    list.add(interfaces[i]);
-                }
-                getAllInterfacesImpl(interfaces[i], list);
-            }
-            currentClass = currentClass.getSuperclass();
-        }
-        return list;
+        return cls == null ? null : ClassUtils.getAllInterfaces(cls).toArray(ArrayUtils.EMPTY_CLASS_ARRAY);
     }
 
     /**
