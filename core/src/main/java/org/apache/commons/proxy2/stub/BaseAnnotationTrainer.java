@@ -77,9 +77,9 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
             @SuppressWarnings("unchecked")
             final Class<N> annotationType = (Class<N>) componentType;
             @SuppressWarnings("unchecked")
-            final BaseTrainer<?, R> annotationTypeTrainer = (BaseTrainer<?, R>) new AnnotationTypeTrainer<N>(
+            final BaseTrainer<?, R> trainer = (BaseTrainer<?, R>) new AnnotationTypeTrainer<N>(
                     annotationType);
-            this.annotationTypeTrainer = annotationTypeTrainer;
+            this.annotationTypeTrainer = trainer;
         }
 
         @Override
