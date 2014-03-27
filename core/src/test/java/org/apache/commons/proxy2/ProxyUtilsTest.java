@@ -60,15 +60,16 @@ public class ProxyUtilsTest extends AbstractTestCase
     @Test
     public void testNullValue()
     {
+        // expecting objects so test against explicit objects rather than using autoboxing
         assertNullValue(null, String.class);
-        assertNullValue((char) 0, Character.TYPE);
-        assertNullValue(0, Integer.TYPE);
-        assertNullValue((long) 0, Long.TYPE);
-        assertNullValue((short) 0, Short.TYPE);
-        assertNullValue((double) 0, Double.TYPE);
-        assertNullValue((float) 0, Float.TYPE);
-        assertNullValue(false, Boolean.TYPE);
-        assertNullValue((byte) 0, Byte.TYPE);
+        assertNullValue(Character.valueOf((char) 0), Character.TYPE);
+        assertNullValue(Integer.valueOf(0), Integer.TYPE);
+        assertNullValue(Long.valueOf(0), Long.TYPE);
+        assertNullValue(Short.valueOf((short) 0), Short.TYPE);
+        assertNullValue(Double.valueOf(0), Double.TYPE);
+        assertNullValue(Float.valueOf(0), Float.TYPE);
+        assertNullValue(Boolean.FALSE, Boolean.TYPE);
+        assertNullValue(Byte.valueOf((byte) 0), Byte.TYPE);
     }
 
     private void assertNullValue(Object expected, Class<?> type)

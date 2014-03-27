@@ -58,13 +58,13 @@ public final class ProxyUtils
 
     static
     {
-        NULL_VALUE_MAP.put(Integer.TYPE, 0);
-        NULL_VALUE_MAP.put(Long.TYPE, (long) 0);
-        NULL_VALUE_MAP.put(Short.TYPE, (short) 0);
-        NULL_VALUE_MAP.put(Byte.TYPE, (byte) 0);
-        NULL_VALUE_MAP.put(Float.TYPE, 0.0f);
-        NULL_VALUE_MAP.put(Double.TYPE, 0.0);
-        NULL_VALUE_MAP.put(Character.TYPE, (char) 0);
+        NULL_VALUE_MAP.put(Integer.TYPE, Integer.valueOf(0));
+        NULL_VALUE_MAP.put(Long.TYPE, Long.valueOf(0));
+        NULL_VALUE_MAP.put(Short.TYPE, Short.valueOf((short) 0));
+        NULL_VALUE_MAP.put(Byte.TYPE, Byte.valueOf((byte) 0));
+        NULL_VALUE_MAP.put(Float.TYPE, Float.valueOf(0.0f));
+        NULL_VALUE_MAP.put(Double.TYPE, Double.valueOf(0.0));
+        NULL_VALUE_MAP.put(Character.TYPE, Character.valueOf((char) 0));
         NULL_VALUE_MAP.put(Boolean.TYPE, Boolean.FALSE);
     }
 
