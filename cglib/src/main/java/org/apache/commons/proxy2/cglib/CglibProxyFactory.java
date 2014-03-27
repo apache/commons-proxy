@@ -54,6 +54,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
             Class<?>... proxyClasses)
@@ -71,6 +72,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
@@ -88,6 +90,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
@@ -107,6 +110,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class CglibProxyFactoryCallbackFilter implements CallbackFilter
     {
+        @Override
         public int accept(Method method)
         {
             if (ProxyUtils.isEqualsMethod(method))
@@ -129,6 +133,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
             return o == objects[0];
@@ -140,6 +145,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable
         {
             return System.identityHashCode(o);
@@ -160,6 +166,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
         }
 
+        @Override
         public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable
         {
             return inner.intercept(new MethodProxyInvocation(object, target, method, args, methodProxy));
@@ -178,6 +185,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.original = original;
         }
 
+        @Override
         public Object invoke(Object object, Method method, Object[] objects) throws Throwable
         {
             return original.invoke(object, method, objects);
@@ -201,21 +209,25 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.args = ObjectUtils.defaultIfNull(ArrayUtils.clone(args), ProxyUtils.EMPTY_ARGUMENTS);
         }
 
+        @Override
         public Method getMethod()
         {
             return method;
         }
 
+        @Override
         public Object[] getArguments()
         {
             return args;
         }
 
+        @Override
         public Object proceed() throws Throwable
         {
             return methodProxy.invoke(target, args);
         }
 
+        @Override
         public Object getProxy()
         {
             return proxy;
@@ -234,6 +246,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
             this.delegateProvider = delegateProvider;
         }
 
+        @Override
         public Object loadObject()
         {
             return delegateProvider.getObject();

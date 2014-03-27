@@ -35,6 +35,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      *            the proxy classes
      * @return true if all <code>proxyClasses</code> are interfaces
      */
+    @Override
     public boolean canProxy(Class<?>... proxyClasses)
     {
         for (Class<?> proxyClass : proxyClasses)
@@ -57,6 +58,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      *            the interfaces that the proxy should implement
      * @return a proxy which delegates to the object provided by the target object provider
      */
+    @Override
     public <T> T createDelegatorProxy(ObjectProvider<?> delegateProvider, Class<?>... proxyClasses)
     {
         return createDelegatorProxy(Thread.currentThread().getContextClassLoader(), delegateProvider, proxyClasses);
@@ -75,6 +77,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      * @return a proxy which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
+    @Override
     public <T> T createInterceptorProxy(Object target, Interceptor interceptor, Class<?>... proxyClasses)
     {
         return createInterceptorProxy(Thread.currentThread().getContextClassLoader(), target, interceptor,
@@ -91,6 +94,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory
      *            the interfaces that the proxy should implement
      * @return a proxy which uses the provided {@link Invoker} to handle all method invocations
      */
+    @Override
     public <T> T createInvokerProxy(Invoker invoker, Class<?>... proxyClasses)
     {
         return createInvokerProxy(Thread.currentThread().getContextClassLoader(), invoker, proxyClasses);

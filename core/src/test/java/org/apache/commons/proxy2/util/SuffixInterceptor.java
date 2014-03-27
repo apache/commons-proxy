@@ -46,6 +46,7 @@ public class SuffixInterceptor implements Interceptor
     // Interceptor Implementation
     //**********************************************************************************************************************
 
+    @Override
     public Object intercept(Invocation methodInvocation) throws Throwable
     {
         Object result = methodInvocation.proceed();

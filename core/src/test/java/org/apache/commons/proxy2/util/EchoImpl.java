@@ -36,15 +36,18 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
     // Echo Implementation
     //**********************************************************************************************************************
 
+    @Override
     public void echo()
     {
     }
 
+    @Override
     public boolean echoBack(boolean b)
     {
         return b;
     }
 
+    @Override
     public String echoBack(String[] messages)
     {
         final StringBuilder sb = new StringBuilder();
@@ -56,6 +59,7 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         return sb.toString();
     }
 
+    @Override
     public String echoBack(String[][] messages)
     {
         final StringBuilder sb = new StringBuilder();
@@ -66,6 +70,7 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         return sb.toString();
     }
 
+    @Override
     public String echoBack(String[][][] messages)
     {
         final StringBuilder sb = new StringBuilder();
@@ -76,21 +81,25 @@ public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializabl
         return sb.toString();
     }
 
+    @Override
     public int echoBack(int i)
     {
         return i;
     }
 
+    @Override
     public String echoBack(String message1, String message2)
     {
         return message1 + message2;
     }
 
+    @Override
     public void illegalArgument()
     {
         throw new IllegalArgumentException("dummy message");
     }
 
+    @Override
     public void ioException() throws IOException
     {
         throw new IOException("dummy message");

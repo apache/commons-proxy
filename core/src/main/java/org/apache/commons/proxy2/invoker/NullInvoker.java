@@ -47,6 +47,7 @@ public class NullInvoker implements Invoker, Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
     {
         final Class<?> returnType = method.getReturnType();

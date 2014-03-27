@@ -69,6 +69,7 @@ public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, 
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public T getObject()
     {

@@ -61,6 +61,7 @@ public class ProviderDecorator<T> implements ObjectProvider<T>
     /**
      * {@inheritDoc}
      */
+    @Override
     public T getObject()
     {
         return inner.getObject();

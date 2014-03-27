@@ -60,6 +60,7 @@ public class InvocationHandlerAdapter implements Invoker
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable
     {
         return invocationHandler.invoke(proxy, method, arguments);

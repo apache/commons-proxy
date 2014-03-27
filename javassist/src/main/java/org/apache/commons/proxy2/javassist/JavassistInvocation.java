@@ -223,16 +223,19 @@ public abstract class JavassistInvocation implements Invocation
         return target;
     }
 
+    @Override
     public Object[] getArguments()
     {
         return arguments;
     }
 
+    @Override
     public Method getMethod()
     {
         return method;
     }
 
+    @Override
     public Object getProxy()
     {
         return proxy;

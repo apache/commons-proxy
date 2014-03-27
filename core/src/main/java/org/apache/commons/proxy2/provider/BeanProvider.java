@@ -63,6 +63,7 @@ public class BeanProvider<T> implements ObjectProvider<T>, Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public T getObject()
     {
         try

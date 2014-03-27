@@ -357,6 +357,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     private static class ChangeArgumentInterceptor implements Interceptor
     {
+        @Override
         public Object intercept(Invocation methodInvocation) throws Throwable
         {
             methodInvocation.getArguments()[0] = "something different";
@@ -371,6 +372,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         private Object proxy;
         private Class<?> invocationClass;
 
+        @Override
         public Object intercept(Invocation methodInvocation) throws Throwable
         {
             arguments = methodInvocation.getArguments();
@@ -387,6 +389,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         private Object[] args;
         private Object proxy;
 
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
             this.proxy = proxy;
@@ -398,6 +401,7 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
 
     protected static class NoOpMethodInterceptor implements Interceptor, Serializable
     {
+        @Override
         public Object intercept(Invocation methodInvocation) throws Throwable
         {
             return methodInvocation.proceed();

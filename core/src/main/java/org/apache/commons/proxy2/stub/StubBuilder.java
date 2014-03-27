@@ -76,6 +76,7 @@ public class StubBuilder<T> implements Builder<T>
     // Other Methods
     //******************************************************************************************************************
 
+    @Override
     public T build()
     {
         return proxyFactory.createInterceptorProxy(target, switchInterceptor,

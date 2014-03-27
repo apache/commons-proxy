@@ -383,6 +383,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
     @SuppressWarnings("serial")
     private abstract static class AbstractInvoker implements Invoker, Serializable
     {
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
             if (isHashCode(method))
@@ -444,21 +445,25 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             this.target = target;
         }
 
+        @Override
         public Object[] getArguments()
         {
             return arguments;
         }
 
+        @Override
         public Method getMethod()
         {
             return method;
         }
 
+        @Override
         public Object getProxy()
         {
             return proxy;
         }
 
+        @Override
         public Object proceed() throws Throwable
         {
             try

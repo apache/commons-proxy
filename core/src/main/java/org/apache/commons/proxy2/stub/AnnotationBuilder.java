@@ -60,6 +60,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
         /**
          * {@inheritDoc}
          */
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
             if (ProxyUtils.isHashCode(method))
@@ -94,21 +95,25 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
             this.target = target;
         }
 
+        @Override
         public Object[] getArguments()
         {
             return arguments;
         }
 
+        @Override
         public Method getMethod()
         {
             return method;
         }
 
+        @Override
         public Object getProxy()
         {
             return target;
         }
 
+        @Override
         public Object proceed() throws Throwable
         {
             try
@@ -124,6 +129,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
 
     private static final ProxyFactory PROXY_FACTORY = new AbstractProxyFactory()
     {
+        @Override
         @SuppressWarnings("unchecked")
         public <T> T createInvokerProxy(ClassLoader classLoader, final Invoker invoker, Class<?>... proxyClasses)
         {
@@ -137,6 +143,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
             });
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
                 Class<?>... proxyClasses)
@@ -145,6 +152,7 @@ public class AnnotationBuilder<A extends Annotation> extends StubBuilder<A>
                     ObjectProviderUtils.constant(target), interceptor));
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public <T> T createDelegatorProxy(ClassLoader classLoader, final ObjectProvider<?> delegateProvider,
                 Class<?>... proxyClasses)

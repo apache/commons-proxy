@@ -104,6 +104,7 @@ public class InvocationRecorder
         /**
          * {@inheritDoc}
          */
+        @Override
         public Object invoke(Object o, Method method, Object[] args) throws Throwable
         {
             recordedInvocations.add(new RecordedInvocation(method, args));

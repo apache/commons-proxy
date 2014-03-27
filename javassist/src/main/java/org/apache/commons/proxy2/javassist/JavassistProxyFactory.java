@@ -68,6 +68,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> targetProvider,
             Class<?>... proxyClasses)
@@ -87,6 +88,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
@@ -106,6 +108,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
@@ -127,6 +130,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class DelegatingProxyClassGenerator extends AbstractProxyClassGenerator
     {
+        @Override
         public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try
@@ -165,6 +169,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InterceptorProxyClassGenerator extends AbstractProxyClassGenerator
     {
+        @Override
         public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try
@@ -229,6 +234,7 @@ public class JavassistProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class InvokerProxyClassGenerator extends AbstractProxyClassGenerator
     {
+        @Override
         public Class<?> generateProxyClass(ClassLoader classLoader, Class<?>... proxyClasses)
         {
             try

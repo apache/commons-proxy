@@ -59,6 +59,7 @@ public class ConstantProvider<T> implements ObjectProvider<T>, Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public T getObject()
     {
         return constant;
