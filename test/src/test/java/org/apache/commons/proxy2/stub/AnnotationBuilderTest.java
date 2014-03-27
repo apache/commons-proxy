@@ -29,7 +29,7 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * Test {@link AnnotationFactory}.
+ * Test {@link AnnotationBuilder}.
  */
 public class AnnotationBuilderTest
 {
