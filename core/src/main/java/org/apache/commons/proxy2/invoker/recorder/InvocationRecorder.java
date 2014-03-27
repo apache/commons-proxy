@@ -31,7 +31,6 @@ import org.apache.commons.proxy2.invoker.RecordedInvocation;
 /**
  * An {@link InvocationRecorder} records method invocations against its generated proxies.
  * 
- * @author James Carman
  */
 public class InvocationRecorder
 {

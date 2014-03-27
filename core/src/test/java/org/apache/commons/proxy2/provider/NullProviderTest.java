@@ -23,7 +23,6 @@ import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
 
 /**
- * @author James Carman
  * @since 1.0
  */
 public class NullProviderTest extends AbstractTestCase

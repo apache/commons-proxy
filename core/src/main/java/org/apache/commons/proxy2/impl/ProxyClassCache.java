@@ -31,7 +31,6 @@ import java.util.WeakHashMap;
  * proxy class cache ensures that there is only one class for every {@link ProxyClassGenerator}/{@link ClassLoader}
  * /proxy class array combination.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class ProxyClassCache

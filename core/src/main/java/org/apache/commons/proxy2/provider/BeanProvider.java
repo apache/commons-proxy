@@ -26,7 +26,6 @@ import org.apache.commons.proxy2.exception.ObjectProviderException;
 /**
  * Uses <code>Class.newInstance()</code> to instantiate an object.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class BeanProvider<T> implements ObjectProvider<T>, Serializable

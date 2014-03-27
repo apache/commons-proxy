@@ -21,7 +21,6 @@ package org.apache.commons.proxy2.exception;
  * A runtime exception type to be used by {@link org.apache.commons.proxy2.ProxyFactory proxy factories} when a problem
  * occurs.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class ProxyFactoryException extends RuntimeException

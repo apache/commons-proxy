@@ -27,7 +27,6 @@ import org.apache.commons.proxy2.ProxyUtils;
  * An {@link Invoker} implementation which merely returns null for all method invocations. This class is useful for
  * scenarios where the "null object" design pattern is needed.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class NullInvoker implements Invoker, Serializable

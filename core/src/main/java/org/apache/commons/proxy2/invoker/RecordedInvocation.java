@@ -25,7 +25,6 @@ import org.apache.commons.proxy2.ProxyUtils;
 /**
  * Detached representation of a method invocation.
  * 
- * @author James Carman
  */
 public class RecordedInvocation
 {

@@ -23,7 +23,6 @@ package org.apache.commons.proxy2.impl;
  * generate proxy class instances for a specific type of proxies (interceptor, invoker, etc.) and will be associated
  * with a corresponding {@link ProxyClassCache}.
  * 
- * @author James Carman
  * @since 1.0
  */
 public interface ProxyClassGenerator

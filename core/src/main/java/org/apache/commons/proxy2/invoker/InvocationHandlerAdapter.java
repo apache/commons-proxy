@@ -25,7 +25,6 @@ import org.apache.commons.proxy2.Invoker;
 /**
  * An adapter class to adapt the JDK's {@link InvocationHandler} interface to Commons Proxy's {@link Invoker} interface.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class InvocationHandlerAdapter implements Invoker

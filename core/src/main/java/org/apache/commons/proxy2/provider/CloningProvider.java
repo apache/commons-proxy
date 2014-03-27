@@ -28,7 +28,6 @@ import org.apache.commons.proxy2.exception.ObjectProviderException;
 /**
  * Merely calls <code>clone()</code> (reflectively) on the given {@link Cloneable} object.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class CloningProvider<T extends Cloneable> implements ObjectProvider<T>, Serializable

@@ -21,7 +21,6 @@ package org.apache.commons.proxy2.exception;
  * {@link org.apache.commons.proxy2.ObjectProvider} implementations should throw this exception type to indicate that
  * there was a problem creating/finding the object.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class ObjectProviderException extends RuntimeException

@@ -28,7 +28,6 @@ import java.util.Set;
 /**
  * A useful superclass for {@link ProxyClassGenerator} implementations.
  * 
- * @author James Carman
  * @since 1.0
  */
 public abstract class AbstractProxyClassGenerator implements ProxyClassGenerator

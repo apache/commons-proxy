@@ -20,7 +20,6 @@ package org.apache.commons.proxy2.provider;
 import org.apache.commons.proxy2.ObjectProvider;
 
 /**
- * @author James Carman
  * @since 1.0
  */
 public class CountingProvider<T> extends ProviderDecorator<T>

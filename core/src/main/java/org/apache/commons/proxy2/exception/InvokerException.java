@@ -20,7 +20,6 @@ package org.apache.commons.proxy2.exception;
 /**
  * To be used by an {@link org.apache.commons.proxy2.Invoker} when they encounter an error.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class InvokerException extends RuntimeException
