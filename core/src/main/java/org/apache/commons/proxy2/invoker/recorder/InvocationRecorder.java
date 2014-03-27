@@ -81,9 +81,7 @@ public class InvocationRecorder
     {
         if (proxyFactory.canProxy(type))
         {
-            @SuppressWarnings("unchecked")
-            final T result = (T) proxyFactory.createInvokerProxy(new InvocationRecorderInvoker(genericType), type);
-            return result;
+            return proxyFactory.<T> createInvokerProxy(new InvocationRecorderInvoker(genericType), type);
         }
         return ProxyUtils.nullValue(type);
     }
