@@ -45,7 +45,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
     // Fields
     //******************************************************************************************************************
 
-    private static CallbackFilter callbackFilter = new CglibProxyFactoryCallbackFilter();
+    private static final CallbackFilter CALLBACKFILTER = new CglibProxyFactoryCallbackFilter();
 
     //******************************************************************************************************************
     // ProxyFactory Implementation
@@ -62,7 +62,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
-        enhancer.setCallbackFilter(callbackFilter);
+        enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(new Callback[] { new ObjectProviderDispatcher(targetProvider), new EqualsHandler(),
                 new HashCodeHandler() });
         return (T) enhancer.create();
@@ -79,7 +79,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
-        enhancer.setCallbackFilter(callbackFilter);
+        enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(new Callback[] { new InterceptorBridge(target, interceptor), new EqualsHandler(),
                 new HashCodeHandler() });
         return (T) enhancer.create();
@@ -95,7 +95,7 @@ public class CglibProxyFactory extends AbstractSubclassingProxyFactory
         enhancer.setClassLoader(classLoader);
         enhancer.setInterfaces(toInterfaces(proxyClasses));
         enhancer.setSuperclass(getSuperclass(proxyClasses));
-        enhancer.setCallbackFilter(callbackFilter);
+        enhancer.setCallbackFilter(CALLBACKFILTER);
         enhancer.setCallbacks(
                 new Callback[] { new InvokerBridge(invoker), new EqualsHandler(), new HashCodeHandler() });
         return (T) enhancer.create();
