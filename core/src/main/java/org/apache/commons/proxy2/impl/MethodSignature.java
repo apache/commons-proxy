@@ -169,15 +169,17 @@ public class MethodSignature implements Serializable
             pos.next();
             final int type = pos.getIndex();
             final int semi = internal.indexOf(';', type);
-            Validate.isTrue(semi > 0, "Type at index %s of method signature \"%s\" not terminated by semicolon", here,
-                    internal);
+            Validate.isTrue(semi > 0, "Type at index %d of method signature \"%s\" not terminated by semicolon",
+                    Integer.valueOf(here), internal);
             final String className = internal.substring(type, semi).replace('/', '.');
-            Validate.notBlank(className, "Invalid classname at position %s of method signature \"%s\"", type, internal);
+            Validate.notBlank(className, "Invalid classname at position %d of method signature \"%s\"",
+                    Integer.valueOf(type), internal);
             pos.setIndex(semi + 1);
             return Class.forName(className);
         default:
             throw new IllegalArgumentException(String.format(
-                    "Unexpected character at index %s of method signature \"%s\"", here, internal));
+                    "Unexpected character at index %d of method signature \"%s\"",
+                    Integer.valueOf(here), internal));
         }
     }
 
@@ -258,7 +260,7 @@ public class MethodSignature implements Serializable
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(internal).build();
+        return new HashCodeBuilder().append(internal).build().intValue();
     }
 
     /**
