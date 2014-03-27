@@ -233,6 +233,7 @@ public class MethodSignature implements Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object o)
     {
         if (o == null)
@@ -254,6 +255,7 @@ public class MethodSignature implements Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode()
     {
         return new HashCodeBuilder().append(internal).build();
@@ -262,6 +264,7 @@ public class MethodSignature implements Serializable
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString()
     {
         return internal;

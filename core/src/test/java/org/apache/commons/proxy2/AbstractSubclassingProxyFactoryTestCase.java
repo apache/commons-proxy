@@ -48,6 +48,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
     // Other Methods
     //----------------------------------------------------------------------------------------------------------------------
 
+    @Override
     @Test
     public void testCanProxy()
     {
@@ -61,6 +62,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(factory.canProxy(new Class[] { Echo.class, EchoImpl.class, String.class }));
     }
 
+    @Override
     @Test
     public void testDelegatorEquals() throws Exception
     {
@@ -89,6 +91,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertTrue(echo instanceof EchoImpl);
     }
 
+    @Override
     @Test
     public void testInterceptorEquals()
     {
@@ -123,6 +126,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         factory.createInvokerProxy(new NullInvoker(), new Class[] { EchoImpl.class, String.class });
     }
 
+    @Override
     @Test
     public void testInvokerEquals() throws Exception
     {
@@ -189,6 +193,7 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
 
     public static class FinalMethodEcho extends EchoImpl
     {
+        @Override
         public final String echoBack(String message)
         {
             return "final";

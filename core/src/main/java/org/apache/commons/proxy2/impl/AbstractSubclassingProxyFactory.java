@@ -41,6 +41,7 @@ public abstract class AbstractSubclassingProxyFactory extends AbstractProxyFacto
      *            the proxy classes
      * @return true if a suitable superclass can be found, given the desired <code>proxyClasses</code>
      */
+    @Override
     public boolean canProxy(Class<?>... proxyClasses)
     {
         try

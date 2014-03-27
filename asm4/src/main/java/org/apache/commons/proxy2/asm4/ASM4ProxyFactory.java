@@ -346,6 +346,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             this.delegateProvider = delegateProvider;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             try
@@ -371,6 +372,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             this.methodInterceptor = methodInterceptor;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             final ReflectionInvocation invocation = new ReflectionInvocation(target, proxy, method, args);
@@ -407,6 +409,7 @@ public class ASM4ProxyFactory extends AbstractSubclassingProxyFactory
             this.invoker = invoker;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             return invoker.invoke(proxy, method, args);

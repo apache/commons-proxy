@@ -55,6 +55,7 @@ public class SingletonProvider<T> extends ProviderDecorator<T>
     /**
      * {@inheritDoc}
      */
+    @Override
     public T getObject()
     {
         synchronized (this)

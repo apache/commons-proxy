@@ -52,6 +52,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
      *            the interfaces that the proxy2 should implement
      * @return a proxy2 which delegates to the object provided by the target <code>delegateProvider>
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createDelegatorProxy(ClassLoader classLoader, ObjectProvider<?> delegateProvider,
             Class<?>... proxyClasses)
@@ -74,6 +75,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
      * @return a proxy2 which passes through a {@link Interceptor interceptor} before eventually reaching the
      *         <code>target</code> object.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInterceptorProxy(ClassLoader classLoader, Object target, Interceptor interceptor,
             Class<?>... proxyClasses)
@@ -93,6 +95,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
      *            the interfaces that the proxy2 should implement
      * @return a proxy2 which uses the provided {@link Invoker} to handle all method invocations
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T createInvokerProxy(ClassLoader classLoader, Invoker invoker, Class<?>... proxyClasses)
     {
@@ -108,6 +111,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
         /** Serialization version */
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
             if (ProxyUtils.isHashCode(method))
@@ -139,6 +143,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
             this.delegateProvider = delegateProvider;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             try
@@ -166,6 +171,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
             this.methodInterceptor = methodInterceptor;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             final ReflectionInvocation invocation = new ReflectionInvocation(proxy, target, method, args);
@@ -185,6 +191,7 @@ public class JdkProxyFactory extends AbstractProxyFactory
             this.invoker = invoker;
         }
 
+        @Override
         public Object invokeImpl(Object proxy, Method method, Object[] args) throws Throwable
         {
             return invoker.invoke(proxy, method, args);
@@ -206,21 +213,25 @@ public class JdkProxyFactory extends AbstractProxyFactory
             this.arguments = ObjectUtils.defaultIfNull(ArrayUtils.clone(arguments), ProxyUtils.EMPTY_ARGUMENTS);
         }
 
+        @Override
         public Object[] getArguments()
         {
             return arguments;
         }
 
+        @Override
         public Method getMethod()
         {
             return method;
         }
 
+        @Override
         public Object getProxy()
         {
             return proxy;
         }
 
+        @Override
         public Object proceed() throws Throwable
         {
             try

@@ -88,6 +88,7 @@ public class CloningProviderTest extends AbstractTestCase
 
     public static class ExceptionCloneable implements Cloneable
     {
+        @Override
         public Object clone()
         {
             throw new RuntimeException("No clone for you!");
@@ -100,6 +101,7 @@ public class CloningProviderTest extends AbstractTestCase
 
     public static class ProtectedCloneable implements Cloneable
     {
+        @Override
         protected Object clone()
         {
             return this;

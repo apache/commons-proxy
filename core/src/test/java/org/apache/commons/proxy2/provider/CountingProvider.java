@@ -44,6 +44,7 @@ public class CountingProvider<T> extends ProviderDecorator<T>
     // ObjectProvider Implementation
     //**********************************************************************************************************************
 
+    @Override
     public synchronized T getObject()
     {
         count++;
