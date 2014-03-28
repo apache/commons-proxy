@@ -57,10 +57,7 @@ public final class ProxyUtils
         wrappers.put(Double.TYPE, Double.class);
         wrappers.put(Byte.TYPE, Byte.class);
         WRAPPER_CLASS_MAP = Collections.unmodifiableMap(wrappers);
-    }
 
-    static
-    {
         final Map<Class<?>, Object> nullValues = new HashMap<Class<?>, Object>();
         nullValues.put(Integer.TYPE, Integer.valueOf(0));
         nullValues.put(Long.TYPE, Long.valueOf(0));
@@ -153,12 +150,12 @@ public final class ProxyUtils
      * 
      * @param method
      *            to compare
-     * @return <code>true</code> for a method with signature <code>boolean equals(Object)</code>
+     * @return <code>true</code> for a method with signature <code>equals(Object)</code>
      */
     public static boolean isEqualsMethod(Method method)
     {
-        return "equals".equals(method.getName()) && Boolean.TYPE.equals(method.getReturnType())
-                && method.getParameterTypes().length == 1 && Object.class.equals(method.getParameterTypes()[0]);
+        return "equals".equals(method.getName()) && method.getParameterTypes().length == 1
+                && Object.class.equals(method.getParameterTypes()[0]);
     }
 
     /**
@@ -166,12 +163,11 @@ public final class ProxyUtils
      * 
      * @param method
      *            to compare
-     * @return true for a method with signature <code>int hashCode()</code>
+     * @return true for a method with signature <code>hashCode()</code>
      */
     public static boolean isHashCode(Method method)
     {
-        return "hashCode".equals(method.getName()) && Integer.TYPE.equals(method.getReturnType())
-                && method.getParameterTypes().length == 0;
+        return "hashCode".equals(method.getName()) && method.getParameterTypes().length == 0;
     }
 
     /**
