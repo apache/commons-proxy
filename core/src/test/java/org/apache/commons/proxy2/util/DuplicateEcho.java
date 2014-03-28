@@ -17,10 +17,6 @@
 
 package org.apache.commons.proxy2.util;
 
-/**
- * @author James Carman
- * @since 1.0
- */
 public interface DuplicateEcho
 {
     //**********************************************************************************************************************

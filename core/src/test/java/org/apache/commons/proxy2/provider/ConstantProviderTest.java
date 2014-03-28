@@ -22,9 +22,6 @@ import static org.junit.Assert.assertSame;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
 
-/**
- * @since 1.0
- */
 public class ConstantProviderTest extends AbstractTestCase
 {
     //**********************************************************************************************************************

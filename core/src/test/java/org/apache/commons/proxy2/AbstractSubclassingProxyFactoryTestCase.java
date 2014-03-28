@@ -31,10 +31,6 @@ import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
 import org.junit.Test;
 
-/**
- * @author James Carman
- * @since 1.0
- */
 @SuppressWarnings("serial")
 public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractProxyFactoryTestCase
 {

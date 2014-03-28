@@ -17,9 +17,6 @@
 
 package org.apache.commons.proxy2.exception;
 
-/**
- * @since 1.0
- */
 public class ProxyFactoryExceptionTest extends AbstractExceptionClassTestCase
 {
     //**********************************************************************************************************************

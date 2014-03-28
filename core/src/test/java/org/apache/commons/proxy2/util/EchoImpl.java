@@ -20,10 +20,6 @@ package org.apache.commons.proxy2.util;
 import java.io.IOException;
 import java.io.Serializable;
 
-/**
- * @author James Carman
- * @since 1.0
- */
 public class EchoImpl extends AbstractEcho implements DuplicateEcho, Serializable
 {
     //**********************************************************************************************************************

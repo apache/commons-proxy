@@ -20,10 +20,6 @@ package org.apache.commons.proxy2.util;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-/**
- * @author James Carman
- * @since 1.0
- */
 public interface QuoteService extends Remote
 {
     //**********************************************************************************************************************

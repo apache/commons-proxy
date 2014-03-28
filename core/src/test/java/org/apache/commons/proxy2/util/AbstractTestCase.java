@@ -27,10 +27,6 @@ import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.proxy2.Invocation;
 import org.apache.commons.proxy2.ProxyUtils;
 
-/**
- * @author James Carman
- * @since 2.0
- */
 public abstract class AbstractTestCase
 {
     //**********************************************************************************************************************
