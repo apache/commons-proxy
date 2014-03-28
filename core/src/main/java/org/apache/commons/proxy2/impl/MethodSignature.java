@@ -37,7 +37,7 @@ import org.apache.commons.lang3.tuple.Pair;
 /**
  * A class for capturing the signature of a method (its name and parameter types).
  * 
- * @since 1.0
+ * @since 2.0
  */
 public class MethodSignature implements Serializable
 {
