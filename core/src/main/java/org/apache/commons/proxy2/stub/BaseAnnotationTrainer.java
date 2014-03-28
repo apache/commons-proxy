@@ -80,7 +80,7 @@ public abstract class BaseAnnotationTrainer<S extends BaseAnnotationTrainer<S, A
              * Therefore we declare a bogus annotation type parameter on this method which we use to create
              * our AnnotationTypeTrainer, whose type parameter requires an annotation type. N == R
              */
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked") // we assume N == R
             final Class<N> annotationType = (Class<N>) componentType;
             @SuppressWarnings("unchecked") // and cast it back
             final BaseTrainer<?, R> trainer = (BaseTrainer<?, R>) new AnnotationTypeTrainer<N>(
