@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 /**
  * An invoker is responsible for handling a method invocation.
  * 
- * @author James Carman
  * @since 1.0
  */
 public interface Invoker extends Serializable

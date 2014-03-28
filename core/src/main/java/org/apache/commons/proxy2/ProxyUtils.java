@@ -28,7 +28,6 @@ import org.apache.commons.lang3.ClassUtils;
 /**
  * Provides some helpful proxy utility methods.
  * 
- * @author James Carman
  * @since 1.0
  */
 public final class ProxyUtils

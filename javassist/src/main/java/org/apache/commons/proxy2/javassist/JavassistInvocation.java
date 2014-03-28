@@ -38,7 +38,6 @@ import org.apache.commons.proxy2.ProxyUtils;
  * actually serves as the superclass for all <a href="http://www.jboss.org/products/javassist">Javassist</a>-based
  * method invocations. Subclasses are dynamically created to deal with specific interface methods (they're hard-wired).
  * 
- * @author James Carman
  * @since 1.0
  */
 public abstract class JavassistInvocation implements Invocation

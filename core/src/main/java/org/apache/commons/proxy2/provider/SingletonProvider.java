@@ -23,7 +23,6 @@ import org.apache.commons.proxy2.ObjectProvider;
  * Wraps another object provider, making sure to only call it once, returning the value returned from the wrapped
  * provider on all subsequent invocations.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class SingletonProvider<T> extends ProviderDecorator<T>

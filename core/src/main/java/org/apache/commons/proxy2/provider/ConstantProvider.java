@@ -24,7 +24,6 @@ import org.apache.commons.proxy2.ObjectProvider;
 /**
  * Always returns the same object.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class ConstantProvider<T> implements ObjectProvider<T>, Serializable

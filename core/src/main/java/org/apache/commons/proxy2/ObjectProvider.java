@@ -22,7 +22,6 @@ import java.io.Serializable;
 /**
  * Provides an object to a delegating proxy.
  * 
- * @author James Carman
  * @since 1.0
  */
 public interface ObjectProvider<T> extends Serializable

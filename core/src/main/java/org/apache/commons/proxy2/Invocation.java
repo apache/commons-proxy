@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 /**
  * Method invocation for use by an {@link Interceptor}.
  * 
- * @author James Carman
  * @since 1.0
  */
 public interface Invocation

@@ -24,7 +24,6 @@ import org.apache.commons.proxy2.ObjectProvider;
  * method and decorate what comes back from the inner provider in some way (by {@link SingletonProvider caching it} for
  * example).
  * 
- * @author James Carman
  * @since 1.0
  */
 public class ProviderDecorator<T> implements ObjectProvider<T>

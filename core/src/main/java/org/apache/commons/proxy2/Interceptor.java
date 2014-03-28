@@ -22,7 +22,6 @@ import java.io.Serializable;
 /**
  * "Intercepts" a method invocation.
  * 
- * @author James Carman
  * @since 1.0
  */
 public interface Interceptor extends Serializable

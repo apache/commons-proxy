@@ -34,7 +34,6 @@ import org.apache.commons.proxy2.exception.ObjectProviderException;
 /**
  * Some utility methods for dealing with Javassist. This class is not part of the public API!
  * 
- * @author James Carman
  * @since 1.0
  */
 final class JavassistUtils

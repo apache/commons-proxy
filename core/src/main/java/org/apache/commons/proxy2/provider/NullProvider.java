@@ -20,7 +20,6 @@ package org.apache.commons.proxy2.provider;
 /**
  * Always returns null.
  * 
- * @author James Carman
  * @since 1.0
  */
 public class NullProvider<T> extends ConstantProvider<T>
