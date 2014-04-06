@@ -18,7 +18,7 @@
  * The various {@link org.apache.commons.proxy2.ProxyFactory} implementations create {@link Serializable} proxies;
  * however it is not always possible or practical to serialize the complete structure of a given proxy object. The
  * intent of this package is to facilitate the "serialization proxy" pattern by means of the {@code readResolve()} and
- * {@code writeReplace} methods supported by Java's serialization mechanism. This would normally be problematic with
+ * {@code writeReplace()} methods supported by Java's serialization mechanism. This would normally be problematic with
  * Commons Proxy because its proxies are generalized to expose only methods declared by superclasses (where applicable)
  * or proxied interfaces. Therefore we declare the following interfaces:
  * <ul>
