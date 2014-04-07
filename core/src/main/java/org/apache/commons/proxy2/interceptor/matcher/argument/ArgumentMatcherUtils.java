@@ -110,11 +110,11 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private abstract static class ComparatorMatcher<C extends Comparable<C>> implements ArgumentMatcher<C>
+    private abstract static class ComparableMatcher<C extends Comparable<C>> implements ArgumentMatcher<C>
     {
         private final C comparable;
 
-        protected ComparatorMatcher(C comparable)
+        protected ComparableMatcher(C comparable)
         {
             this.comparable = Validate.notNull(comparable);
         }
@@ -128,7 +128,7 @@ public final class ArgumentMatcherUtils
             {
                 return false;
             }
-            final int comparison = (comparable).compareTo(argument);
+            final int comparison = comparable.compareTo(argument);
             return evaluate(comparison);
         }
     }
@@ -166,7 +166,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class GreaterThanMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
+    private static final class GreaterThanMatcher<C extends Comparable<C>> extends ComparableMatcher<C>
     {
         private GreaterThanMatcher(C comparable)
         {
@@ -180,7 +180,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class GreaterThanOrEqualMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
+    private static final class GreaterThanOrEqualMatcher<C extends Comparable<C>> extends ComparableMatcher<C>
     {
         private GreaterThanOrEqualMatcher(C comparable)
         {
@@ -219,7 +219,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class LessThanMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
+    private static final class LessThanMatcher<C extends Comparable<C>> extends ComparableMatcher<C>
     {
         private LessThanMatcher(C comparable)
         {
@@ -233,7 +233,7 @@ public final class ArgumentMatcherUtils
         }
     }
 
-    private static final class LessThanOrEqualMatcher<C extends Comparable<C>> extends ComparatorMatcher<C>
+    private static final class LessThanOrEqualMatcher<C extends Comparable<C>> extends ComparableMatcher<C>
     {
         private LessThanOrEqualMatcher(C comparable)
         {
