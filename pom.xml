@@ -43,7 +43,7 @@
     <commons.componentid>proxy</commons.componentid>
     <commons.release.version>1.0</commons.release.version>
     <commons.release.name>commons-proxy-${commons.release.version}</commons.release.name>
-    <commons.release.desc>(requires Java ${maven.compiler.target} or later)</commons.release.desc>
+    <commons.release.desc>(requires Java 1.4 or later)</commons.release.desc>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.jira.id>PROXY</commons.jira.id>
     <commons.jira.pid>12310731</commons.jira.pid>

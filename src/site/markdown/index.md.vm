@@ -122,11 +122,9 @@ behavior specified by a typesafe DSL. The [AnnotationBuilder][] variant
 provides a simple way to create Java annotation instances at runtime.
 
 $h2 Releases
-  The latest version is v1.0. - [Download now!][download]
+  The latest version is v${project.getProperties().get("commons.release.version")} _${project.getProperties().get("commons.release.desc")}_. - [Download now!][download]
 
   For previous releases, see the [Apache archive][archive].
-
-  _**Note:** The 1.x releases are compatible with JDK1.4+._
 
 $h2 Support
   The [Commons mailing lists][mailing-lists] act as the main support forum.
