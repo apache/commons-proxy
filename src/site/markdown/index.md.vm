@@ -17,7 +17,10 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-## Commons Proxy: Dynamic Proxies Made Easy
+#set( $h2 = $StringUtils.repeat("#", 2) )
+#set( $h3 = $StringUtils.repeat("#", 3) )
+
+$h2 Commons Proxy: Dynamic Proxies Made Easy
 
   The *Proxy* design pattern ([GoF][]) allows you to provide
   "a surrogate or placeholder for another object to control access to it".
@@ -40,7 +43,7 @@ under the License.
   *Commons Proxy* supports dynamic proxy generation using proxy factories,
   object providers, invokers, and interceptors.
 
-## Proxy Factories
+$h2 Proxy Factories
   A [ProxyFactory][] encapsulates all necessary proxying logic away from your
   code. Switching proxying techniques/technologies is as simple as using a
   different proxy factory implementation class.
@@ -64,11 +67,11 @@ under the License.
      method invocation as it makes its way to the target of the invocation.
   * **Invoker Proxy** - uses an [Invoker][] to handle all method invocations.
 
-## Object Providers
+$h2 Object Providers
   [Object providers][providers] provide the objects which will be the
   "target" of a proxy. There are two types of object providers:
 
-### Core Object Providers
+$h3 Core Object Providers
   A core object provider provides a core implementation object.
   *Commons Proxy* supports many different implementations including:
 
@@ -77,14 +80,14 @@ under the License.
   * **Cloning** - Reflectively calls the public `clone()` method
                   on a `Cloneable` object
 
-### Decorating Object Providers
+$h3 Decorating Object Providers
   A decorating object provider decorates the object returned by another
   provider. *Commons Proxy* provides a few implementations including:
 
   * **Singleton** - Calls a nested provider at most once, returning that
                     original value on all subsequent invocations
 
-## Invokers
+$h2 Invokers
   An [Invoker][] handles all method invocations using a single method.
   *Commons Proxy* provides a few invoker implementations:
 
@@ -94,7 +97,7 @@ under the License.
   * **Invocation Handler Adapter** - Adapts an implementation of the JDK
 [InvocationHandler][] interface as a *Commons Proxy* [Invoker][].
 
-## Interceptors
+$h2 Interceptors
   *Commons Proxy* allows you to "intercept" a method invocation using
   an [Interceptor][]. Interceptors provide *rudimentary* aspect-oriented
   programming (AOP) support, allowing you to alter the parameters/results
@@ -107,25 +110,25 @@ under the License.
   * **Switch** - provides a fluent API to configure the handling
                  of invoked methods
 
-## Serialization
+$h2 Serialization
   The proxies created by the provided proxy factories are `Serializable` in
   most cases. For more complex cases *Commons Proxy* provides basic support
   for the "serialization proxy" pattern. See
   [org.apache.commons.proxy.serialization][serializationproxy] for details.
 
-## Stubbing
+$h2 Stubbing
   The [StubBuilder][] class allows you to create a proxy with customized
 behavior specified by a typesafe DSL. The [AnnotationBuilder][] variant
 provides a simple way to create Java annotation instances at runtime.
 
-## Releases
+$h2 Releases
   The latest version is v1.0. - [Download now!][download]
 
   For previous releases, see the [Apache archive][archive].
 
   _**Note:** The 1.x releases are compatible with JDK1.4+._
 
-## Support
+$h2 Support
   The [Commons mailing lists][mailing-lists] act as the main support forum.
   The `user` list is suitable for most library usage queries.
   The `dev` list is intended for the development discussion.
