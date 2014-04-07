@@ -1,31 +1,35 @@
-	     Apache Commons Proxy Package
-			    Version 1.0
-			   Release Notes
+              Apache Commons Proxy 2.0
+                  RELEASE NOTES
 
+The Apache Commons team is pleased to announce the release of Apache Commons Proxy 2.0
 
-INTRODUCTION:
+Java library for dynamic proxying
 
-Apache Commons Proxy is a package of utility classes which facilitate the
-creation of dynamic proxies in Java.
+Requires Java 1.6
 
-REQUIREMENTS:
+Changes in this version include:
 
-JDK1.4+
+New features:
+o PROXY-11:   slf4j-like discovery of the Proxy implementation to use
+o PROXY-20:   Implement A SwitchInterceptor
+o PROXY-22:   Provide an ASM-based ProxyFactory implementation Thanks to Romain Manni-Bucau.
+o PROXY-23:   Create stubbing facilities along the lines of Mockito mocks
 
-NOTES:
+Fixed Bugs:
+o PROXY-18:   Invocation should return the proxy object, rather than the target, from #getProxy()
 
-*** This is the initial release ***
+Changes:
+o PROXY-8:    Improve Proxy Serialization
+o PROXY-10:   Introducing interfaces for ProxyFactory
+o PROXY-21:   Remove Cyclic Package Dependencies
 
+Removed:
+o PROXY-9:    Remove logging interceptor
+o PROXY-24:   Remove remoting ObjectProviders
 
-FEEDBACK:
+Historical list of changes: http://commons.apache.org/proxy/changes-report.html
 
-Open source works best when you give feedback:
+For complete information on Apache Commons Proxy, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons Proxy website:
+
 http://commons.apache.org/proxy/
-
-Please direct all bug reports to JIRA
-http://issues.apache.org/jira/browse/PROXY
-
-Or subscribe to the commons-user mailing list (please prefix email subject with [proxy])
-http://commons.apache.org/mail-lists.html
-
-The Commons-Proxy Team
