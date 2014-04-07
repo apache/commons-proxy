@@ -107,6 +107,17 @@ under the License.
   * **Switch** - provides a fluent API to configure the handling
                  of invoked methods
 
+## Serialization
+  The proxies created by the provided proxy factories are `Serializable` in
+  most cases. For more complex cases *Commons Proxy* provides basic support
+  for the "serialization proxy" pattern. See
+  [org.apache.commons.proxy.serialization][serializationproxy] for details.
+
+## Stubbing
+  The [StubBuilder][] class allows you to create a proxy with customized
+behavior specified by a typesafe DSL. The [AnnotationBuilder][] variant
+provides a simple way to create Java annotation instances at runtime.
+
 ## Releases
   The latest version is v1.0. - [Download now!][download]
 
@@ -138,7 +149,10 @@ under the License.
 [Interceptor]: apidocs/org/apache/commons/proxy2/Interceptor.html
 [Invoker]: apidocs/org/apache/commons/proxy2/Invoker.html
 [defaultPF]: apidocs/org/apache/commons/proxy2/ProxyUtils.html#proxyFactory\(\)
-[providers]: apidocs/org/apache/commons/proxy2/provider/package-summary.html
+[providers]: apidocs/index.html?org/apache/commons/proxy2/provider/package-summary.html
+[StubBuilder]: apidocs/org/apache/commons/proxy2/stub/StubBuilder.html
+[AnnotationBuilder]: apidocs/org/apache/commons/proxy2/stub/AnnotationBuilder.html
+[serializationproxy]: apidocs/index.html?org/apache/commons/proxy2/serialization/package-summary.html
 
 [ServiceLoader]: http://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html
 [InvocationHandler]: http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/InvocationHandler.html
