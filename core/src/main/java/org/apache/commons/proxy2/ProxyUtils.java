@@ -18,12 +18,14 @@
 package org.apache.commons.proxy2;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 
 /**
  * Provides some helpful proxy utility methods.
@@ -40,6 +42,8 @@ public final class ProxyUtils
     public static final Class<?>[] EMPTY_ARGUMENT_TYPES = ArrayUtils.EMPTY_CLASS_ARRAY;
     private static final Map<Class<?>, Class<?>> WRAPPER_CLASS_MAP;
     private static final Map<Class<?>, Object> NULL_VALUE_MAP;
+    private static final String SPRING_ADVISED_CLASS_NAME = "org.springframework.aop.framework.Advised";
+    private static final String SPRING_SPRINGPROXY_CLASS_NAME = "org.springframework.aop.SpringProxy";
 
     //******************************************************************************************************************
     // Static Methods
@@ -178,6 +182,94 @@ public final class ProxyUtils
     public static ProxyFactory proxyFactory()
     {
         return DefaultProxyFactory.INSTANCE;
+    }
+
+    /**
+     * Get the ultimate <em>target</em> object of the supplied {@code candidate}
+     * object, unwrapping not only a top-level proxy but also any number of
+     * nested proxies.
+     * <p>If the supplied {@code candidate} is a Spring proxy, the ultimate target of all
+     * nested proxies will be returned; otherwise, the {@code candidate}
+     * will be returned <em>as is</em>.
+     * @param candidate the instance to check (potentially a Spring AOP proxy;
+     * never {@code null})
+     * @return the target object or the {@code candidate} (never {@code null})
+     * @throws IllegalStateException if an error occurs while unwrapping a proxy
+     */
+    public static <T> T getSpringUltimateTargetObject(Object candidate) {
+        try {
+            if (isSpringAopProxy(candidate) && implementsInterface(candidate.getClass(), SPRING_ADVISED_CLASS_NAME)) {
+                Object targetSource = MethodUtils.invokeMethod(candidate, "getTargetSource");
+                Object target = MethodUtils.invokeMethod(targetSource, "getTarget");
+                return getSpringUltimateTargetObject(target);
+            }
+        }
+        catch (Throwable ex) {
+            throw new IllegalStateException("Failed to unwrap proxied object", ex);
+        }
+        return (T) candidate;
+    }
+
+    /**
+     * Check whether the given object is a Spring proxy.
+     * @param object the object to check
+     */
+    public static boolean isSpringAopProxy(Object object) {
+        Class<?> clazz = object.getClass();
+        return (implementsInterface(clazz, SPRING_SPRINGPROXY_CLASS_NAME) && (Proxy.isProxyClass(clazz)
+                || isCglibProxyClass(clazz)));
+    }
+
+    /**
+     * Check whether the specified class is a CGLIB-generated class.
+     * @param clazz the class to check
+     */
+    private static boolean isCglibProxyClass(Class<?> clazz) {
+        return (clazz != null && clazz.getName().contains("$$"));
+    }
+
+    /**
+     * Check whether the given class implements an interface with a given class name.
+     * @param clazz the class to check
+     * @param ifaceClassName the interface class name to check
+     */
+    private static boolean implementsInterface(Class<?> clazz, String ifaceClassName) {
+        try {
+            Class ifaceClass = loadClass(ifaceClassName);
+            return ifaceClass.isAssignableFrom(clazz);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * <p>
+     * Load a class with a given name.
+     * </p>
+     *
+     * <p>
+     * It will try to load the class in the following order:
+     * </p>
+     *
+     * <ul>
+     *  <li>From {@link Thread#getContextClassLoader() Thread.currentThread().getContextClassLoader()}
+     *  <li>Using the basic {@link Class#forName(java.lang.String) }
+     *  <li>From {@link Class#getClassLoader() ProxyUtils.class.getClassLoader()}
+     * </ul>
+     *
+     * @param className    The name of the class to load
+     * @throws ClassNotFoundException If the class cannot be found anywhere.
+     */
+    private static Class loadClass(String className) throws ClassNotFoundException {
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException ex) {
+                return ProxyUtils.class.getClassLoader().loadClass(className);
+            }
+        }
     }
 
     private ProxyUtils()
