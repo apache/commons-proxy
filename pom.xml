@@ -86,7 +86,7 @@
       <timezone>+1</timezone>
     </developer>
     <developer>
-      <name>Jörg Hohwiller</name>
+      <name>JÃ¶rg Hohwiller</name>
       <email>hohwille@users.sourceforge.net</email>
       <organization />
       <roles>
@@ -117,7 +117,7 @@
       <url>http://www.howardlewisship.com/</url>
     </contributor>
     <contributor>
-      <name>Jörg Schaible</name>
+      <name>JÃ¶rg Schaible</name>
       <email>joerg.schaible@gmx.de</email>
       <organization />
       <roles>
@@ -133,9 +133,9 @@
   </contributors>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/commons/proper/proxy/trunk/</url>
+    <connection>scm:git:https://gitbox.apache.org/repos/asf/commons-proxy</connection>
+    <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-proxy</developerConnection>
+    <url>https://gitbox.apache.org/repos/asf/commons-proxy</url>
   </scm>
 
   <distributionManagement>
