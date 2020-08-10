@@ -450,7 +450,7 @@
             <configuration>
               <rules>
                 <!-- Problem with Maven 3.2.x filed as
-                     http://jira.codehaus.org/browse/MNG-5601
+                     http://issues.apache.org/jira/browse/MNG-5601
                  -->
                 <requireMavenVersion>
                   <version>[3.0.0,3.2.0)</version>
