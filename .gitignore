@@ -1,0 +1,11 @@
+target/
+.project
+.classpath
+.settings/
+.idea/
+*.iml
+*.iws
+.DS_Store
+.vscode/
+*.code-workspace
+.history/
