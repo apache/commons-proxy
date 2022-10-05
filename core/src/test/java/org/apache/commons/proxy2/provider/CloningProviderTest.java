@@ -21,12 +21,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public class CloningProviderTest extends AbstractTestCase
 {
@@ -69,18 +71,32 @@ public class CloningProviderTest extends AbstractTestCase
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWithInvalidCloneable()
     {
-        assertNotNull(new CloningProvider<InvalidCloneable>(new InvalidCloneable())); // assert is used to avoid not used warning
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                new CloningProvider<InvalidCloneable>(new InvalidCloneable());
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWithProtectedCloneMethod()
     {
         final CloningProvider<ProtectedCloneable> provider = new CloningProvider<ProtectedCloneable>(
                 new ProtectedCloneable());
-        provider.getObject();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                provider.getObject();
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
     //**********************************************************************************************************************
