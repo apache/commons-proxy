@@ -20,6 +20,9 @@ package org.apache.commons.proxy2.provider;
 import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BeanProviderTest extends AbstractTestCase
 {
@@ -27,17 +30,31 @@ public class BeanProviderTest extends AbstractTestCase
     // Other Methods
     //**********************************************************************************************************************
 
-    @Test(expected = ObjectProviderException.class)
+    @Test
     public void testAbstractBeanClass()
     {
         final BeanProvider<Number> p = new BeanProvider<Number>(Number.class);
-        p.getObject();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                p.getObject();
+            }
+        };
+        assertThrows(ObjectProviderException.class, testMethod);
     }
 
-    @Test(expected = ObjectProviderException.class)
+    @Test
     public void testNonAccessibleConstructor()
     {
-        new BeanProvider<MyBean>(MyBean.class).getObject();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                new BeanProvider<MyBean>(MyBean.class).getObject();
+            }
+        };
+        assertThrows(ObjectProviderException.class, testMethod);
     }
 
     @Test
@@ -46,11 +63,18 @@ public class BeanProviderTest extends AbstractTestCase
         assertSerializable(new BeanProvider<MyBean>(MyBean.class));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testWithNullBeanClass()
     {
         final BeanProvider<Object> p = new BeanProvider<Object>(null);
-        p.getObject();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                p.getObject();
+            }
+        };
+        assertThrows(NullPointerException.class, testMethod);
     }
 
     //**********************************************************************************************************************
