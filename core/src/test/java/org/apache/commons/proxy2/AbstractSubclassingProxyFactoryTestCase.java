@@ -20,6 +20,7 @@ package org.apache.commons.proxy2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 
@@ -30,6 +31,7 @@ import org.apache.commons.proxy2.util.AbstractEcho;
 import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 @SuppressWarnings("serial")
 public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractProxyFactoryTestCase
@@ -72,11 +74,18 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(proxy2.equals(proxy1));
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testDelegatorWithMultipleSuperclasses()
     {
-        factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[] { EchoImpl.class,
-                String.class });
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{EchoImpl.class,
+                        String.class});
+            }
+        };
+        assertThrows(ProxyFactoryException.class, testMethod);
     }
 
     @Test
@@ -101,11 +110,18 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(proxy2.equals(proxy1));
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testInterceptorWithMultipleSuperclasses()
     {
-        factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), new Class[] { EchoImpl.class,
-                String.class });
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), new Class[]{EchoImpl.class,
+                        String.class});
+            }
+        };
+        assertThrows(ProxyFactoryException.class, testMethod);
     }
 
     @Test
@@ -116,10 +132,17 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertTrue(echo instanceof EchoImpl);
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testInvocationHandlerWithMultipleSuperclasses()
     {
-        factory.createInvokerProxy(new NullInvoker(), new Class[] { EchoImpl.class, String.class });
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                factory.createInvokerProxy(new NullInvoker(), new Class[]{EchoImpl.class, String.class});
+            }
+        };
+        assertThrows(ProxyFactoryException.class, testMethod);
     }
 
     @Override
