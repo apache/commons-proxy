@@ -20,6 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -28,6 +29,7 @@ import org.apache.commons.proxy2.invoker.NullInvoker;
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticTest
 {
@@ -68,18 +70,23 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
         assertEquals("World", proxy.one(null));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testMixingArgumentMatchingStrategies()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
             @Override
-            protected void train(StubInterface trainee)
-            {
-                when(trainee.three(isInstance(String.class), "World"))
-                        .thenAnswer(ObjectProviderUtils.constant("World"));
+            public void execute() throws Throwable {
+                createProxy(new Trainer<StubInterface>() {
+                    @Override
+                    protected void train(StubInterface trainee) {
+                        when(trainee.three(isInstance(String.class), "World"))
+                                .thenAnswer(ObjectProviderUtils.constant("World"));
+                    }
+                });
             }
-        });
+        };
+        assertThrows(IllegalStateException.class, testMethod);
     }
 
     @Test
@@ -134,23 +141,28 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
         assertEquals("One", proxy.stubs()[1].one("Whatever"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testThenBeforeWhen()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
             @Override
-            protected void train(StubInterface trainee)
-            {
-                thenThrow(new RuntimeException("Oops!"));
+            public void execute() throws Throwable {
+                createProxy(new Trainer<StubInterface>() {
+                    @Override
+                    protected void train(StubInterface trainee) {
+                        thenThrow(new RuntimeException("Oops!"));
+                    }
+                });
             }
-        });
+        };
+        assertThrows(IllegalStateException.class, testMethod);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testThrowExceptionWithException()
     {
-        StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface trainee)
@@ -159,13 +171,20 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 thenThrow(new IllegalArgumentException("Nope!"));
             }
         });
-        proxy.voidMethod("Hello");
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.voidMethod("Hello");
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testThrowExceptionWithProvidedException()
     {
-        StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface trainee)
@@ -174,10 +193,17 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 thenThrow(ObjectProviderUtils.constant(new IllegalArgumentException("Nope!")));
             }
         });
-        proxy.voidMethod("Hello");
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.voidMethod("Hello");
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testThrowingExceptionObject()
     {
         final StubInterface proxy = createProxy(new Trainer<StubInterface>()
@@ -188,10 +214,17 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 when(trainee.one("Hello")).thenThrow(new RuntimeException("No way, Jose!"));
             }
         });
-        proxy.one("Hello");
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.one("Hello");
+            }
+        };
+        assertThrows(RuntimeException.class, testMethod);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testThrowingProvidedException()
     {
         final StubInterface proxy = createProxy(new Trainer<StubInterface>()
@@ -203,27 +236,37 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                         ObjectProviderUtils.constant(new RuntimeException("No way, Jose!")));
             }
         });
-        proxy.one("Hello");
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.one("Hello");
+            }
+        };
+        assertThrows(RuntimeException.class, testMethod);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testUsingWrongStub()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
             @Override
-            protected void train(final StubInterface parent)
-            {
-                when(parent.stub()).thenStub(new Trainer<StubInterface>()
-                {
+            public void execute() throws Throwable {
+                createProxy(new Trainer<StubInterface>() {
                     @Override
-                    protected void train(final StubInterface child)
-                    {
-                        when(parent.one("Hello")).thenReturn("World");
+                    protected void train(final StubInterface parent) {
+                        when(parent.stub()).thenStub(new Trainer<StubInterface>() {
+                            @Override
+                            protected void train(final StubInterface child) {
+                                when(parent.one("Hello")).thenReturn("World");
+                            }
+                        });
                     }
                 });
             }
-        });
+        };
+        assertThrows(IllegalStateException.class, testMethod);
     }
 
     @Test
