@@ -21,12 +21,14 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * Test {@link AnnotationBuilder}.
@@ -137,11 +139,18 @@ public class AnnotationBuilderTest
         assertArrayEquals(new FiniteValues[] { FiniteValues.TWO }, nestingAnnotation.children()[1].finiteValues());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBadMemberMap()
     {
-        AnnotationBuilder.of(CustomAnnotation.class).withMembers(
-                Collections.singletonMap("annString", Integer.valueOf(100)));
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                AnnotationBuilder.of(CustomAnnotation.class).withMembers(
+                        Collections.singletonMap("annString", Integer.valueOf(100)));
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
     public @interface NestingAnnotation
