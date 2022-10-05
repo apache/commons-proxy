@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -45,6 +46,7 @@ import org.apache.commons.proxy2.util.Echo;
 import org.apache.commons.proxy2.util.EchoImpl;
 import org.apache.commons.proxy2.util.SuffixInterceptor;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 @SuppressWarnings("serial")
 public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
@@ -221,18 +223,32 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertSerializable(proxy);
     }
 
-    @Test(expected = IOException.class)
-    public void testInterceptorProxyWithCheckedException() throws Exception
+    @Test
+    public void testInterceptorProxyWithCheckedException()
     {
         final Echo proxy = factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
-        proxy.ioException();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.ioException();
+            }
+        };
+        assertThrows(IOException.class, testMethod);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInterceptorProxyWithUncheckedException() throws Exception
+    @Test
+    public void testInterceptorProxyWithUncheckedException()
     {
         final Echo proxy = factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
-        proxy.illegalArgument();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.illegalArgument();
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
     @Test
@@ -326,18 +342,32 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertEquals(1, echo.echoBack(1));
     }
 
-    @Test(expected = IOException.class)
-    public void testProxyWithCheckedException() throws Exception
+    @Test
+    public void testProxyWithCheckedException()
     {
         final Echo proxy = factory.createDelegatorProxy(new ConstantProvider<Echo>(new EchoImpl()), Echo.class);
-        proxy.ioException();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.ioException();
+            }
+        };
+        assertThrows(IOException.class, testMethod);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testProxyWithUncheckedException() throws Exception
+    @Test
+    public void testProxyWithUncheckedException()
     {
         final Echo proxy = factory.createDelegatorProxy(new ConstantProvider<Echo>(new EchoImpl()), Echo.class);
-        proxy.illegalArgument();
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                proxy.illegalArgument();
+            }
+        };
+        assertThrows(IllegalArgumentException.class, testMethod);
     }
 
     @Test
