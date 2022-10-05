@@ -19,6 +19,7 @@ package org.apache.commons.proxy2.interceptor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Method;
 
@@ -27,6 +28,7 @@ import org.apache.commons.proxy2.Invoker;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.apache.commons.proxy2.util.Echo;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public class InvokerInterceptorTest extends AbstractTestCase
 {
@@ -53,9 +55,16 @@ public class InvokerInterceptorTest extends AbstractTestCase
         assertEquals("Hello!", interceptor.intercept(invocation));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testWithNullInvoker()
     {
-        assertNotNull(new InvokerInterceptor(null)); // assert is used to avoid not used warning
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                new InvokerInterceptor(null);
+            }
+        };
+        assertThrows(NullPointerException.class, testMethod);
     }
 }
