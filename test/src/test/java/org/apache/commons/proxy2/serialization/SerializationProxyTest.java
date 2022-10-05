@@ -18,6 +18,7 @@ package org.apache.commons.proxy2.serialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.Serializable;
 
@@ -31,6 +32,7 @@ import org.apache.commons.proxy2.AbstractProxyFactoryAgnosticTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
 {
@@ -91,14 +93,21 @@ public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
         PROXY_FACTORY.remove();
     }
 
-    @Test(expected = SerializationException.class)
+    @Test
     public void testNaive()
     {
         final Provider proxy = proxyFactory.createInterceptorProxy(null, implementProvider("foo"), Provider.class,
                 Serializable.class);
         assertEquals("foo", proxy.getObject().getValue());
         assertTrue(Serializable.class.isInstance(proxy));
-        SerializationUtils.roundtrip((Serializable) proxy);
+        // FIXME Simplification once upgraded to Java 1.8
+        final Executable testMethod = new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                SerializationUtils.roundtrip((Serializable) proxy);
+            }
+        };
+        assertThrows(SerializationException.class, testMethod);
     }
 
     @Test
