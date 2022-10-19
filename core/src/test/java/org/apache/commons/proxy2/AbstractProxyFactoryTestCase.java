@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -221,18 +222,18 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertSerializable(proxy);
     }
 
-    @Test(expected = IOException.class)
-    public void testInterceptorProxyWithCheckedException() throws Exception
+    @Test
+    public void testInterceptorProxyWithCheckedException()
     {
         final Echo proxy = factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
-        proxy.ioException();
+        assertThrows(IOException.class, () -> proxy.ioException());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInterceptorProxyWithUncheckedException() throws Exception
+    @Test
+    public void testInterceptorProxyWithUncheckedException()
     {
         final Echo proxy = factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), ECHO_ONLY);
-        proxy.illegalArgument();
+        assertThrows(IllegalArgumentException.class, () -> proxy.illegalArgument());
     }
 
     @Test
@@ -326,18 +327,18 @@ public abstract class AbstractProxyFactoryTestCase extends AbstractTestCase
         assertEquals(1, echo.echoBack(1));
     }
 
-    @Test(expected = IOException.class)
-    public void testProxyWithCheckedException() throws Exception
+    @Test
+    public void testProxyWithCheckedException()
     {
         final Echo proxy = factory.createDelegatorProxy(new ConstantProvider<Echo>(new EchoImpl()), Echo.class);
-        proxy.ioException();
+        assertThrows(IOException.class, () -> proxy.ioException());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testProxyWithUncheckedException() throws Exception
+    @Test
+    public void testProxyWithUncheckedException()
     {
         final Echo proxy = factory.createDelegatorProxy(new ConstantProvider<Echo>(new EchoImpl()), Echo.class);
-        proxy.illegalArgument();
+        assertThrows(IllegalArgumentException.class, () -> proxy.illegalArgument());
     }
 
     @Test
