@@ -54,7 +54,7 @@
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/${commons.site.path}</commons.scmPubUrl>
 
     <asm.version>5.0.1</asm.version>
-    <ant.version>1.9.3</ant.version>
+    <ant.version>1.10.11</ant.version>
     <checkstyle.version>2.11</checkstyle.version>
     <!-- Unfortunately reporting sections ignore pluginManagement settings, so define the versions here -->
     <pmd.version>3.0.1</pmd.version>
