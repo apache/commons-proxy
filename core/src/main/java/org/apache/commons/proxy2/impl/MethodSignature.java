@@ -171,7 +171,7 @@ public class MethodSignature implements Serializable
             Validate.isTrue(semi > 0, "Type at index %d of method signature \"%s\" not terminated by semicolon",
                     Integer.valueOf(here), internal);
             final String className = internal.substring(type, semi).replace('/', '.');
-            Validate.notBlank(className, "Invalid classname at position %d of method signature \"%s\"",
+            Validate.notBlank(className, "Invalid class name at position %d of method signature \"%s\"",
                     Integer.valueOf(type), internal);
             pos.setIndex(semi + 1);
             return Class.forName(className);
