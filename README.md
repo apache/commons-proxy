@@ -43,7 +43,7 @@
 Apache Commons Proxy
 ===================
 
-[![GitHub Actions Status](https://github.com/apache/commons-proxy/workflows/Java%20CI/badge.svg)](https://github.com/apache/commons-proxy/actions)
+[![Java CI](https://github.com/apache/commons-proxy/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-proxy/actions/workflows/maven.yml)
 [![Coverage Status](https://coveralls.io/repos/apache/commons-proxy2/badge.svg)](https://coveralls.io/r/apache/commons-proxy2)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-proxy2-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-proxy2-parent/)
 [![Javadocs](https://javadoc.io/badge/org.apache.commons/commons-proxy2-parent/2.0.svg)](https://javadoc.io/doc/org.apache.commons/commons-proxy2-parent/2.0)
