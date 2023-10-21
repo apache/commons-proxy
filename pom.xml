@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
   ~ Licensed to the Apache Software Foundation (ASF) under one or more
@@ -39,7 +39,10 @@
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
-    <commons.componentid>proxy2</commons.componentid>
+    <!-- Do not change: "proxy" is the name of the component even if the
+         name of the base package evolves with major release numbers
+    -->
+    <commons.componentid>proxy</commons.componentid>
     <commons.module.name>org.apache.commons.proxy2</commons.module.name>
     <commons.release.version>2.0</commons.release.version>
     <commons.release.name>commons-proxy-${commons.release.version}</commons.release.name>
