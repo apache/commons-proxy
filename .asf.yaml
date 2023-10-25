@@ -14,7 +14,7 @@
 # limitations under the License.
 
 github:
-  description: "Apache Commons Proxy"
+  description: "Apache Commons Proxy (Dormant)"
   homepage: https://commons.apache.org/proxy/
 
 notifications:

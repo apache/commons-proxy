@@ -28,7 +28,7 @@
   <version>2.1-SNAPSHOT</version>
   <name>Apache Commons Proxy</name>
   <description>Java library for dynamic proxying</description>
-  <url>http://commons.apache.org/proper/commons-proxy/</url>
+  <url>http://commons.apache.org/dormant/commons-proxy/</url>
   <inceptionYear>2005</inceptionYear>
 
   <issueManagement>
@@ -54,7 +54,7 @@
     <commons.jira.id>PROXY</commons.jira.id>
     <commons.jira.pid>12310731</commons.jira.pid>
     <commons.site.path>commons-proxy</commons.site.path>
-    <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/${commons.site.path}</commons.scmPubUrl>
+    <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/dormant/${commons.site.path}</commons.scmPubUrl>
 
     <asm.version>5.0.1</asm.version>
     <ant.version>1.9.3</ant.version>

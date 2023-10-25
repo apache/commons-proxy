@@ -43,33 +43,22 @@
 Apache Commons Proxy
 ===================
 
-[![Java CI](https://github.com/apache/commons-proxy/actions/workflows/maven.yml/badge.svg)](https://github.com/apache/commons-proxy/actions/workflows/maven.yml)
-[![Coverage Status](https://coveralls.io/repos/apache/commons-proxy2/badge.svg)](https://coveralls.io/r/apache/commons-proxy2)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-proxy2-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.apache.commons/commons-proxy2-parent/)
-[![Javadocs](https://javadoc.io/badge/org.apache.commons/commons-proxy2-parent/2.0.svg)](https://javadoc.io/doc/org.apache.commons/commons-proxy2-parent/2.0)
+**Warning: The Apache Commons Proxy component is now DORMANT, meaning
+this component is not being developed.**
+
+For queries, please contact the
+<a href="mailto:dev@commons.apache.org?subject=[PROXY] question on dormant component">Commons Developer</a> list
+
+----------------
 
 Java library for dynamic proxying
 
 Documentation
 -------------
 
-More information can be found on the [Apache Commons Proxy homepage](https://commons.apache.org/proper/commons-proxy2).
-The [Javadoc](https://commons.apache.org/proper/commons-proxy2/apidocs) can be browsed.
+More information can be found on the [Apache Commons Proxy homepage](https://commons.apache.org/dormant/commons-proxy2).
+The [Javadoc](https://commons.apache.org/dormant/commons-proxy2/apidocs) can be browsed.
 Questions related to the usage of Apache Commons Proxy should be posted to the [user mailing list][ml].
-
-Where can I get the latest release?
------------------------------------
-You can download source and binaries from our [download page](https://commons.apache.org/proper/commons-proxy2/download_proxy2.cgi).
-
-Alternatively, you can pull it from the central Maven repositories:
-
-```xml
-<dependency>
-  <groupId>org.apache.commons</groupId>
-  <artifactId>commons-proxy2-parent</artifactId>
-  <version>2.0</version>
-</dependency>
-```
 
 Contributing
 ------------
