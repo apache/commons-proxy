@@ -20,6 +20,7 @@ package org.apache.commons.proxy2;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 
@@ -72,11 +73,12 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(proxy2.equals(proxy1));
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testDelegatorWithMultipleSuperclasses()
     {
-        factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[] { EchoImpl.class,
-                String.class });
+        assertThrows(ProxyFactoryException.class, () ->
+                factory.createDelegatorProxy(new ConstantProvider<EchoImpl>(new EchoImpl()), new Class[]{EchoImpl.class,
+                        String.class}));
     }
 
     @Test
@@ -101,11 +103,12 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertFalse(proxy2.equals(proxy1));
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testInterceptorWithMultipleSuperclasses()
     {
-        factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), new Class[] { EchoImpl.class,
-                String.class });
+        assertThrows(ProxyFactoryException.class, () ->
+                factory.createInterceptorProxy(new EchoImpl(), new NoOpMethodInterceptor(), new Class[]{EchoImpl.class,
+                        String.class}));
     }
 
     @Test
@@ -116,10 +119,11 @@ public abstract class AbstractSubclassingProxyFactoryTestCase extends AbstractPr
         assertTrue(echo instanceof EchoImpl);
     }
 
-    @Test(expected = ProxyFactoryException.class)
+    @Test
     public void testInvocationHandlerWithMultipleSuperclasses()
     {
-        factory.createInvokerProxy(new NullInvoker(), new Class[] { EchoImpl.class, String.class });
+        assertThrows(ProxyFactoryException.class, () ->
+                factory.createInvokerProxy(new NullInvoker(), new Class[]{EchoImpl.class, String.class}));
     }
 
     @Override
