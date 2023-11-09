@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 
@@ -69,18 +70,18 @@ public class CloningProviderTest extends AbstractTestCase
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWithInvalidCloneable()
     {
-        assertNotNull(new CloningProvider<InvalidCloneable>(new InvalidCloneable())); // assert is used to avoid not used warning
+        assertThrows(IllegalArgumentException.class, () -> new CloningProvider<InvalidCloneable>(new InvalidCloneable()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWithProtectedCloneMethod()
     {
         final CloningProvider<ProtectedCloneable> provider = new CloningProvider<ProtectedCloneable>(
                 new ProtectedCloneable());
-        provider.getObject();
+        assertThrows(IllegalArgumentException.class, () -> provider.getObject());
     }
 
     //**********************************************************************************************************************
