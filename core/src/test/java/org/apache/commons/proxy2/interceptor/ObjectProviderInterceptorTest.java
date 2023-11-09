@@ -19,6 +19,7 @@ package org.apache.commons.proxy2.interceptor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.commons.proxy2.provider.ObjectProviderUtils;
 import org.apache.commons.proxy2.util.AbstractTestCase;
@@ -26,6 +27,7 @@ import org.junit.Test;
 
 public class ObjectProviderInterceptorTest extends AbstractTestCase
 {
+
     //----------------------------------------------------------------------------------------------------------------------
     // Other Methods
     //----------------------------------------------------------------------------------------------------------------------
@@ -37,9 +39,10 @@ public class ObjectProviderInterceptorTest extends AbstractTestCase
         assertEquals("Hello!", interceptor.intercept(null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testWithNullProvider()
     {
-        assertNotNull(new ObjectProviderInterceptor(null)); // assert is used to avoid not used warning
+        assertThrows(NullPointerException.class, () -> new ObjectProviderInterceptor(null));
     }
+
 }
