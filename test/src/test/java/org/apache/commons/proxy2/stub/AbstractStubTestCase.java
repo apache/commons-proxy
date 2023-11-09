@@ -20,6 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -31,6 +32,7 @@ import org.junit.Test;
 
 public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticTest
 {
+
     // *****************************************************************************************************************
     // Fields
     // *****************************************************************************************************************
@@ -68,18 +70,17 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
         assertEquals("World", proxy.one(null));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testMixingArgumentMatchingStrategies()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
-            @Override
-            protected void train(StubInterface trainee)
-            {
-                when(trainee.three(isInstance(String.class), "World"))
-                        .thenAnswer(ObjectProviderUtils.constant("World"));
-            }
-        });
+        assertThrows(IllegalStateException.class, () ->
+                createProxy(new Trainer<StubInterface>() {
+                    @Override
+                    protected void train(StubInterface trainee) {
+                        when(trainee.three(isInstance(String.class), "World"))
+                                .thenAnswer(ObjectProviderUtils.constant("World"));
+                    }
+                }));
     }
 
     @Test
@@ -134,23 +135,22 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
         assertEquals("One", proxy.stubs()[1].one("Whatever"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testThenBeforeWhen()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
-            @Override
-            protected void train(StubInterface trainee)
-            {
-                thenThrow(new RuntimeException("Oops!"));
-            }
-        });
+        assertThrows(IllegalStateException.class, () ->
+                createProxy(new Trainer<StubInterface>() {
+                    @Override
+                    protected void train(StubInterface trainee) {
+                        thenThrow(new RuntimeException("Oops!"));
+                    }
+                }));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testThrowExceptionWithException()
     {
-        StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface trainee)
@@ -159,13 +159,13 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 thenThrow(new IllegalArgumentException("Nope!"));
             }
         });
-        proxy.voidMethod("Hello");
+        assertThrows(IllegalArgumentException.class, () -> proxy.voidMethod("Hello"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testThrowExceptionWithProvidedException()
     {
-        StubInterface proxy = createProxy(new Trainer<StubInterface>()
+        final StubInterface proxy = createProxy(new Trainer<StubInterface>()
         {
             @Override
             protected void train(StubInterface trainee)
@@ -174,10 +174,10 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 thenThrow(ObjectProviderUtils.constant(new IllegalArgumentException("Nope!")));
             }
         });
-        proxy.voidMethod("Hello");
+        assertThrows(IllegalArgumentException.class, () -> proxy.voidMethod("Hello"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testThrowingExceptionObject()
     {
         final StubInterface proxy = createProxy(new Trainer<StubInterface>()
@@ -188,10 +188,10 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                 when(trainee.one("Hello")).thenThrow(new RuntimeException("No way, Jose!"));
             }
         });
-        proxy.one("Hello");
+        assertThrows(RuntimeException.class, () -> proxy.one("Hello"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testThrowingProvidedException()
     {
         final StubInterface proxy = createProxy(new Trainer<StubInterface>()
@@ -203,27 +203,24 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
                         ObjectProviderUtils.constant(new RuntimeException("No way, Jose!")));
             }
         });
-        proxy.one("Hello");
+        assertThrows(RuntimeException.class, () -> proxy.one("Hello"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testUsingWrongStub()
     {
-        createProxy(new Trainer<StubInterface>()
-        {
-            @Override
-            protected void train(final StubInterface parent)
-            {
-                when(parent.stub()).thenStub(new Trainer<StubInterface>()
-                {
+        assertThrows(IllegalStateException.class, () ->
+                createProxy(new Trainer<StubInterface>() {
                     @Override
-                    protected void train(final StubInterface child)
-                    {
-                        when(parent.one("Hello")).thenReturn("World");
+                    protected void train(final StubInterface parent) {
+                        when(parent.stub()).thenStub(new Trainer<StubInterface>() {
+                            @Override
+                            protected void train(final StubInterface child) {
+                                when(parent.one("Hello")).thenReturn("World");
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }));
     }
 
     @Test
@@ -453,4 +450,5 @@ public abstract class AbstractStubTestCase extends AbstractProxyFactoryAgnosticT
         assertNotNull(proxy.stub());
         assertEquals("World", proxy.stub().one("Hello"));
     }
+
 }
