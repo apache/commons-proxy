@@ -82,7 +82,7 @@ public class ASMProxyFactory extends AbstractSubclassingProxyFactory
 
     private static class ProxyGenerator extends AbstractProxyClassGenerator implements Opcodes
     {
-        private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
+        private static final AtomicInteger CLASS_NUMBER = new AtomicInteger();
         private static final String CLASSNAME_PREFIX = "CommonsProxyASM_";
         private static final String HANDLER_NAME = "__handler";
         private static final Type INVOKER_TYPE = Type.getType(Invoker.class);
