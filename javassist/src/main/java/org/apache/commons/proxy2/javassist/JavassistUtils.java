@@ -43,7 +43,7 @@ final class JavassistUtils
     //******************************************************************************************************************
 
     public static final String DEFAULT_BASE_NAME = "JavassistUtilsGenerated";
-    private static final AtomicInteger CLASS_NUMBER = new AtomicInteger(0);
+    private static final AtomicInteger CLASS_NUMBER = new AtomicInteger();
     private static final ClassPool CLASS_POOL = new ClassPool();
     private static final Set<ClassLoader> CLASS_LOADERS = new HashSet<ClassLoader>();
 
