@@ -16,6 +16,8 @@
 github:
   description: "Apache Commons Proxy (Dormant)"
   homepage: https://commons.apache.org/proxy/
+  autolink_jira:
+    - PROXY
   
   pull_requests:
     # allow auto-merge
