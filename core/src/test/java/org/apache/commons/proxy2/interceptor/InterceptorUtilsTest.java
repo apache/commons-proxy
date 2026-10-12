@@ -18,6 +18,7 @@
 package org.apache.commons.proxy2.interceptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.commons.proxy2.Interceptor;
 import org.apache.commons.proxy2.Invocation;
@@ -44,21 +45,21 @@ public class InterceptorUtilsTest extends AbstractTestCase
         assertEquals("Foo!", interceptor.intercept(invocation));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testThrowingExceptionObject() throws Throwable
+    @Test
+    public void testThrowingExceptionObject()
     {
-        Interceptor interceptor = InterceptorUtils.throwing(new RuntimeException("Oops!"));
-        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
-        interceptor.intercept(invocation);
+        final Interceptor interceptor = InterceptorUtils.throwing(new RuntimeException("Oops!"));
+        final Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
+        assertThrows(RuntimeException.class, () -> interceptor.intercept(invocation));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void testThrowingProvidedException() throws Throwable
+    @Test
+    public void testThrowingProvidedException()
     {
-        Interceptor interceptor = InterceptorUtils
+        final Interceptor interceptor = InterceptorUtils
                 .throwing(ObjectProviderUtils.constant(new RuntimeException("Oops!")));
-        Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
-        interceptor.intercept(invocation);
+        final Invocation invocation = mockInvocation(Echo.class, "echoBack", String.class).withArguments("World!").build();
+        assertThrows(RuntimeException.class, () -> interceptor.intercept(invocation));
     }
 
 }
