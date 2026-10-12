@@ -21,23 +21,25 @@ import org.apache.commons.proxy2.exception.ObjectProviderException;
 import org.apache.commons.proxy2.util.AbstractTestCase;
 import org.junit.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class BeanProviderTest extends AbstractTestCase
 {
     //**********************************************************************************************************************
     // Other Methods
     //**********************************************************************************************************************
 
-    @Test(expected = ObjectProviderException.class)
+    @Test
     public void testAbstractBeanClass()
     {
         final BeanProvider<Number> p = new BeanProvider<Number>(Number.class);
-        p.getObject();
+        assertThrows(ObjectProviderException.class, () -> p.getObject());
     }
 
-    @Test(expected = ObjectProviderException.class)
+    @Test
     public void testNonAccessibleConstructor()
     {
-        new BeanProvider<MyBean>(MyBean.class).getObject();
+        assertThrows(ObjectProviderException.class, () -> new BeanProvider<MyBean>(MyBean.class).getObject());
     }
 
     @Test
@@ -46,11 +48,11 @@ public class BeanProviderTest extends AbstractTestCase
         assertSerializable(new BeanProvider<MyBean>(MyBean.class));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testWithNullBeanClass()
     {
         final BeanProvider<Object> p = new BeanProvider<Object>(null);
-        p.getObject();
+        assertThrows(NullPointerException.class, () -> p.getObject());
     }
 
     //**********************************************************************************************************************
