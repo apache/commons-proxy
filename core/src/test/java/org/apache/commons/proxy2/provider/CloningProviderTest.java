@@ -20,7 +20,6 @@ package org.apache.commons.proxy2.provider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 
@@ -54,19 +53,12 @@ public class CloningProviderTest extends AbstractTestCase
         assertNotSame(clone2, clone1);
     }
 
-    @Test
+    @Test(expected = ObjectProviderException.class)
     public void testWithExceptionThrown()
     {
         final CloningProvider<ExceptionCloneable> provider = new CloningProvider<ExceptionCloneable>(
                 new ExceptionCloneable());
-        try
-        {
-            provider.getObject();
-            fail();
-        }
-        catch (ObjectProviderException e)
-        {
-        }
+        provider.getObject();
     }
 
     @Test(expected = IllegalArgumentException.class)
