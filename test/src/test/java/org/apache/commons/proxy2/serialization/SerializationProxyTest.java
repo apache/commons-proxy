@@ -18,6 +18,7 @@ package org.apache.commons.proxy2.serialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.Serializable;
 
@@ -91,14 +92,14 @@ public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
         PROXY_FACTORY.remove();
     }
 
-    @Test(expected = SerializationException.class)
+    @Test
     public void testNaive()
     {
         final Provider proxy = proxyFactory.createInterceptorProxy(null, implementProvider("foo"), Provider.class,
                 Serializable.class);
         assertEquals("foo", proxy.getObject().getValue());
         assertTrue(Serializable.class.isInstance(proxy));
-        SerializationUtils.roundtrip((Serializable) proxy);
+        assertThrows(SerializationException.class, () -> SerializationUtils.roundtrip((Serializable) proxy));
     }
 
     @Test
@@ -110,4 +111,5 @@ public class SerializationProxyTest extends AbstractProxyFactoryAgnosticTest
         final Provider proxy2 = (Provider) SerializationUtils.roundtrip((Serializable) proxy);
         assertEquals("foo", proxy2.getObject().getValue());
     }
+
 }
